@@ -1,0 +1,185 @@
+
+    <div class="flex flex-col w-full" style="background:#FFF;padding:2em;">
+        <mat-tab-group mat-align-tabs="center">
+            <mat-tab label="Member" class="text-3xl">
+                <div class="flex w-full mt-3 w-full justify-center">
+                    <div class="text-3xl font-bold">Member Import</div>
+                    <div class="ml-3 flex items-center"><a href="assets/downloads/member.csv" download style="color:blue;">Download Template</a></div>
+                </div>
+                
+                <div class="w-full mt-5">
+                    <mat-card class="flex" style="column-gap:40px;box-shadow: 1px 1px 15px 1px #ccc;">
+                        <div class="w-2/4">
+                            <div class="mb-5"> <span class="text-2xl font-bold justify-center"> STEP 1 : Select File And Upload </span></div>
+                            <div class="w-full h-50 flex items-center justify-center" style="border: 1px dashed black;cursor:pointer;">
+                                <div style="border-bottom: 1px solid black;">
+                                    <input class="ng-hide mr-9" name="upload" id="input-file-id" multiple type="file" (change)="onFileSelect($event)" style="margin-bottom: 9px;" />
+                                </div>
+
+                                <!--<label for="input-file-id" class="md-button md-raised md-primary">Choose Files</label>-->
+                                <button for="input-file-id" class="h-10 md-button md-raised md-primary" (click)="uploadFile()" style="background: #2777ff;color:#fff;width: 20% !important;margin-left: 10px;">Upload</button>
+                            </div>
+                        </div>
+
+
+                        <div class="w-2/4">
+                            <div class="mb-5"> <span class="text-2xl font-bold justify-center"> STEP 2 : Confirm To Import </span></div>
+                            <div class="w-full h-50 flex items-center justify-center" style="border: 1px dashed black;cursor:pointer;">
+                                <ng-container *ngIf="uploadButton">
+                                    <button for="input-file-id" class="w-1/4 h-15 md-button md-raised md-primary text-white" style="background:#2777ff" (click)="importFile('member')">Import</button>
+                                </ng-container>
+                                <ng-container *ngIf="!uploadButton">
+                                    <button for="input-file-id" class="w-1/4 h-15 md-button md-raised md-primary text-white" style="background:#ccc">Import</button>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                    </mat-card>
+
+                    <div>
+
+                    </div>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="MemberPoint">
+                <div class="flex w-full mt-3 w-full justify-center">
+                    <div class="text-3xl font-bold">Member Point Import</div>
+                    <div class="ml-3 flex items-center"><a href="assets/downloads/member_point.csv" download style="color:blue;">Download Template</a></div>
+                </div>
+                <div class="w-full mt-5">
+                    <mat-card class="flex" style="column-gap:40px;box-shadow: 1px 1px 15px 1px #ccc;">
+                        <div class="w-2/4">
+                            <div class="mb-5"> <span class="text-2xl font-bold justify-center"> STEP 1 : Select File And Upload </span></div>
+                            <div class="w-full h-50 flex items-center justify-center" style="border: 1px dashed black;cursor:pointer;">
+                                <div style="border-bottom: 1px solid black;">
+                                    <input class="ng-hide mr-9" id="input-file-id" multiple type="file" (change)="onFileSelect($event)" style="margin-bottom: 9px;" />
+                                </div>
+
+                                <!--<label for="input-file-id" class="md-button md-raised md-primary">Choose Files</label>-->
+                                <button for="input-file-id" class="h-10 md-button md-raised md-primary" (click)="uploadFile()" style="background: #2777ff;color:#fff;width: 20% !important;margin-left: 10px;">Upload</button>
+                            </div>
+                        </div>
+
+
+                        <div class="w-2/4">
+                            <div class="mb-5"> <span class="text-2xl font-bold justify-center"> STEP 2 : Confirm To Import </span></div>
+                            <div class="w-full h-50 flex items-center justify-center" style="border: 1px dashed black;cursor:pointer;">
+                                <button for="input-file-id" class="w-1/4 h-15 md-button md-raised md-primary" style="background: #2777ff;color:#fff;" (click)="importFile('member_point')">Import</button>
+                            </div>
+                        </div>
+
+                    </mat-card>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="Product Exclusion">
+                <div class="flex w-full mt-3 w-full justify-center">
+                    <div class="text-3xl font-bold">Product Exclusion</div>
+                    <div class="ml-3 flex items-center"><a href="assets/downloads/product_exclusion.csv" download style="color:blue;">Download Template</a></div>
+                </div>
+                <div class="w-full mt-5">
+                    <mat-card class="flex" style="column-gap:40px;box-shadow: 1px 1px 15px 1px #ccc;">
+                        <div class="w-2/4">
+                            <div class="mb-5"> <span class="text-2xl font-bold justify-center"> STEP 1 : Select File And Upload </span></div>
+                            <div class="w-full h-50 flex items-center justify-center" style="border: 1px dashed black;cursor:pointer;">
+                                <div style="border-bottom: 1px solid black;">
+                                    <input class="ng-hide mr-9" id="input-file-id" multiple type="file" (change)="onFileSelect($event)" style="margin-bottom: 9px;" />
+                                </div>
+
+                                <!--<label for="input-file-id" class="md-button md-raised md-primary">Choose Files</label>-->
+                                <button for="input-file-id" class="h-10 md-button md-raised md-primary" (click)="uploadFile()" style="background: #2777ff;color:#fff;width: 20% !important;margin-left: 10px;">Upload</button>
+                            </div>
+                        </div>
+
+
+                        <div class="w-2/4">
+                            <div class="mb-5"> <span class="text-2xl font-bold justify-center"> STEP 2 : Confirm To Import </span></div>
+                            <div class="w-full h-50 flex items-center justify-center" style="border: 1px dashed black;cursor:pointer;">
+                                <button for="input-file-id" class="w-1/4 h-15 md-button md-raised md-primary" style="background: #2777ff;color:#fff;" (click)="importFile('product_exclusion')">Import</button>
+                            </div>
+                        </div>
+
+                    </mat-card>
+                </div>
+            </mat-tab>
+
+        </mat-tab-group>
+
+        <div class="flex w-full">
+            <div class="w-1/4" style="padding:26px;padding-bottom:0;">
+                <span class="text-3xl font-bold"> Import history</span>
+            </div>
+
+            <div class="w-3/4 flex justify-end" style="padding:26px;padding-bottom:0;">
+                <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
+                    <mat-icon class="icon-size-5"
+                              matPrefix
+                              [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                    <input matInput
+                           [formControl]="searchInputControl"
+                           [autocomplete]="'off'"
+                           [placeholder]="'Search import'">
+                </mat-form-field>
+            </div>
+        </div>
+       
+        <!-- Import History Lists-->
+        <div class="w-full" style="padding:26px;">
+            <div class="grid">
+                <div class="import-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-200 dark:bg-black dark:bg-opacity-5"
+                     matSort
+                     matSortDisableClear>
+
+                    <div [mat-sort-header]="'collection_name'"> Collection Name </div>
+                    <div [mat-sort-header]="'status'"> Status  </div>
+                    <div [mat-sort-header]="'import_date'"> Import Date </div>
+                    <div [mat-sort-header]="'remark'"> Remark </div>
+                    <!--<div [mat-sort-header]="'job_completed_date'"> Completed Date </div>-->
+                </div>
+
+                <!-- Rows -->
+                <ng-container *ngIf="(activities$ | async) as activities">
+                    <ng-container *ngFor="let activity of activities; trackBy: trackByFn">
+                        <div class="import-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+
+                            <div class="hidden md:block truncate">
+                                {{activity.collection_name}}
+                            </div>
+
+
+                            <div class="truncate">
+                                {{activity.status}}
+                            </div>
+
+
+                            <div class="truncate">
+                                {{activity.import_date | date:'MMM dd, y hh:mm:ss'}}
+                            </div>
+
+                            <div>
+                                {{activity.remark}}
+                            </div>
+                            <!--<div class="truncate">
+                                {{activity.job_completed_date | date:'MMM dd, y hh:mm:ss'}}
+                            </div>-->
+                        </div>
+                    </ng-container>
+                </ng-container>
+
+            </div>
+
+            <div class="w-full mt-5">
+                <mat-paginator class="sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-200 dark:bg-transparent"
+                               [ngClass]="{'pointer-events-none': isLoading}"
+                               [length]="pagination.length"
+                               [pageIndex]="pagination.page"
+                               [pageSizeOptions]="[10, 25, 100]"
+                               [showFirstLastButtons]="true"></mat-paginator>
+            </div>
+           
+
+        </div>
+        
+    </div>
+

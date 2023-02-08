@@ -1,0 +1,1013 @@
+<mat-drawer-container class="flex flex-col w-full">
+    <mat-drawer class="w-2/4 dark:bg-gray-900"
+                [mode]="'over'"
+                [opened]="false"
+                [position]="'end'"
+                [disableClose]="true"
+                #matDrawer>
+
+
+        <!-- Point Rule Edit Form -->
+        <ng-container *ngIf="!pointsegmentMode && !tierUpgradeFormMode && !MemberListMode">
+            <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
+                <div class="">
+                    <button mat-icon-button style="background-color:#ccc;"
+                            [matTooltip]="'Close'"
+                            (click)="matDrawer.close()">
+                        <mat-icon class="text-white"
+                                  [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+                <div class="w-full text-3xl font-bold" style="text-align:center;">Edit Point Rule</div>
+              
+            </div>
+
+            <div class="flex-auto p-5">
+                <form [formGroup]="PointRuleForm">
+                    <div class="mt-8 hidden">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <input matInput [formControlName]="'id'">
+                        </mat-form-field>
+                    </div>
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Name</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'name'"
+                                   [placeholder]="'name'"
+                                   [spellcheck]="false">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Description</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'description'"
+                                   [placeholder]="'description'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Reward Code</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'reward_code'"
+                                   [placeholder]="'reward_code'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Type</mat-label>
+                            <mat-select [formControlName]="'type'">
+                                <mat-option value="tier_rule">Tier Rule</mat-option>
+                                <mat-option value="event_rule">Event Rule</mat-option>
+                                <!--<mat-option value="referral_rule">Customer Referral</mat-option>-->
+                                <mat-option value="birthday_rule">Birthday Event</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Point Value</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput type="number"
+                                   [formControlName]="'point_value'"
+                                   [placeholder]="'Point Value'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Status</mat-label>
+                            <mat-select [formControlName]="'status'">
+                                <mat-option value="active">Active</mat-option>
+                                <mat-option value="inactive">Inactive</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Point Basket -->
+                    <ng-container *ngIf="addedPointSegment.length == 0">
+                        <div class="mt-8">
+                            <mat-label>Point Basket</mat-label>
+                            <div class="customPoint mt-3 h-12" style="cursor: pointer; border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
+                                <span style="color:#ccc;">Create Point Basket</span>
+                            </div>
+                        </div>
+                    </ng-container>
+
+
+                    <ng-container *ngIf="addedPointSegment.length > 0">
+                        <div class="mt-8">
+                            <label>Point Basket</label>
+                            <mat-form-field class="fuse-mat-no-subscript w-full hidden">
+                                <input matInput readonly style="cursor:pointer;"
+                                       [formControlName]="'point_basket'"
+                                       [value]="addedPointSegmentId">
+                            </mat-form-field>
+                            <ng-container *ngFor="let add of addedPointSegment; trackBy: trackByFn">
+                                <div [matTooltip]="'Edit Basket'" (click)="editForm(add)" class="customPoint mt-3 h-12" style="border: 1px solid #ccc;border-radius: 10px;padding: 12px;cursor: pointer;">
+                                    {{add.name}} : {{add.description}}
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                    <div class="mt-4">
+                        <div class="flex w-full ">
+                            <button class="w-1/8 bg-green-500 text-white" mat-flat-button
+                                    [matTooltip]="'Basket'"
+                                    (click)="createNewPointSegment()">
+                                Add New
+                            </button>
+                        </div>
+                    </div>
+
+
+                    <div class="flex justify-end items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                        <button class="ml-2" style="width:16%;"
+                                mat-flat-button
+                                [disabled]="PointRuleForm.invalid"
+                                [color]="'primary'"
+                                [matTooltip]="'Save'"
+                                (click)="updatePointRule()">
+                            Save
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </ng-container>
+
+        <!-- Point Segment Add and Edit Form -->
+        <ng-container *ngIf="pointsegmentMode">
+            <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
+                <div class="">
+                    <button mat-icon-button style="background-color:#ccc;"
+                            [matTooltip]="'Close'"
+                            (click)="closeSegmentForm()">
+                        <mat-icon class="text-white"
+                                  [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+                <div class="w-full text-3xl font-bold" style="text-align:center;">Point Segment</div>
+            </div>
+
+            <div class="flex-auto p-5">
+                <form [formGroup]="PointSegmentForm">
+
+                    <div class="mt-8 hidden">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>id</mat-label>
+                            <input matInput
+                                   [formControlName]="'id'"
+                                   [placeholder]="'id'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Status</mat-label>
+                            <mat-select [formControlName]="'status'">
+                                <mat-option value="published">Published</mat-option>
+                                <mat-option value="draft">Draft</mat-option>
+                                <mat-option value="archived">Archived</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Name</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'name'"
+                                   [placeholder]="'name'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Description</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'description'"
+                                   [placeholder]="'description'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="flex sm:items-center mt-8">
+                        <div class="w-full text-3xl font-bold">Earning Period</div>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Earning From</mat-label>
+                            <mat-select [formControlName]="'earning_from'" [(ngModel)]="selectedValue" [disabled]="true">
+                                <mat-option value="date">Date</mat-option>
+                                <mat-option value="day_month">Day/Month</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <ng-container *ngIf="selectedValue == 'day_month'">
+                        <div class=" flex mt-8" style="column-gap:15px;">
+                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
+                                <mat-label>Earning From Day</mat-label>
+                                <input [readonly]="true" type="number"
+                                       matInput
+                                       [formControlName]="'earning_from_day'">
+                            </mat-form-field>
+
+                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
+                                <mat-label>Earning From Month</mat-label>
+                                <input [readonly]="true" type="number"
+                                       matInput
+                                       [formControlName]="'earning_from_month'">
+                            </mat-form-field>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="selectedValue == 'date'">
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Earning From Date</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                <input matInput
+                                       [matDatepicker]="earningfromDatepicker"
+                                       [formControlName]="'earning_from_date'"
+                                       [placeholder]="'Earning Valid To'">
+                                <mat-datepicker-toggle matSuffix
+                                                       [for]="earningfromDatepicker">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #earningfromDatepicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </ng-container>
+
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Earning To</mat-label>
+                            <mat-select [formControlName]="'earning_to'" [(ngModel)]="earningToValue" [disabled]="true">
+                                <mat-option value="date">Date</mat-option>
+                                <mat-option value="day_month">Day/Month</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <ng-container *ngIf="earningToValue == 'day_month'">
+                        <div class=" flex mt-8" style="column-gap:15px;">
+                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
+                                <mat-label>Earning To Day</mat-label>
+                                <input [readonly]="true" type="number"
+                                       matInput
+                                       [formControlName]="'earning_to_day'">
+                            </mat-form-field>
+
+                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
+                                <mat-label>Earning To Month</mat-label>
+                                <input [readonly]="true" type="number"
+                                       matInput
+                                       [formControlName]="'earning_to_month'">
+                            </mat-form-field>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="earningToValue == 'date'">
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Earning To Date</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                <input matInput
+                                       [matDatepicker]="earningtoDatepicker"
+                                       [formControlName]="'earning_to_date'"
+                                       [placeholder]="'Earning To Date'">
+                                <mat-datepicker-toggle matSuffix
+                                                       [for]="earningtoDatepicker">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #earningtoDatepicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </ng-container>
+
+                    <div class="flex sm:items-center mt-8">
+                        <div class="w-full text-3xl font-bold">Spending Period</div>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Spending From</mat-label>
+                            <mat-select [formControlName]="'spending_from'" [(ngModel)]="spendingFromValue">
+                                <mat-option value="date">Date</mat-option>
+                                <mat-option value="day_month">Day/Month</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <ng-container *ngIf="spendingFromValue == 'day_month'">
+                        <div class=" flex mt-8" style="column-gap:15px;">
+                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
+                                <mat-label>Spending From Day</mat-label>
+                                <input type="number"
+                                       matInput
+                                       [formControlName]="'spending_from_day'">
+                            </mat-form-field>
+
+                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
+                                <mat-label>Spending From Month</mat-label>
+                                <input type="number"
+                                       matInput
+                                       [formControlName]="'spending_from_month'">
+                            </mat-form-field>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="spendingFromValue == 'date'">
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Spending From Date</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                <input matInput
+                                       [matDatepicker]="spendingfromDatepicker"
+                                       [formControlName]="'spending_from_date'"
+                                       [placeholder]="'Spending From Date'">
+                                <mat-datepicker-toggle matSuffix
+                                                       [for]="spendingfromDatepicker">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #spendingfromDatepicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </ng-container>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Spending To</mat-label>
+                            <mat-select [formControlName]="'spending_to'" [(ngModel)]="spendingToValue">
+                                <mat-option value="date">Date</mat-option>
+                                <mat-option value="day_month">Day/Month</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <ng-container *ngIf="spendingToValue == 'day_month'">
+                        <div class=" flex mt-8" style="column-gap:15px;">
+                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
+                                <mat-label>Spending To Day</mat-label>
+                                <input type="number"
+                                       matInput
+                                       [formControlName]="'spending_to_day'">
+                            </mat-form-field>
+
+                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
+                                <mat-label>Spending To Month</mat-label>
+                                <input type="number"
+                                       matInput
+                                       [formControlName]="'spending_to_month'">
+                            </mat-form-field>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="spendingToValue == 'date'">
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Spending To Date</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                <input matInput
+                                       [matDatepicker]="spendingtoDatepicker"
+                                       [formControlName]="'spending_to_date'"
+                                       [placeholder]="'Spending To Date'">
+                                <mat-datepicker-toggle matSuffix
+                                                       [for]="spendingtoDatepicker">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #spendingtoDatepicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </ng-container>
+                    <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                        <button class="ml-2"
+                                mat-flat-button
+                                [disabled]="PointSegmentForm.invalid"
+                                [color]="'primary'"
+                                [matTooltip]="'Save'"
+                                (click)="createUpdateSegmentPoint()">
+                            Save
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </ng-container>
+
+        <!-- Tier Upgrade Form-->
+        <ng-container *ngIf="tierUpgradeFormMode">
+            <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
+                <div class="">
+                    <button mat-icon-button style="background-color:#ccc;"
+                            [matTooltip]="'Close'"
+                            (click)="matDrawer.close()">
+                        <mat-icon class="text-white"
+                                  [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+                <div class="w-full text-3xl font-bold" style="text-align:center;"> Member Tier Upgrade</div>
+            </div>
+
+            <div class="flex-auto p-5">
+                <form [formGroup]="TierUpgradeForm">
+
+                    <div class="mt-8 hidden">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>id</mat-label>
+                            <input matInput
+                                   [formControlName]="'id'"
+                                   [placeholder]="'id'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Status</mat-label>
+                            <mat-select [formControlName]="'status'">
+                                <mat-option value="active">Active</mat-option>
+                                <mat-option value="inactive">Inactive</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Item Number</mat-label>
+                            <input matInput
+                                   [formControlName]="'item_number'"
+                                   [placeholder]="'item_number'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Price</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'price'"
+                                   [placeholder]="'price'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Upgrade Tier</mat-label>
+                            <mat-select [formControlName]="'upgrade_tier'">
+                                <ng-container *ngFor="let tier of memberTiers">
+                                    <mat-option [value]="tier.id">
+                                        {{tier.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                        <button class="ml-2"
+                                mat-flat-button
+                                [disabled]="TierUpgradeForm.invalid"
+                                [color]="'primary'"
+                                [matTooltip]="'Save'"
+                                (click)="createTierUpgrade()">
+                            Save
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </ng-container>
+
+        <!-- Member Tier List-->
+        <ng-container *ngIf="MemberListMode">
+            <div class="flex justify-start w-full ng-tns-c188-34">
+                <button mat-icon-button style="background-color:#ccc;"
+                        [matTooltip]="'Close'"
+                        (click)="closeMemberListMode()">
+                    <mat-icon class="text-white"
+                              [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                </button>
+            </div>
+
+            <div class="flex-auto">
+                <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+                    <div>
+                        <div class="text-4xl font-extrabold tracking-tight leading-none">Member Tier</div>
+                    </div>
+                    <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+
+                        <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+                            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
+                                <mat-icon class="icon-size-5"
+                                          matPrefix
+                                          [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                <input matInput
+                                       [formControl]="memberTierSearchInputControl"
+                                       [autocomplete]="'off'"
+                                       [placeholder]="'Search Member Tier'">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+                    <ng-container *ngIf="(memberTiers$ | async) as memberTiers">
+                        <ng-container *ngIf="memberTiers.length; else noPoints">
+                            <div class="grid">
+                                <!-- Header -->
+                                <div class="tier-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                     matSort
+                                     matSortDisableClear>
+                                    <div></div>
+                                    <div class="sm:block"
+                                         [mat-sort-header]="'name'">
+                                        Name
+                                    </div>
+                                    <div class="hidden md:block"
+                                         [mat-sort-header]="'description'">
+                                        Description
+                                    </div>
+                                </div>
+                                <!-- Rows -->
+                                <ng-container *ngIf="(memberTiers$ | async) as memberTiers">
+                                    <ng-container *ngFor="let memberTier of memberTiers; trackBy: trackByFn">
+                                        <div class="tier-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+
+                                            <div>
+                                                <input type="radio" name="memberTier" #memberTier (click)="selectTier(memberTier.id,memberTier.name)" />
+                                            </div>
+
+                                            <div class=" truncate">
+                                                {{memberTier.name}}
+                                            </div>
+
+                                            <div class="hidden md:block truncate">
+                                                Level {{memberTier.description}}
+                                            </div>
+
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+
+                            <div class="membercustom-paging w-full">
+                                <mat-paginator class="sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                                               [ngClass]="{'pointer-events-none': isLoading}"
+                                               [length]="memberTierPagination.length"
+                                               [pageIndex]="memberTierPagination.page"
+                                               [pageSize]="memberTierPagination.limit"
+                                               [pageSizeOptions]="[5, 10, 15, 25, 50]"
+                                               [showFirstLastButtons]="true"></mat-paginator>
+                            </div>
+
+
+                        </ng-container>
+                    </ng-container>
+
+                    <ng-template #noMembers>
+                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no members!</div>
+                    </ng-template>
+
+                </div>
+            </div>
+        </ng-container>
+        
+    </mat-drawer>
+
+
+
+    <mat-drawer-content class="p-5">
+        <div class="flex flex-col w-full">
+            <!-- View -->
+            <ng-container *ngIf="!pointAddFormMode">
+                <div class="relative w-full h-40 sm:h-20 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
+                    <!-- Close button -->
+                    <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
+                        <div class="mt-3 text-4xl w-full font-bold truncate">
+                            {{memberTier.name}}
+                            <button mat-stroked-button
+                                    (click)="tooglepointAddFormMode(true)">
+                                <mat-icon class="icon-size-5"
+                                          [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                                <span class="ml-2">Edit</span>
+                            </button>
+                        </div>
+
+                        <button mat-icon-button
+                                [matTooltip]="'Close'"
+                                [routerLink]="['/member-tier']"
+                                style="background:#ccc;">
+                            <mat-icon class="text-white"
+                                      [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0 custom-layout">
+                    <div class="w-full max-w-3xl">
+                        <div class="flex flex-col mt-4 pt-6 space-y-3">
+
+                            <ng-container *ngIf="memberTier.code">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Code: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.code}}</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="memberTier.description">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Description: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.description}}</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="memberTier.date_created">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Created Date: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.date_created | date:'MMM dd, y'}}</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="memberTier.date_updated">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Last Update Date: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.date_updated | date:'MMM dd, y'}}</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="memberTier.status">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Status: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.status}}</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="memberTier.point_rule">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Point Rule: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.point_ruleFullname}}</div>
+                                </div>
+                            </ng-container>
+
+                            <div class="flex sm:items-center mt-3">
+                                <div class="w-full text-3xl font-bold">Condition</div>
+                            </div>
+
+                            <ng-container *ngIf="memberTier.condition_type">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Condition Type: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.condition_type}}</div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="memberTier.condition_period">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Condition Period: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.condition_period}}</div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="memberTier.condition_period_value">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Condition Period value: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.condition_period_value}} </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="memberTier.min_condition_amount">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Min Condition Amount: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.min_condition_amount}}</div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="memberTier.max_condition_amount">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Max Condition Amount: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.max_condition_amount}}</div>
+                                </div>
+                            </ng-container>
+
+
+                            <div class="flex sm:items-center mt-3">
+                                <div class="w-full text-3xl font-bold">Downgrade Condition </div>
+                            </div>
+
+                            <ng-container *ngIf="memberTier.downgrade_condition_type">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Downgrade Condition Type: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.downgrade_condition_type}}</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="memberTier.downgrade_condition_period">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Downgrade Condition Period: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.downgrade_condition_period}}</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="memberTier.downgrade_condition_period_value">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Downgrade Condition Period Value: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.downgrade_condition_period_value}}</div>
+                                </div>
+                            </ng-container>
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+
+        <!-- Add Form-->
+        <ng-container *ngIf="pointAddFormMode">
+            <div class="flex flex-col w-full">
+                <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
+                    <div class="mt-3 text-4xl w-full font-bold truncate">Edit Member Tier</div>
+                    <button mat-icon-button
+                            [matTooltip]="'Close'"
+                            (click)="AddFormclose()" style="background:#ccc;">
+                        <mat-icon class="text-white"
+                                  [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+
+                <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12" style="background:#FFF;">
+                    <div class="w-full max-w-3xl">
+                        <form [formGroup]="memberTierAddForm">
+
+                            <div class="mt-8 hidden">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <input matInput
+                                           [formControlName]="'id'"
+                                           [placeholder]="'id'"
+                                           [spellcheck]="false">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Name</mat-label>
+                                    <mat-icon matPrefix
+                                              class="hidden sm:flex icon-size-5"
+                                              [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                    <input matInput
+                                           [formControlName]="'name'"
+                                           [placeholder]="'Name'"
+                                           [spellcheck]="false">
+                                </mat-form-field>
+                            </div>
+
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Code</mat-label>
+                                    <mat-icon matPrefix
+                                              class="hidden sm:flex icon-size-5"
+                                              [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                    <input matInput
+                                           [formControlName]="'code'"
+                                           [placeholder]="'Code'">
+                                </mat-form-field>
+                            </div>
+
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Description</mat-label>
+                                    <mat-icon matPrefix
+                                              class="hidden sm:flex icon-size-5"
+                                              [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                    <input matInput
+                                           [formControlName]="'description'"
+                                           [placeholder]="'Description'">
+                                </mat-form-field>
+                            </div>
+
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Level</mat-label>
+                                    <mat-select [formControlName]="'level'">
+                                        <mat-option value="0">Level 0</mat-option>
+                                        <mat-option value="1">Level 1</mat-option>
+                                        <mat-option value="2">Level 2</mat-option>
+                                        <mat-option value="3">Level 3</mat-option>
+                                        <mat-option value="4">Level 4</mat-option>
+                                        <mat-option value="5">Level 5</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Status</mat-label>
+                                    <mat-select [formControlName]="'status'">
+                                        <mat-option value="active">Active</mat-option>
+                                        <mat-option value="draft">Draft</mat-option>
+                                        <mat-option value="inactive">Inactive</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="flex sm:items-center mt-4">
+                                <div class="w-full text-3xl font-bold">Condition</div>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Condition Type</mat-label>
+                                    <mat-select [formControlName]="'condition_type'">
+                                        <mat-option value="min_order">Min Order Value (per order)</mat-option>
+                                        <mat-option value="total_order">Total Order Amount (period)</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Condition Period</mat-label>
+                                    <mat-select [formControlName]="'condition_period'">
+                                        <mat-option value="days">Days</mat-option>
+                                        <mat-option value="months">Months</mat-option>
+                                        <mat-option value="years">Years</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
+                                    <mat-label>Condition Period Value</mat-label>
+                                    <mat-icon matPrefix
+                                              class="hidden sm:flex icon-size-5"
+                                              [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                    <input matInput type="number"
+                                           [formControlName]="'condition_period_value'"
+                                           [placeholder]="'Condition Period Value'">
+                                </mat-form-field>
+
+                                <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
+                                    <mat-label>Min Amount</mat-label>
+                                    <mat-icon matPrefix
+                                              class="hidden sm:flex icon-size-5"
+                                              [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                    <input matInput type="number"
+                                           [formControlName]="'min_condition_amount'"
+                                           [placeholder]="'Min Condition Amount'">
+                                </mat-form-field>
+
+                                <mat-form-field class="fuse-mat-no-subscript w-1/4">
+                                    <mat-label>Max Amount</mat-label>
+                                    <mat-icon matPrefix
+                                              class="hidden sm:flex icon-size-5"
+                                              [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                    <input matInput type="number"
+                                           [formControlName]="'max_condition_amount'"
+                                           [placeholder]="'Max Condition Amount'">
+                                </mat-form-field>
+                            </div>
+
+                            <mat-form-field class="fuse-mat-no-subscript w-full hidden">
+                                <input matInput readonly style="cursor:pointer;"
+                                       [formControlName]="'tier_upgrade_items'">
+                            </mat-form-field>
+
+                            <div class="mt-8">
+                                <label>Tier Upgrade Item</label>
+                                <ng-container *ngIf="selectedUpgradeItem.length == 0">
+                                    <div class="customPoint mt-3 h-12" style="cursor: pointer; border: 1px solid #ccc; border-radius: 6px; padding: 10px;">
+                                        <span style="color:#ccc;">Create Tier Upgrade Item</span>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="selectedUpgradeItem.length > 0">
+                                    <ng-container *ngFor="let item of selectedUpgradeItem; trackBy: trackByFn">
+                                        <div [matTooltip]="'Edit Item'" (click)="setTierUpgradeEditForm(item.id)" class="customPoint mt-3 h-12" style="border: 1px solid #ccc;border-radius: 10px;padding: 12px;cursor: pointer;">
+                                            {{item.item_number}}
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="flex w-full ">
+                                    <button class="w-1/8 bg-green-500 text-white" mat-flat-button
+                                            [matTooltip]="'Create Tire Item'"
+                                            (click)="openTierUpgradeForm()">
+                                        Add New
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="flex sm:items-center mt-4">
+                                <div class="w-full text-3xl font-bold">Reward Detail</div>
+                            </div>
+
+                            <mat-form-field class="fuse-mat-no-subscript w-full hidden">
+                                <input matInput [formControlName]="'point_rule'" />
+                            </mat-form-field>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Point Rule</mat-label>
+                                    <mat-icon matPrefix
+                                              class="hidden sm:flex icon-size-5"
+                                              [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                    <input matInput (click)="openPointRuleForm(memberTier.point_rule.id)" style="cursor:pointer" readonly
+                                           [formControlName]="'point_ruleFullname'"
+                                           [value]="point_ruleFullname"
+                                           [placeholder]="'Point Rule'">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="flex sm:items-center mt-3">
+                                <div class="w-full text-3xl font-bold">Downgrade Condition</div>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Downgrade Condition Type</mat-label>
+                                    <mat-select [formControlName]="'downgrade_condition_type'" [(ngModel)]="downgradeconditionValue">
+                                        <mat-option value="never">Never</mat-option>
+                                        <mat-option value="main_condition">Main Condition</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <ng-container *ngIf="downgradeconditionValue == 'main_condition'">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Downgrade Condition Period</mat-label>
+                                        <mat-select [formControlName]="'downgrade_condition_period'">
+                                            <mat-option value="Day">Day</mat-option>
+                                            <mat-option value="month">Month</mat-option>
+                                            <mat-option value="year">Year</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Downgrade Condition Period Value</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'downgrade_condition_period_value'"
+                                               [placeholder]="'Downgrade Condition Period Value'">
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
+
+
+                            <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                                <button class="ml-2"
+                                        mat-flat-button
+                                        [disabled]="memberTierAddForm.invalid"
+                                        [color]="'primary'"
+                                        [matTooltip]="'Save'"
+                                        (click)="updateMemberTier()">
+                                    Save
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+    </mat-drawer-content>
+
+</mat-drawer-container>
+

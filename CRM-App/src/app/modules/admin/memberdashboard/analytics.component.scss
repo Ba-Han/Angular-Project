@@ -1,0 +1,100 @@
+.card {
+    border: 0;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    border-radius: 6px;
+    color: #333;
+    background: #fff;
+    width: 100%;
+    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+    box-shadow: 0 1px 13px 0 rgb(0 0 0 / 14%);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    font-size: .875rem;
+}
+
+.card [class*=card-header-]:not(.card-header-icon):not(.card-header-text):not(.card-header-image) {
+    border-radius: 3px;
+    margin-top: -20px;
+    padding: 15px;
+}
+
+.card .card-header-primary .card-icon, .card .card-header-primary .card-text, .card .card-header-primary:not(.card-header-icon):not(.card-header-text) {
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(156 39 176 / 40%);
+}
+
+.card [class*=card-header-] {
+    margin: 0 15px;
+    padding: 0;
+    position: relative;
+}
+
+.card [class*=card-header-], .card [class*=card-header-] .card-title, .card [class*=card-header-] .card-title a, .card [class*=card-header-] .icon i, .card[class*=bg-], .card[class*=bg-] .card-title, .card[class*=bg-] .card-title a, .card[class*=bg-] .icon i {
+    color: #fff;
+}
+
+.card .card-header {
+    border-bottom: none;
+    z-index: 3 !important;
+}
+
+.card .card-header .card-title {
+    margin-bottom: 3px;
+}
+
+.card-title {
+    text-decoration: none;
+}
+
+.card .card-body {
+    padding: 0.9375rem 20px;
+    position: relative;
+}
+
+.card-header-primary {
+    background: linear-gradient(60deg,#ab47bc,#8e24aa);
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(156 39 176 / 40%);
+}
+
+.card-header-success {
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(76 175 80 / 40%);
+    background: linear-gradient(60deg,#66bb6a,#43a047);
+}
+
+.card-header-warning {
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(255 152 0 / 40%);
+    background: linear-gradient(60deg,#ffa726,#fb8c00);
+}
+.card-header-twittercolor {
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(0 188 212 / 40%);
+    background: linear-gradient(60deg,#26c6da,#00acc1);
+}
+.card-icon-danger {
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(244 67 54 / 40%);
+    background: linear-gradient(60deg,#ef5350,#e53935);
+}
+.card .card-header .card-category {
+    margin: 0;
+}
+.custom-filter-width {
+    width: 180%;
+}
+.card-header-nav-color {
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(156 39 176 / 40%);
+    background: rgba(var(--fuse-primary-400-rgb), var(--tw-text-opacity));
+}
+.custom-tooglebtn {
+    border-radius: unset !important;
+    background: transparent !important;
+}
+.mat-button-toggle-label-content {
+    color: #fff !important;
+}
+.mat-button-toggle-checked {
+    background: #fff !important;
+    border-radius: 99999px !important;
+}
+

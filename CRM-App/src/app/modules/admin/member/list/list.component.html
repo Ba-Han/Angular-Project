@@ -1,0 +1,269 @@
+<div class="flex flex-col w-full">
+    <div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+        <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-3 px-6 md:px-8 border-b">
+            <div>
+                <div class="text-4xl font-extrabold tracking-tight leading-none">Members</div>
+            </div>
+            <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+
+                <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+                    <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
+                        <mat-icon class="icon-size-5"
+                                  matPrefix
+                                  [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                        <input matInput
+                               [formControl]="searchInputControl"
+                               [autocomplete]="'off'"
+                               [placeholder]="'Search members'">
+                    </mat-form-field>
+                </div>
+                <button class="ml-4"
+                        mat-flat-button
+                        [color]="'primary'"
+                        (click)="openAdvancedSearch(panel)">
+                    <mat-icon svgIcon="heroicons_outline:filter"></mat-icon>
+                    <span class="ml-2 mr-1">Advanced Search</span>
+                </button>
+            </div>
+        </div>
+
+        
+
+        <!--  Advanced Search -->
+        <mat-accordion class="example-headers-align" multi>
+            <mat-expansion-panel #panel hideToggle>
+                <!--<b style="position: absolute;margin-top: 89px;margin-left: 46px;z-index: 99999;">Advanced Search</b>-->
+                <div class="relative sm:items-center sm:justify-between py-3">
+                    <div>
+                        <div class="tracking-tight leading-none">
+                            <div class="grid">
+                                <form [formGroup]="searchForm">
+                                    <!-- Header -->
+                                    <div class="advancedSearch-gird z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5">
+                                        <!--<div></div>-->
+                                        <div class="sm:block">
+                                            <div>
+                                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                                    <mat-label>Search Field</mat-label>
+                                                    <mat-select [formControlName]="'field'"
+                                                                (selectionChange)="fieldChange($event)">
+                                                        <mat-option value="member_tier">Member Tier</mat-option>
+                                                        <mat-option value="member_code">Member Code</mat-option>
+                                                        <mat-option value="full_name">Full Name</mat-option>
+                                                        <mat-option value="first_name">First Name</mat-option>
+                                                        <mat-option value="last_name">Last Name</mat-option>
+                                                        <mat-option value="email">Email</mat-option>
+                                                        <mat-option value="mobile_phone">Mobile</mat-option>
+                                                        <mat-option value="status">Status</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="sm:block">
+                                            <div>
+                                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                                    <mat-label>Option</mat-label>
+                                                    <mat-select [formControlName]="'option'">
+                                                        <ng-container *ngFor="let o of optionList">
+                                                            <mat-option [value]="o.value">
+                                                                {{o.name}}
+                                                            </mat-option>
+                                                        </ng-container>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="sm:block">
+                                            <div>
+                                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                                    <mat-label>Text</mat-label>
+                                                    <input matInput *ngIf="!selectTier"
+                                                           [formControlName]="'searchValue'"
+                                                           [autocomplete]="'off'">
+                                                    <mat-select [formControlName]="'searchTierValue'" *ngIf="selectTier">
+                                                        <ng-container *ngIf="selectTierType == 'member_tier'">
+                                                            <ng-container *ngFor="let t of memberTiers">
+                                                                <mat-option [value]="t.id">
+                                                                    {{t.name}}
+                                                                </mat-option>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="selectTierType == 'status'">
+                                                            <mat-option value="active">Active</mat-option>
+                                                            <mat-option value="inactive">Inactive</mat-option>
+                                                        </ng-container>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="sm:block">
+                                            <button type="button" style="margin-top: 30px;" class="mat-primary" mat-flat-button
+                                                    (click)="clearSearch()">
+                                                <mat-icon svgIcon="heroicons_solid:x-circle"></mat-icon>
+                                                <span class="ml-2 mr-1">Clear</span>
+                                            </button>
+                                        </div>
+                                        <div class="sm:block">
+                                            <button class="w-1/8 text-white items-center mat-primary"
+                                                    mat-flat-button
+                                                    style="margin-top: 30px;"
+                                                    [formControl]="searchInputControl"
+                                                    (click)="advanceSearch()">
+                                                <mat-icon svgIcon="heroicons_solid:search"></mat-icon>
+                                                <span class="ml-2 mr-1">Search</span>
+                                            </button>
+                                        </div>
+                                        <div class="flex" style="justify-content: end; align-items: flex-start;">
+                                            <button mat-icon-button
+                                                    [matTooltip]="'Close'"
+                                                    (click)="closeAdvancedSearch(panel)" style="background:gray;">
+                                                <mat-icon class="text-white"
+                                                          [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+
+
+        <!-- Members list -->
+        <div class="flex flex-col flex-auto sm:mb-18 sm:overflow-y-auto" style="position:relative;">
+            <ng-container *ngIf="(members$ | async) as members">
+                <ng-container *ngIf="members.length; else noMembers">
+                    <div class="grid">
+                        <!-- Header -->
+                        <div class="member-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                             matSort
+                             matSortDisableClear>
+                            <!--<div></div>-->
+                            <div class="sm:block"
+                                 [mat-sort-header]="'member_code'">
+                                Member Code
+                            </div>
+                            <div class="hidden md:block">
+                                Member Tier
+                            </div>
+                            <div class="sm:block"
+                                 [mat-sort-header]="'first_name'">
+                                First Name
+                            </div>
+                            <div class="sm:block"
+                                 [mat-sort-header]="'last_name'">
+                                Last Name
+                            </div>
+                            <div class="lg:block"
+                                 [mat-sort-header]="'mobile_phone'" style="opacity:1;">
+                                Mobile
+                            </div>
+                            <div class="sm:block">
+                                Total Points
+                            </div>
+                            <div class="lg:block" style="text-align:center;">
+                                Total Redeemed Points
+                            </div>
+                            <div class="lg:block" style="text-align:center;">
+                                Allow email
+                            </div>
+                            <div class="lg:block">
+                                Allow SMS
+                            </div>
+                            <div class="md:block"
+                                 [mat-sort-header]="'email'" style="text-align:center;">
+                                Email
+                            </div>
+                            <!-- <div class="hidden sm:block">Details</div>-->
+                        </div>
+                        <!-- Rows -->
+                        <ng-container *ngIf="(members$ | async) as members">
+                            <ng-container *ngFor="let member of members; trackBy: trackByFn">
+                                <a class=" cursor-pointer"
+                                   [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedMember || selectedMember.id !== member.id,
+                                            'bg-primary-50 dark:bg-hover': selectedMember && selectedMember.id === member.id}"
+                                   [routerLink]="['/member', member.id]">
+
+                                    <div class="member-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+
+                                        <div class=" truncate">
+                                            {{member.member_code}}
+                                        </div>
+
+                                        <div class="hidden md:block truncate">
+                                            {{member.member_tier}}
+                                        </div>
+
+                                        <div class="sm:block truncate" [matTooltip]="member.first_name">
+                                            {{member.first_name}}
+                                        </div>
+
+                                        <div class="hidden sm:block truncate" [matTooltip]="member.last_name">
+                                            {{member.last_name}}
+                                        </div>
+
+                                        <div class="hidden lg:block truncate">
+                                            {{member.mobile_phone}}
+                                        </div>
+                                        <div class="hidden lg:block truncate" style="text-align:center;">
+                                            {{member.total_points}}
+                                        </div>
+                                        <div class="hidden lg:block truncate" style="text-align:center;">
+                                            {{member.total_redeemed_points}}
+                                        </div>
+                                        <div class="hidden lg:block" style="text-align:center;">
+                                            <ng-container *ngIf="member.accept_email == true">
+                                                Yes
+                                            </ng-container>
+                                            <ng-container *ngIf="member.accept_email == false">
+                                                No
+                                            </ng-container>
+                                        </div>
+                                        <div class="hidden lg:block" style="text-align:center;">
+                                            <ng-container *ngIf="member.accept_mobile_sms == true">
+                                                Yes
+                                            </ng-container>
+                                            <ng-container *ngIf="member.accept_mobile_sms == false">
+                                                No
+                                            </ng-container>
+                                        </div>
+                                        <div class="hidden md:block">
+                                            {{member.email}}
+
+
+                                        </div>
+
+                                    </div>
+                                </a>
+                                <div class="grid">
+                                    <ng-container *ngIf="selectedMember?.id === member.id">
+                                        <ng-container *ngTemplateOutlet="rowDetailsTemplate; context: {$implicit: member}"></ng-container>
+                                    </ng-container>
+                                </div>
+                            </ng-container> 
+                        </ng-container>
+                    </div>
+
+                    <mat-paginator class="custom-paging sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                                   [ngClass]="{'pointer-events-none': isLoading}"
+                                   [length]="pagination.length"
+                                   [pageIndex]="pagination.page"
+                                   [pageSize]="pagination.limit"
+                                   [pageSizeOptions]="[5, 10, 15, 25, 50]"
+                                   [showFirstLastButtons]="true"></mat-paginator>
+
+                </ng-container>
+            </ng-container>
+
+            <ng-template #noMembers>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no members!</div>
+            </ng-template>
+
+        </div>
+
+    </div>
+</div>
+

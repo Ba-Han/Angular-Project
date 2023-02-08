@@ -1,0 +1,300 @@
+
+<div class="flex flex-col w-full" style="background: #fff;">
+    <ng-container *ngIf="!editMode">
+        <div class="flex flex-col w-full">
+            <div class="relative w-full h-40 sm:h-20 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
+                <!-- Close button -->
+                <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
+                    <div class="mt-3 text-4xl w-full font-bold truncate">
+                        {{store.name}}
+                        <button mat-stroked-button
+                                (click)="toggleEditMode(true)">
+                            <mat-icon class="icon-size-5"
+                                      [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                            <span class="ml-2">Edit</span>
+                        </button>
+                    </div>
+                    <button mat-icon-button
+                            [matTooltip]="'Close'"
+                            [routerLink]="['/store']"
+                            style="background:#ccc;">
+                        <mat-icon class="text-white"
+                                  [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0 custom-layout">
+                <div class="w-full max-w-3xl">
+                    <div class="flex flex-col mt-4 pt-6 space-y-3">
+                        <!--<div class="flex sm:items-center">
+                            <div class="w-full text-3xl font-bold">Basic Information </div>
+                        </div>-->
+
+
+                        <ng-container *ngIf="store.code">
+                            <div class="flex sm:items-center">
+                                <div class="w-1/4">Store Code: </div>
+                                <div class="ml-6 leading-6">{{store.code}}</div>
+                            </div>
+                        </ng-container>
+
+                        <!--<ng-container *ngIf="store.user_created">
+                            <div class="flex sm:items-center">
+                                <div class="w-1/4">User Created Date: </div>
+                                <div class="ml-6 leading-6">{{store.user_created}}</div>
+                            </div>
+                        </ng-container>-->
+
+                        <!--<ng-container *ngIf="store.user_updated">
+                        <div class="flex sm:items-center">
+                            <div class="w-1/4">User Updated Date: </div>
+                            <div class="ml-6 leading-6">{{store.user_updated | date:'MMM dd, y'}}</div>
+                        </div>
+                    </ng-container>-->
+
+                        <!--<ng-container *ngIf="store.date_created">
+                            <div class="flex sm:items-center">
+                                <div class="w-1/4">Created Date: </div>
+                                <div class="ml-6 leading-6">{{store.date_created | date:'MMM dd, y'}}</div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="store.date_updated">
+                            <div class="flex sm:items-center">
+                                <div class="w-1/4">Last Update Date: </div>
+                                <div class="ml-6 leading-6">{{store.date_updated | date:'MMM dd, y'}}</div>
+                            </div>
+                        </ng-container>-->
+
+                         <ng-container *ngIf="store.country">
+                            <div class="flex sm:items-center">
+                                <div class="w-1/4">Country: </div>
+                                <div class="ml-6 leading-6">{{store.country}}</div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="store.status">
+                            <div class="flex sm:items-center">
+                                <div class="w-1/4">Status: </div>
+                                <div class="ml-6 leading-6">{{store.status}}</div>
+                            </div>
+                        </ng-container>
+
+                        <!--<div class="flex sm:items-center mt-3">
+                            <div class="w-full text-3xl font-bold">Address Information </div>
+                        </div>-->
+
+                        <ng-container *ngIf="store.address_line_1">
+                            <div class="flex sm:items-center">
+                                <div class="w-1/4">Address 1: </div>
+                                <div class="ml-6 leading-6">{{store.address_line_1}}</div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="store.address_line_2">
+                            <div class="flex sm:items-center">
+                                <div class="w-1/4">Address 1: </div>
+                                <div class="ml-6 leading-6">{{store.address_line_2}}</div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="store.postal_code">
+                            <div class="flex sm:items-center">
+                                <div class="w-1/4">Postal Code: </div>
+                                <div class="ml-6 leading-6">{{store.postal_code}}</div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="store.city">
+                            <div class="flex sm:items-center">
+                                <div class="w-1/4">City: </div>
+                                <div class="ml-6 leading-6">{{store.city}}</div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="store.state">
+                            <div class="flex sm:items-center">
+                                <div class="w-1/4">State: </div>
+                                <div class="ml-6 leading-6">{{store.state}}</div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="store.region">
+                            <div class="flex sm:items-center">
+                                <div class="w-1/4">Region: </div>
+                                <div class="ml-6 leading-6">{{store.region}}</div>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="editMode">
+        <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
+            <div class="mt-3 text-4xl w-full font-bold truncate">Edit Store</div>
+            <button mat-icon-button
+                    [matTooltip]="'Close'"
+                    (click)="toggleEditMode(false)"
+                    style="background:#ccc;">
+                <mat-icon class="text-white"
+                          [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            </button>
+        </div>
+
+        <!-- Edit Form -->
+        <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
+            <div class="w-full max-w-3xl">
+                <form [formGroup]="StoreEditForm">
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full" disabled>
+                            <mat-label>Code</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'code'"
+                                   [placeholder]="'code'"
+                                   [spellcheck]="false">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Name</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'name'"
+                                   [placeholder]="'name'">
+                        </mat-form-field>
+                    </div>
+
+                    <!--<div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Address Line 1</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'address_line_1'"
+                                   [placeholder]="'address_line_1'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Address Line 2</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'address_line_2'"
+                                   [placeholder]="'address_line_2'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>City</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'city'"
+                                   [placeholder]="'city'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>State</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'state'"
+                                   [placeholder]="'state'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Postal Code</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'postal_code'"
+                                   [placeholder]="'postal_code'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Region</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'region'"
+                                   [placeholder]="'region'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Country</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'country'"
+                                   [placeholder]="'country'">
+                        </mat-form-field>
+                    </div>-->
+
+                     <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Country</mat-label>
+                            <mat-select [formControlName]="'country'">
+                                <mat-option value="SG">SG</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Status</mat-label>
+                            <mat-select [formControlName]="'status'">
+                                <mat-option value="active">Active</mat-option>
+                                <mat-option value="inactive">Inactive</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+
+
+                    <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                        <button class="ml-2"
+                                mat-flat-button
+                                [disabled]="StoreEditForm.invalid"
+                                [color]="'primary'"
+                                [matTooltip]="'Save'"
+                                (click)="updateStore()"
+                                [routerLink]="['/store']">
+                            Save
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </ng-container>
+</div>

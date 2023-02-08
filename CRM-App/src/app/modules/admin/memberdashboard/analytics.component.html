@@ -1,0 +1,632 @@
+<div class="flex flex-col flex-auto w-full">
+
+    <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-8">
+
+        <div class="flex items-center justify-between w-full">
+            <div>
+                <div class="text-3xl font-semibold tracking-tight leading-8">Member dashboard</div>
+            </div>
+
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full mt-8">
+
+            <!-- Total Members -->
+            <div class="card h-40">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">Total Members</h4>
+                    <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalMembers | number:'1.0-0'}}</p>
+                </div>
+                <div class="card-body">
+                    <div style="border: 1px solid #ccc;"></div>
+                    <div class="mt-2" style="cursor:pointer;color: gray !important;"
+                         (click)="memberList()">
+                        See More Details
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Total Be Informed Members-->
+            <div class="card h-40">
+                <div class="card-header card-header-warning">
+                    <h4 class="card-title">Be Informed</h4>
+                    <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalBeInformed | number:'1.0-0'}}</p>
+                </div>
+                <div class="card-body">
+                    <div style="border: 1px solid #ccc;"></div>
+                    <div class="mt-2" style="cursor:pointer;color: gray !important;"
+                         (click)="detailTierList(informedId)">
+                        See More Details
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Total Be Reward Members -->
+
+            <div class="card h-40">
+                <div class="card-header card-header-twittercolor">
+                    <h4 class="card-title">Be Rewarded</h4>
+                    <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalBeReward | number:'1.0-0'}}</p>
+                </div>
+                <div class="card-body">
+                    <div style="border: 1px solid #ccc;"></div>
+                    <div class="mt-2" style="cursor:pointer;color: gray !important;"
+                         (click)="detailTierList(rewardedId)">
+                        See More Details
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Be Wowed Members -->
+            <div class="card h-40">
+                <div class="card-header card-header-success">
+                    <h4 class="card-title">Be Wowed</h4>
+                    <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalBeWow | number:'1.0-0'}}</p>
+                </div>
+                <div class="card-body">
+                    <div style="border: 1px solid #ccc;"></div>
+                    <div class="mt-2" style="cursor:pointer;color: gray !important;"
+                         (click)="detailTierList(wowId)">
+                        See More Details
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 w-full mt-5">
+           
+            <div class="grid gird-rows-2">
+
+                 <!-- Transaction -->
+                 <div class="card" style="margin-top: unset;">
+                    <div class="">
+                        <div style="background: #DCD6D6;">
+                            <mat-button-toggle-group #group="matButtonToggleGroup" name="fontStyle" aria-label="Font Style">
+                                <mat-button-toggle class="custom-tooglebtn" value="day" (click)="trandatepicker.open()"><span style="color:black;">Day</span></mat-button-toggle>
+                                <mat-button-toggle class="custom-tooglebtn" value="month" (click)="tranmonthpicker.open()"><span style="color:black;">Month</span></mat-button-toggle>
+                                <mat-button-toggle class="custom-tooglebtn" value="year" (click)="tranyearpicker.open()"><span style="color:black;">Year</span></mat-button-toggle>
+                                <mat-button-toggle class="custom-tooglebtn" value="daterange" (click)="tranrangePicker.open()"><span style="color:black;">Date Range</span></mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                    </div>
+                    <div class=" grid grid-cols-2 w-full items-center" >
+                        <div class="grid grid-rows-2" style="height: 416px;">
+                            <div class="w-full w-full h-60 mt-20">
+                                <apx-chart class="flex flex-auto items-center justify-center w-full h-full"
+                                           [chart]="chartAge.chart"
+                                           [colors]="chartAge.colors"
+                                           [labels]="chartAge.labels"
+                                           [plotOptions]="chartAge.plotOptions"
+                                           [series]="chartAge.series"
+                                           [states]="chartAge.states"
+                                           [tooltip]="chartAge.tooltip">
+        
+                                </apx-chart>
+                            </div>
+                            <div class="mt-30">
+                                <div class="w-full flex flex-col justify-start items-center">
+                                    <div class="ml-3 truncate">Total Transaction : {{transactionObject.TotalTransaction}}</div>
+                                </div>
+                                <div class="w-full flex flex-col justify-start items-center">
+                                    <div class="ml-3 truncate">Total Amount : $ {{transactionObject.TotalTransactionAmount | number : '1.2-2'}}</div>
+                                </div>
+                                <div class="w-full flex flex-col justify-start items-center mb-2">
+                                    <div class="ml-3 truncate">Average Transaction:  {{transactionObject.AverageTransactionValue | number : '1.2-2'}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+    
+                        <div class="w-full h-full" >
+                            <div class="pt-2 pl-2 card-header w-full flex justify-end">
+                                <mat-form-field appearance="fill" class="pr-2 w-full">
+                                    <mat-label>Filter By Store</mat-label>
+                                    <mat-select [(ngModel)]="filterTrans.store" (selectionChange)="fieldChange($event)">
+                                        <mat-option value="allstore">All Store</mat-option>
+                                        <mat-option *ngFor="let store of stores$" [value]="store.code">
+                                            {{store.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <div class="w-full flex flex-col justify-center p-2">
+                                    <ng-container *ngFor="let dataset of transactionObject.TransactionPercentageSeries; let i = index">
+                                        <div class="flex items-center" style="margin-top: 10px;">
+                                            <div class="flex-0 w-2 h-2"
+                                                 [style.backgroundColor]="chartAge.colors[i]"></div>
+                                            <div class="ml-3" style="line-height:20px;">{{transactionObject.StoreSeries[i]}}</div>
+                                            <!--<div class="font-medium text-right">{{data.total * dataset / 100 | number:'1.0-0'}}</div>-->
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    
+                </div>
+
+                <!-- Total Register Members -->
+                <div class="card h-65" style="margin-top: 0px;">                 
+                    <div class="">
+                        <div style="background: #DCD6D6;">
+                            <mat-button-toggle-group #group="matButtonToggleGroup" name="fontStyle" aria-label="Font Style" value="month">
+                                <mat-button-toggle class="custom-tooglebtn" value="day" (click)="datepicker.open()"><span style="color:black;">Day</span></mat-button-toggle>
+                                <mat-button-toggle class="custom-tooglebtn" value="month" (click)="monthpicker.open()"><span style="color:black;">Month</span></mat-button-toggle>
+                                <mat-button-toggle class="custom-tooglebtn" value="year" (click)="yearpicker.open()"><span style="color:black;">Year</span></mat-button-toggle>
+                                <mat-button-toggle class="custom-tooglebtn" value="daterange" (click)="rangePicker.open()"><span style="color:black;">Date Range</span></mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                    </div>
+                    <div class="w-full pb-9">
+                        <div class="flex justify-start p-5 pr-2 w-full text-1xl">Total Member Registration</div>
+                    </div>
+                    <div class="w-full h-10">
+                        
+                        <div class="card-header card-header-primary" style="margin-top: -10px;">
+                            <h4 class="card-title">Total Member Registration</h4>
+                            <p class="card-category text-5xl font-bold tracking-tighter leading-tight mt-10">{{registerMember | number:'1.0-0'}}</p>
+                            <ng-container *ngIf="registerMember > 0">
+                                <p>members</p>
+                            </ng-container>
+                            <ng-container *ngIf="registerMember == 0">
+                                <p>member</p>
+                            </ng-container>
+                        </div>
+                        <div class="mx-6 mt-3 mb-3" style="border: 1px solid #ccc;"></div>
+                        <div class="mx-6 mb-2">
+                            <ng-container *ngIf="selectedButton == 'month'">
+                                <div style="color: gray !important;">Member Registration For - {{filterDate | date:'MMM, y'}}</div>
+                            </ng-container>
+                            <ng-container *ngIf="selectedButton == 'year'">
+                                <div style="color: gray !important;">Member Registration For - {{filterDate | date: 'y'}}</div>
+                            </ng-container>
+                            <ng-container *ngIf="selectedButton == 'day'">
+                                <div style="color: gray !important;">Member Registration For - {{filterDate | date:'MMM dd, y'}}</div>
+                            </ng-container>
+                            <ng-container *ngIf="selectedButton == 'daterange'">
+                                <div style="color: gray !important;">Member Registration between {{filterStartDate | date:'MMM dd, y'}} - {{filterEndDate | date:'MMM dd, y'}}</div>
+                            </ng-container>
+                        </div>
+                    </div>
+                   
+                </div>
+
+            </div>
+            
+            
+            <div class="gird gird-rows-3">
+
+                <!-- Total Active Point For All Members -->
+                <div class="card h-65" style="margin-top: 0px;">
+                    <div class="">
+                        <div style="background: #DCD6D6;">
+                            <mat-button-toggle-group #group="matButtonToggleGroup" name="fontStyle" aria-label="Font Style">
+                                <mat-button-toggle class="custom-tooglebtn" value="day" (click)="activepointdatepicker.open()"><span style="color:black;">Day</span></mat-button-toggle>
+                                <mat-button-toggle class="custom-tooglebtn" value="month" (click)="activepointmonthpicker.open()"><span style="color:black;">Month</span></mat-button-toggle>
+                                <mat-button-toggle class="custom-tooglebtn" value="year" (click)="activepointyearpicker.open()"><span style="color:black;">Year</span></mat-button-toggle>
+                                <mat-button-toggle class="custom-tooglebtn" value="range" (click)="activepointrangePicker.open()"><span style="color:black;">Date Range</span></mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                    </div>
+                    <div class="w-full">
+                        <div class="flex w-full justify-end">
+                            <div class="flex justify-start p-5 pr-2 w-full text-1xl">Total Active Points</div>
+                            <div class="flex justify-end p-5 w-full">
+                                <mat-label>Filter By : </mat-label>
+                            </div>
+                            <div class="flex items-center p-2">
+                                <mat-form-field appearance="fill" class="pr-2 w-full">
+                                    <mat-select [(ngModel)]="filterActivePoint.tier" (selectionChange)="activePointfieldChange($event)">
+                                        <mat-option value="alltier">All</mat-option>
+                                        <mat-option *ngFor="let tier of tiers$" [value]="tier.id">
+                                            {{tier.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <div class="grid grid-cols-2 w-full mt-5">
+                        <div class="card-header card-header-primary h-30">
+                            <h4 class="card-title">Total Active Points</h4>
+                            <p class="card-category text-5xl font-bold tracking-tighter leading-tight">{{totalActivePoint | number:'1.0-0'}}</p>
+                        </div>
+
+                        <div class="card-header card-header-primary h-30">
+                            <h4 class="card-title">Total Active Dollars</h4>
+                            <p class="card-category text-5xl font-bold tracking-tighter leading-tight">$ {{totalActiveDollar | number:'1.0-0'}}</p>
+                        </div>
+
+                    </div>
+                    <div class="mx-6 mt-3 mb-3" style="border: 1px solid #ccc;"></div>
+                    <div class="mx-6 mb-2">
+                        <ng-container *ngIf="filterActivePoint.type == 'all'">
+                            <div style="color: gray !important;">Total Active Points - For All</div>
+                        </ng-container>
+                        <ng-container *ngIf="filterActivePoint.type == 'month'">
+                            <div style="color: gray !important;">Total Active Points For - {{activefilterDate | date:'MMM, y'}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="filterActivePoint.type == 'year'">
+                            <div style="color: gray !important;">Total Active Points For - {{activefilterDate | date:'y'}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="filterActivePoint.type == 'day'">
+                            <div style="color: gray !important;">Total Active Points For - {{activefilterDate | date:'MMM dd, y'}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="filterActivePoint.type == 'range'">
+                            <div style="color: gray !important;">Total Active Points between {{activefilterStartDate | date:'MMM dd, y'}} - {{activefilterEndDate | date:'MMM dd, y'}}</div>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <!-- Total Expired Point For All Members-->
+                <div class="card h-65">
+                    <div class="">
+                        <div style="background: #DCD6D6;">
+                            <mat-button-toggle-group #group="matButtonToggleGroup" name="fontStyle" aria-label="Font Style">
+                                <mat-button-toggle class="custom-tooglebtn" value="day" (click)="expiredpointdatepicker.open()"><span style="color:black;">Day</span></mat-button-toggle>
+                                <mat-button-toggle class="custom-tooglebtn" value="month" (click)="expiredpointmonthpicker.open()"><span style="color:black;">Month</span></mat-button-toggle>
+                                <mat-button-toggle class="custom-tooglebtn" value="year" (click)="expiredpointyearpicker.open()"><span style="color:black;">Year</span></mat-button-toggle>
+                                <mat-button-toggle class="custom-tooglebtn" value="range" (click)="expiredpointrangePicker.open()"><span style="color:black;">Date Range</span></mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                    </div>
+                    <div class="w-full">
+                        <div class="flex w-full justify-end">
+                            <div class="flex justify-start p-5 pr-2 w-full text-1xl">Total Expired Points</div>
+                            <div class="flex justify-end p-5 w-full">
+                                <mat-label>Filter By : </mat-label>
+                            </div>
+                            <div class="flex items-center p-2">
+                                <mat-form-field appearance="fill" class="pr-2 w-full">
+                                    <mat-select [(ngModel)]="filterExpiredPoint.tier" (selectionChange)="expiredPointfieldChange($event)">
+                                        <mat-option value="alltier">All</mat-option>
+                                        <mat-option *ngFor="let tier of tiers$" [value]="tier.id">
+                                            {{tier.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                       
+                    </div>
+
+                    <div class="grid grid-cols-2 w-full mt-5">
+                        <div class="card-header card-header-warning h-30">
+                            <h4 class="card-title">Total Expired Points</h4>
+                            <p class="card-category text-5xl font-bold tracking-tighter leading-tight">{{totalExpiredPoint | number:'1.0-0'}}</p>
+                        </div>
+
+                        <div class="card-header card-header-warning h-30">
+                            <h4 class="card-title">Total Expired Dollars</h4>
+                            <p class="card-category text-5xl font-bold tracking-tighter leading-tight">$ {{totalExpiredDollar}}</p>
+                        </div>
+
+                    </div>
+
+                    <div class="mx-6 mt-3 mb-3" style="border: 1px solid #ccc;"></div>
+                    <div class="mx-6 mb-2">
+                        <ng-container *ngIf="filterExpiredPoint.type == 'all'">
+                            <div style="color: gray !important;">Total Expired Points - For All</div>
+                        </ng-container>
+                        <ng-container *ngIf="filterExpiredPoint.type == 'month'">
+                            <div style="color: gray !important;">Total Expired Points - {{expiredFilterDate | date:'MMM, y'}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="filterExpiredPoint.type == 'year'">
+                            <div style="color: gray !important;">Total Expired Points For - {{expiredFilterDate | date:'y'}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="filterExpiredPoint.type == 'day'">
+                            <div style="color: gray !important;">Total Expired Points For - {{expiredFilterDate | date:'MMM dd, y'}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="filterExpiredPoint.type == 'range'">
+                            <div style="color: gray !important;">Total Expired Points between {{expiredfilterStartDate | date:'MMM dd, y'}} - {{expiredfilterEndDate | date:'MMM dd, y'}}</div>
+                        </ng-container>
+                    </div>
+                </div>
+
+
+                <!-- Total Earn Points-->
+                <div class="card h-65" style="margin-top: -2px;">
+                    <div class="">
+                        <div style="background: #DCD6D6;">
+                            <mat-button-toggle-group #group="matButtonToggleGroup" name="fontStyle" aria-label="Font Style">
+                                <mat-button-toggle class="custom-tooglebtn" value="day" (click)="earndatepicker.open()"><span style="color:black;">Day</span></mat-button-toggle>
+                                <mat-button-toggle class="custom-tooglebtn" value="month" (click)="earnmonthpicker.open()"><span style="color:black;">Month</span></mat-button-toggle>
+                                <mat-button-toggle class="custom-tooglebtn" value="year" (click)="earnyearpicker.open()"><span style="color:black;">Year</span></mat-button-toggle>
+                                <mat-button-toggle class="custom-tooglebtn" value="range" (click)="earnrangePicker.open()"><span style="color:black;">Date Range</span></mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                    </div>
+                    <div class="w-full">
+                       
+                        <div class="flex w-full justify-end">
+                            <div class="flex justify-start p-5 pr-2 w-full text-1xl">Total Issued Points</div>
+                            <div class="flex justify-end p-5 w-full">
+                                <mat-label>Filter By Channel: </mat-label>
+                            </div>
+                            <div class="flex items-center p-2">
+                                <mat-form-field appearance="fill">
+                                    <mat-select [(ngModel)]="earnPoint.store">
+                                      <mat-option value="all" (click)="earnPointfieldChange('all','all')">All</mat-option>
+                                      <mat-optgroup [label]="'POS'">
+                                        <mat-option value="allstore" (click)="earnPointfieldChange('allstore','pos')">All Store</mat-option>
+                                        <ng-container *ngFor="let store of stores$">
+                                            <ng-container *ngIf="store.code != 'BHG_ONLINE'">
+                                                <mat-option [value]="store.code" (click)="earnPointfieldChange(store.code,'pos')"> {{store.name}}</mat-option>
+                                            </ng-container>
+                                        </ng-container>
+                                      </mat-optgroup>
+                                      <mat-optgroup [label]="'Ecommerce'">
+                                        <mat-option value="allstore" (click)="earnPointfieldChange('allstore','m_portal')">All Store</mat-option>
+                                        <ng-container *ngFor="let store of stores$">
+                                            <ng-container *ngIf="store.code == 'BHG_ONLINE'">
+                                                <mat-option [value]="store.code" (click)="earnPointfieldChange(store.code,'m_portal')"> {{store.name}}</mat-option>
+                                            </ng-container>
+                                        </ng-container>
+                                      </mat-optgroup>
+                                    </mat-select>
+                                  </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex w-full justify-end" style="margin-top: -20px;">
+                        <div class="flex justify-end p-2 w-full">
+                            <mat-label>Filter By Tier : </mat-label>
+                        </div>
+                        <div class="flex items-center">
+                            <mat-form-field appearance="fill" class="pl-5 pr-2 w-full">
+                                <mat-select [(ngModel)]="earnPoint.tier" (selectionChange)="earnPointTierfieldChange($event)">
+                                    <mat-option value="all">All</mat-option>
+                                    <mat-option *ngFor="let tier of tiers$" [value]="tier.id">
+                                        {{tier.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    
+
+                    <div class="grid grid-cols-2 w-full mt-5">
+                        <div class="card-header card-header-twittercolor h-30">
+                            <h4 class="card-title">Total Issued Points</h4>
+                            <p class="card-category text-5xl font-bold tracking-tighter leading-tight">{{earnPoint.totalEarnPoint | number:'1.0-0'}}</p>
+                        </div>
+
+                        <div class="card-header card-header-twittercolor h-30">
+                            <h4 class="card-title">Total Issued Dollars</h4>
+                            <p class="card-category text-5xl font-bold tracking-tighter leading-tight">$ {{earnPoint.totalEarnDolarValue | number:'1.0-0'}}</p>
+                        </div>
+
+                    </div>
+
+                    <div class="mx-6 mt-3 mb-3" style="border: 1px solid #ccc;"></div>
+                    <div class="mx-6 mb-2">
+                        <ng-container *ngIf="earnPoint.type == 'all'">
+                            <div style="color: gray !important;">Total Issued Points - For All</div>
+                        </ng-container>
+                        <ng-container *ngIf="earnPoint.type == 'month'">
+                            <div style="color: gray !important;">Total Issued Points - {{earnPoint.filterShowDate | date:'MMM, y'}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="earnPoint.type == 'year'">
+                            <div style="color: gray !important;">Total Issued Points For - {{earnPoint.filterShowDate | date:'y'}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="earnPoint.type == 'day'">
+                            <div style="color: gray !important;">Total Issued Points For - {{earnPoint.filterShowDate | date:'MMM dd, y'}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="earnPoint.type == 'range'">
+                            <div style="color: gray !important;">Total Issued Points between {{earnPoint.filterShowStartDate | date:'MMM dd, y'}} - {{earnPoint.filterShowEndDate | date:'MMM dd, y'}}</div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        
+    </div>
+
+</div>
+
+<!--Date Range Picker-->
+<div>
+    <mat-form-field appearance="fill" class="hidden">
+        <mat-date-range-input [rangePicker]="rangePicker">
+            <input matStartDate placeholder="Start date" #startrange>
+            <input matEndDate placeholder="End date" #endrange>
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker touchUi #rangePicker>
+            <mat-date-range-picker-actions>
+                <button mat-button matDateRangePickerCancel>Cancel</button>
+                <button mat-raised-button color="primary" matDateRangePickerApply (click)="registeredMemberByDateRange(startrange.value,endrange.value,rangePicker)">Apply</button>
+            </mat-date-range-picker-actions>
+        </mat-date-range-picker>
+    </mat-form-field>
+    
+    
+    <!-- Month Picker -->
+    <mat-form-field class="hidden" appearance="fill">
+        <input class="hiddenfield" matInput [matDatepicker]="monthpicker">
+        <mat-datepicker-toggle matSuffix [for]="monthpicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #monthpicker startView="year" [startAt]="startDate" (monthSelected)="registeredMemberByDate('month',$event, monthpicker)"></mat-datepicker>
+    </mat-form-field>
+    
+    <!-- Year -->
+    <mat-form-field class="hidden" appearance="fill">
+        <input matInput [matDatepicker]="yearpicker">
+        <mat-datepicker-toggle matSuffix [for]="monthpicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #yearpicker startView="multi-year" [startAt]="startYear" (yearSelected)="registeredMemberByDate('year',$event, yearpicker)"></mat-datepicker>
+    </mat-form-field>
+    
+    <!-- Day Picker  -->
+    <mat-form-field class="hidden" appearance="fill">
+        <input matInput [matDatepicker]="datepicker" (dateInput)="registeredMemberByDate('day',$event.value, datepicker)">
+        <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #datepicker></mat-datepicker>
+    </mat-form-field>
+</div>
+
+
+<!--Transaction Date Picker-->
+<div>
+    <mat-form-field appearance="fill" class="hidden">
+        <mat-date-range-input [rangePicker]="tranrangePicker">
+            <input matStartDate placeholder="Start date" #transtartrange>
+            <input matEndDate placeholder="End date" #tranendrange>
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="tranrangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker touchUi #tranrangePicker>
+            <mat-date-range-picker-actions>
+                <button mat-button matDateRangePickerCancel>Cancel</button>
+                <button mat-raised-button color="primary" matDateRangePickerApply (click)="transactionByRange(transtartrange.value,tranendrange.value,tranrangePicker)">Apply</button>
+            </mat-date-range-picker-actions>
+        </mat-date-range-picker>
+    </mat-form-field>
+    
+    
+    <!-- Month Picker -->
+    <mat-form-field class="hidden" appearance="fill">
+        <input class="hiddenfield" matInput [matDatepicker]="tranmonthpicker">
+        <mat-datepicker-toggle matSuffix [for]="tranmonthpicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #tranmonthpicker startView="year" [startAt]="startDate" (monthSelected)="transactionByDate('month',$event, tranmonthpicker)"></mat-datepicker>
+    </mat-form-field>
+    
+    <!-- Year -->
+    <mat-form-field class="hidden" appearance="fill">
+        <input matInput [matDatepicker]="tranyearpicker">
+        <mat-datepicker-toggle matSuffix [for]="tranyearpicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #tranyearpicker startView="multi-year" [startAt]="startYear" (yearSelected)="transactionByDate('year',$event, tranyearpicker)"></mat-datepicker>
+    </mat-form-field>
+    
+    <!-- Day Picker  -->
+    <mat-form-field class="hidden" appearance="fill">
+        <input matInput [matDatepicker]="trandatepicker" (dateInput)="transactionByDate('day',$event.value, trandatepicker)">
+        <mat-datepicker-toggle matSuffix [for]="trandatepicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #trandatepicker></mat-datepicker>
+    </mat-form-field>
+</div>
+
+
+
+<!-- Active Point Date Picker-->
+<div>
+    <mat-form-field appearance="fill" class="hidden">
+        <mat-date-range-input [rangePicker]="activepointrangePicker">
+            <input matStartDate placeholder="Start date" #activepointstartrange>
+            <input matEndDate placeholder="End date" #activepointendrange>
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="activepointrangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker touchUi #activepointrangePicker>
+            <mat-date-range-picker-actions>
+                <button mat-button matDateRangePickerCancel>Cancel</button>
+                <button mat-raised-button color="primary" matDateRangePickerApply (click)="totalActivePointByDateRange(activepointstartrange.value,activepointendrange.value,activepointrangePicker)">Apply</button>
+            </mat-date-range-picker-actions>
+        </mat-date-range-picker>
+    </mat-form-field>
+    
+    
+    <!-- Month Picker -->
+    <mat-form-field class="hidden" appearance="fill">
+        <input class="hiddenfield" matInput [matDatepicker]="activepointmonthpicker">
+        <mat-datepicker-toggle matSuffix [for]="activepointmonthpicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #activepointmonthpicker startView="year" [startAt]="startDate" (monthSelected)="totalActivePointByDate('month',$event, activepointmonthpicker)"></mat-datepicker>
+    </mat-form-field>
+    
+    <!-- Year -->
+    <mat-form-field class="hidden" appearance="fill">
+        <input matInput [matDatepicker]="activepointyearpicker">
+        <mat-datepicker-toggle matSuffix [for]="activepointyearpicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #activepointyearpicker startView="multi-year" [startAt]="startYear" (yearSelected)="totalActivePointByDate('year',$event, activepointyearpicker)"></mat-datepicker>
+    </mat-form-field>
+    
+    <!-- Day Picker  -->
+    <mat-form-field class="hidden" appearance="fill">
+        <input matInput [matDatepicker]="activepointdatepicker" (dateInput)="totalActivePointByDate('day',$event.value, activepointdatepicker)">
+        <mat-datepicker-toggle matSuffix [for]="activepointdatepicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #activepointdatepicker></mat-datepicker>
+    </mat-form-field>
+</div>
+
+
+<!-- Expired Point Date Picker -->
+<div>
+    <mat-form-field appearance="fill" class="hidden">
+        <mat-date-range-input [rangePicker]="expiredpointrangePicker">
+            <input matStartDate placeholder="Start date" #expiredpointstartrange>
+            <input matEndDate placeholder="End date" #expiredpointendrange>
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="expiredpointrangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker touchUi #expiredpointrangePicker>
+            <mat-date-range-picker-actions>
+                <button mat-button matDateRangePickerCancel>Cancel</button>
+                <button mat-raised-button color="primary" matDateRangePickerApply (click)="totalExpiredPointByDateRange(expiredpointstartrange.value,expiredpointendrange.value,expiredpointrangePicker)">Apply</button>
+            </mat-date-range-picker-actions>
+        </mat-date-range-picker>
+    </mat-form-field>
+    
+    
+    <!-- Month Picker -->
+    <mat-form-field class="hidden" appearance="fill">
+        <input class="hiddenfield" matInput [matDatepicker]="expiredpointmonthpicker">
+        <mat-datepicker-toggle matSuffix [for]="expiredpointmonthpicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #expiredpointmonthpicker startView="year" [startAt]="startDate" (monthSelected)="totalExpiredPointByDate('month',$event, expiredpointmonthpicker)"></mat-datepicker>
+    </mat-form-field>
+    
+    <!-- Year -->
+    <mat-form-field class="hidden" appearance="fill">
+        <input matInput [matDatepicker]="expiredpointyearpicker">
+        <mat-datepicker-toggle matSuffix [for]="expiredpointyearpicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #expiredpointyearpicker startView="multi-year" [startAt]="startYear" (yearSelected)="totalExpiredPointByDate('year',$event, expiredpointyearpicker)"></mat-datepicker>
+    </mat-form-field>
+    
+    <!-- Day Picker  -->
+    <mat-form-field class="hidden" appearance="fill">
+        <input matInput [matDatepicker]="expiredpointdatepicker" (dateInput)="totalExpiredPointByDate('day',$event.value, expiredpointdatepicker)">
+        <mat-datepicker-toggle matSuffix [for]="expiredpointdatepicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #expiredpointdatepicker></mat-datepicker>
+    </mat-form-field>
+</div>
+
+<!-- Earn Point Date Picker -->
+<div>
+    <mat-form-field appearance="fill" class="hidden">
+        <mat-date-range-input [rangePicker]="earnrangePicker">
+            <input matStartDate placeholder="Start date" #earnstartrange>
+            <input matEndDate placeholder="End date" #earnendrange>
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="earnrangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker touchUi #earnrangePicker>
+            <mat-date-range-picker-actions>
+                <button mat-button matDateRangePickerCancel>Cancel</button>
+                <button mat-raised-button color="primary" matDateRangePickerApply (click)="totalEarnedPointByDateRange(earnstartrange.value,earnendrange.value,earnrangePicker)">Apply</button>
+            </mat-date-range-picker-actions>
+        </mat-date-range-picker>
+    </mat-form-field>
+    
+    
+    <!-- Month Picker -->
+    <mat-form-field class="hidden" appearance="fill">
+        <input class="hiddenfield" matInput [matDatepicker]="earnmonthpicker">
+        <mat-datepicker-toggle matSuffix [for]="earnmonthpicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #earnmonthpicker startView="year" [startAt]="startDate" (monthSelected)="totalEarnedPointByDate('month',$event, earnmonthpicker)"></mat-datepicker>
+    </mat-form-field>
+    
+    <!-- Year -->
+    <mat-form-field class="hidden" appearance="fill">
+        <input matInput [matDatepicker]="earnyearpicker">
+        <mat-datepicker-toggle matSuffix [for]="earnyearpicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #earnyearpicker startView="multi-year" [startAt]="startYear" (yearSelected)="totalEarnedPointByDate('year',$event, earnyearpicker)"></mat-datepicker>
+    </mat-form-field>
+    
+    <!-- Day Picker  -->
+    <mat-form-field class="hidden" appearance="fill">
+        <input matInput [matDatepicker]="earndatepicker" (dateInput)="totalEarnedPointByDate('day',$event.value, earndatepicker)">
+        <mat-datepicker-toggle matSuffix [for]="earndatepicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #earndatepicker></mat-datepicker>
+    </mat-form-field>
+</div>

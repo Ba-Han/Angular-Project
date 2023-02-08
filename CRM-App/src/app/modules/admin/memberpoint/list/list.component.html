@@ -1,0 +1,317 @@
+
+    <div class="flex flex-col w-full" style="background:#fff;">
+
+        <!-- Member Points Lists-->
+        <ng-container *ngIf="!pointAddFormMode">
+            <div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+                <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+                    <div class="absolute inset-x-0 bottom-0"
+                         *ngIf="isLoading">
+                        <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+                    </div>
+
+                    <div class="text-4xl font-extrabold tracking-tight flex flex-col sm:flex-row flex-0 sm:items-center">
+                        <mat-icon class="icon-size-10" style="cursor:pointer;margin-right: 10px;" svgIcon="heroicons_solid:arrow-circle-left" [routerLink]="['/member/', memberId]"></mat-icon>
+
+                        <div>Member Points</div>
+                    </div>
+
+                    <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+                        <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
+                            <mat-icon class="icon-size-5"
+                                      matPrefix
+                                      [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                            <input matInput
+                                   [formControl]="searchInputControl"
+                                   [autocomplete]="'off'"
+                                   [placeholder]="'Search member point'">
+                        </mat-form-field>
+                        <button class="ml-4"
+                                mat-flat-button
+                                [color]="'primary'"
+                                (click)="tooglepointAddFormMode(true)">
+                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                            <span class="ml-2 mr-1">Add</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Points lists -->
+                <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+                    <ng-container *ngIf="(memberPoints$ | async) as memberPoints">
+                        <ng-container *ngIf="memberPoints.length; else noPoints">
+                            <div class="grid">
+                                <div class="memberpoint-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                     matSort
+                                     matSortDisableClear>
+                                    <div class="sm:block"
+                                         [mat-sort-header]="'transaction_document_no'">
+                                        Document No.
+                                    </div>
+                                    <div class="sm:block"
+                                         [mat-sort-header]="'point_type'">
+                                        Point Type
+                                    </div>
+                                    <div class="hidden md:block"
+                                         [mat-sort-header]="'point'">
+                                        Points
+                                    </div>
+                                    <div class="hidden md:block"
+                                         [mat-sort-header]="'pointsInDoller'">
+                                        $ Value
+                                    </div>
+                                    <div class="hidden md:block"
+                                         [mat-sort-header]="'real_amount'">
+                                        Total Amount (Exclusive GST)
+                                    </div>
+                                    <div class="hidden md:block"
+                                         [mat-sort-header]="'vat_amount'" style="justify-content:center;display: flex !important;align-items: flex-start;">
+                                        GST
+                                    </div>
+                                    <div class="hidden md:block"
+                                         [mat-sort-header]="'total_amount'">
+                                        Total Amount (Inclusive GST)
+                                    </div>
+                                </div>
+
+                                <!-- Rows -->
+                                <ng-container *ngIf="(memberPoints$ | async) as memberPoints">
+                                    <ng-container *ngFor="let memberPoint of memberPoints; trackBy: trackByFn">
+                                        <a class=" cursor-pointer"
+                                           [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedMember || selectedMember.id !== member.id,
+                                            'bg-primary-50 dark:bg-hover': selectedMemberPoint && selectedMemberPoint.id === memberPoint.id}"
+                                           [routerLink]="['/member/', memberId , 'memberpoint', memberPoint.id]">
+
+                                            <div class="memberpoint-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+
+                                                <div class="sm:block truncate" [matTooltip]="memberPoint.transaction_document_no">
+                                                    {{memberPoint.transaction_document_no}}
+                                                </div>
+
+                                                <div class=" truncate" style="text-transform:capitalize;">
+                                                    {{memberPoint.point_type}}
+                                                </div>
+
+                                                <div class="hidden md:block truncate">
+                                                    {{memberPoint.point}}
+                                                </div>
+
+                                                <div class="hidden md:block truncate">
+                                                    ${{memberPoint.pointsInDoller | number : '1.2-2'}}
+                                                </div>
+
+                                                <div class="hidden md:block truncate" style="text-align: center;">
+                                                    ${{ ((memberPoint.point_type == "adjustment" || memberPoint.real_amount == null || memberPoint.real_amount == "" ? 0 : memberPoint.real_amount))  | number : '1.2-2' }}
+                                                </div>
+
+                                                <div class="hidden md:block truncate" style="text-align: center;">
+                                                    ${{ ((memberPoint.point_type == "adjustment" || memberPoint.vat_amount == null || memberPoint.vat_amount == "" ? 0 : memberPoint.vat_amount))  | number : '1.2-2' }}
+                                                </div>
+
+                                                <div class="hidden md:block truncate" style="text-align: center;">
+                                                    ${{ ((memberPoint.point_type == "adjustment" || memberPoint.total_amount == null || memberPoint.total_amount == "" ? 0 : memberPoint.total_amount))  | number : '1.2-2' }}
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                            <mat-paginator class="custom-paging sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                                           [ngClass]="{'pointer-events-none': isLoading}"
+                                           [length]="pagination.length"
+                                           [pageIndex]="pagination.page"
+                                           [pageSize]="pagination.limit"
+                                           [pageSizeOptions]="[5, 10, 15, 25, 50]"
+                                           [showFirstLastButtons]="true"></mat-paginator>
+                        </ng-container>
+
+                    </ng-container>
+                    <ng-template #noPoints>
+                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no points!</div>
+                    </ng-template>
+                </div>
+
+            </div>
+          
+
+        </ng-container>
+
+
+        <!-- Point Add Form-->
+        <ng-container *ngIf="pointAddFormMode">
+            <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
+                <div class="mt-3 text-4xl w-full font-bold truncate">Add New Point</div>
+                <button mat-icon-button
+                        [matTooltip]="'Close'"
+                        (click)="AddFormclose()" style="background:#ccc;">
+                    <mat-icon class="text-white"
+                              [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                </button>
+            </div>
+
+            <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
+                <div class="w-full max-w-3xl">
+                    <form [formGroup]="memberPointAddForm">
+
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Point Type</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                <input matInput readonly
+                                       [formControlName]="'point_type'"
+                                       [placeholder]="'Point Type'"
+                                       [spellcheck]="false">
+                            </mat-form-field>
+                        </div>
+
+
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Reward Code</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                <input matInput
+                                       [formControlName]="'reward_code'"
+                                       [placeholder]="'Reward Code'">
+                            </mat-form-field>
+                        </div>
+
+
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Point</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                <input matInput
+                                       [formControlName]="'point'"
+                                       [placeholder]="'Point'">
+                            </mat-form-field>
+                        </div>
+
+                        <mat-form-field class="fuse-mat-no-subscript w-full hidden">
+                            <input matInput [formControlName]="'member'" />
+                        </mat-form-field>
+
+
+
+                        <!--<div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Earning Valid From</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                <input matInput
+                                       [matDatepicker]="earningvalidFromDatepicker"
+                                       [formControlName]="'earning_valid_from'"
+                                       [placeholder]="'Earning Valid From'">
+                                <mat-datepicker-toggle matSuffix
+                                                       [for]="earningvalidFromDatepicker">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #earningvalidFromDatepicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Earning Valid To</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                <input matInput
+                                       [matDatepicker]="earningvalidToDatepicker"
+                                       [formControlName]="'earning_valid_to'"
+                                       [placeholder]="'Earning Valid To'">
+                                <mat-datepicker-toggle matSuffix
+                                                       [for]="earningvalidToDatepicker">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #earningvalidToDatepicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Spending Valid From</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                <input matInput
+                                       [matDatepicker]="spandingvalidFromDatepicker"
+                                       [formControlName]="'spending_valid_from'"
+                                       [placeholder]="'Spending Valid From'">
+                                <mat-datepicker-toggle matSuffix
+                                                       [for]="spandingvalidFromDatepicker">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #spandingvalidFromDatepicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Spending Valid To</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                <input matInput
+                                       [matDatepicker]="spandingvalidToDatepicker"
+                                       [formControlName]="'spending_valid_to'"
+                                       [placeholder]="'Spending Valid To'">
+                                <mat-datepicker-toggle matSuffix
+                                                       [for]="spandingvalidToDatepicker">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #spandingvalidToDatepicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>-->
+
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
+                                <mat-label>Comment</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:menu-alt-2'"></mat-icon>
+                                <textarea matInput
+                                          [formControlName]="'comment'"
+                                          [placeholder]="'Comment'"
+                                          [rows]="5"
+                                          [spellcheck]="false"
+                                          matTextareaAutosize></textarea>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Status</mat-label>
+                                <mat-select [formControlName]="'status'">
+                                    <mat-option value="active">Active</mat-option>
+                                    <mat-option value="inactive">Inactive</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="flex items-center justify-end mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                            <button class="ml-2" style="width:16%;"
+                                    mat-flat-button
+                                    [disabled]="memberPointAddForm.invalid"
+                                    [color]="'primary'"
+                                    [matTooltip]="'Save'"
+                                    (click)="createMemberPoint()">
+                                Save
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </ng-container>
+
+    </div>
+   
+
+
+
+
+
+

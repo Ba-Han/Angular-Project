@@ -1,0 +1,94 @@
+<div class="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-auto min-w-0">
+    <div class="md:flex md:items-center md:justify-end w-full sm:w-auto md:h-full md:w-1/2 py-8 px-4 sm:p-12 md:p-16 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none sm:bg-card">
+        <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0">
+            <!-- Logo -->
+            <div class="w-30">
+                <img src="assets/images/logo/BHGlogo.png">
+            </div>
+
+            <!-- Title -->
+            <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">Two-Factor Authentication</div>
+            <div class="mt-0.5 font-medium">Setup Authenticator App and enter your otp.</div>
+
+            <!-- Alert -->
+            <fuse-alert
+                class="mt-8 -mb-4"
+                *ngIf="showAlert"
+                [appearance]="'outline'"
+                [showIcon]="false"
+                [type]="alert.type"
+                [@shake]="alert.type === 'error'">
+                {{alert.message}}
+            </fuse-alert>
+            <!-- Forgot password form -->
+            <form
+                class="mt-8"
+                [formGroup]="tfaForm"
+                #tfaNgForm="ngForm">
+                <qrcode
+                [qrdata]="otpauth_url"
+                [allowEmptyString]="true"
+                [cssClass]="'center'"
+                [colorDark]="'#000000ff'"
+                [colorLight]="'#ffffffff'"
+                [elementType]="'canvas'"
+                [errorCorrectionLevel]="'M'"
+                [margin]="4"
+                [scale]="1"
+                [width]="300"
+              ></qrcode>
+                <!-- Email field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Otp</mat-label>
+                    <input
+                    id="secret"
+                    type="hidden"
+                    [formControlName]="'secret'">
+                    <input
+                        id="otp"
+                        matInput
+                        [formControlName]="'otp'">
+                    <mat-error *ngIf="tfaForm.get('otp').hasError('required')">
+                        Opt address is required
+                    </mat-error>
+                </mat-form-field>
+                
+                <!-- Submit button -->
+                <button
+                    class="fuse-mat-button-large w-full mt-3"
+                    mat-flat-button
+                    [color]="'primary'"
+                    [disabled]="tfaForm.disabled"
+                    (click)="enableTFA()">
+                    <span *ngIf="!tfaForm.disabled">
+                        Submit
+                    </span>
+                    <mat-progress-spinner
+                        *ngIf="tfaForm.disabled"
+                        [diameter]="24"
+                        [mode]="'indeterminate'"></mat-progress-spinner>
+                </button>
+
+                <!-- Form footer -->
+                <div class="mt-8 text-md font-medium text-secondary">
+                    <span>Return to</span>
+                    <a
+                        class="ml-1 text-primary-500 hover:underline"
+                        [routerLink]="['/sign-in']">sign in
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div class="relative hidden md:flex flex-auto items-center justify-center w-1/2 h-full p-16 lg:px-28 overflow-hidden bg-gray-800 dark:border-l" style="background: url(assets/images/logo/BHGMain.png) top center no-repeat;background-size: cover;">
+
+        <!-- Content -->
+        <div class="z-10 relative w-full max-w-2xl">
+            <div class="text-7xl font-bold leading-none text-gray-100" style="color: #222 !important;margin-top: 65%;margin-left: -17%;">
+                <div>BHG Membership &</div>
+                <div>Loyalty System</div>
+            </div>
+        </div>
+    </div>
+</div>

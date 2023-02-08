@@ -1,0 +1,2 @@
+id,status,user_created,date_created,date_updated,member_code,first_name,last_name,gender,email,mobile_phone,date_of_birth,company_name,tax_identification_no,address_line_1,address_line_2,postal_code,city,state,region,accept_terms,accept_marketing,accept_email,accept_mobile_sms,registration_date,member_photo,member_tier,referral_code,birth_month,address_unit,address_building,user_updated,registration_channel,store,country
+,,,,,,testimportfirst,lastimport,male,import@gmail.com,67779848,1997-09-05,,,,,,,,,TRUE,TRUE,TRUE,TRUE,,,0,,,,,,m_portal,store1,
