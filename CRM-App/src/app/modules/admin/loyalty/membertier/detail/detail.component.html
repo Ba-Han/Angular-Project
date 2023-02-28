@@ -673,12 +673,12 @@
                                 </div>
                             </ng-container>
 
-                            <ng-container *ngIf="memberTier.point_rule">
+                            <!-- <ng-container *ngIf="memberTier.point_rule">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Point Rule: </div>
                                     <div class="ml-6 leading-6">{{memberTier.point_ruleFullname}}</div>
                                 </div>
-                            </ng-container>
+                            </ng-container> -->
 
                             <div class="flex sm:items-center mt-3">
                                 <div class="w-full text-3xl font-bold">Condition</div>
@@ -720,28 +720,34 @@
                                 <div class="w-full text-3xl font-bold">Downgrade Condition </div>
                             </div>
 
-                            <ng-container *ngIf="memberTier.downgrade_condition_type">
+                            <ng-container *ngIf="memberTier.downgrade_condition_type == 'never'">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Downgrade Condition Type: </div>
                                     <div class="ml-6 leading-6">{{memberTier.downgrade_condition_type}}</div>
                                 </div>
                             </ng-container>
 
-                            <ng-container *ngIf="memberTier.downgrade_condition_period">
+                            <ng-container *ngIf="memberTier.downgrade_condition_type == 'main_condition'">
                                 <div class="flex sm:items-center">
-                                    <div class="w-1/4">Downgrade Condition Period: </div>
-                                    <div class="ml-6 leading-6">{{memberTier.downgrade_condition_period}}</div>
+                                    <div class="w-1/4">Downgrade Condition Type: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.downgrade_condition_type}}</div>
                                 </div>
+
+                                <ng-container *ngIf="memberTier.downgrade_condition_period">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Downgrade Condition Period: </div>
+                                        <div class="ml-6 leading-6">{{memberTier.downgrade_condition_period}}</div>
+                                    </div>
+                                </ng-container>
+    
+                                <ng-container *ngIf="memberTier.downgrade_condition_period_value">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Downgrade Condition Period Value: </div>
+                                        <div class="ml-6 leading-6">{{memberTier.downgrade_condition_period_value}}</div>
+                                    </div>
+                                </ng-container>
+
                             </ng-container>
-
-                            <ng-container *ngIf="memberTier.downgrade_condition_period_value">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Downgrade Condition Period Value: </div>
-                                    <div class="ml-6 leading-6">{{memberTier.downgrade_condition_period_value}}</div>
-                                </div>
-                            </ng-container>
-
-
 
                         </div>
 
@@ -929,7 +935,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex sm:items-center mt-4">
+                            <!-- <div class="flex sm:items-center mt-4">
                                 <div class="w-full text-3xl font-bold">Reward Detail</div>
                             </div>
 
@@ -948,7 +954,7 @@
                                            [value]="point_ruleFullname"
                                            [placeholder]="'Point Rule'">
                                 </mat-form-field>
-                            </div>
+                            </div> -->
 
                             <div class="flex sm:items-center mt-3">
                                 <div class="w-full text-3xl font-bold">Downgrade Condition</div>
@@ -969,7 +975,7 @@
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Downgrade Condition Period</mat-label>
                                         <mat-select [formControlName]="'downgrade_condition_period'">
-                                            <mat-option value="Day">Day</mat-option>
+                                            <mat-option value="day">Day</mat-option>
                                             <mat-option value="month">Month</mat-option>
                                             <mat-option value="year">Year</mat-option>
                                         </mat-select>

@@ -891,11 +891,11 @@
                                 </div>
                             </div>
 
-                            <div class="flex sm:items-center mt-4">
+                            <!-- <div class="flex sm:items-center mt-4">
                                 <div class="w-full text-3xl font-bold">Reward Detail</div>
-                            </div>
+                            </div> -->
 
-                            <mat-form-field class="fuse-mat-no-subscript w-full hidden">
+                            <!-- <mat-form-field class="fuse-mat-no-subscript w-full hidden">
                                 <input matInput [formControlName]="'point_rule'" />
                             </mat-form-field>
 
@@ -909,7 +909,7 @@
                                            [formControlName]="'point_ruleFullname'"
                                            [placeholder]="'Create Point Rule'">
                                 </mat-form-field>
-                            </div>
+                            </div> -->
 
                             <div class="flex sm:items-center mt-3">
                                 <div class="w-full text-3xl font-bold">Downgrade Condition</div>
@@ -930,9 +930,9 @@
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Downgrade Condition Period</mat-label>
                                         <mat-select [formControlName]="'downgrade_condition_period'">
-                                            <mat-option value="days">Days</mat-option>
-                                            <mat-option value="months">Months</mat-option>
-                                            <mat-option value="years">Years</mat-option>
+                                            <mat-option value="day">Days</mat-option>
+                                            <mat-option value="month">Months</mat-option>
+                                            <mat-option value="year">Years</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>

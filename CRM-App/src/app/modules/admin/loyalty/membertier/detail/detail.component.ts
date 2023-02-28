@@ -149,11 +149,9 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
             condition_period_value: ['', [Validators.required]],
             min_condition_amount: ['', [Validators.required]],
             max_condition_amount: ['', [Validators.required]],
-            point_rule: [''],
             downgrade_condition_type: ['', [Validators.required]],
             downgrade_condition_period: [''],
             downgrade_condition_period_value: [''],
-            point_ruleFullname: [''],
             tier_upgrade_Fullname: [this.itemName],
             tier_upgrade_items: new FormControl(this.selectedUpgradeItem)
         });
@@ -207,7 +205,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
             .subscribe((tier: any) => {
                 this.memberTier = tier;
                 this.selectedUpgradeItem = tier.tier_upgrade_items;
-                this.memberTier.point_ruleFullname = tier.point_rule.name;
+                //this.memberTier.point_ruleFullname = tier.point_rule.name;
                 //this.memberTier.tier_upgrade_Fullname = 
                 //this.tierUpgradeId =;
                 this.downgradeconditionValue = tier.downgrade_condition_type;
@@ -354,7 +352,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
         this.matDrawer.close();
     }
 
-    openPointRuleForm(id): void {
+    /* openPointRuleForm(id): void {
         this.addedPointSegment = [];
         this.addedPointSegmentId = [];
         this.isLoading = true;
@@ -395,9 +393,9 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
             )
             .subscribe();
         
-    }
+    } */
 
-    updatePointRule(): void {
+    /* updatePointRule(): void {
         const pointrule = this.PointRuleForm.getRawValue();
         pointrule.point_basket = this.addedPointSegmentId;
         this._memberTierService.updatePointRule(pointrule.id,pointrule)
@@ -411,7 +409,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
                 this.addedPointSegment = [];
                 this.addedPointSegmentId = [];
             });
-    }
+    } */
 
     createNewPointSegment(): void {
         this.PointSegmentForm.reset();

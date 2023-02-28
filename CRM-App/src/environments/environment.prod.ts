@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    apiurl: 'https://crm-api.dynamicwebapac.com',
+    apiurl: 'https://crmreplatform.dynamicwebapac.com',
     tfaEnable: true
 };

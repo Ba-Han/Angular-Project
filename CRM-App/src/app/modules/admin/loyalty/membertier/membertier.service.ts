@@ -95,7 +95,7 @@ export class MemberTierService {
                 //const memberTier = response.data;
 
                 
-                for (var i = 0; i < response.data.length; i++) {
+                /* for (var i = 0; i < response.data.length; i++) {
                     if (response.data != null) {
                         response.data[i]["point_ruleFullname"] = response.data[i].point_rule.name;
                         response.data[i].point_rule = response.data[i].point_rule.id;
@@ -105,7 +105,7 @@ export class MemberTierService {
                         response.data[i].point_rule = "";
                     }
                     
-                }
+                } */
                 this._pagination.next(pagination);
                 this._memberTiers.next(response.data);
             })
@@ -182,10 +182,102 @@ export class MemberTierService {
                 })
             );
     }
+
     createMemberTier(memberTier: MemberTier): Observable<MemberTier> {
-        return this.memberTiers$.pipe(
-            take(1),
-            switchMap(tiers => this._httpClient.post<any>(`${this._apiurl}/items/member_tier`, {
+
+        const periodValue = memberTier.downgrade_condition_period_value;
+
+        if (periodValue == "")
+        {
+            return this.memberTiers$.pipe(
+                take(1),
+                switchMap(tiers => this._httpClient.post<any>(`${this._apiurl}/items/member_tier`, {
+                    "status": memberTier.status,
+                    "description": memberTier.description,
+                    "name": memberTier.name,
+                    "level": memberTier.level,
+                    "condition_type": memberTier.condition_type,
+                    "condition_period": memberTier.condition_period,
+                    "condition_period_value": memberTier.condition_period_value,
+                    "level_image": null,
+                    "code": memberTier.code,
+                    "min_condition_amount": memberTier.min_condition_amount,
+                    "max_condition_amount": memberTier.max_condition_amount,
+                    "downgrade_condition_type": memberTier.downgrade_condition_type,
+                    "downgrade_condition_period": memberTier.downgrade_condition_period,
+                    "downgrade_condition_period_value": null,
+                    /* "point_rule": memberTier.point_rule, */
+                    "tier_upgrade_items": memberTier.tier_upgrade_items
+                }).pipe(
+                    map((newTier) => {
+                        this._memberTiers.next([newTier.data, ...tiers]);
+                        return newTier;
+                    })
+                ))
+            );
+        } else {
+            return this.memberTiers$.pipe(
+                take(1),
+                switchMap(tiers => this._httpClient.post<any>(`${this._apiurl}/items/member_tier`, {
+                    "status": memberTier.status,
+                    "description": memberTier.description,
+                    "name": memberTier.name,
+                    "level": memberTier.level,
+                    "condition_type": memberTier.condition_type,
+                    "condition_period": memberTier.condition_period,
+                    "condition_period_value": memberTier.condition_period_value,
+                    "level_image": null,
+                    "code": memberTier.code,
+                    "min_condition_amount": memberTier.min_condition_amount,
+                    "max_condition_amount": memberTier.max_condition_amount,
+                    "downgrade_condition_type": memberTier.downgrade_condition_type,
+                    "downgrade_condition_period": memberTier.downgrade_condition_period,
+                    "downgrade_condition_period_value": memberTier.downgrade_condition_period_value,
+                    /* "point_rule": memberTier.point_rule, */
+                    "tier_upgrade_items": memberTier.tier_upgrade_items
+                }).pipe(
+                    map((newTier) => {
+                        this._memberTiers.next([newTier.data, ...tiers]);
+                        return newTier;
+                    })
+                ))
+            );
+        }
+    }
+
+    UpdateMemberTier(id: number, memberTier: MemberTier): Observable<MemberTier[]> {
+
+        const updateperiodValue = memberTier.downgrade_condition_period_value;
+
+        if (updateperiodValue == "")
+        {
+            return this._httpClient.patch<MemberTier>(`${this._apiurl}/items/member_tier/${id}`, {
+                "id": id,
+                "status": memberTier.status,
+                "description": memberTier.description,
+                "name": memberTier.name,
+                "level": memberTier.level,
+                "condition_type": memberTier.condition_type,
+                "condition_period": memberTier.condition_period,
+                "condition_period_value": memberTier.condition_period_value,
+                "level_image": null,
+                "code": memberTier.code,
+                "min_condition_amount": memberTier.min_condition_amount,
+                "max_condition_amount": memberTier.max_condition_amount,
+                "downgrade_condition_type": memberTier.downgrade_condition_type,
+                "downgrade_condition_period": memberTier.downgrade_condition_period,
+                "downgrade_condition_period_value": null,
+                /* "point_rule": memberTier.point_rule, */
+                "tier_upgrade_items": memberTier.tier_upgrade_items
+    
+            }).pipe(
+                tap((response: any) => {
+                    return response.data;
+                })
+            )
+        } else {
+            return this._httpClient.patch<MemberTier>(`${this._apiurl}/items/member_tier/${id}`, {
+                "id": id,
                 "status": memberTier.status,
                 "description": memberTier.description,
                 "name": memberTier.name,
@@ -200,42 +292,15 @@ export class MemberTierService {
                 "downgrade_condition_type": memberTier.downgrade_condition_type,
                 "downgrade_condition_period": memberTier.downgrade_condition_period,
                 "downgrade_condition_period_value": memberTier.downgrade_condition_period_value,
-                "point_rule": memberTier.point_rule,
+                /* "point_rule": memberTier.point_rule, */
                 "tier_upgrade_items": memberTier.tier_upgrade_items
+    
             }).pipe(
-                map((newTier) => {
-                    this._memberTiers.next([newTier.data, ...tiers]);
-                    return newTier;
+                tap((response: any) => {
+                    return response.data;
                 })
-            ))
-        );
-    }
-
-    UpdateMemberTier(id: number, memberTier: MemberTier): Observable<MemberTier[]> {
-        return this._httpClient.patch<MemberTier>(`${this._apiurl}/items/member_tier/${id}`, {
-            "id": id,
-            "status": memberTier.status,
-            "description": memberTier.description,
-            "name": memberTier.name,
-            "level": memberTier.level,
-            "condition_type": memberTier.condition_type,
-            "condition_period": memberTier.condition_period,
-            "condition_period_value": memberTier.condition_period_value,
-            "level_image": null,
-            "code": memberTier.code,
-            "min_condition_amount": memberTier.min_condition_amount,
-            "max_condition_amount": memberTier.max_condition_amount,
-            "downgrade_condition_type": memberTier.downgrade_condition_type,
-            "downgrade_condition_period": memberTier.downgrade_condition_period,
-            "downgrade_condition_period_value": memberTier.downgrade_condition_period_value,
-            "point_rule": memberTier.point_rule,
-            "tier_upgrade_items": memberTier.tier_upgrade_items
-
-        }).pipe(
-            tap((response: any) => {
-                return response.data;
-            })
-        )
+            )
+        }
     }
 
     createPointSegment(pointsegment: PointSegment): Observable<PointSegment> {

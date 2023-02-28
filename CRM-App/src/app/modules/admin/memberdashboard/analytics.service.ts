@@ -79,21 +79,21 @@ export class AnalyticsService
 
     getTotalMember(): Observable<any>
     {
-        return this._httpClient.get<any>(`${this._apiurl}/items/member?aggregate[count]=member_code`).pipe(
+        return this._httpClient.get<any>(`${this._apiurl}/items/memberaggregate?level=0`).pipe(
             tap((response: any) => {
                 this._totalMembers.next(response);
             })
         );
     }
     getBeInformed(): Observable<any> {
-        return this._httpClient.get<any>(`${this._apiurl}/items/member?fields=*,member_tier.*&filter[member_tier][level][_eq]=0&aggregate[count]=member_code`).pipe(
+        return this._httpClient.get<any>(`${this._apiurl}/items/memberaggregate?level=0`).pipe(
             tap((response: any) => {
                 this._beInformedMembers.next(response);
             })
         );
     }
     getBeReward(): Observable<any> {
-        return this._httpClient.get<any>(`${this._apiurl}/items/member?fields=*,member_tier.*&filter[member_tier][level][_eq]=1&aggregate[count]=member_code`).pipe(
+        return this._httpClient.get<any>(`${this._apiurl}/items/memberaggregate?level=1`).pipe(
             tap((response: any) => {
                 this._beRewardMembers.next(response);
             })
@@ -101,7 +101,7 @@ export class AnalyticsService
     }
 
     getBeWow(): Observable<any> {
-        return this._httpClient.get<any>(`${this._apiurl}/items/member?fields=*,member_tier.*&filter[member_tier][level][_eq]=2&aggregate[count]=member_code`).pipe(
+        return this._httpClient.get<any>(`${this._apiurl}/items/memberaggregate?level=2`).pipe(
             tap((response: any) => {
                 this._beWowMembers.next(response);
             })
