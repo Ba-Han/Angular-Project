@@ -12,13 +12,13 @@ export interface MemberTier
     condition_period_value: string;
     min_condition_amount: string;
     max_condition_amount: string;
-    point_rule: [];
+    /* point_rule: []; */
     downgrade_condition_type: string;
     downgrade_condition_period: string;
     downgrade_condition_period_value: string;
     date_created: string,
     date_updated: string,
-    point_ruleFullname: string,
+    /* point_ruleFullname: string, */
     tier_upgrade_items: [],
     tier_upgrade_Fullname: string,
 }

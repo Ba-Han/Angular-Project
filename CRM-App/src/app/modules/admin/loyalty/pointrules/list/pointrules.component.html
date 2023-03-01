@@ -1,6 +1,4 @@
-
 <mat-drawer-container class="flex flex-col w-full">
-
     <mat-drawer class="w-2/4 dark:bg-gray-900"
                 [mode]="'over'"
                 [opened]="false"
@@ -8,6 +6,7 @@
                 [disableClose]="true"
                 #matDrawer>
 
+        <!-- Member Tier List-->
         <ng-container *ngIf="MemberTierListMode">
             <div class="flex justify-start w-full ng-tns-c188-34">
                 <button mat-icon-button style="background-color:#ccc;"
@@ -94,149 +93,138 @@
                         </ng-container>
                     </ng-container>
 
-                    <ng-template #noMembers>
-                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no members!</div>
+                    <ng-template #noBaskets>
+                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no point basket!</div>
                     </ng-template>
 
                 </div>
             </div>
         </ng-container>
-    </mat-drawer>
-    <mat-drawer-content>
-<div class="flex flex-col w-full" style="background:#fff;">
-    <!--  Point rule Lists -->
-    <ng-container *ngIf="!AddMode">
-        <div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
-
+        <!-- Point Basket List -->
+        <ng-container *ngIf="PointBasketListMode">
+            <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
+                <div class="">
+                    <button mat-icon-button style="background-color:#ccc;"
+                            [matTooltip]="'Close'"
+                            (click)="matDrawer.close()">
+                        <mat-icon class="text-white"
+                                    [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+                <div class="w-full text-3xl font-bold" style="text-align:center;">  </div>
+            </div>            
             <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
                 <div class="absolute inset-x-0 bottom-0"
                      *ngIf="isLoading">
                     <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
                 </div>
-                <div class="text-4xl font-extrabold tracking-tight">Point Rules</div>
+                <div class="w-full text-3xl font-bold" style="text-align:center;">Point Basket</div>
                 <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
-                    <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
-                        <mat-icon class="icon-size-5"
-                                  matPrefix
-                                  [svgIcon]="'heroicons_solid:search'"></mat-icon>
-                        <input matInput
-                               [formControl]="searchInputControl"
-                               [autocomplete]="'off'"
-                               [placeholder]="'Search point rule'">
-                    </mat-form-field>
                     <button class="ml-4"
                             mat-flat-button
                             [color]="'primary'"
-                            (click)="toogleStoreAddFormMode(true)">
+                            (click)="createNewPointBasket()">
                         <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                         <span class="ml-2 mr-1">Add</span>
                     </button>
                 </div>
             </div>
+            <div class="flex-auto p-5">
+                <form [formGroup]="PointBasketForm">
+                    <div class="mt-8 hidden">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <input matInput [formControlName]="'id'">
+                        </mat-form-field>
+                    </div>
 
-            <div class="flex flex-auto overflow-hidden">
-                <!-- Point Rule list -->
-                <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
-                    <ng-container *ngIf="(pointRules$ | async) as products">
-                        <ng-container *ngIf="products.length > 0; else noProducts">
-                            <div class="grid">
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Point Basket</mat-label>
+                            <mat-icon matPrefix
+                                    class="hidden sm:flex icon-size-5"
+                                    ></mat-icon>
+                            <input matInput
+                                [formControlName]="'name'"
+                                [placeholder]="'create point basket'"
+                                (click)="editForm()"
+                                [matTooltip]="'Edit Basket'">
+                        </mat-form-field>
+                    </div>
 
-                                <div class="prule-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
-                                     matSort
-                                     matSortDisableClear>
-
-                                    <div [mat-sort-header]="'name'"> Name </div>
-                                    <div [mat-sort-header]="'reward_code'"> Reward Code </div>
-                                    <div [mat-sort-header]="'point_value'"> Point Value </div>
-                                    <div [mat-sort-header]="'start_date'"> Start Date </div>
-                                    <div [mat-sort-header]="'end_date'"> End Date </div>
-                                </div>
-
-
-                                <!-- Rows -->
-                                <ng-container *ngIf="(pointRules$ | async) as products">
-                                    <ng-container *ngFor="let product of products; trackBy: trackByFn">
-                                        <a class=" cursor-pointer hover:bg-gray-100 dark:hover:bg-hover"
-                                           [routerLink]="['./', product.id]">
-                                            <div class="prule-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
-                                                <div class="truncate">
-                                                    {{product.name}}
-                                                </div>
-
-
-                                                <div class="truncate">
-                                                    {{product.reward_code}}
-                                                </div>
-
-
-                                                <div class="truncate">
-                                                    {{product.point_value}}
-                                                </div>
-
-
-                                                <div class="truncate">
-                                                    {{product.start_date | date:'MMM dd, y'}}
-                                                </div>
-
-                                                <div class="truncate">
-                                                    {{product.end_date | date:'MMM dd, y'}}
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </ng-container>
-                                </ng-container>
+                    <!-- <ng-container *ngIf="addedPointBasket.length == 0">
+                        <div class="mt-8">
+                            <mat-label></mat-label>
+                            <div class="customPoint mt-3 h-12" style="cursor: pointer; border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
+                                <span style="color:#ccc;">Create Point Basket</span>
                             </div>
-
-                            <mat-paginator class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
-                                           [ngClass]="{'pointer-events-none': isLoading}"
-                                           [length]="pagination.length"
-                                           [pageIndex]="pagination.page"
-                                           [pageSize]="pagination.size"
-                                           [pageSizeOptions]="[10, 25, 100]"
-                                           [showFirstLastButtons]="true"></mat-paginator>
-
-                        </ng-container>
-                    </ng-container>
-
-                </div>
-
-            </div>
-
-        </div>
-    </ng-container>
-
-    <!-- Point Rule Add Mode-->
-    <ng-container *ngIf="AddMode">
-
-        <div class="relative w-full h-20 sm:h-20 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700" style="position: sticky !important;top: 0;z-index: 99;">
-            <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
-                <div class="mt-3 text-4xl w-full font-bold truncate">Add Point Rule</div>
-                <button mat-icon-button
-                        [matTooltip]="'Close'"
-                        (click)="toogleStoreAddFormMode(false)"
-                        style="background:#ccc;">
-                    <mat-icon class="text-white"
-                              [svgIcon]="'heroicons_outline:x'"></mat-icon>
-                </button>
-            </div>
-        </div>
+                        </div>
+                    </ng-container> -->
         
+        
+                    <!-- <ng-container *ngIf="addedPointBasket.length > 0">
+                        <div class="mt-8">
+                            <label>Point Basket</label>
+                            <mat-form-field class="fuse-mat-no-subscript w-full hidden">
+                                <input matInput readonly style="cursor:pointer;"
+                                       [formControlName]="'name'"
+                                       [value]="addedPointBasketId">
+                            </mat-form-field>
+                            <ng-container *ngFor="let add of addedPointBasket; trackBy: trackByFn">
+                                <div [matTooltip]="'Edit Basket'" (click)="editForm(add)" class="customPoint mt-3 h-12" style="border: 1px solid #ccc;border-radius: 10px;padding: 12px;cursor: pointer;">
+                                    {{add.name}}
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container> -->
+        
+                    <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                        <button class="ml-2"
+                                mat-flat-button
+                                [disabled]="PointBasketForm.invalid"
+                                [color]="'primary'"
+                                [matTooltip]="'Save'"
+                                (click)="createPointBasket()">
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </ng-container>
+        <!-- Point Basket Add and Edit Form -->
+        <ng-container *ngIf="pointbasketMode">
+            <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
+                <div class="">
+                    <button mat-icon-button style="background-color:#ccc;"
+                            [matTooltip]="'Close'"
+                            (click)="closeBasketForm()">
+                        <mat-icon class="text-white"
+                                    [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+                <div class="w-full text-3xl font-bold" style="text-align:center;"> Point Basket </div>
+            </div>
 
-        <!-- Add Form -->
-        <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
-            <div class="w-full max-w-3xl">
-                <form [formGroup]="PointRuleAddForm">
+            <div class="flex-auto p-5">
+                <form [formGroup]="PointBasketForm">
+
+                    <div class="mt-8 hidden">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>id</mat-label>
+                            <input matInput
+                                    [formControlName]="'id'"
+                                    [placeholder]="'id'">
+                        </mat-form-field>
+                    </div>
 
                     <div class="mt-8">
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Name</mat-label>
                             <mat-icon matPrefix
-                                      class="hidden sm:flex icon-size-5"
-                                      [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                    class="hidden sm:flex icon-size-5"
+                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
                             <input matInput
-                                   [formControlName]="'name'"
-                                   [placeholder]="'name'"
-                                   [spellcheck]="false">
+                                [formControlName]="'name'"
+                                [placeholder]="'name'">
                         </mat-form-field>
                     </div>
 
@@ -244,131 +232,524 @@
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Description</mat-label>
                             <mat-icon matPrefix
-                                      class="hidden sm:flex icon-size-5"
-                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                    class="hidden sm:flex icon-size-5"
+                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
                             <input matInput
-                                   [formControlName]="'description'"
-                                   [placeholder]="'description'">
+                                [formControlName]="'description'"
+                                [placeholder]="'description'">
                         </mat-form-field>
                     </div>
 
                     <div class="mt-8">
                         <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Reward Code</mat-label>
-                            <mat-icon matPrefix
-                                      class="hidden sm:flex icon-size-5"
-                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                            <input matInput
-                                   [formControlName]="'reward_code'"
-                                   [placeholder]="'reward_code'">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Type</mat-label>
-                            <mat-select [formControlName]="'type'">
-                                <mat-option value="event_rule">Event Rule</mat-option>
-                                <!--<mat-option value="referral_rule">Customer Referral</mat-option>-->
-                                <mat-option value="birthday_rule">Birthday Event</mat-option>
+                            <mat-label>Redemption Type</mat-label>
+                            <mat-select [formControlName]="'spending_type'" [(ngModel)]="spendingtypeValue">
+                                <mat-option value="instant_redemption">Instant Redemption</mat-option>
+                                <mat-option value="redemption_basket">Redemption Basket</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
 
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Point Value</mat-label>
-                            <mat-icon matPrefix
-                                      class="hidden sm:flex icon-size-5"
-                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                            <input matInput type="number"
-                                   [formControlName]="'point_value'"
-                                   [placeholder]="'Point Value'">
-                        </mat-form-field>
-                    </div>
+                    <!--redemptionType-->
+                    <ng-container *ngIf="spendingtypeValue == 'instant_redemption'">
+                        <div class="flex sm:items-center mt-8">
+                            <div class="w-full text-3xl font-bold">To</div>
+                        </div> 
 
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Status</mat-label>
-                            <mat-select [formControlName]="'status'">
-                                <mat-option value="active">Active</mat-option>
-                                <mat-option value="inactive">Inactive</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                    <!-- bh test  -->
-                    <div class="flex sm:items-center mt-8">
-                        <div class="w-full text-3xl font-bold">Type Detail</div>
-                    </div>
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Spending Validity Type</mat-label>
+                                <mat-select [formControlName]="'to_type'" [(ngModel)]="totypeValue">
+                                    <mat-option value="0">Day</mat-option>
+                                    <mat-option value="1">Month</mat-option>
+                                    <mat-option value="2">Year</mat-option>
+                                    <mat-option value="3">Date</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
 
-                    <mat-form-field class="fuse-mat-no-subscript w-full hidden ">
-                        <input matInput [formControlName]="'member_tier'" />
-                    </mat-form-field>
+                        <ng-container *ngIf="totypeValue == '0' || totypeValue == '1' || totypeValue== '2'">
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Validity Number</mat-label>
+                                    <mat-icon matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                    <input matInput type="number"
+                                        [formControlName]="'to_number'"
+                                        [placeholder]="'validity number'">
+                                </mat-form-field>
+                            </div>
+    
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Spending End</mat-label>
+                                    <mat-select [formControlName]="'to_end_type'">
+                                        <mat-option value="expire_month_end">Expire Month End</mat-option>
+                                        <mat-option value="expire_date">Expire Date</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </ng-container>
+                        
+                        <ng-container *ngIf="totypeValue == '3'">
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>End Date</mat-label>
+                                    <mat-icon matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                    <input matInput type="datetime-local"
+                                        [formControlName]="'to_end_date'"
+                                        [placeholder]="'End Date'">
+                                    <!-- <mat-datepicker-toggle matSuffix
+                                                        [for]="endDatepicker">
+                                    </mat-datepicker-toggle> -->
+                                    <mat-datepicker #endDatepicker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </ng-container>
+                        
+                    </ng-container>
 
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Member Tier</mat-label>
-                            <input matInput (click)="setMemberTierDrawer()" style="cursor:pointer" readonly
-                                   [formControlName]="'member_tierFullName'"
-                                   placeholder="Select Member Tier">
-                            <mat-icon matSuffix svgIcon="heroicons_outline:external-link"></mat-icon>
-                        </mat-form-field>
+                    <!--redemptionBasket-->
+                    <ng-container *ngIf="spendingtypeValue == 'redemption_basket'">
+                        <div class="flex sm:items-center mt-8">
+                            <div class="w-full text-3xl font-bold">From</div>
+                        </div> 
 
-                    </div>
-                    <!-- bh test end  -->
-                    <div class="flex sm:items-center mt-8">
-                        <div class="w-full text-3xl font-bold">Validity</div>
-                    </div>
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Spending Validity Type</mat-label>
+                                <mat-select [formControlName]="'from_type'" [(ngModel)]="fromtypeValue">
+                                    <mat-option value="0">Day</mat-option>
+                                    <mat-option value="1">Month</mat-option>
+                                    <mat-option value="2">Year</mat-option>
+                                    <mat-option value="3">Date</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
 
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Start Date</mat-label>
-                            <mat-icon matPrefix
-                                      class="hidden sm:flex icon-size-5"
-                                      [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
-                            <input matInput type="datetime-local"
-                                   [formControlName]="'start_date'"
-                                   [placeholder]="'Start Date'">
-                            <!-- <mat-datepicker-toggle matSuffix
-                                                   [for]="startDatepicker">
-                            </mat-datepicker-toggle> -->
-                            <mat-datepicker #startDatepicker></mat-datepicker>
-                        </mat-form-field>
-                    </div>
+                        <ng-container *ngIf="fromtypeValue == '0' || fromtypeValue == '1' || fromtypeValue== '2'">
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Validity Number</mat-label>
+                                    <mat-icon matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                    <input matInput type="number"
+                                        [formControlName]="'from_number'"
+                                        [placeholder]="'validity number'">
+                                </mat-form-field>
+                            </div>
+    
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Spending Start</mat-label>
+                                    <mat-select [formControlName]="'from_start_type'">
+                                        <mat-option value="0">Current Date</mat-option>
+                                        <mat-option value="1">Current Month Start</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </ng-container>
+                        
+                        <ng-container *ngIf="fromtypeValue == '3'">
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Start Date</mat-label>
+                                    <mat-icon matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                    <input matInput type="datetime-local"
+                                        [formControlName]="'from_start_date'"
+                                        [placeholder]="'Start Date'">
+                                    <!-- <mat-datepicker-toggle matSuffix
+                                                        [for]="startDatepicker">
+                                    </mat-datepicker-toggle> -->
+                                    <mat-datepicker #startDatepicker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </ng-container>
+                        
 
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>End Date</mat-label>
-                            <mat-icon matPrefix
-                                      class="hidden sm:flex icon-size-5"
-                                      [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
-                            <input matInput type="datetime-local"
-                                   [formControlName]="'end_date'"
-                                   [placeholder]="'End Date'">
-                            <!-- <mat-datepicker-toggle matSuffix
-                                                   [for]="endDatepicker">
-                            </mat-datepicker-toggle> -->
-                            <mat-datepicker #endDatepicker></mat-datepicker>
-                        </mat-form-field>
-                    </div>
+                        <div class="flex sm:items-center mt-8">
+                            <div class="w-full text-3xl font-bold">To</div>
+                        </div>    
 
-                    <div class="flex justify-end items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
-                        <button class="ml-2" style="width:16%;"
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Spending Validity Type</mat-label>
+                                <mat-select [formControlName]="'to_type'" [(ngModel)]="totypeValue">
+                                    <mat-option value="0">Day</mat-option>
+                                    <mat-option value="1">Month</mat-option>
+                                    <mat-option value="2">Year</mat-option>
+                                    <mat-option value="3">Date</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <ng-container *ngIf="totypeValue == '0' || totypeValue == '1' || totypeValue == '2'">
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Validity Number</mat-label>
+                                    <mat-icon matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                    <input matInput type="number"
+                                        [formControlName]="'to_number'"
+                                        [placeholder]="'validity number'">
+                                </mat-form-field>
+                            </div>
+    
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Spending End</mat-label>
+                                    <mat-select [formControlName]="'to_end_type'">
+                                        <mat-option value="0">Expire Month End</mat-option>
+                                        <mat-option value="1">Expire Date</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </ng-container>
+                        
+                        <ng-container *ngIf="totypeValue == '3'">
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>End Date</mat-label>
+                                    <mat-icon matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                    <input matInput type="datetime-local"
+                                        [formControlName]="'to_end_date'"
+                                        [placeholder]="'End Date'">
+                                    <!-- <mat-datepicker-toggle matSuffix
+                                                        [for]="endDatepicker">
+                                    </mat-datepicker-toggle> -->
+                                    <mat-datepicker #endDatepicker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </ng-container>
+                    </ng-container> 
+
+                    <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                        <button class="ml-2"
                                 mat-flat-button
-                                [disabled]="PointRuleAddForm.invalid"
+                                [disabled]="PointBasketForm.invalid"
                                 [color]="'primary'"
                                 [matTooltip]="'Save'"
-                                (click)="createPointRule()">
+                                (click)="createUpdateBasketPoint()"> 
                             Save
                         </button>
                     </div>
-
                 </form>
             </div>
+        </ng-container>
+    </mat-drawer>
+    <mat-drawer-content>
+        <div class="flex flex-col w-full" style="background:#fff;">
+            <!--  Point rule Lists -->
+            <ng-container *ngIf="!AddMode">
+                <div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+                    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+                        <div class="absolute inset-x-0 bottom-0"
+                            *ngIf="isLoading">
+                            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+                        </div>
+                        <div class="text-4xl font-extrabold tracking-tight">Point Rules</div>
+                        <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+                            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
+                                <mat-icon class="icon-size-5"
+                                        matPrefix
+                                        [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                <input matInput
+                                    [formControl]="searchInputControl"
+                                    [autocomplete]="'off'"
+                                    [placeholder]="'Search point rule'">
+                            </mat-form-field>
+                            <button class="ml-4"
+                                    mat-flat-button
+                                    [color]="'primary'"
+                                    (click)="toogleStoreAddFormMode(true)">
+                                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                                <span class="ml-2 mr-1">Add</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-auto overflow-hidden">
+                        <!-- Point Rule list -->
+                        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+                            <ng-container *ngIf="(pointRules$ | async) as products">
+                                <ng-container *ngIf="products.length > 0; else noProducts">
+                                    <div class="grid">
+
+                                        <div class="prule-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                            matSort
+                                            matSortDisableClear>
+
+                                            <div [mat-sort-header]="'name'"> Name </div>
+                                            <div [mat-sort-header]="'reward_code'"> Reward Code </div>
+                                            <div [mat-sort-header]="'point_value'"> Point Value </div>
+                                            <div [mat-sort-header]="'start_date'"> Start Date </div>
+                                            <div [mat-sort-header]="'end_date'"> End Date </div>
+                                        </div>
+
+                                        <!-- Rows -->
+                                        <ng-container *ngIf="(pointRules$ | async) as products">
+                                            <ng-container *ngFor="let product of products; trackBy: trackByFn">
+                                                <a class=" cursor-pointer hover:bg-gray-100 dark:hover:bg-hover"
+                                                [routerLink]="['./', product.id]">
+                                                    <div class="prule-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                                                        <div class="truncate">
+                                                            {{product.name}}
+                                                        </div>
+
+
+                                                        <div class="truncate">
+                                                            {{product.reward_code}}
+                                                        </div>
+
+
+                                                        <div class="truncate">
+                                                            {{product.point_value}}
+                                                        </div>
+
+
+                                                        <div class="truncate">
+                                                            {{product.start_date | date:'MMM dd, y'}}
+                                                        </div>
+
+                                                        <div class="truncate">
+                                                            {{product.end_date | date:'MMM dd, y'}}
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </ng-container>
+                                        </ng-container>
+                                    </div>
+
+                                    <mat-paginator class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                                                [ngClass]="{'pointer-events-none': isLoading}"
+                                                [length]="pagination.length"
+                                                [pageIndex]="pagination.page"
+                                                [pageSize]="pagination.size"
+                                                [pageSizeOptions]="[10, 25, 100]"
+                                                [showFirstLastButtons]="true"></mat-paginator>
+
+                                </ng-container>
+                            </ng-container>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </ng-container>
+
+            <!-- Point Rule Add Mode-->
+            <ng-container *ngIf="AddMode">
+
+                <div class="relative w-full h-20 sm:h-20 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700" style="position: sticky !important;top: 0;z-index: 99;">
+                    <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
+                        <div class="mt-3 text-4xl w-full font-bold truncate">Add Point Rule</div>
+                        <button mat-icon-button
+                                [matTooltip]="'Close'"
+                                (click)="toogleStoreAddFormMode(false)"
+                                style="background:#ccc;">
+                            <mat-icon class="text-white"
+                                    [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+                
+
+                <!-- Add Form -->
+                <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
+                    <div class="w-full max-w-3xl">
+                        <form [formGroup]="PointRuleAddForm">
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Name</mat-label>
+                                    <mat-icon matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                    <input matInput
+                                        [formControlName]="'name'"
+                                        [placeholder]="'name'"
+                                        [spellcheck]="false">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Description</mat-label>
+                                    <mat-icon matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                    <input matInput
+                                        [formControlName]="'description'"
+                                        [placeholder]="'description'">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Reward Code</mat-label>
+                                    <mat-icon matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                    <input matInput
+                                        [formControlName]="'reward_code'"
+                                        [placeholder]="'reward_code'">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Type</mat-label>
+                                    <mat-select [formControlName]="'type'">
+                                        <mat-option value="event_rule">Event Rule</mat-option>
+                                        <!--<mat-option value="referral_rule">Customer Referral</mat-option>-->
+                                        <mat-option value="birthday_rule">Birthday Event</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <!--addDollarValue-->
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
+                                    <mat-label>Dollar Value</mat-label>
+                                    <mat-icon matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                    <input matInput type="number"
+                                        [formControlName]="'dollar_value'"
+                                        [placeholder]="'Dollar Value'">
+                                </mat-form-field>
+
+                                <mat-label>To</mat-label>
+
+                                <mat-form-field class="fuse-mat-no-subscript w-1/3 ml-4">
+                                    <mat-label>Point Value</mat-label>
+                                    <mat-icon matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                    <input matInput type="number"
+                                        [formControlName]="'point_value'"
+                                        [placeholder]="'Point Value'">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Status</mat-label>
+                                    <mat-select [formControlName]="'status'">
+                                        <mat-option value="active">Active</mat-option>
+                                        <mat-option value="inactive">Inactive</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <!-- bh test  -->
+                            <div class="flex sm:items-center mt-8">
+                                <div class="w-full text-3xl font-bold">Type Detail</div>
+                            </div>
+
+                            <mat-form-field class="fuse-mat-no-subscript w-full hidden ">
+                                <input matInput [formControlName]="'member_tier'" />
+                            </mat-form-field>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Member Tier</mat-label>
+                                    <input matInput (click)="setMemberTierDrawer()" style="cursor:pointer" readonly
+                                        [formControlName]="'member_tierFullName'"
+                                        placeholder="Select Member Tier">
+                                    <mat-icon matSuffix svgIcon="heroicons_outline:external-link"></mat-icon>
+                                </mat-form-field>
+
+                            </div>
+                            
+                            <mat-form-field class="fuse-mat-no-subscript w-full hidden ">
+                                <input matInput [formControlName]="'basket_id'" />
+                            </mat-form-field>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Point Basket</mat-label>
+                                    <input matInput (click)="openPointBasketForm(pointbasketId)" style="cursor:pointer" readonly
+                                        [formControlName]="'point_basketName'"
+                                        placeholder="Create Point Basket">
+                                    <mat-icon matSuffix svgIcon="heroicons_outline:external-link"></mat-icon>
+                                </mat-form-field>
+                            </div>
+                            
+                            <div class="flex sm:items-center mt-8">
+                                <div class="w-full text-3xl font-bold">Validity</div>
+                            </div>
+
+                            <!--addValidityValue-->
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Validity Type</mat-label>
+                                    <mat-select [formControlName]="'validity_type'" [(ngModel)]="validitytypeValue">
+                                        <mat-option [value]="1">No Range</mat-option>
+                                        <mat-option [value]="2">Custom</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <ng-container *ngIf="validitytypeValue == '2'">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Start Date</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                        <input matInput type="datetime-local"
+                                            [formControlName]="'start_date'"
+                                            [placeholder]="'Start Date'">
+                                        <!-- <mat-datepicker-toggle matSuffix
+                                                            [for]="startDatepicker">
+                                        </mat-datepicker-toggle> -->
+                                        <mat-datepicker #startDatepicker></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>End Date</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                        <input matInput type="datetime-local"
+                                            [formControlName]="'end_date'"
+                                            [placeholder]="'End Date'">
+                                        <!-- <mat-datepicker-toggle matSuffix
+                                                            [for]="endDatepicker">
+                                        </mat-datepicker-toggle> -->
+                                        <mat-datepicker #endDatepicker></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
+
+                            <div class="flex justify-end items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                                <button class="ml-2" style="width:16%;"
+                                        mat-flat-button
+                                        [disabled]="PointRuleAddForm.invalid"
+                                        [color]="'primary'"
+                                        [matTooltip]="'Save'"
+                                        (click)="createPointRule()">
+                                    Save
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </ng-container>
         </div>
-    </ng-container>
-</div>
-</mat-drawer-content>
+    </mat-drawer-content>
 </mat-drawer-container>
-
-

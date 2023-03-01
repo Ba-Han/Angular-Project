@@ -5,7 +5,7 @@
 
 export const environment = {
     production: false,
-    apiurl: 'http://localhost:8055',
+    apiurl: 'https://crmreplatform.dynamicwebapac.com',
     tfaEnable: true,
 };
 
