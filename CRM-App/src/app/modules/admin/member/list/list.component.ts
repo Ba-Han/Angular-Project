@@ -189,14 +189,14 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
                 .pipe(
                     switchMap(() => {
                         this.isLoading = true;
-                        const sort =
+                        /* const sort =
                             this._sort.direction == 'desc' && this.searchField != "full_name"
                                 ? '-' + this._sort.active
-                                : this._sort.active;
+                                : this._sort.active; */
                         return this._memberService.getMembers(
                             this._paginator.pageIndex,
                             this._paginator.pageSize,
-                            sort,
+                            this._sort.active,
                             this._sort.direction,
                             this.searchValue,
                             this.searchFilter,
