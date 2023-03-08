@@ -192,7 +192,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
 
         this.TierUpgradeForm = this._formBuilder.group({
             id: [''],
-            status: ['', [Validators.required]],
+            /* status: ['', [Validators.required]], */
             item_number: ['', [Validators.required]],
             price: ['', [Validators.required]],
             upgrade_tier: ['', [Validators.required]],

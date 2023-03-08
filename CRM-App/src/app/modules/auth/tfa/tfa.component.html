@@ -25,7 +25,8 @@
                 class="mt-8"
                 [formGroup]="tfaForm"
                 #tfaNgForm="ngForm">
-                <qrcode
+                
+               <!--  <qrcode
                 [qrdata]="otpauth_url"
                 [allowEmptyString]="true"
                 [cssClass]="'center'"
@@ -36,7 +37,12 @@
                 [margin]="4"
                 [scale]="1"
                 [width]="300"
-              ></qrcode>
+              ></qrcode> -->
+
+                <div>
+                    <img [src]="otpauth_url" alt="qrcode"  [title]="'scan qrcode'">
+                </div>
+                
                 <!-- Email field -->
                 <mat-form-field class="w-full">
                     <mat-label>Otp</mat-label>

@@ -136,8 +136,8 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
                     this.isLoading = true;
-                    const sort = this._sort.direction == "desc" ? "-" + this._sort.active : this._sort.active;
-                    return this._channelService.getChannels(this._paginator.pageIndex, this._paginator.pageSize, sort, this._sort.direction);
+                    //const sort = this._sort.direction == "desc" ? "-" + this._sort.active : this._sort.active;
+                    return this._channelService.getChannels(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
                 }),
                 map(() => {
                     this.isLoading = false;
