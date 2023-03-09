@@ -139,7 +139,7 @@ export class MemberService
         .pipe(
             tap((response) => {
                 const member = response;
-                let bathDatestring = member.member != null ? member.member[0].date_of_birth : "";
+                let bathDatestring = member.member != null ? member.member[0].date_of_birth : '';
                 let date = new Date(bathDatestring);
                 //const modifyBirthDate = new Date(date.setDate(date.getDate() + Number(1)));
                 const modifyBirthDate = new Date(date.setDate(date.getDate()));
@@ -161,7 +161,7 @@ export class MemberService
 
     getRecentTransactionsById(id: number): Observable<Transaction> {
         return this._httpClient.get<any>(`${this._apiurl}/member/${id}/transactions`, {
-            params: { limit: 5, sort: '-date_created' }
+            params: { limit: 5, sort: 'date_created' }
         })
             .pipe(
                 tap((response) => {
@@ -172,7 +172,7 @@ export class MemberService
 
     getRecentPointsById(id: number): Observable<MemberPoint> {
         return this._httpClient.get<any>(`${this._apiurl}/member/${id}/points`, {
-            params: { limit: 5, sort: '-date_created' }
+            params: { limit: 5, sort: 'date_created' }
         })
             .pipe(
                 tap((response) => {

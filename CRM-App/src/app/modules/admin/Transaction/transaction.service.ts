@@ -39,7 +39,7 @@ export class TransactionService
     }
 
    
-    getData(id: number = 0, page: number = 0, limit: number = 10, sort: string = '-date_created', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+    getData(id: number = 0, page: number = 0, limit: number = 10, sort: string = 'date_created', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: TransactionPagination; members: Transaction[] }>
     {
         return this._httpClient.get(`${this._apiurl}/member/${id}/transactions`, {

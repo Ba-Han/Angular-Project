@@ -168,9 +168,11 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                
                 // Patch values to the form
                 this.memberForm.patchValue(member.member[0]);
-                const tierId = this.memberTiers.find(x => x.name == member.member[0].member_tier).id;
-                this.memberForm.get('member_tier').setValue(tierId);
-                this._changeDetectorRef.markForCheck();
+                if (member.member[0].member_tier != null) {
+                    const tierId = this.memberTiers.find(x => x.name == member.member[0].member_tier).id;
+                    this.memberForm.get('member_tier').setValue(tierId);
+                } 
+                    this._changeDetectorRef.markForCheck();
             });
 
         
