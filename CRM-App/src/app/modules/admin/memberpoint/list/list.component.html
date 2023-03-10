@@ -166,6 +166,15 @@
                             </mat-form-field>
                         </div>
 
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Point Type Int</mat-label>
+                                <mat-select [formControlName]="'point_type_int'"> 
+                                    <mat-option [value]="0">Add</mat-option>
+                                    <mat-option [value]="1">Reduce</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
 
                         <div class="mt-8">
                             <mat-form-field class="fuse-mat-no-subscript w-full">

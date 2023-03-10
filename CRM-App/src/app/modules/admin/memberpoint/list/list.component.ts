@@ -94,6 +94,7 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
             id: 0,
             member: this.memberId,
             point_type: ['adjustment', [Validators.required]],
+            point_type_int: ['', [Validators.required]],
             reward_code: ['', [Validators.required]],
             point: ['', [Validators.required]],
             status: ['', [Validators.required]],

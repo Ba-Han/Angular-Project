@@ -68,6 +68,7 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
     memberId: number;
     pointType: boolean = false;
     searchInputControl: FormControl = new FormControl();
+    pointTypeInt: string;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
 
@@ -107,6 +108,7 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
             id: [''],
             member: this.memberId,
             point_type: ['adjustment', [Validators.required]],
+            point_type_int: ['', [Validators.required]],
             reward_code: ['', [Validators.required]],
             point: ['', [Validators.required]],
             status: ['', [Validators.required]],
@@ -118,6 +120,7 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
             .subscribe((memberPoint: MemberPoint) => {
                 this.memberPoint = memberPoint;
                 this.pointType = memberPoint.point_type.toString().toLowerCase() == "adjustment" ? true : false;
+                this.pointTypeInt = memberPoint.point_type_int;
                 // Patch values to the form
                 this.memberPointEditForm.patchValue(memberPoint);
                 this.toggleEditMode(false);
