@@ -6,6 +6,7 @@ export interface MemberPoint {
     user_updated: string,
     date_updated: string,
     point_type: string,
+    point_type_int: string,
     reward_code: string,
     point: number,
     comment: string,
