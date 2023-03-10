@@ -157,7 +157,7 @@
                             <mat-icon matPrefix
                                       class="hidden sm:flex icon-size-5"
                                       [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
-                            <input matInput
+                            <input matInput [readonly] = "true"
                                    [formControlName]="'code'"
                                    [placeholder]="'code'"
                                    [spellcheck]="false">

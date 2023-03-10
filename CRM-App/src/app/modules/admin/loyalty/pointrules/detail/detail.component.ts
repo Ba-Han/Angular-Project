@@ -65,6 +65,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     description: string;
     spendingType: string;
     validitytypeValue: string;
+    minDate: string;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
 
@@ -75,10 +76,10 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         private _pointRuleService: PointRuleService,
         private _router: Router,
         private _activatedRoute: ActivatedRoute,
-        //bh test 
         private _fuseMediaWatcherService: FuseMediaWatcherService,
-        //bh test end
     ) {
+        const today = new Date();
+        this.minDate = today.toISOString().slice(0, 16);
     }
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -197,7 +198,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
                 switchMap((query) => {
                     this.isLoading = true;
                     // Search
-                    return this._pointRuleService.getMemberTiers(0, 10, 'member_code', 'asc', query);
+                    return this._pointRuleService.getMemberTiers(0, 10, 'name', 'asc', query);
                     this.matDrawer.open();
                 }),
                 map(() => {

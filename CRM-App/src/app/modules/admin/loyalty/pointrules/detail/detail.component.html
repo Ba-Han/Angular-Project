@@ -299,6 +299,7 @@
                                             class="hidden sm:flex icon-size-5"
                                             [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
                                     <input matInput type="datetime-local"
+                                        [min]="minDate"
                                         [formControlName]="'to_end_date'"
                                         [placeholder]="'End Date'">
                                     <!-- <mat-datepicker-toggle matSuffix
@@ -361,6 +362,7 @@
                                             class="hidden sm:flex icon-size-5"
                                             [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
                                     <input matInput type="datetime-local"
+                                        [min]="minDate"
                                         [formControlName]="'from_start_date'"
                                         [placeholder]="'Start Date'">
                                     <!-- <mat-datepicker-toggle matSuffix
@@ -420,6 +422,7 @@
                                             class="hidden sm:flex icon-size-5"
                                             [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
                                     <input matInput type="datetime-local"
+                                        [min]="minDate"
                                         [formControlName]="'to_end_date'"
                                         [placeholder]="'End Date'">
                                     <!-- <mat-datepicker-toggle matSuffix
@@ -748,6 +751,7 @@
                                                 class="hidden sm:flex icon-size-5"
                                                 [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
                                         <input matInput type="datetime-local"
+                                            [min]="minDate"
                                             [formControlName]="'start_date'"
                                             [placeholder]="'Start Date'">
                                         <!-- <mat-datepicker-toggle matSuffix
@@ -764,6 +768,7 @@
                                                 class="hidden sm:flex icon-size-5"
                                                 [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
                                         <input matInput type="datetime-local"
+                                            [min]="minDate"
                                             [formControlName]="'end_date'"
                                             [placeholder]="'End Date'">
                                         <!-- <mat-datepicker-toggle matSuffix
