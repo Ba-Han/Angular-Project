@@ -8,7 +8,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { MatDrawer } from '@angular/material/sidenav';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { PointRule, PointRulePaginagion, PointBasket, point_basket_id, PointBasketPagination } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
+import { PointRule, PointRulePaginagion, PointBasket, PointBasketPagination } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 import { PointRuleService } from 'app/modules/admin/loyalty/pointrules/pointrules.service';
 import { MemberTier, MemberTierPagination } from 'app/modules/admin/loyalty/membertier/membertier.types';
 
@@ -34,7 +34,7 @@ import { MemberTier, MemberTierPagination } from 'app/modules/admin/loyalty/memb
                 }
             }
 
-            .tier-grid{
+            .point_rule_tier_grid {
                 grid-template-columns: 60px 100px;
                      @screen sm {
                          grid-template-columns: 60px 100px 100px;
@@ -43,7 +43,7 @@ import { MemberTier, MemberTierPagination } from 'app/modules/admin/loyalty/memb
                          grid-template-columns: 60px 150px 150px;
                      }
                      @screen lg {
-                         grid-template-columns: 60px 150px 150px;
+                         grid-template-columns: 35px 200px 200px;
                      }
                 }
  
@@ -77,8 +77,9 @@ import { MemberTier, MemberTierPagination } from 'app/modules/admin/loyalty/memb
 export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
-   
+
     memberTiers$: Observable<MemberTier[]>;
     pointBaskets$: Observable<PointBasket[]>;
     pointBasketPagination: PointBasketPagination;
@@ -86,14 +87,12 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     MemberTierListMode: boolean = false;
     PointBasketListMode: boolean = false;
     PointRuleAddForm: FormGroup;
-    drawerMode:'side'|'over';
+    drawerMode: 'side'|'over';
 
     newSegmentModel: PointBasket;
     PointBasketForm: FormGroup;
     pointbasketMode: boolean = false;
     pointbasketEditMode: boolean = false;
-    addedPointBasket: Array<PointBasket> = [];
-    addedPointBasketId: Array<point_basket_id> = [];
     pointbasketFormMode: boolean = false;
 
     pointRules$: Observable<PointRule[]>;
@@ -111,6 +110,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     description: string;
     spendingType: string;
     minDate: string;
+    timeoutId: any;
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -147,14 +147,14 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             validity_type: ['', [Validators.required]],
             basket_id: [''],
             point_basket: ['', [Validators.required]],
-            point_basketName: [''],
+            point_basketName: ['', [Validators.required]],
         });
 
         this.PointBasketForm = this._formBuilder.group({
             id: [''],
             name: ['',[Validators.required]],
             description: [''],
-            spending_type: [''],
+            spending_type: ['',[Validators.required]],
             from_type: [''],
             from_number: [''],
             from_start_type: [''],
@@ -190,7 +190,6 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             )
             .subscribe();
 
-        //bh test 
         //Drawer Mode
         this.matDrawer.openedChange.subscribe((opened) => {
             if (!opened) {
@@ -217,7 +216,6 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
-
 
         //Member Tier Search
         this.memberTierSearchInputControl.valueChanges
@@ -270,7 +268,6 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                 ).subscribe();
             }
         }, 2000);
-        
     }
 
     ngOnDestroy(): void {
@@ -283,6 +280,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         return item.id || index;
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     toogleStoreAddFormMode(AddMode: boolean | null = null): void {
         if (AddMode === null) {
             this.AddMode = !this.AddMode;
@@ -292,7 +290,8 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         }
         this._changeDetectorRef.markForCheck();
     }
-   
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     toogleMemberTierListMode(MemberTierListMode: boolean | null = null): void {
         this.pointbasketMode = false;
         this.PointBasketListMode = false;
@@ -305,6 +304,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         this._changeDetectorRef.markForCheck();
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     tooglePointBasketListMode(PointBasketListMode: boolean | null = null): void {
         this.pointbasketMode = false;
         this.MemberTierListMode = false;
@@ -316,20 +316,38 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         }
         this._changeDetectorRef.markForCheck();
     }
- 
+
+    tooglepointBasketAddFormMode(pointbasketMode: boolean | null = null): void {
+        this.MemberTierListMode = false;
+        this.PointBasketListMode = false;
+        if (pointbasketMode === null) {
+            this.pointbasketMode = !this.pointbasketMode;
+        }
+        else {
+            this.pointbasketMode = pointbasketMode;
+        }
+
+        this._changeDetectorRef.markForCheck();
+    }
+
+    tooglepointBasketEditFormMode(pointbasketEditMode: boolean | null = null): void {
+        this.MemberTierListMode = false;
+        if (pointbasketEditMode === null) {
+            this.pointbasketEditMode = !this.pointbasketEditMode;
+        }
+        else {
+            this.pointbasketEditMode = pointbasketEditMode;
+        }
+
+        this._changeDetectorRef.markForCheck();
+    }
+
     createPointRule(): void {
         const pointrule = this.PointRuleAddForm.getRawValue();
         this._pointRuleService.createPointRule(pointrule).subscribe(() => {
             this.toogleStoreAddFormMode(false);
         });
     }
-
-    /* createPointBasket(): void {
-        const pointbasket = this.PointBasketForm.getRawValue();
-        this._pointRuleService.createPointBasket(pointbasket).subscribe(() => {
-            this.tooglePointBasketListMode(true);
-        });
-    } */
 
     setMemberTierDrawer(): void {
         this.toogleMemberTierListMode(true);
@@ -347,102 +365,6 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         }, 2000);
         //this.tooglePointBasketMode(false);
     }
-
-    openPointBasketForm(id = 0): void {
-        if (Number(id) > 0) {
-            this.addedPointBasket = [];
-            this.addedPointBasketId = [];
-            this.isLoading = true;
-            this._pointRuleService.getBasketDetailById(id)
-                .pipe(
-                    takeUntil(this._unsubscribeAll),
-
-                    map((pointbaskets: any) => {
-                        /* const baskets = pointrules.data.point_basket;
-                        //take segement
-                        for (var i = 0; i < baskets.length; i++) {
-                            this._memberTierService.getPointSegmentById(baskets[i].point_segment_id)
-                                .pipe(takeUntil(this._unsubscribeAll))
-                                .subscribe((pointsegment: any) => {
-                                    let index = this.addedPointBasket.findIndex(x => x.id === pointsegment.data.id || x.name === pointsegment.data.name);
-                                    if (index > -1) {
-                                        this.addedPointBasket[(index)] = pointsegment.data;
-                                    }
-                                    else {
-                                        this.addedPointBasket.push(pointsegment.data);
-                                    }
-
-                                });
-                            let index1 = this.addedPointSegmentId.findIndex(x => x === baskets[i].point_segment_id);
-                            if (index1 > -1) {
-                                this.addedPointSegmentId[(index1)] = baskets[i].id;
-                            }
-                            else {
-                                this.addedPointSegmentId.push(baskets[i].id);
-                            }
-                        } */
-                        this.PointBasketForm.patchValue(pointbaskets.data);
-                        this.isLoading = false;
-                        this.tooglePointBasketListMode(true);
-                        this.matDrawer.open();
-                    })
-                )
-                .subscribe();
-        }
-        else {
-            this.tooglePointBasketListMode(true);
-            this.matDrawer.open();
-        }
-    }
-
-    /* setPointBasketDrawer(): void {
-        this.tooglePointBasketListMode(true);
-        this.pointBaskets$ = this._pointRuleService.pointBaskets$;
-        this._pointRuleService.pointBasketPagination$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((pagination: PointBasketPagination) => {
-                this.pointBasketPagination = pagination;
-                this.matDrawer.open();
-                this._changeDetectorRef.markForCheck();
-            });
-
-        setTimeout(() => {
-            this.pageSortAndBasketPaging();
-        }, 2000);
-        //this.tooglePointBasketMode(false);
-    } */
-
-    /* pageSortAndBasketPaging(): void {
-        if (this._sort && this._paginator) {
-            // Set the initial sort
-            this._sort.sort({
-                id: 'name',
-                start: 'asc',
-                disableClear: true
-            });
-            this._changeDetectorRef.markForCheck();
-
-            this._sort.sortChange
-                .pipe(takeUntil(this._unsubscribeAll))
-                .subscribe(() => {
-                    this._paginator.pageIndex = 0;
-                    this.matDrawer.open();
-                });
-
-            merge(this._sort.sortChange, this._paginator.page).pipe(
-                switchMap(() => {
-                    this.matDrawer.open();
-                    this.isLoading = true;
-                    return this._pointRuleService.getPointBaskets(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
-                }),
-                map(() => {
-                    this.isLoading = false;
-                    this.matDrawer.open();
-                })
-            ).subscribe();
-            this.matDrawer.open();
-        }
-    } */
 
     pageSortAndPaging(): void {
         if (this._sort && this._paginator) {
@@ -485,152 +407,93 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         this.matDrawer.close();
     }
 
-    createUpdateBasketPoint(): void {
-        this.isLoading = true;
-        const basket = this.PointBasketForm.getRawValue();
-        if (Number(basket.id) > 0) {
-            this.isLoading = true;
-            this._pointRuleService.updatePointBasket(basket.id, basket)
+    setPointBasketDrawer(): void {
+        //clearTimeout(this.timeoutId);
+        this.tooglePointBasketListMode(true);
+        this.pointBaskets$ = this._pointRuleService.pointBaskets$;
+        this._pointRuleService.pointBasketPagination$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((pagination: PointBasketPagination) => {
+                this.pointBasketPagination = pagination;
+                this.matDrawer.open();
+                this._changeDetectorRef.markForCheck();
+            });
+       this.timeoutId = setTimeout(() => {
+            this.pageSortAndBasketPaging();
+        }, 2000);
+        //this.tooglePointBasketMode(false);
+
+        //clearTimeout(this.timeoutId);
+    }
+
+    pageSortAndBasketPaging(): void {
+        if (this._sort && this._paginator) {
+            // Set the initial sort
+            this._sort.sort({
+                id: 'name',
+                start: 'asc',
+                disableClear: true
+            });
+            this._changeDetectorRef.markForCheck();
+
+            this._sort.sortChange
                 .pipe(takeUntil(this._unsubscribeAll))
-                .subscribe((pointbasket: any) => {
-                    let index = this.addedPointBasket.findIndex(x => x.id === pointbasket.data.id);
-                    this.addedPointBasket[(index)] = basket;
-                    this.isLoading = false;
-                    this.tooglepointBasketAddFormMode(false);
-                    this.tooglePointBasketListMode(true);
+                .subscribe(() => {
+                    this._paginator.pageIndex = 0;
+                    this.matDrawer.open();
                 });
-           
-        }
-        else {
-            //this._memberTierService.createPointSegment(segment)
-            //    .pipe(takeUntil(this._unsubscribeAll))
-            //    .subscribe((pointsegment: any) => {
-                   
-            //    });
 
-            var point_basket_id = this.convertToPointBasketIdObject(basket);
-            let index1 = this.addedPointBasket.findIndex(x => x.id === null);
-            if (index1 > -1) {
-                this.addedPointBasket[(index1)] = basket;
-            }
-            else {
-                this.addedPointBasket.push(basket);
-            }
-            let index = this.addedPointBasketId.findIndex(x => typeof x === 'object');
-            if (index > -1) {
-                this.addedPointBasketId[(index1)] = point_basket_id;
-            }
-            else {
-                this.addedPointBasketId.push(point_basket_id);
-            }
-            this.isLoading = false;
-            this.tooglepointBasketAddFormMode(false);
-            this.tooglePointBasketListMode(true);
+            merge(this._sort.sortChange, this._paginator.page).pipe(
+                switchMap(() => {
+                    this.matDrawer.open();
+                    this.isLoading = true;
+                    return this._pointRuleService.getPointBaskets(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                }),
+                map(() => {
+                    this.isLoading = false;
+                    this.matDrawer.open();
+                })
+            ).subscribe();
+            this.matDrawer.open();
         }
-
     }
 
-    convertToPointBasketIdObject(pointbasket: PointBasket): any {
-        var point_basket_id = {
-            "point_basket_id": {
-            "user_created": pointbasket.user_created,
-            "date_created": pointbasket.date_created,
-            "user_updated": pointbasket.user_updated,
-            "date_updated": pointbasket.date_updated,
-            "name": pointbasket.name,
-            "description": pointbasket.description,
-            "spending_type": pointbasket.spending_type,
-            "from_type": pointbasket.from_type,
-            "from_number": pointbasket.from_number,
-            "from_start_type": pointbasket.from_start_type,
-            "from_start_date": pointbasket.from_start_date,
-            "to_type": pointbasket.to_type,
-            "to_number": pointbasket.to_number,
-            "to_end_type": pointbasket.to_end_type,
-            "to_end_date": pointbasket.to_end_date,
-            }
-        }
-        return point_basket_id;
-    }
-
-    editForm(pointbasket: PointBasket): void {
-        this.tooglepointBasketAddFormMode(true);
+    selectPointBasket(id, name): void {
+        const pointBasket = this.PointRuleAddForm.getRawValue();
+        pointBasket.basket_id = id;
+        pointBasket.point_basket = name;
+        pointBasket.point_basketName = name;
+        this.PointRuleAddForm.patchValue(pointBasket);
         this.isLoading = false;
-        //this._memberTierService.getPointSegmentById(id)
-        //    .pipe(takeUntil(this._unsubscribeAll))
-        //    .subscribe((pointsegment: any) => {
-                
-        //    });
-        //const editsegment = pointsegment;
-        //pointsegment = PointSegment;
-        //pointsegment = this.addedPointSegment.filter(x => x.id != null ? x.id === id : x.name === name);
-      
-        this.name = pointbasket.name;
-        this.description = pointbasket.description;
-        this.spendingType = pointbasket.spending_type;
-        this.PointBasketForm.patchValue(pointbasket);
-        this.isLoading = false;
-        this.tooglepointBasketAddFormMode(false);
+        this.matDrawer.close();
     }
 
     createPointBasket(): void {
         const pointbasket = this.PointBasketForm.getRawValue();
-        pointbasket.point_basket = this.addedPointBasketId;
         if (pointbasket.id > 0) {
             this._pointRuleService.updatePointBasket(pointbasket.id, pointbasket)
-                .pipe(takeUntil(this._unsubscribeAll))
-                .subscribe((basket: any) => {
-                    const pointrule = this.PointRuleAddForm.getRawValue();
-                    this.pointbasketId = basket.data.id;
-                    pointrule.basket_id = basket.data.id;
-                    pointrule.point_basket = basket.data.name;
-                    pointrule.point_basketName = basket.data.name;
-                    this.PointRuleAddForm.patchValue(pointrule);
-                    this.matDrawer.close();
-                    this.addedPointBasket = [];
-                    this.addedPointBasketId = [];
-                });
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((basket: any) => {
+                this._pointRuleService.getPointBaskets(0,10,'date_created','desc','').subscribe(
+                    (result: any) => {
+                        console.log(result);
+                    }
+                );
+                this.tooglePointBasketListMode(true);
+            });
         }
         else {
             this._pointRuleService.createPointBasket(pointbasket)
                 .pipe(takeUntil(this._unsubscribeAll))
                 .subscribe((basket: any) => {
-                    const pointrule = this.PointRuleAddForm.getRawValue();
-                    this.pointbasketId = basket.data.id;
-                    pointrule.basket_id = basket.data.id;
-                    pointrule.point_basket = basket.data.name;
-                    pointrule.point_basketName = basket.data.name;
-                    this.PointRuleAddForm.patchValue(pointrule);
-                    this.matDrawer.close();
-                    this.addedPointBasket = [];
-                    this.addedPointBasketId = [];
+                    this._pointRuleService.getPointBaskets(0,10,'date_created','desc','').subscribe(
+                        (result: any) => {
+                            console.log(result);
+                        }
+                    );
+                    this.tooglePointBasketListMode(true);
                 });
         }
-    }
-
-    tooglepointBasketAddFormMode(pointbasketMode: boolean | null = null): void {
-        this.MemberTierListMode = false;
-        this.PointBasketListMode = false;
-        if (pointbasketMode === null) {
-            this.pointbasketMode = !this.pointbasketMode;
-        }
-        else {
-            this.pointbasketMode = pointbasketMode;
-        }
-
-        this._changeDetectorRef.markForCheck();
-    }
-
-    tooglepointBasketEditFormMode(pointbasketEditMode: boolean | null = null): void {
-        this.MemberTierListMode = false;
-        if (pointbasketEditMode === null) {
-            this.pointbasketEditMode = !this.pointbasketEditMode;
-        }
-        else {
-            this.pointbasketEditMode = pointbasketEditMode;
-        }
-
-        this._changeDetectorRef.markForCheck();
     }
 
     createNewPointBasket(): void {

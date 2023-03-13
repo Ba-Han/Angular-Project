@@ -40,24 +40,6 @@ export interface PointBasket {
     "to_end_date": string,
 }
 
-export interface point_basket_id {
-    "user_created": string,
-    "date_created": string,
-    "user_updated": string,
-    "date_updated": string,
-    "name": string,
-    "description": string,
-    "spending_type": string,
-    "from_type": string,
-    "from_number": number,
-    "from_start_type": string,
-    "from_start_date": string,
-    "to_type": string,
-    "to_number": number,
-    "to_end_type": string,
-    "to_end_date": string,
-}
-
 export interface PointBasketPagination
 {
     length: number;
@@ -75,6 +57,5 @@ export interface PointRulePaginagion {
     lastPage: number;
     startIndex: number;
     endIndex: number;
-    
 }
 

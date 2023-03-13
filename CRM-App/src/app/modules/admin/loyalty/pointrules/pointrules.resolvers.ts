@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@a
 import { catchError, Observable, throwError } from 'rxjs';
 import { PointRuleService } from 'app/modules/admin/loyalty/pointrules/pointrules.service';
 import { MemberTier, MemberTierPagination } from 'app/modules/admin/loyalty/membertier/membertier.types';
-import { PointRule, PointRulePaginagion } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
+import { PointRule, PointRulePaginagion, PointBasketPagination, PointBasket } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 import { PointSegmentPagination, PointSegment } from '../../memberpoint/memberpoint.types';
 
 @Injectable({
@@ -49,7 +49,7 @@ export class PointRuleResolver implements Resolve<any>
             );
     }
 }
-//bh test
+
 @Injectable({
     providedIn: 'root'
 })
@@ -61,4 +61,15 @@ export class MemberTiersResolver implements Resolve<any>
         return this._pointRuleService.getMemberTiers();
     }
 }
-//bh test end
+
+@Injectable({
+    providedIn: 'root'
+})
+export class PointBasketResolver implements Resolve<any>
+{
+    constructor(private _pointRuleService: PointRuleService) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ pagination: PointBasketPagination; pointBaskets: PointBasket[] }> {
+        return this._pointRuleService.getPointBaskets();
+    }
+}

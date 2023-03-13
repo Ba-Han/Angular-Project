@@ -40,7 +40,7 @@ export class PointRuleService {
     get pagination$(): Observable<PointRulePaginagion> {
         return this._pagination.asObservable();
     }
-     
+
      get memberTiers$(): Observable<MemberTier[]> {
         return this._memberTiers.asObservable();
     }
@@ -56,7 +56,6 @@ export class PointRuleService {
     get memberTierpagination$(): Observable<PointRulePaginagion> {
         return this._memberTierpagination.asObservable();
     }
-   
      // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
@@ -96,7 +95,7 @@ export class PointRuleService {
     }
 
     getPointBaskets(page: number = 0, limit: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
-        Observable<{ pagination: PointBasketPagination; pointrules: PointBasket[] }> {
+        Observable<{ pagination: PointBasketPagination; pointBaskets: PointBasket[] }> {
         return this._httpClient.get(`${this._apiurl}/items/point_basket`, {
             params: {
                 meta: 'filter_count',
@@ -108,22 +107,22 @@ export class PointRuleService {
             }
         }).pipe(
             tap((response: any) => {
-                const totalLength = response.meta.filter_count;
+                const pointBasketLength = response.meta.filter_count;
                 const begin = page * limit;
-                const end = Math.min((limit * (page + 1)), totalLength);
-                const lastPage = Math.max(Math.ceil(totalLength / limit), 1);
+                const end = Math.min((limit * (page + 1)), pointBasketLength);
+                const lastPage = Math.max(Math.ceil(pointBasketLength / limit), 1);
 
                 // Prepare the pagination object
                 const pagination = {
-                    length: totalLength,
+                    length: pointBasketLength,
                     limit: limit,
                     page: page,
                     lastPage: lastPage,
                     startIndex: begin,
                     endIndex: end - 1
                 };
-                this._pagination.next(pagination);
-                this._pointRules.next(response.data);
+                this._pointBasketPagination.next(pagination);
+                this._pointBaskets.next(response.data);
             })
         );
     }
@@ -169,7 +168,7 @@ export class PointRuleService {
             })
         );
     }
-    
+
     getPointRuleById(id: number): Observable<PointRule> {
         return this._httpClient.get<any>(`${this._apiurl}/items/point_rule/${id}`)
             .pipe(
@@ -179,26 +178,6 @@ export class PointRuleService {
                 })
             );
     }
-    
-    /* getPointRuleById(id: number, isdetail: boolean): Observable<PointRule> {
-        if (isdetail) {
-            return this._httpClient.get(`${this._apiurl}/items/point_rule/${id}?fields=*,point_basket.*`
-            ).pipe(
-                tap((response: any) => {
-                    return response.data;
-                })
-            );
-        }
-        else {
-            return this._httpClient.get(`${this._apiurl}/items/point_rule/${id}`
-            ).pipe(
-                tap((response: any) => {
-                    return response.data;
-                })
-            );
-        }
-        
-    } */
 
     getPointBasketById(id: number): Observable<PointBasket> {
         return this._httpClient.get(`${this._apiurl}/items/point_basket/${id}`
