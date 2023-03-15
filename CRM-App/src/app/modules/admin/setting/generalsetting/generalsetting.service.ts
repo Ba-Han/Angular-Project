@@ -145,7 +145,7 @@ export class GeneralSettingService {
     }
 
 
-        updateSetting(id: number, setting: GeneralSetting, selectedMemberGroupValue: MemberGroup[], selectedUserGroupValue: UserGroup[]): Observable<GeneralSetting> {
+    updateSetting(id: number, setting: GeneralSetting, selectedMemberGroupValue: MemberGroup[], selectedUserGroupValue: UserGroup[]): Observable<GeneralSetting> {
 
         //let memberGroup = setting.member_groups;
         let strMemberGroup = selectedMemberGroupValue.map(x=>x.id).join(',');

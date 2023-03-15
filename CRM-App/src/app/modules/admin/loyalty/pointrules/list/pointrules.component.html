@@ -8,14 +8,16 @@
 
         <!-- Member Tier List-->
         <ng-container *ngIf="MemberTierListMode">
-            <div class="flex justify-start w-full ng-tns-c188-34">
-                <button mat-icon-button style="background-color:#ccc;"
-                        [matTooltip]="'Close'"
-                        (click)="matDrawer.close()">
-                    <mat-icon class="text-white"
-                              [svgIcon]="'heroicons_outline:x'"></mat-icon>
-                </button>
-            </div>
+            <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
+                <div class="">
+                    <button mat-icon-button style="background-color:#ccc;"
+                            [matTooltip]="'Close'"
+                            (click)="matDrawer.close()">
+                        <mat-icon class="text-white"
+                                    [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+            </div>  
 
             <div class="flex-auto">
                 <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
@@ -44,23 +46,29 @@
                         <ng-container *ngIf="memberTiers.length; else noPoints">
                             <div class="grid">
                                 <!-- Header -->
-                                <div class="tier-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                <div class="point_rule_tier_grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                      matSort
                                      matSortDisableClear>
                                     <div></div>
-                                    <div class="sm:block"
+                                    <div class="sm:block">
+                                        Name
+                                    </div>
+                                    <div class="hidden md:block">
+                                        Level
+                                    </div>
+                                    <!-- <div class="sm:block"
                                          [mat-sort-header]="'name'">
                                         Name
                                     </div>
                                     <div class="hidden md:block"
                                          [mat-sort-header]="'level'">
                                         Level
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <!-- Rows -->
                                 <ng-container *ngIf="(memberTiers$ | async) as memberTiers">
                                     <ng-container *ngFor="let memberTier of memberTiers; trackBy: trackByFn">
-                                        <div class="tier-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                                        <div class="point_rule_tier_grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
 
                                             <div>
                                                 <input type="radio" name="memberTier" #memberTier (click)="selectTier(memberTier.id,memberTier.name)" />
@@ -79,13 +87,13 @@
                                 </ng-container>
                             </div>
 
-                            <div class="membercustom-paging w-full">
-                                <mat-paginator class="sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                            <div class="">
+                                <mat-paginator class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
                                                [ngClass]="{'pointer-events-none': isLoading}"
                                                [length]="memberTierPagination.length"
                                                [pageIndex]="memberTierPagination.page"
                                                [pageSize]="memberTierPagination.limit"
-                                               [pageSizeOptions]="[5, 10, 15, 25, 50]"
+                                               [pageSizeOptions]="[10, 25, 100]"
                                                [showFirstLastButtons]="true"></mat-paginator>
                             </div>
 
@@ -111,83 +119,84 @@
                                     [svgIcon]="'heroicons_outline:x'"></mat-icon>
                     </button>
                 </div>
-                <div class="w-full text-3xl font-bold" style="text-align:center;">  </div>
-            </div>            
-            <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
-                <div class="absolute inset-x-0 bottom-0"
-                     *ngIf="isLoading">
-                    <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
-                </div>
-                <div class="w-full text-3xl font-bold" style="text-align:center;">Point Basket</div>
-                <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
-                    <button class="ml-4"
-                            mat-flat-button
-                            [color]="'primary'"
-                            (click)="createNewPointBasket()">
-                        <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                        <span class="ml-2 mr-1">Add</span>
-                    </button>
-                </div>
-            </div>
-            <div class="flex-auto p-5">
-                <form [formGroup]="PointBasketForm">
-                    <div class="mt-8 hidden">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <input matInput [formControlName]="'id'">
-                        </mat-form-field>
+            </div>          
+            <div class="flex-auto">
+                <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+                    <div>
+                        <div class="text-4xl font-extrabold tracking-tight leading-none"> Point Basket </div>
                     </div>
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Point Basket</mat-label>
-                            <mat-icon matPrefix
-                                    class="hidden sm:flex icon-size-5"
-                                    ></mat-icon>
-                            <input matInput
-                                [formControlName]="'name'"
-                                [placeholder]="'create point basket'"
-                                (click)="editForm()"
-                                [matTooltip]="'Edit Basket'">
-                        </mat-form-field>
-                    </div>
-
-                    <!-- <ng-container *ngIf="addedPointBasket.length == 0">
-                        <div class="mt-8">
-                            <mat-label></mat-label>
-                            <div class="customPoint mt-3 h-12" style="cursor: pointer; border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
-                                <span style="color:#ccc;">Create Point Basket</span>
-                            </div>
+                    <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+                        
+                        <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+                            <button class="ml-4" style="position: relative; bottom: 10px;"
+                                    mat-flat-button
+                                    [color]="'primary'"
+                                    (click)="createNewPointBasket()">
+                                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                                <span class="ml-2 mr-1">Add</span>
+                            </button>
                         </div>
-                    </ng-container> -->
-        
-        
-                    <!-- <ng-container *ngIf="addedPointBasket.length > 0">
-                        <div class="mt-8">
-                            <label>Point Basket</label>
-                            <mat-form-field class="fuse-mat-no-subscript w-full hidden">
-                                <input matInput readonly style="cursor:pointer;"
-                                       [formControlName]="'name'"
-                                       [value]="addedPointBasketId">
-                            </mat-form-field>
-                            <ng-container *ngFor="let add of addedPointBasket; trackBy: trackByFn">
-                                <div [matTooltip]="'Edit Basket'" (click)="editForm(add)" class="customPoint mt-3 h-12" style="border: 1px solid #ccc;border-radius: 10px;padding: 12px;cursor: pointer;">
-                                    {{add.name}}
+                        
+                    </div>
+                </div>
+
+                <!-- Point Basket List -->
+                <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+                    <ng-container *ngIf="(pointBaskets$ | async) as pointBaskets">
+                        <ng-container *ngIf="pointBaskets.length; else noPointBasket">
+                            <div class="grid">
+                                <!-- Header -->
+                                <div class="point_rule_tier_grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                     matSort
+                                     matSortDisableClear>
+                                    <div></div>
+                                    <div class="sm:block">
+                                        Name
+                                    </div>
+                                    <!-- <div class="sm:block"
+                                         [mat-sort-header]="'name'">
+                                        Name
+                                    </div> -->
                                 </div>
-                            </ng-container>
-                        </div>
-                    </ng-container> -->
-        
-                    <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
-                        <button class="ml-2"
-                                mat-flat-button
-                                [disabled]="PointBasketForm.invalid"
-                                [color]="'primary'"
-                                [matTooltip]="'Save'"
-                                (click)="createPointBasket()">
-                            Save
-                        </button>
-                    </div>
-                </form>
+                                <!-- Rows -->
+                                <ng-container *ngIf="(pointBaskets$ | async) as pointBaskets">
+                                    <ng-container *ngFor="let pointBasket of pointBaskets; trackBy: trackByFn">
+                                        <div class="point_rule_tier_grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+
+                                            <div>
+                                                <input type="radio" name="pointBasket" #pointBasket (click)="selectPointBasket(pointBasket.id,pointBasket.name)" />
+                                            </div>
+
+                                            <div class=" truncate">
+                                                {{pointBasket.name}}
+                                            </div>
+
+                                            <!-- <div class="hidden md:block truncate">
+                                                Level {{memberTier.level}}
+                                            </div> -->
+
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+
+                            <div class="">
+                                <mat-paginator class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                                               [ngClass]="{'pointer-events-none': isLoading}"
+                                               [length]="pointBasketPagination.length"
+                                               [pageIndex]="pointBasketPagination.page"
+                                               [pageSize]="pointBasketPagination.limit"
+                                               [pageSizeOptions]="[10, 25, 100]"
+                                               [showFirstLastButtons]="true"></mat-paginator>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+
+                    <ng-template #noPointBasket>
+                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no point basket!</div>
+                    </ng-template>
+
+                </div>
             </div>
         </ng-container>
         <!-- Point Basket Add and Edit Form -->
@@ -201,7 +210,7 @@
                                     [svgIcon]="'heroicons_outline:x'"></mat-icon>
                     </button>
                 </div>
-                <div class="w-full text-3xl font-bold" style="text-align:center;"> Point Basket </div>
+                <div class="w-full text-3xl font-bold" style="position: relative; top: 10px; text-align:center;"> Point Basket </div>
             </div>
 
             <div class="flex-auto p-5">
@@ -244,14 +253,14 @@
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Redemption Type</mat-label>
                             <mat-select [formControlName]="'spending_type'" [(ngModel)]="spendingtypeValue">
-                                <mat-option value="instant_redemption">Instant Redemption</mat-option>
-                                <mat-option value="redemption_basket">Redemption Basket</mat-option>
+                                <mat-option [value]="1">Instant Redemption</mat-option>
+                                <mat-option [value]="2">Redemption Basket</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
 
                     <!--redemptionType-->
-                    <ng-container *ngIf="spendingtypeValue == 'instant_redemption'">
+                    <ng-container *ngIf="spendingtypeValue === 1">
                         <div class="flex sm:items-center mt-8">
                             <div class="w-full text-3xl font-bold">To</div>
                         </div> 
@@ -260,15 +269,15 @@
                             <mat-form-field class="fuse-mat-no-subscript w-full">
                                 <mat-label>Spending Validity Type</mat-label>
                                 <mat-select [formControlName]="'to_type'" [(ngModel)]="totypeValue">
-                                    <mat-option value="0">Day</mat-option>
-                                    <mat-option value="1">Month</mat-option>
-                                    <mat-option value="2">Year</mat-option>
-                                    <mat-option value="3">Date</mat-option>
+                                    <mat-option [value]="1">Day</mat-option>
+                                    <mat-option [value]="2">Month</mat-option>
+                                    <mat-option [value]="3">Year</mat-option>
+                                    <mat-option [value]="4">Date</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
 
-                        <ng-container *ngIf="totypeValue == '0' || totypeValue == '1' || totypeValue== '2'">
+                        <ng-container *ngIf="totypeValue === 1 || totypeValue === 2 || totypeValue=== 3">
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Validity Number</mat-label>
@@ -285,14 +294,14 @@
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Spending End</mat-label>
                                     <mat-select [formControlName]="'to_end_type'">
-                                        <mat-option value="expire_month_end">Expire Month End</mat-option>
-                                        <mat-option value="expire_date">Expire Date</mat-option>
+                                        <mat-option [value]="1">Expire Month End</mat-option>
+                                        <mat-option [value]="2">Expire Date</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
                         </ng-container>
                         
-                        <ng-container *ngIf="totypeValue == '3'">
+                        <ng-container *ngIf="totypeValue === 4">
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>End Date</mat-label>
@@ -314,7 +323,7 @@
                     </ng-container>
 
                     <!--redemptionBasket-->
-                    <ng-container *ngIf="spendingtypeValue == 'redemption_basket'">
+                    <ng-container *ngIf="spendingtypeValue === 2">
                         <div class="flex sm:items-center mt-8">
                             <div class="w-full text-3xl font-bold">From</div>
                         </div> 
@@ -323,15 +332,15 @@
                             <mat-form-field class="fuse-mat-no-subscript w-full">
                                 <mat-label>Spending Validity Type</mat-label>
                                 <mat-select [formControlName]="'from_type'" [(ngModel)]="fromtypeValue">
-                                    <mat-option value="0">Day</mat-option>
-                                    <mat-option value="1">Month</mat-option>
-                                    <mat-option value="2">Year</mat-option>
-                                    <mat-option value="3">Date</mat-option>
+                                    <mat-option [value]="1">Day</mat-option>
+                                    <mat-option [value]="2">Month</mat-option>
+                                    <mat-option [value]="3">Year</mat-option>
+                                    <mat-option [value]="4">Date</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
 
-                        <ng-container *ngIf="fromtypeValue == '0' || fromtypeValue == '1' || fromtypeValue== '2'">
+                        <ng-container *ngIf="fromtypeValue === 1 || fromtypeValue === 2 || fromtypeValue=== 3">
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Validity Number</mat-label>
@@ -348,14 +357,14 @@
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Spending Start</mat-label>
                                     <mat-select [formControlName]="'from_start_type'">
-                                        <mat-option value="0">Current Date</mat-option>
-                                        <mat-option value="1">Current Month Start</mat-option>
+                                        <mat-option [value]="1">Current Date</mat-option>
+                                        <mat-option [value]="2">Current Month Start</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
                         </ng-container>
                         
-                        <ng-container *ngIf="fromtypeValue == '3'">
+                        <ng-container *ngIf="fromtypeValue === 4">
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Start Date</mat-label>
@@ -383,15 +392,15 @@
                             <mat-form-field class="fuse-mat-no-subscript w-full">
                                 <mat-label>Spending Validity Type</mat-label>
                                 <mat-select [formControlName]="'to_type'" [(ngModel)]="totypeValue">
-                                    <mat-option value="0">Day</mat-option>
-                                    <mat-option value="1">Month</mat-option>
-                                    <mat-option value="2">Year</mat-option>
-                                    <mat-option value="3">Date</mat-option>
+                                    <mat-option [value]="1">Day</mat-option>
+                                    <mat-option [value]="2">Month</mat-option>
+                                    <mat-option [value]="3">Year</mat-option>
+                                    <mat-option [value]="4">Date</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
 
-                        <ng-container *ngIf="totypeValue == '0' || totypeValue == '1' || totypeValue == '2'">
+                        <ng-container *ngIf="totypeValue === 1 || totypeValue === 2 || totypeValue === 3">
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Validity Number</mat-label>
@@ -408,14 +417,14 @@
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Spending End</mat-label>
                                     <mat-select [formControlName]="'to_end_type'">
-                                        <mat-option value="0">Expire Month End</mat-option>
-                                        <mat-option value="1">Expire Date</mat-option>
+                                        <mat-option [value]="1">Expire Month End</mat-option>
+                                        <mat-option [value]="2">Expire Date</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
                         </ng-container>
                         
-                        <ng-container *ngIf="totypeValue == '3'">
+                        <ng-container *ngIf="totypeValue === 4">
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>End Date</mat-label>
@@ -441,7 +450,7 @@
                                 [disabled]="PointBasketForm.invalid"
                                 [color]="'primary'"
                                 [matTooltip]="'Save'"
-                                (click)="createUpdateBasketPoint()"> 
+                                (click)="createPointBasket()"> 
                             Save
                         </button>
                     </div>
@@ -519,14 +528,15 @@
                                                             {{product.point_value}}
                                                         </div>
 
+                                                        <ng-container *ngIf="product.validity_type == '2'">
+                                                            <div class="truncate">
+                                                                {{product.start_date | date:'MMM dd, y'}}
+                                                            </div>
 
-                                                        <div class="truncate">
-                                                            {{product.start_date | date:'MMM dd, y'}}
-                                                        </div>
-
-                                                        <div class="truncate">
-                                                            {{product.end_date | date:'MMM dd, y'}}
-                                                        </div>
+                                                            <div class="truncate">
+                                                                {{product.end_date | date:'MMM dd, y'}}
+                                                            </div>
+                                                        </ng-container>
                                                     </div>
                                                 </a>
                                             </ng-container>
@@ -614,6 +624,7 @@
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Type</mat-label>
                                     <mat-select [formControlName]="'type'">
+                                        <mat-option value="basic_rule">Basic Rule</mat-option>
                                         <mat-option value="event_rule">Event Rule</mat-option>
                                         <!--<mat-option value="referral_rule">Customer Referral</mat-option>-->
                                         <mat-option value="birthday_rule">Birthday Event</mat-option>
@@ -655,7 +666,7 @@
                                     </mat-select>
                                 </mat-form-field>
                             </div>
-                            <!-- bh test  -->
+                            
                             <div class="flex sm:items-center mt-8">
                                 <div class="w-full text-3xl font-bold">Type Detail</div>
                             </div>
@@ -665,12 +676,12 @@
                             </mat-form-field>
 
                             <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-form-field class="fuse-mat-no-subscript w-full" (click)="setMemberTierDrawer()">
                                     <mat-label>Member Tier</mat-label>
-                                    <input matInput (click)="setMemberTierDrawer()" style="cursor:pointer" readonly
+                                    <input matInput style="cursor:pointer" readonly
                                         [formControlName]="'member_tierFullName'"
                                         placeholder="Select Member Tier">
-                                    <mat-icon matSuffix svgIcon="heroicons_outline:external-link"></mat-icon>
+                                    <mat-icon matSuffix svgIcon="heroicons_outline:external-link" style="cursor:pointer"></mat-icon>
                                 </mat-form-field>
 
                             </div>
@@ -680,12 +691,12 @@
                             </mat-form-field>
 
                             <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-form-field class="fuse-mat-no-subscript w-full" (click)="setPointBasketDrawer()">
                                     <mat-label>Point Basket</mat-label>
-                                    <input matInput (click)="openPointBasketForm(pointbasketId)" style="cursor:pointer" readonly
+                                    <input matInput style="cursor:pointer" readonly
                                         [formControlName]="'point_basketName'"
                                         placeholder="Create Point Basket">
-                                    <mat-icon matSuffix svgIcon="heroicons_outline:external-link"></mat-icon>
+                                    <mat-icon matSuffix svgIcon="heroicons_outline:external-link" style="cursor:pointer"></mat-icon>
                                 </mat-form-field>
                             </div>
                             

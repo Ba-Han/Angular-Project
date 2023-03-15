@@ -36,9 +36,16 @@
 
                 <!-- Basic -->
                 <ng-container *ngIf="item.type === 'basic'">
-                    <fuse-vertical-navigation-basic-item
+                    <ng-container *ngIf="item.title === 'User' && item.title === 'Country' && item.title === 'Data Import'">
+                        <fuse-vertical-navigation-basic-item style="display: none;"
                         [item]="item"
                         [name]="name"></fuse-vertical-navigation-basic-item>
+                    </ng-container>
+                    <ng-container *ngIf="item.title !== 'User' && item.title !== 'Country' && item.title !== 'Data Import'">
+                        <fuse-vertical-navigation-basic-item style="display: block;"
+                        [item]="item"
+                        [name]="name"></fuse-vertical-navigation-basic-item>
+                    </ng-container>
                 </ng-container>
 
                 <!-- Collapsable -->

@@ -2,7 +2,7 @@ import { PointBasketPagination } from './pointrules.types';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
-import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError, delay } from 'rxjs';
 import { PointRule, PointRulePaginagion, PointBasket } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 import { MemberTier, MemberTierPagination } from 'app/modules/admin/loyalty/membertier/membertier.types';
 
@@ -40,7 +40,7 @@ export class PointRuleService {
     get pagination$(): Observable<PointRulePaginagion> {
         return this._pagination.asObservable();
     }
-     
+
      get memberTiers$(): Observable<MemberTier[]> {
         return this._memberTiers.asObservable();
     }
@@ -56,7 +56,6 @@ export class PointRuleService {
     get memberTierpagination$(): Observable<PointRulePaginagion> {
         return this._memberTierpagination.asObservable();
     }
-   
      // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
@@ -96,7 +95,7 @@ export class PointRuleService {
     }
 
     getPointBaskets(page: number = 0, limit: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
-        Observable<{ pagination: PointBasketPagination; pointrules: PointBasket[] }> {
+        Observable<{ pagination: PointBasketPagination; pointBaskets: PointBasket[] }> {
         return this._httpClient.get(`${this._apiurl}/items/point_basket`, {
             params: {
                 meta: 'filter_count',
@@ -108,22 +107,22 @@ export class PointRuleService {
             }
         }).pipe(
             tap((response: any) => {
-                const totalLength = response.meta.filter_count;
+                const pointBasketLength = response.meta.filter_count;
                 const begin = page * limit;
-                const end = Math.min((limit * (page + 1)), totalLength);
-                const lastPage = Math.max(Math.ceil(totalLength / limit), 1);
+                const end = Math.min((limit * (page + 1)), pointBasketLength);
+                const lastPage = Math.max(Math.ceil(pointBasketLength / limit), 1);
 
                 // Prepare the pagination object
                 const pagination = {
-                    length: totalLength,
+                    length: pointBasketLength,
                     limit: limit,
                     page: page,
                     lastPage: lastPage,
                     startIndex: begin,
                     endIndex: end - 1
                 };
-                this._pagination.next(pagination);
-                this._pointRules.next(response.data);
+                this._pointBasketPagination.next(pagination);
+                this._pointBaskets.next(response.data);
             })
         );
     }
@@ -169,7 +168,7 @@ export class PointRuleService {
             })
         );
     }
-    
+
     getPointRuleById(id: number): Observable<PointRule> {
         return this._httpClient.get<any>(`${this._apiurl}/items/point_rule/${id}`)
             .pipe(
@@ -179,26 +178,6 @@ export class PointRuleService {
                 })
             );
     }
-    
-    /* getPointRuleById(id: number, isdetail: boolean): Observable<PointRule> {
-        if (isdetail) {
-            return this._httpClient.get(`${this._apiurl}/items/point_rule/${id}?fields=*,point_basket.*`
-            ).pipe(
-                tap((response: any) => {
-                    return response.data;
-                })
-            );
-        }
-        else {
-            return this._httpClient.get(`${this._apiurl}/items/point_rule/${id}`
-            ).pipe(
-                tap((response: any) => {
-                    return response.data;
-                })
-            );
-        }
-        
-    } */
 
     getPointBasketById(id: number): Observable<PointBasket> {
         return this._httpClient.get(`${this._apiurl}/items/point_basket/${id}`
@@ -219,52 +198,119 @@ export class PointRuleService {
     }
 
     createPointBasket(pointbasket: PointBasket): Observable<PointBasket> {
-        return this._httpClient.post<PointBasket>(`${this._apiurl}/items/point_basket`, {
-            "user_created": pointbasket.user_created,
-            "date_created": pointbasket.date_created,
-            "user_updated": pointbasket.user_updated,
-            "date_updated": pointbasket.date_updated,
-            "name": pointbasket.name,
-            "description": pointbasket.description,
-            "spending_type": pointbasket.spending_type,
-            "from_type": pointbasket.from_type,
-            "from_number": pointbasket.from_number,
-            "from_start_type": pointbasket.from_start_type,
-            "from_start_date": pointbasket.from_start_date,
-            "to_type": pointbasket.to_type,
-            "to_number": pointbasket.to_number,
-            "to_end_type": pointbasket.to_end_type,
-            "to_end_date": pointbasket.to_end_date,
-        }).pipe(
-            tap((response: any) => {
-                return response.data;
-            })
-        )
+
+        const fromNumber = pointbasket.from_number;
+        const fromStartType = pointbasket.from_start_type;
+        const fromType = pointbasket.from_type;
+
+        const toNumber = pointbasket.to_number;
+        const toEndType = pointbasket.to_end_type;
+        const toType = pointbasket.to_type;
+
+        if(fromNumber === null || fromStartType === null || fromType=== null || toNumber === null || toEndType === null || toType === null) {
+            return this._httpClient.post<PointBasket>(`${this._apiurl}/items/point_basket`, {
+                "user_created": pointbasket.user_created,
+                "date_created": pointbasket.date_created,
+                "user_updated": pointbasket.user_updated,
+                "date_updated": pointbasket.date_updated,
+                "name": pointbasket.name,
+                "description": pointbasket.description,
+                "spending_type": pointbasket.spending_type,
+                //"from_type": pointbasket.from_type,
+                //"from_number": pointbasket.from_number,
+                //"from_start_type": pointbasket.from_start_type,
+                "from_start_date": pointbasket.from_start_date,
+                //"to_type": pointbasket.to_type,
+                //"to_number": pointbasket.to_number,
+                //"to_end_type": pointbasket.to_end_type,
+                "to_end_date": pointbasket.to_end_date,
+            }).pipe(
+                tap((response: any) => {
+                    return response.data;
+                })
+            )
+        } else {
+            return this._httpClient.post<PointBasket>(`${this._apiurl}/items/point_basket`, {
+                "user_created": pointbasket.user_created,
+                "date_created": pointbasket.date_created,
+                "user_updated": pointbasket.user_updated,
+                "date_updated": pointbasket.date_updated,
+                "name": pointbasket.name,
+                "description": pointbasket.description,
+                "spending_type": pointbasket.spending_type,
+                "from_type": pointbasket.from_type,
+                "from_number": pointbasket.from_number,
+                "from_start_type": pointbasket.from_start_type,
+                "from_start_date": pointbasket.from_start_date,
+                "to_type": pointbasket.to_type,
+                "to_number": pointbasket.to_number,
+                "to_end_type": pointbasket.to_end_type,
+                "to_end_date": pointbasket.to_end_date,
+            }).pipe(
+                tap((response: any) => {
+                    return response.data;
+                })
+            )
+        }
     }
 
     updatePointBasket(id: number, pointbasket: PointBasket): Observable<PointBasket> {
-        return this._httpClient.patch<PointBasket>(`${this._apiurl}/items/point_basket/${id}`, {
-            "id": id,
-            "user_created": pointbasket.user_created,
-            "date_created": pointbasket.date_created,
-            "user_updated": pointbasket.user_updated,
-            "date_updated": pointbasket.date_updated,
-            "name": pointbasket.name,
-            "description": pointbasket.description,
-            "spending_type": pointbasket.spending_type,
-            "from_type": pointbasket.from_type,
-            "from_number": pointbasket.from_number,
-            "from_start_type": pointbasket.from_start_type,
-            "from_start_date": pointbasket.from_start_date,
-            "to_type": pointbasket.to_type,
-            "to_number": pointbasket.to_number,
-            "to_end_type": pointbasket.to_end_type,
-            "to_end_date": pointbasket.to_end_date,
-        }).pipe(
-            tap((response: any) => {
-                return response.data;
-            })
-        )
+
+        const fromNumber = pointbasket.from_number;
+        const fromStartType = pointbasket.from_start_type;
+        const fromType = pointbasket.from_type;
+
+        const toNumber = pointbasket.to_number;
+        const toEndType = pointbasket.to_end_type;
+        const toType = pointbasket.to_type;
+
+        if(fromNumber === null || fromStartType === null || fromType=== null || toNumber === null || toEndType === null || toType === null) {
+            return this._httpClient.post<PointBasket>(`${this._apiurl}/items/point_basket/${id}`, {
+                "id": id,
+                "user_created": pointbasket.user_created,
+                "date_created": pointbasket.date_created,
+                "user_updated": pointbasket.user_updated,
+                "date_updated": pointbasket.date_updated,
+                "name": pointbasket.name,
+                "description": pointbasket.description,
+                "spending_type": pointbasket.spending_type,
+                //"from_type": pointbasket.from_type,
+                //"from_number": pointbasket.from_number,
+                //"from_start_type": pointbasket.from_start_type,
+                "from_start_date": pointbasket.from_start_date,
+                //"to_type": pointbasket.to_type,
+                //"to_number": pointbasket.to_number,
+                //"to_end_type": pointbasket.to_end_type,
+                "to_end_date": pointbasket.to_end_date,
+            }).pipe(
+                tap((response: any) => {
+                    return response.data;
+                })
+            )
+        } else {
+            return this._httpClient.post<PointBasket>(`${this._apiurl}/items/point_basket/${id}`, {
+                "id": id,
+                "user_created": pointbasket.user_created,
+                "date_created": pointbasket.date_created,
+                "user_updated": pointbasket.user_updated,
+                "date_updated": pointbasket.date_updated,
+                "name": pointbasket.name,
+                "description": pointbasket.description,
+                "spending_type": pointbasket.spending_type,
+                "from_type": pointbasket.from_type,
+                "from_number": pointbasket.from_number,
+                "from_start_type": pointbasket.from_start_type,
+                "from_start_date": pointbasket.from_start_date,
+                "to_type": pointbasket.to_type,
+                "to_number": pointbasket.to_number,
+                "to_end_type": pointbasket.to_end_type,
+                "to_end_date": pointbasket.to_end_date,
+            }).pipe(
+                tap((response: any) => {
+                    return response.data;
+                })
+            )
+        }
     }
 
     createPointRule(pointrule: PointRule): Observable<PointRule> {
@@ -400,7 +446,7 @@ export class PointRuleService {
             endDate.setMinutes(endDate.getMinutes() - 0o0);
             let endDateFormat = endDate.getFullYear() + "-" +  (endDate.getMonth()+1) + "-" + endDate.getDate() + "T" + endDate.getHours() + ":" + endDate.getMinutes() + ":00"; */
         
-            return this._httpClient.patch<PointRule>(`${this._apiurl}/items/point_rule/${id}`, 
+            return this._httpClient.patch<PointRule>(`${this._apiurl}/items/point_rule/${id}`,
                 {
                     "id": pointrule.id,
                     "name": pointrule.name,
