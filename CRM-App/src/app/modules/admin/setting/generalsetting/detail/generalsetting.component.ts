@@ -84,6 +84,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 export class SettingDetailComponent implements OnInit, OnDestroy {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
 
     memberGroupOptions: MemberGroup[];
@@ -98,16 +99,13 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
     isLoading: boolean = false;
     SettingEditForm: FormGroup;
     editMode: boolean = false;
-    isSuccess : boolean = false;
+    isSuccess: boolean = false;
     drawerMode: 'side' | 'over';
 
-    MemberGroupListMode: boolean = false;
     memberGroups$: Observable<MemberGroup[]>;
-    //memberGroups: Array<MemberGroup> = [];
     memberGroupsPagination: MemberGroupPaginagion;
     memberGroupsSearchInputControl: FormControl = new FormControl();
 
-    UserGroupListMode: boolean = false;
     userGroups$: Observable<UserGroup[]>;
     userGroupsPagination: UserGroupPaginagion;
     userGroupsSearchInputControl: FormControl = new FormControl();

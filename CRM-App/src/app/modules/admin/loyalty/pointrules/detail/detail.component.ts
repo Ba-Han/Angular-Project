@@ -18,6 +18,18 @@ import { MemberTier, MemberTierPagination } from 'app/modules/admin/loyalty/memb
     templateUrl: './detail.component.html',
     styles: [
         `
+            .point_rule_tier_grid {
+                grid-template-columns: 60px 100px;
+                    @screen sm {
+                        grid-template-columns: 60px 100px 100px;
+                    }
+                    @screen md {
+                        grid-template-columns: 60px 150px 150px;
+                    }
+                    @screen lg {
+                        grid-template-columns: 35px 200px 200px;
+                    }
+                }
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -66,6 +78,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     validitytypeValue: string;
     minDate: string;
     timeoutId: any;
+    timeOutUpId: any;
     selectedId: number;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -279,13 +292,13 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     toggleEditMode(MemberTierListMode: boolean | null = null): void {
-            if (MemberTierListMode === null) {
-                this.MemberTierListMode = !this.MemberTierListMode;
-            }
-            else {
-                this.MemberTierListMode = MemberTierListMode;
-            }
-            this._changeDetectorRef.markForCheck();
+        if (MemberTierListMode === null) {
+        this.MemberTierListMode = !this.MemberTierListMode;
+        }
+        else {
+        this.MemberTierListMode = MemberTierListMode;
+        }
+        this._changeDetectorRef.markForCheck();
     }
 
     tooglepointBasketAddFormMode(pointbasketMode: boolean | null = null): void {
@@ -332,21 +345,27 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
                 this.matDrawer.open();
                 this._changeDetectorRef.markForCheck();
             });
-
-        setTimeout(() => {
-            this.pageSortAndPaging();
-        }, 2500);
-        //this.tooglePointBasketMode(false);
+        if (this.timeOutUpId) {
+                this.timeOutUpId = setTimeout(() => {
+                    this.pageSortAndPaging();
+                }, 1000);
+                //clearTimeout(this.timeOutUpId);
+            } else {
+                this.timeOutUpId = setTimeout(() => {
+                    this.pageSortAndPaging();
+                }, 1000);
+            }
+        this._changeDetectorRef.markForCheck();
     }
 
     pageSortAndPaging(): void {
         if (this._sort && this._paginator) {
             // Set the initial sort
-            this._sort.sort({
+            /* this._sort.sort({
                 id: 'name',
                 start: 'asc',
                 disableClear: true
-            });
+            }); */
             this._changeDetectorRef.markForCheck();
 
             this._sort.sortChange
@@ -355,6 +374,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
                     this._paginator.pageIndex = 0;
                     this.matDrawer.open();
                 });
+            this._changeDetectorRef.markForCheck();
 
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
@@ -368,6 +388,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
                 })
             ).subscribe();
             this.matDrawer.open();
+            this._changeDetectorRef.markForCheck();
         }
     }
 
@@ -381,7 +402,6 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     setPointBasketDrawer(): void {
-        //clearTimeout(this.timeoutId);
         this.tooglePointBasketListMode(true);
         this.pointBaskets$ = this._pointRuleService.pointBaskets$;
         this._pointRuleService.pointBasketPagination$
@@ -392,22 +412,27 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
                 this._changeDetectorRef.markForCheck();
             });
         //this.selectedId = this.pointRule.basket_id;
-        this.timeoutId = setTimeout(() => {
-            this.pageSortAndBasketPaging();
-        }, 2000);
-        //this.tooglePointBasketMode(false);
-
-        //clearTimeout(this.timeoutId);
+        if (this.timeoutId) {
+            this.timeoutId = setTimeout(() => {
+                this.pageSortAndBasketPaging();
+            }, 1000);
+            //clearTimeout(this.timeoutId);
+          } else {
+            this.timeoutId = setTimeout(() => {
+                this.pageSortAndBasketPaging();
+            }, 1000);
+          }
+        this._changeDetectorRef.markForCheck();
     }
 
     pageSortAndBasketPaging(): void {
         if (this._sort && this._paginator) {
             // Set the initial sort
-            this._sort.sort({
+            /* this._sort.sort({
                 id: 'name',
                 start: 'asc',
                 disableClear: true
-            });
+            }); */
             this._changeDetectorRef.markForCheck();
 
             this._sort.sortChange
@@ -416,6 +441,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
                     this._paginator.pageIndex = 0;
                     this.matDrawer.open();
                 });
+            this._changeDetectorRef.markForCheck();
 
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
@@ -429,6 +455,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
                 })
             ).subscribe();
             this.matDrawer.open();
+            this._changeDetectorRef.markForCheck();
         }
     }
 

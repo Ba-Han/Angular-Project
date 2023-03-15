@@ -111,6 +111,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     spendingType: string;
     minDate: string;
     timeoutId: any;
+    timeOutUpId: any;
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -360,20 +361,27 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                 this._changeDetectorRef.markForCheck();
             });
 
-        setTimeout(() => {
-            this.pageSortAndPaging();
-        }, 2000);
-        //this.tooglePointBasketMode(false);
+        if (this.timeOutUpId) {
+            this.timeOutUpId = setTimeout(() => {
+                this.pageSortAndPaging();
+            }, 1000);
+            //clearTimeout(this.timeOutUpId);
+        } else {
+            this.timeOutUpId = setTimeout(() => {
+                this.pageSortAndPaging();
+            }, 1000);
+        }
+        this._changeDetectorRef.markForCheck();
     }
 
     pageSortAndPaging(): void {
         if (this._sort && this._paginator) {
             // Set the initial sort
-            this._sort.sort({
+            /* this._sort.sort({
                 id: 'name',
                 start: 'asc',
                 disableClear: true
-            });
+            }); */
             this._changeDetectorRef.markForCheck();
 
             this._sort.sortChange
@@ -382,6 +390,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                     this._paginator.pageIndex = 0;
                     this.matDrawer.open();
                 });
+            this._changeDetectorRef.markForCheck();
 
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
@@ -408,7 +417,6 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     setPointBasketDrawer(): void {
-        //clearTimeout(this.timeoutId);
         this.tooglePointBasketListMode(true);
         this.pointBaskets$ = this._pointRuleService.pointBaskets$;
         this._pointRuleService.pointBasketPagination$
@@ -418,22 +426,27 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.matDrawer.open();
                 this._changeDetectorRef.markForCheck();
             });
-       this.timeoutId = setTimeout(() => {
-            this.pageSortAndBasketPaging();
-        }, 2000);
-        //this.tooglePointBasketMode(false);
-
-        //clearTimeout(this.timeoutId);
+        if (this.timeoutId) {
+            this.timeoutId = setTimeout(() => {
+                this.pageSortAndBasketPaging();
+            }, 1000);
+            //clearTimeout(this.timeoutId);
+            } else {
+            this.timeoutId = setTimeout(() => {
+                this.pageSortAndBasketPaging();
+            }, 1000);
+            }
+        this._changeDetectorRef.markForCheck();
     }
 
     pageSortAndBasketPaging(): void {
         if (this._sort && this._paginator) {
             // Set the initial sort
-            this._sort.sort({
+            /* this._sort.sort({
                 id: 'name',
                 start: 'asc',
                 disableClear: true
-            });
+            }); */
             this._changeDetectorRef.markForCheck();
 
             this._sort.sortChange
@@ -442,6 +455,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                     this._paginator.pageIndex = 0;
                     this.matDrawer.open();
                 });
+            this._changeDetectorRef.markForCheck();
 
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
@@ -455,6 +469,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                 })
             ).subscribe();
             this.matDrawer.open();
+            this._changeDetectorRef.markForCheck();
         }
     }
 

@@ -50,14 +50,20 @@
                                      matSort
                                      matSortDisableClear>
                                     <div></div>
-                                    <div class="sm:block"
+                                    <div class="sm:block">
+                                        Name
+                                    </div>
+                                    <div class="hidden md:block">
+                                        Level
+                                    </div>
+                                    <!-- <div class="sm:block"
                                          [mat-sort-header]="'name'">
                                         Name
                                     </div>
                                     <div class="hidden md:block"
                                          [mat-sort-header]="'level'">
                                         Level
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <!-- Rows -->
                                 <ng-container *ngIf="(memberTiers$ | async) as memberTiers">
@@ -144,13 +150,12 @@
                                      matSort
                                      matSortDisableClear>
                                     <div></div>
-                                    <div class="sm:block"
-                                         [mat-sort-header]="'name'">
+                                    <div class="sm:block">
                                         Name
                                     </div>
-                                    <!-- <div class="hidden md:block"
-                                         [mat-sort-header]="'level'">
-                                        Level
+                                    <!-- <div class="sm:block"
+                                         [mat-sort-header]="'name'">
+                                        Name
                                     </div> -->
                                 </div>
                                 <!-- Rows -->
@@ -248,14 +253,14 @@
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Redemption Type</mat-label>
                             <mat-select [formControlName]="'spending_type'" [(ngModel)]="spendingtypeValue">
-                                <mat-option value="instant_redemption">Instant Redemption</mat-option>
-                                <mat-option value="redemption_basket">Redemption Basket</mat-option>
+                                <mat-option [value]="1">Instant Redemption</mat-option>
+                                <mat-option [value]="2">Redemption Basket</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
 
                     <!--redemptionType-->
-                    <ng-container *ngIf="spendingtypeValue === 'instant_redemption'">
+                    <ng-container *ngIf="spendingtypeValue === 1">
                         <div class="flex sm:items-center mt-8">
                             <div class="w-full text-3xl font-bold">To</div>
                         </div> 
@@ -264,15 +269,15 @@
                             <mat-form-field class="fuse-mat-no-subscript w-full">
                                 <mat-label>Spending Validity Type</mat-label>
                                 <mat-select [formControlName]="'to_type'" [(ngModel)]="totypeValue">
-                                    <mat-option value="0">Day</mat-option>
-                                    <mat-option value="1">Month</mat-option>
-                                    <mat-option value="2">Year</mat-option>
-                                    <mat-option value="3">Date</mat-option>
+                                    <mat-option [value]="1">Day</mat-option>
+                                    <mat-option [value]="2">Month</mat-option>
+                                    <mat-option [value]="3">Year</mat-option>
+                                    <mat-option [value]="4">Date</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
 
-                        <ng-container *ngIf="totypeValue === '0' || totypeValue === '1' || totypeValue=== '2'">
+                        <ng-container *ngIf="totypeValue === 1 || totypeValue === 2 || totypeValue=== 3">
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Validity Number</mat-label>
@@ -289,14 +294,14 @@
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Spending End</mat-label>
                                     <mat-select [formControlName]="'to_end_type'">
-                                        <mat-option value="expire_month_end">Expire Month End</mat-option>
-                                        <mat-option value="expire_date">Expire Date</mat-option>
+                                        <mat-option [value]="1">Expire Month End</mat-option>
+                                        <mat-option [value]="2">Expire Date</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
                         </ng-container>
                         
-                        <ng-container *ngIf="totypeValue === '3'">
+                        <ng-container *ngIf="totypeValue === 4">
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>End Date</mat-label>
@@ -318,7 +323,7 @@
                     </ng-container>
 
                     <!--redemptionBasket-->
-                    <ng-container *ngIf="spendingtypeValue === 'redemption_basket'">
+                    <ng-container *ngIf="spendingtypeValue === 2">
                         <div class="flex sm:items-center mt-8">
                             <div class="w-full text-3xl font-bold">From</div>
                         </div> 
@@ -327,15 +332,15 @@
                             <mat-form-field class="fuse-mat-no-subscript w-full">
                                 <mat-label>Spending Validity Type</mat-label>
                                 <mat-select [formControlName]="'from_type'" [(ngModel)]="fromtypeValue">
-                                    <mat-option value="0">Day</mat-option>
-                                    <mat-option value="1">Month</mat-option>
-                                    <mat-option value="2">Year</mat-option>
-                                    <mat-option value="3">Date</mat-option>
+                                    <mat-option [value]="1">Day</mat-option>
+                                    <mat-option [value]="2">Month</mat-option>
+                                    <mat-option [value]="3">Year</mat-option>
+                                    <mat-option [value]="4">Date</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
 
-                        <ng-container *ngIf="fromtypeValue === '0' || fromtypeValue === '1' || fromtypeValue=== '2'">
+                        <ng-container *ngIf="fromtypeValue === 1 || fromtypeValue === 2 || fromtypeValue=== 3">
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Validity Number</mat-label>
@@ -352,14 +357,14 @@
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Spending Start</mat-label>
                                     <mat-select [formControlName]="'from_start_type'">
-                                        <mat-option value="0">Current Date</mat-option>
-                                        <mat-option value="1">Current Month Start</mat-option>
+                                        <mat-option [value]="1">Current Date</mat-option>
+                                        <mat-option [value]="2">Current Month Start</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
                         </ng-container>
                         
-                        <ng-container *ngIf="fromtypeValue === '3'">
+                        <ng-container *ngIf="fromtypeValue === 4">
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Start Date</mat-label>
@@ -387,15 +392,15 @@
                             <mat-form-field class="fuse-mat-no-subscript w-full">
                                 <mat-label>Spending Validity Type</mat-label>
                                 <mat-select [formControlName]="'to_type'" [(ngModel)]="totypeValue">
-                                    <mat-option value="0">Day</mat-option>
-                                    <mat-option value="1">Month</mat-option>
-                                    <mat-option value="2">Year</mat-option>
-                                    <mat-option value="3">Date</mat-option>
+                                    <mat-option [value]="1">Day</mat-option>
+                                    <mat-option [value]="2">Month</mat-option>
+                                    <mat-option [value]="3">Year</mat-option>
+                                    <mat-option [value]="4">Date</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
 
-                        <ng-container *ngIf="totypeValue === '0' || totypeValue === '1' || totypeValue === '2'">
+                        <ng-container *ngIf="totypeValue === 1 || totypeValue === 2 || totypeValue === 3">
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Validity Number</mat-label>
@@ -412,14 +417,14 @@
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Spending End</mat-label>
                                     <mat-select [formControlName]="'to_end_type'">
-                                        <mat-option value="0">Expire Month End</mat-option>
-                                        <mat-option value="1">Expire Date</mat-option>
+                                        <mat-option [value]="1">Expire Month End</mat-option>
+                                        <mat-option [value]="2">Expire Date</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
                         </ng-container>
                         
-                        <ng-container *ngIf="totypeValue === '3'">
+                        <ng-container *ngIf="totypeValue === 4">
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>End Date</mat-label>
@@ -671,12 +676,12 @@
                             </mat-form-field>
 
                             <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-form-field class="fuse-mat-no-subscript w-full" (click)="setMemberTierDrawer()">
                                     <mat-label>Member Tier</mat-label>
-                                    <input matInput readonly (click)="setMemberTierDrawer()" style="cursor:pointer"
+                                    <input matInput style="cursor:pointer" readonly
                                         [formControlName]="'member_tierFullName'"
                                         placeholder="Select Member Tier">
-                                    <mat-icon matSuffix svgIcon="heroicons_outline:external-link" (click)="setMemberTierDrawer()" style="cursor:pointer"></mat-icon>
+                                    <mat-icon matSuffix svgIcon="heroicons_outline:external-link" style="cursor:pointer"></mat-icon>
                                 </mat-form-field>
 
                             </div>
@@ -686,12 +691,12 @@
                             </mat-form-field>
 
                             <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-form-field class="fuse-mat-no-subscript w-full" (click)="setPointBasketDrawer()">
                                     <mat-label>Point Basket</mat-label>
-                                    <input matInput readonly (click)="setPointBasketDrawer()" style="cursor:pointer"
+                                    <input matInput style="cursor:pointer" readonly
                                         [formControlName]="'point_basketName'"
                                         placeholder="Create Point Basket">
-                                    <mat-icon matSuffix svgIcon="heroicons_outline:external-link" (click)="setPointBasketDrawer()" style="cursor:pointer"></mat-icon>
+                                    <mat-icon matSuffix svgIcon="heroicons_outline:external-link" style="cursor:pointer"></mat-icon>
                                 </mat-form-field>
                             </div>
                             
