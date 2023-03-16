@@ -80,6 +80,12 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     timeoutId: any;
     timeOutUpId: any;
     selectedId: number;
+    spendingtypeValue = 0;
+    totypeValue = 0;
+    toendTypeValue = 0;
+    fromtypeValue = 0;
+    fromstarttypeValue = 0;
+    isButtonDisabled: boolean = true;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
 
@@ -123,7 +129,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         this.PointBasketForm = this._formBuilder.group({
             id: [''],
             name: ['',[Validators.required]],
-            description: [''],
+            description: ['',[Validators.required]],
             spending_type: ['',[Validators.required]],
             from_type: [''],
             from_number: [''],

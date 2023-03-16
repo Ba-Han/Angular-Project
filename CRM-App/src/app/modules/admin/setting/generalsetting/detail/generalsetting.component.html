@@ -78,6 +78,19 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
+
+                        <div class="mt-8">
+                            <div class="mt-3 text-2xl w-full font-bold truncate">Default Member Tier</div>
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-select [formControlName]="'default_member_tier'">
+                                    <ng-container *ngFor="let tier of memberTiers">
+                                        <mat-option [value]="tier.id">
+                                            {{ tier.name }}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
     
                         <ng-container *ngIf="isSuccess">
                             <div class="mt-8">

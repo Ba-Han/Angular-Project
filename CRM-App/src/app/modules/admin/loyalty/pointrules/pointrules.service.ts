@@ -199,118 +199,64 @@ export class PointRuleService {
 
     createPointBasket(pointbasket: PointBasket): Observable<PointBasket> {
 
-        const fromNumber = pointbasket.from_number;
-        const fromStartType = pointbasket.from_start_type;
-        const fromType = pointbasket.from_type;
+        const fromType = pointbasket.from_type == null ? 0 : pointbasket.from_type;
+        const fromNumber = pointbasket.from_number == null ? 0 : pointbasket.from_number;
+        const fromStartType = pointbasket.from_start_type == null ? 0 : pointbasket.from_start_type;
+        const toType = pointbasket.to_type == null ? 0 : pointbasket.to_type;
+        const toEndType = pointbasket.to_end_type == null ? 0 : pointbasket.to_end_type;
+        const toNumber = pointbasket.to_number == null ? 0 : pointbasket.to_number;
 
-        const toNumber = pointbasket.to_number;
-        const toEndType = pointbasket.to_end_type;
-        const toType = pointbasket.to_type;
+        return this._httpClient.post<PointBasket>(`${this._apiurl}/items/point_basket`, {
+            "user_created": pointbasket.user_created,
+            "date_created": pointbasket.date_created,
+            "user_updated": pointbasket.user_updated,
+            "date_updated": pointbasket.date_updated,
+            "name": pointbasket.name,
+            "description": pointbasket.description,
+            "spending_type": pointbasket.spending_type,
+            "from_type": fromType,
+            "from_number": fromNumber,
+            "from_start_type": fromStartType,
+            "from_start_date": pointbasket.from_start_date,
+            "to_type": toType,
+            "to_number": toNumber,
+            "to_end_type": toEndType,
+            "to_end_date": pointbasket.to_end_date,
+        }).pipe(
+            tap((response: any) => response.data)
+        );
 
-        if(fromNumber === null || fromStartType === null || fromType=== null || toNumber === null || toEndType === null || toType === null) {
-            return this._httpClient.post<PointBasket>(`${this._apiurl}/items/point_basket`, {
-                "user_created": pointbasket.user_created,
-                "date_created": pointbasket.date_created,
-                "user_updated": pointbasket.user_updated,
-                "date_updated": pointbasket.date_updated,
-                "name": pointbasket.name,
-                "description": pointbasket.description,
-                "spending_type": pointbasket.spending_type,
-                //"from_type": pointbasket.from_type,
-                //"from_number": pointbasket.from_number,
-                //"from_start_type": pointbasket.from_start_type,
-                "from_start_date": pointbasket.from_start_date,
-                //"to_type": pointbasket.to_type,
-                //"to_number": pointbasket.to_number,
-                //"to_end_type": pointbasket.to_end_type,
-                "to_end_date": pointbasket.to_end_date,
-            }).pipe(
-                tap((response: any) => {
-                    return response.data;
-                })
-            )
-        } else {
-            return this._httpClient.post<PointBasket>(`${this._apiurl}/items/point_basket`, {
-                "user_created": pointbasket.user_created,
-                "date_created": pointbasket.date_created,
-                "user_updated": pointbasket.user_updated,
-                "date_updated": pointbasket.date_updated,
-                "name": pointbasket.name,
-                "description": pointbasket.description,
-                "spending_type": pointbasket.spending_type,
-                "from_type": pointbasket.from_type,
-                "from_number": pointbasket.from_number,
-                "from_start_type": pointbasket.from_start_type,
-                "from_start_date": pointbasket.from_start_date,
-                "to_type": pointbasket.to_type,
-                "to_number": pointbasket.to_number,
-                "to_end_type": pointbasket.to_end_type,
-                "to_end_date": pointbasket.to_end_date,
-            }).pipe(
-                tap((response: any) => {
-                    return response.data;
-                })
-            )
-        }
     }
 
     updatePointBasket(id: number, pointbasket: PointBasket): Observable<PointBasket> {
 
-        const fromNumber = pointbasket.from_number;
-        const fromStartType = pointbasket.from_start_type;
-        const fromType = pointbasket.from_type;
+        const fromType = pointbasket.from_type == null ? 0 : pointbasket.from_type;
+        const fromNumber = pointbasket.from_number == null ? 0 : pointbasket.from_number;
+        const fromStartType = pointbasket.from_start_type == null ? 0 : pointbasket.from_start_type;
+        const toType = pointbasket.to_type == null ? 0 : pointbasket.to_type;
+        const toEndType = pointbasket.to_end_type == null ? 0 : pointbasket.to_end_type;
+        const toNumber = pointbasket.to_number == null ? 0 : pointbasket.to_number;
 
-        const toNumber = pointbasket.to_number;
-        const toEndType = pointbasket.to_end_type;
-        const toType = pointbasket.to_type;
-
-        if(fromNumber === null || fromStartType === null || fromType=== null || toNumber === null || toEndType === null || toType === null) {
-            return this._httpClient.post<PointBasket>(`${this._apiurl}/items/point_basket/${id}`, {
-                "id": id,
-                "user_created": pointbasket.user_created,
-                "date_created": pointbasket.date_created,
-                "user_updated": pointbasket.user_updated,
-                "date_updated": pointbasket.date_updated,
-                "name": pointbasket.name,
-                "description": pointbasket.description,
-                "spending_type": pointbasket.spending_type,
-                //"from_type": pointbasket.from_type,
-                //"from_number": pointbasket.from_number,
-                //"from_start_type": pointbasket.from_start_type,
-                "from_start_date": pointbasket.from_start_date,
-                //"to_type": pointbasket.to_type,
-                //"to_number": pointbasket.to_number,
-                //"to_end_type": pointbasket.to_end_type,
-                "to_end_date": pointbasket.to_end_date,
-            }).pipe(
-                tap((response: any) => {
-                    return response.data;
-                })
-            )
-        } else {
-            return this._httpClient.post<PointBasket>(`${this._apiurl}/items/point_basket/${id}`, {
-                "id": id,
-                "user_created": pointbasket.user_created,
-                "date_created": pointbasket.date_created,
-                "user_updated": pointbasket.user_updated,
-                "date_updated": pointbasket.date_updated,
-                "name": pointbasket.name,
-                "description": pointbasket.description,
-                "spending_type": pointbasket.spending_type,
-                "from_type": pointbasket.from_type,
-                "from_number": pointbasket.from_number,
-                "from_start_type": pointbasket.from_start_type,
-                "from_start_date": pointbasket.from_start_date,
-                "to_type": pointbasket.to_type,
-                "to_number": pointbasket.to_number,
-                "to_end_type": pointbasket.to_end_type,
-                "to_end_date": pointbasket.to_end_date,
-            }).pipe(
-                tap((response: any) => {
-                    return response.data;
-                })
-            )
-        }
+        return this._httpClient.post<PointBasket>(`${this._apiurl}/items/point_basket/${id}`, {
+            "id": id,
+            "user_created": pointbasket.user_created,
+            "date_created": pointbasket.date_created,
+            "user_updated": pointbasket.user_updated,
+            "date_updated": pointbasket.date_updated,
+            "name": pointbasket.name,
+            "description": pointbasket.description,
+            "spending_type": pointbasket.spending_type,
+            "from_type": fromType,
+            "from_number": fromNumber,
+            "from_start_type": fromStartType,
+            "from_start_date": pointbasket.from_start_date,
+            "to_type": toType,
+            "to_number": toNumber,
+            "to_end_type": toEndType,
+            "to_end_date": pointbasket.to_end_date,
+        }).pipe(
+            tap((response: any) => response.data)
+        );
     }
 
     createPointRule(pointrule: PointRule): Observable<PointRule> {

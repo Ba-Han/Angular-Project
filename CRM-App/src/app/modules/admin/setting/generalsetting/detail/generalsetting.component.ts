@@ -9,7 +9,7 @@ import { MatSort } from '@angular/material/sort';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertModule } from '@fuse/components/alert';
-import { GeneralSetting, MemberGroup, UserGroup, MemberGroupPaginagion, UserGroupPaginagion } from 'app/modules/admin/setting/generalsetting/generalsetting.types';
+import { GeneralSetting, MemberGroup, UserGroup, MemberGroupPaginagion, UserGroupPaginagion, MemberTier, MemberTierPagination } from 'app/modules/admin/setting/generalsetting/generalsetting.types';
 import { GeneralSettingService } from 'app/modules/admin/setting/generalsetting/generalsetting.service';
 import { MatDrawer } from '@angular/material/sidenav';
 
@@ -91,9 +91,12 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
     selectedMemberGroupOptions: MemberGroup[];
     userGroupOptions: UserGroup[];
     selectedUserGroupOptions: UserGroup[];
+    memberTierDefaultGroupOptions: MemberTier[];
+    selectedMemberTierDefaultGroupOptions: MemberTier[];
 
     memberform = new FormGroup({ memberGroupCtrl: new FormControl(), });
     userform = new FormGroup({ userGroupCtrl: new FormControl(), });
+    tierdefaultform = new FormGroup({ memberTierDefaultGroupCtrl: new FormControl(), });
 
     setting: GeneralSetting;
     isLoading: boolean = false;
@@ -112,6 +115,12 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
 
     memberGroups: Array<MemberGroup> = [];
     userGroups: Array<UserGroup> = [];
+
+    memberTiers$: Observable<MemberTier[]>;
+    memberTierPagination: MemberTierPagination;
+    memberTierDefaultGroups: Array<MemberTier> = [];
+    memberTiers: any;
+
     setting$: Observable<GeneralSetting>;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -135,6 +144,7 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
             point_conversion: [''],
             member_groups: [''],
             user_groups: [''],
+            default_member_tier: [''],
         });
 
         //Member Groups
@@ -150,6 +160,13 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
         .subscribe((groups) => {
             this.userGroups = groups;
         });
+
+        //MemberTier Groups
+        this._settingService.memberTiers$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((tiers) => {
+                this.memberTiers = tiers;
+            });
 
         this._settingService.setting$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -180,71 +197,6 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
                 this.SettingEditForm.patchValue(this.setting);
                 this._changeDetectorRef.markForCheck();
             });
-
-            //Drawer Mode
-        this.matDrawer.openedChange.subscribe((opened) => {
-            if (!opened) {
-                // Remove the selected contact when drawer closed
-                //this.selectedMember = null;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            }
-        });
-
-        this._fuseMediaWatcherService.onMediaChange$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(({ matchingAliases }) => {
-
-                // Set the drawerMode if the given breakpoint is active
-                if (matchingAliases.includes('lg')) {
-                    this.drawerMode = 'side';
-                }
-                else {
-                    this.drawerMode = 'over';
-                }
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
-
-
-        //Member Group Search
-        this.memberGroupsSearchInputControl.valueChanges
-            .pipe(
-                takeUntil(this._unsubscribeAll),
-                debounceTime(300),
-                switchMap((query) => {
-                    this.isLoading = true;
-                    // Search
-                    return this._settingService.getMemberGroups(0, 10, 'name', 'asc', query);
-                    this.matDrawer.open();
-                }),
-                map(() => {
-                    this.isLoading = false;
-                    this.matDrawer.open();
-                })
-            )
-            .subscribe();
-
-            //User Group Search
-            this.userGroupsSearchInputControl.valueChanges
-            .pipe(
-                takeUntil(this._unsubscribeAll),
-                debounceTime(300),
-                switchMap((query) => {
-                    this.isLoading = true;
-                    // Search
-                    return this._settingService.getUserGroups(0, 10, 'name', 'asc', query);
-                    this.matDrawer.open();
-                }),
-                map(() => {
-                    this.isLoading = false;
-                    this.matDrawer.open();
-                })
-            )
-            .subscribe();
-
         }
 
     ngOnDestroy(): void {
