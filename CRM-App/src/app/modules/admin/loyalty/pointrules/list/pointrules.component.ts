@@ -112,7 +112,12 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     minDate: string;
     timeoutId: any;
     timeOutUpId: any;
-
+    spendingtypeValue = 0;
+    totypeValue = 0;
+    toendTypeValue = 0;
+    fromtypeValue = 0;
+    fromstarttypeValue = 0;
+    isButtonDisabled: boolean = true;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -154,7 +159,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         this.PointBasketForm = this._formBuilder.group({
             id: [''],
             name: ['',[Validators.required]],
-            description: [''],
+            description: ['',[Validators.required]],
             spending_type: ['',[Validators.required]],
             from_type: [''],
             from_number: [''],
@@ -165,6 +170,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             to_end_type: [''],
             to_end_date: [''],
         });
+
 
         this._pointRuleService.pagination$
             .pipe(takeUntil(this._unsubscribeAll))

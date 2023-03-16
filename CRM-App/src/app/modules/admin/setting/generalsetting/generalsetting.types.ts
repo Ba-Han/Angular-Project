@@ -7,15 +7,35 @@ export interface GeneralSetting
     //member_groupsName: string;
     user_groups: string;
     //user_groupsName: string;
+    default_member_tier: string,
+    //default_member_tierName: string,
     user_updated: string;
     date_updated: string;
     memberGroupArray: MemberGroup[];
     userGroupArray: UserGroup[];
+    memberTierDefaultArray: MemberTier[];
 }
 
 export interface GeneralSettingExtended extends GeneralSetting {
     memberGroupArray: MemberGroup[];
     userGroupArray: UserGroup[];
+    memberTierDefaultArray: MemberTier[];
+}
+
+export interface MemberTier
+{
+    id: number;
+    name: string;
+}
+
+export interface MemberTierPagination
+{
+    length: number;
+    limit: number;
+    page: number;
+    lastPage: number;
+    startIndex: number;
+    endIndex: number;
 }
 
 export interface MemberGroup

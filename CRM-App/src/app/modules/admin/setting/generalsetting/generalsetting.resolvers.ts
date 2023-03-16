@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import { GeneralSettingService } from 'app/modules/admin/setting/generalsetting/generalsetting.service';
-import { GeneralSetting, MemberGroupPaginagion, MemberGroup, UserGroupPaginagion, UserGroup } from 'app/modules/admin/setting/generalsetting/generalsetting.types';
+import { GeneralSetting, MemberGroupPaginagion, MemberGroup, UserGroupPaginagion, UserGroup, MemberTierPagination, MemberTier } from 'app/modules/admin/setting/generalsetting/generalsetting.types';
 
 @Injectable({
     providedIn: 'root'
@@ -39,5 +39,17 @@ export class UserGroupsResolver implements Resolve<any>
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ pagination: UserGroupPaginagion; userGroups: UserGroup[] }> {
         return this._settingService.getUserGroups();
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class MemberTierDefaultGroupsResolver implements Resolve<any>
+{
+    constructor(private _settingService: GeneralSettingService) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ pagination: MemberTierPagination; memberTiers: MemberTier[] }> {
+        return this._settingService.getMemberTiers();
     }
 }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { environment } from 'environments/environment';
-import { GeneralSetting, MemberGroupPaginagion, MemberGroup, UserGroup, UserGroupPaginagion } from 'app/modules/admin/setting/generalsetting/generalsetting.types';
+import { GeneralSetting, MemberGroupPaginagion, MemberGroup, UserGroup, UserGroupPaginagion, MemberTier, MemberTierPagination } from 'app/modules/admin/setting/generalsetting/generalsetting.types';
 import { set } from 'lodash-es';
 
 @Injectable({
@@ -16,7 +16,9 @@ export class GeneralSettingService {
     private _memberGroupspagination: BehaviorSubject<MemberGroupPaginagion | null> = new BehaviorSubject(null);
     private _userGroups: BehaviorSubject<UserGroup[] | null> = new BehaviorSubject(null);
     private _userGroupspagination: BehaviorSubject<UserGroupPaginagion | null> = new BehaviorSubject(null);
-
+    private _memberTiers: BehaviorSubject<MemberTier[] | null> = new BehaviorSubject(null);
+    private _memberTierpagination: BehaviorSubject<MemberTierPagination | null> = new BehaviorSubject(null);
+    private _tiers: BehaviorSubject<MemberTier[] | null> = new BehaviorSubject(null);
     private _apiurl: string = '';
 
     /**
@@ -46,6 +48,17 @@ export class GeneralSettingService {
         return this._userGroupspagination.asObservable();
     }
 
+    get memberTiers$(): Observable<MemberTier[]> {
+        return this._memberTiers.asObservable();
+    }
+
+    get memberTierpagination$(): Observable<MemberTierPagination> {
+        return this._memberTierpagination.asObservable();
+    }
+
+    get memberTierlevels(): Observable<MemberTier[]> {
+        return this._tiers.asObservable();
+    }
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
@@ -145,8 +158,40 @@ export class GeneralSettingService {
     }
 
 
-    updateSetting(id: number, setting: GeneralSetting, selectedMemberGroupValue: MemberGroup[], selectedUserGroupValue: UserGroup[]): Observable<GeneralSetting> {
+    getMemberTiers(page: number = 0, limit: number = 50, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+        Observable<{ pagination: MemberTierPagination; memberTiers: MemberTier[] }> {
+        return this._httpClient.get<any>(`${this._apiurl}/items/member_tier`, {
+            params: {
+                meta: 'filter_count',
+                page: page + 1,
+                limit: limit,
+                sort,
+                order,
+                search
+            }
+        }).pipe(
+            tap((response) => {
+                const memberTierLength = response.meta.filter_count;
+                const begin = page * limit;
+                const end = Math.min((limit * (page + 1)), memberTierLength);
+                const lastPage = Math.max(Math.ceil(memberTierLength / limit), 1);
 
+                // Prepare the pagination object
+                const pagination = {
+                    length: memberTierLength,
+                    limit: limit,
+                    page: page,
+                    lastPage: lastPage,
+                    startIndex: begin,
+                    endIndex: end - 1
+                };
+                this._memberTierpagination.next(pagination);
+                this._memberTiers.next(response.data);
+            })
+        );
+    }
+
+    updateSetting(id: number, setting: GeneralSetting, selectedMemberGroupValue: MemberGroup[], selectedUserGroupValue: UserGroup[]): Observable<GeneralSetting> {
         //let memberGroup = setting.member_groups;
         let strMemberGroup = selectedMemberGroupValue.map(x=>x.id).join(',');
 
@@ -160,6 +205,7 @@ export class GeneralSettingService {
                 'point_conversion': setting.point_conversion,
                 'member_groups': strMemberGroup,
                 'user_groups': strUserGroup,
+                'default_member_tier': setting.default_member_tier,
             }).pipe(
                 map((updateSetting) => {
                     return updateSetting;
