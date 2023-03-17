@@ -511,10 +511,24 @@
                                 </div>
                             </ng-container>
 
-                            <ng-container *ngIf="pointRule.type">
+                            <ng-container *ngIf="pointRule.type === 'basic_rule'">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Type: </div>
-                                    <div class="ml-6 leading-6">{{pointRule.type}}</div>
+                                    <div class="ml-6 leading-6">Basic Rule</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="pointRule.type === 'event_rule'">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Type: </div>
+                                    <div class="ml-6 leading-6">Event Rule</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="pointRule.type === 'birthday_rule'">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Type: </div>
+                                    <div class="ml-6 leading-6">Birthday Event</div>
                                 </div>
                             </ng-container>
 
@@ -539,10 +553,17 @@
                                 </div>
                             </ng-container>
 
-                            <ng-container *ngIf="pointRule.status">
+                            <ng-container *ngIf="pointRule.status === 'active'">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Status: </div>
-                                    <div class="ml-6 leading-6">{{pointRule.status}}</div>
+                                    <div class="ml-6 leading-6">Active</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="pointRule.status === 'inactive'">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Status: </div>
+                                    <div class="ml-6 leading-6">Inactive</div>
                                 </div>
                             </ng-container>
                             
@@ -560,17 +581,17 @@
                                 </div>
                             </ng-container>
 
-                            <ng-container *ngIf="pointRule.validity_type == 1">
+                            <ng-container *ngIf="pointRule.validity_type === 1">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Validity Type: </div>
-                                    <div class="ml-6 leading-6">no_range</div>
+                                    <div class="ml-6 leading-6">No Range</div>
                                 </div>
                             </ng-container>
 
-                            <ng-container *ngIf="pointRule.validity_type == 2">
+                            <ng-container *ngIf="pointRule.validity_type === 2">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Validity Type: </div>
-                                    <div class="ml-6 leading-6">custom</div>
+                                    <div class="ml-6 leading-6">Custom</div>
                                 </div>
 
                                 <ng-container *ngIf="pointRule.start_date">

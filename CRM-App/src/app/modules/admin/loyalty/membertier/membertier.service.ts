@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
-import { MemberTier, MemberTierPagination, PointRule, PointRulePagination, PointSegment, MemberTierUpgrade } from 'app/modules/admin/loyalty/membertier/membertier.types';
+import { MemberTier, MemberTierPagination, PointRule, PointRulePagination, PointSegment, MemberTierUpgrade, DWMemberGroup, DWMemberGroupPagination } from 'app/modules/admin/loyalty/membertier/membertier.types';
 import { environment } from 'environments/environment';
 
 @Injectable({
@@ -15,6 +15,8 @@ export class MemberTierService {
     private _pointRules: BehaviorSubject<PointRule[] | null> = new BehaviorSubject(null);
     private _pointRulePagination: BehaviorSubject<PointRulePagination | null> = new BehaviorSubject(null);
     private _tiers: BehaviorSubject<MemberTier[] | null> = new BehaviorSubject(null);
+    private _dwMemberGroups: BehaviorSubject<DWMemberGroup[] | null> = new BehaviorSubject(null);
+    private _dwMemberGroupspagination: BehaviorSubject<DWMemberGroupPagination | null> = new BehaviorSubject(null);
     private _apiurl: string = '';
     /**
      * Constructor
@@ -49,6 +51,14 @@ export class MemberTierService {
 
     get memberTierlevels(): Observable<MemberTier[]> {
         return this._tiers.asObservable();
+    }
+
+    get dwMemberGroups$(): Observable<DWMemberGroup[]> {
+        return this._dwMemberGroups.asObservable();
+    }
+
+    get dwMemberGroupspagination$(): Observable<DWMemberGroupPagination> {
+        return this._dwMemberGroupspagination.asObservable();
     }
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
@@ -124,6 +134,38 @@ export class MemberTierService {
         );
     }
 
+    getDWMemberGroups(page: number = 0, limit: number = 50, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+        Observable<{ pagination: DWMemberGroupPagination; dwMemberGroups: DWMemberGroup[] }> {
+        return this._httpClient.get<any>(`${this._apiurl}/items/member_tier/dwmembergroups`, {
+            params: {
+                meta: 'filter_count',
+                page: page + 1,
+                limit: limit,
+                sort,
+                order,
+                search
+            }
+        }).pipe(
+            tap((response) => {
+                const dwMemberGroupLength = response.meta.filter_count;
+                const begin = page * limit;
+                const end = Math.min((limit * (page + 1)), dwMemberGroupLength);
+                const lastPage = Math.max(Math.ceil(dwMemberGroupLength / limit), 1);
+
+                // Prepare the pagination object
+                const pagination = {
+                    length: dwMemberGroupLength,
+                    limit: limit,
+                    page: page,
+                    lastPage: lastPage,
+                    startIndex: begin,
+                    endIndex: end - 1
+                };
+                this._dwMemberGroupspagination.next(pagination);
+                this._dwMemberGroups.next(response.data);
+            })
+        );
+    }
 
     getPointRuleById(id: number, isdetail: boolean): Observable<PointRule> {
         if (isdetail) {
@@ -187,7 +229,7 @@ export class MemberTierService {
 
         const periodValue = memberTier.downgrade_condition_period_value;
 
-        if (periodValue == "")
+        if (periodValue === '')
         {
             return this.memberTiers$.pipe(
                 take(1),
@@ -206,6 +248,7 @@ export class MemberTierService {
                     "downgrade_condition_type": memberTier.downgrade_condition_type,
                     "downgrade_condition_period": memberTier.downgrade_condition_period,
                     "downgrade_condition_period_value": null,
+                    "dw_member_group": memberTier.dw_member_group,
                     /* "point_rule": memberTier.point_rule, */
                     "tier_upgrade_items": memberTier.tier_upgrade_items
                 }).pipe(
@@ -233,6 +276,7 @@ export class MemberTierService {
                     "downgrade_condition_type": memberTier.downgrade_condition_type,
                     "downgrade_condition_period": memberTier.downgrade_condition_period,
                     "downgrade_condition_period_value": memberTier.downgrade_condition_period_value,
+                    "dw_member_group": memberTier.dw_member_group,
                     /* "point_rule": memberTier.point_rule, */
                     "tier_upgrade_items": memberTier.tier_upgrade_items
                 }).pipe(
@@ -245,11 +289,12 @@ export class MemberTierService {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     UpdateMemberTier(id: number, memberTier: MemberTier): Observable<MemberTier[]> {
 
         const updateperiodValue = memberTier.downgrade_condition_period_value;
 
-        if (updateperiodValue == "")
+        if (updateperiodValue === '')
         {
             return this._httpClient.patch<MemberTier>(`${this._apiurl}/items/member_tier/${id}`, {
                 "id": id,
@@ -267,6 +312,7 @@ export class MemberTierService {
                 "downgrade_condition_type": memberTier.downgrade_condition_type,
                 "downgrade_condition_period": memberTier.downgrade_condition_period,
                 "downgrade_condition_period_value": null,
+                "dw_member_group": memberTier.dw_member_group,
                 /* "point_rule": memberTier.point_rule, */
                 "tier_upgrade_items": memberTier.tier_upgrade_items
     
@@ -292,6 +338,7 @@ export class MemberTierService {
                 "downgrade_condition_type": memberTier.downgrade_condition_type,
                 "downgrade_condition_period": memberTier.downgrade_condition_period,
                 "downgrade_condition_period_value": memberTier.downgrade_condition_period_value,
+                "dw_member_group": memberTier.dw_member_group,
                 /* "point_rule": memberTier.point_rule, */
                 "tier_upgrade_items": memberTier.tier_upgrade_items
     

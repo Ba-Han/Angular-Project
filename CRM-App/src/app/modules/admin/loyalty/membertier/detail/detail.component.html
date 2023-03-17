@@ -666,10 +666,31 @@
                                 </div>
                             </ng-container>
 
-                            <ng-container *ngIf="memberTier.status">
+                            <ng-container *ngIf="memberTier.status === 'active'">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Status: </div>
-                                    <div class="ml-6 leading-6">{{memberTier.status}}</div>
+                                    <div class="ml-6 leading-6">Active</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="memberTier.status === 'draft'">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Status: </div>
+                                    <div class="ml-6 leading-6">Draft</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="memberTier.status === 'inactive'">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Status: </div>
+                                    <div class="ml-6 leading-6">Inactive</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="memberTier.dw_member_group">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">DW Member Group: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.name}}</div>
                                 </div>
                             </ng-container>
 
@@ -684,30 +705,55 @@
                                 <div class="w-full text-3xl font-bold">Condition</div>
                             </div>
 
-                            <ng-container *ngIf="memberTier.condition_type">
+                            <ng-container *ngIf="memberTier.condition_type === 'min_order'">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Condition Type: </div>
-                                    <div class="ml-6 leading-6">{{memberTier.condition_type}}</div>
+                                    <div class="ml-6 leading-6">Min Order Value (per order)</div>
                                 </div>
                             </ng-container>
-                            <ng-container *ngIf="memberTier.condition_period">
+
+                            <ng-container *ngIf="memberTier.condition_type === 'total_order'">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Condition Type: </div>
+                                    <div class="ml-6 leading-6">Total Order Amount (period)</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="memberTier.condition_period === 'days'">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Condition Period: </div>
-                                    <div class="ml-6 leading-6">{{memberTier.condition_period}}</div>
+                                    <div class="ml-6 leading-6">Days</div>
                                 </div>
                             </ng-container>
+
+                            <ng-container *ngIf="memberTier.condition_period === 'months'">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Condition Period: </div>
+                                    <div class="ml-6 leading-6">Months</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="memberTier.condition_period === 'years'">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Condition Period: </div>
+                                    <div class="ml-6 leading-6">Years</div>
+                                </div>
+                            </ng-container>
+
                             <ng-container *ngIf="memberTier.condition_period_value">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Condition Period value: </div>
                                     <div class="ml-6 leading-6">{{memberTier.condition_period_value}} </div>
                                 </div>
                             </ng-container>
+
                             <ng-container *ngIf="memberTier.min_condition_amount">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Min Condition Amount: </div>
                                     <div class="ml-6 leading-6">{{memberTier.min_condition_amount}}</div>
                                 </div>
                             </ng-container>
+
                             <ng-container *ngIf="memberTier.max_condition_amount">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Max Condition Amount: </div>
@@ -720,23 +766,37 @@
                                 <div class="w-full text-3xl font-bold">Downgrade Condition </div>
                             </div>
 
-                            <ng-container *ngIf="memberTier.downgrade_condition_type == 'never'">
+                            <ng-container *ngIf="memberTier.downgrade_condition_type === 'never'">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Downgrade Condition Type: </div>
-                                    <div class="ml-6 leading-6">{{memberTier.downgrade_condition_type}}</div>
+                                    <div class="ml-6 leading-6">Never</div>
                                 </div>
                             </ng-container>
 
-                            <ng-container *ngIf="memberTier.downgrade_condition_type == 'main_condition'">
+                            <ng-container *ngIf="memberTier.downgrade_condition_type === 'main_condition'">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Downgrade Condition Type: </div>
-                                    <div class="ml-6 leading-6">{{memberTier.downgrade_condition_type}}</div>
+                                    <div class="ml-6 leading-6">Main Condition</div>
                                 </div>
 
-                                <ng-container *ngIf="memberTier.downgrade_condition_period">
+                                <ng-container *ngIf="memberTier.downgrade_condition_period === 'day'">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Downgrade Condition Period: </div>
-                                        <div class="ml-6 leading-6">{{memberTier.downgrade_condition_period}}</div>
+                                        <div class="ml-6 leading-6">Day</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="memberTier.downgrade_condition_period === 'month'">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Downgrade Condition Period: </div>
+                                        <div class="ml-6 leading-6">Month</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="memberTier.downgrade_condition_period === 'year'">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Downgrade Condition Period: </div>
+                                        <div class="ml-6 leading-6">Year</div>
                                     </div>
                                 </ng-container>
     
@@ -843,6 +903,19 @@
                                         <mat-option value="active">Active</mat-option>
                                         <mat-option value="draft">Draft</mat-option>
                                         <mat-option value="inactive">Inactive</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>DW Member Group</mat-label>
+                                    <mat-select [formControlName]="'dw_member_group'">
+                                        <ng-container *ngFor="let dw of dwMemberGroups">
+                                            <mat-option [value]="dw.id">
+                                                {{ dw.name }}
+                                            </mat-option>
+                                        </ng-container>
                                     </mat-select>
                                 </mat-form-field>
                             </div>

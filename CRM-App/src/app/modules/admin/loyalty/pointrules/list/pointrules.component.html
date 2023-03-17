@@ -512,6 +512,7 @@
                                             <div [mat-sort-header]="'name'"> Name </div>
                                             <div [mat-sort-header]="'reward_code'"> Reward Code </div>
                                             <div [mat-sort-header]="'point_value'"> Point Value </div>
+                                            <div [mat-sort-header]="'member_tierFullName'"> Member Tier </div>
                                             <div [mat-sort-header]="'start_date'"> Start Date </div>
                                             <div [mat-sort-header]="'end_date'"> End Date </div>
                                         </div>
@@ -536,7 +537,11 @@
                                                             {{product.point_value}}
                                                         </div>
 
-                                                        <ng-container *ngIf="product.validity_type == '2'">
+                                                        <div class="truncate">
+                                                            {{product.member_tierFullName}}
+                                                        </div>
+
+                                                        <ng-container *ngIf="product.validity_type === '2'">
                                                             <div class="truncate">
                                                                 {{product.start_date | date:'MMM dd, y'}}
                                                             </div>

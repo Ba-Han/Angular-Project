@@ -48,7 +48,7 @@
 
                                     <div [mat-sort-header]="'item_no'"> SKU </div>
                                     <div [mat-sort-header]="'item_name'"> Name </div>
-                                    <div [mat-sort-header]="'price'"> Price </div>
+                                    <!-- <div [mat-sort-header]="'price'"> Price </div> -->
                                     <div [mat-sort-header]="'status'"> Status </div>
                                 </div>
 
@@ -69,13 +69,21 @@
                                                     {{product.item_name}}
                                                 </div>
 
-                                                <div class="truncate">
+                                                <!-- <div class="truncate">
                                                     {{product.price}}
-                                                </div>
+                                                </div> -->
 
-                                                <div class="truncate">
-                                                    {{product.status}}
-                                                </div>
+                                                <ng-container *ngIf="product.status === 'active'">
+                                                    <div class="truncate">
+                                                        Active
+                                                    </div>
+                                                </ng-container>
+
+                                                <ng-container *ngIf="product.status === 'inactive'">
+                                                    <div class="truncate">
+                                                        Inactive
+                                                    </div>
+                                                </ng-container>
                                             </div>
 
                                         </a>
@@ -145,7 +153,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="mt-8">
+                    <!-- <div class="mt-8">
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Price</mat-label>
                             <mat-icon matPrefix
@@ -155,7 +163,7 @@
                                    [formControlName]="'price'"
                                    [placeholder]="'Price'">
                         </mat-form-field>
-                    </div>
+                    </div> -->
 
                     <div class="mt-8">
                         <mat-form-field class="fuse-mat-no-subscript w-full">

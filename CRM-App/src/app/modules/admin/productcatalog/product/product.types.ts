@@ -7,7 +7,7 @@ export interface Product
     user_updated: string,
     date_updated: string,
     item_name: string,
-    price: number,
+    /* price: number, */
     item_number: string
 }
 

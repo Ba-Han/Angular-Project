@@ -30,7 +30,7 @@ import { MemberTier, MemberTierPagination } from 'app/modules/admin/loyalty/memb
                 }
 
                 @screen lg {
-                    grid-template-columns: 250px 250px 200px 150px 150px;
+                    grid-template-columns: 160px 160px 150px 150px 150px 150px;
                 }
             }
 

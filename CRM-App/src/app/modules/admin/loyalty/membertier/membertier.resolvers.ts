@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import { MemberTierService } from 'app/modules/admin/loyalty/membertier/membertier.service';
-import { MemberTier, MemberTierPagination, PointRulePagination, PointRule } from 'app/modules/admin/loyalty/membertier/membertier.types';
+import { MemberTier, MemberTierPagination, PointRulePagination, PointRule, DWMemberGroupPagination, DWMemberGroup } from 'app/modules/admin/loyalty/membertier/membertier.types';
 
 @Injectable({
     providedIn: 'root'
@@ -18,8 +18,6 @@ export class MemberTiersResolver implements Resolve<any>
         return this._memberTierService.getMemberTiers();
     }
 }
-
-
 
 @Injectable({
     providedIn: 'root'
@@ -54,7 +52,6 @@ export class MemberTierDetailResolver implements Resolve<any>
     }
 }
 
-
 @Injectable({
     providedIn: 'root'
 })
@@ -65,5 +62,17 @@ export class MemberTierLevels implements Resolve<any>
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<MemberTier[]> {
         return this._memberTierService.getMemberTierLevels();
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class DWMemberGroupsResolver implements Resolve<any>
+{
+    constructor(private _memberTierService: MemberTierService) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ pagination: DWMemberGroupPagination; dwMemberGroups: DWMemberGroup[] }> {
+        return this._memberTierService.getDWMemberGroups();
     }
 }

@@ -1,4 +1,20 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+export interface DWMemberGroup
+{
+    id: number;
+    name: string;
+}
+
+export interface DWMemberGroupPagination
+{
+    length: number;
+    limit: number;
+    page: number;
+    lastPage: number;
+    startIndex: number;
+    endIndex: number;
+}
+
 export interface MemberTier
 {
     id: number;
@@ -16,11 +32,13 @@ export interface MemberTier
     downgrade_condition_type: string;
     downgrade_condition_period: string;
     downgrade_condition_period_value: string;
-    date_created: string,
-    date_updated: string,
+    date_created: string;
+    date_updated: string;
     /* point_ruleFullname: string, */
-    tier_upgrade_items: [],
-    tier_upgrade_Fullname: string,
+    dw_member_group: string;
+    dw_member_groupName: string;
+    tier_upgrade_items: [];
+    tier_upgrade_Fullname: string;
 }
 
 export interface MemberTierPagination

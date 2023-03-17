@@ -80,14 +80,20 @@
                                                                       [svgIcon]="'heroicons_solid:x'"></mat-icon>
                                                         </ng-container>
                                                     </div>-->
-                                                     <div class="truncate">
-                                                        {{channel.status}}
-                                                    </div>
+
+                                                    <ng-container *ngIf="channel.status === 'active'">
+                                                        <div class="truncate">
+                                                            Active
+                                                        </div>
+                                                    </ng-container>
+    
+                                                    <ng-container *ngIf="channel.status === 'inactive'">
+                                                        <div class="truncate">
+                                                            Inactive
+                                                        </div>
+                                                    </ng-container>
                                                 </div>
-
                                             </a>
-
-
                                         </ng-container>
                                     </ng-container>
                                 </div>
