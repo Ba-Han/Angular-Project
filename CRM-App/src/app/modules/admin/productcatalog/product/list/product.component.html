@@ -72,10 +72,17 @@
                                                 <!-- <div class="truncate">
                                                     {{product.price}}
                                                 </div> -->
+                                                <ng-container *ngIf="product.status === 'active'">
+                                                    <div class="truncate">
+                                                        Active
+                                                    </div>
+                                                </ng-container>
 
-                                                <div class="truncate">
-                                                    {{product.status}}
-                                                </div>
+                                                <ng-container *ngIf="product.status === 'inactive'">
+                                                    <div class="truncate">
+                                                        Inactive
+                                                    </div>
+                                                </ng-container>
                                             </div>
 
                                         </a>

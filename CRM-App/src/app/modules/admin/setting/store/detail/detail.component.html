@@ -74,10 +74,18 @@
                                 <div class="ml-6 leading-6">{{store.country}}</div>
                             </div>
                         </ng-container>
-                        <ng-container *ngIf="store.status">
+
+                        <ng-container *ngIf="store.status === 'active'">
                             <div class="flex sm:items-center">
                                 <div class="w-1/4">Status: </div>
-                                <div class="ml-6 leading-6">{{store.status}}</div>
+                                <div class="ml-6 leading-6">Active</div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="store.status === 'inactive'">
+                            <div class="flex sm:items-center">
+                                <div class="w-1/4">Status: </div>
+                                <div class="ml-6 leading-6">Inactive</div>
                             </div>
                         </ng-container>
 

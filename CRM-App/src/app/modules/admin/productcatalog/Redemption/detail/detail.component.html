@@ -42,10 +42,17 @@
                             </div>
                         </ng-container> -->
 
-                        <ng-container *ngIf="product.status">
+                        <ng-container *ngIf="product.status === 'active'">
                             <div class="flex sm:items-center">
                                 <div class="w-1/4">Status: </div>
-                                <div class="ml-6 leading-6">{{product.status}}</div>
+                                <div class="ml-6 leading-6">Active</div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="product.status === 'inactive'">
+                            <div class="flex sm:items-center">
+                                <div class="w-1/4">Status: </div>
+                                <div class="ml-6 leading-6">Inactive</div>
                             </div>
                         </ng-container>
 

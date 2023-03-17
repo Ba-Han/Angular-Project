@@ -74,15 +74,19 @@
                                                     {{store.country}}
                                                 </div>
 
-                                                <div class="truncate">
-                                                    {{store.status}}
-                                                </div>
+                                                <ng-container *ngIf="store.status === 'active'">
+                                                    <div class="truncate">
+                                                        Active
+                                                    </div>
+                                                </ng-container>
 
+                                                <ng-container *ngIf="store.status === 'inactive'">
+                                                    <div class="truncate">
+                                                        Inactive
+                                                    </div>
+                                                </ng-container>
                                             </div>
-
                                         </a>
-
-
                                     </ng-container>
                                 </ng-container>
                             </div>
