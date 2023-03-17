@@ -9,7 +9,7 @@ import { debounceTime, map, merge, Observable, Subject, switchMap, takeUntil } f
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { MemberTier, MemberTierPagination, PointRule, PointRulePagination, PointSegment, point_segment_id, MemberTierUpgrade } from 'app/modules/admin/loyalty/membertier/membertier.types';
+import { MemberTier, MemberTierPagination, PointRule, PointRulePagination, PointSegment, point_segment_id, MemberTierUpgrade, DWMemberGroup } from 'app/modules/admin/loyalty/membertier/membertier.types';
 import { MemberTierService } from 'app/modules/admin/loyalty/membertier/membertier.service';
 
 @Component({
@@ -105,6 +105,7 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
     memberTierPagination: MemberTierPagination;
     MemberListMode: boolean = false;
     memberTiers: any;
+    dwMemberGroups: any;
     pointruleId: number;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -144,6 +145,7 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
             downgrade_condition_period_value: [''],
             point_ruleFullname: [''],
             //tier_upgrade_Fullname: [this.itemName],
+            dw_member_group: ['', [Validators.required]],
             tier_upgrade_items: new FormControl(this.selectedUpgradeItem)
         });
 
@@ -246,6 +248,13 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((tiers) => {
                 this.memberTiers = tiers;
+            });
+
+        //DW Member Groups
+        this._memberTierService.dwMemberGroups$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((dw) => {
+                this.dwMemberGroups = dw;
             });
     }
 

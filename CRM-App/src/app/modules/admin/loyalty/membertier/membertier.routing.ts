@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 import { MemberTierComponent } from 'app/modules/admin/loyalty/membertier/membertier.component';
 import { MemberTierListComponent } from 'app/modules/admin/loyalty/membertier/list/membertier.component';
-import { MemberTiersResolver, MemberTierDetailResolver, MemberTierLevels } from 'app/modules/admin/loyalty/membertier/membertier.resolvers';
+import { MemberTiersResolver, MemberTierDetailResolver, MemberTierLevels, DWMemberGroupsResolver } from 'app/modules/admin/loyalty/membertier/membertier.resolvers';
 import { MemberTierDetailComponent } from './detail/detail.component';
 
 export const ecommerceRoutes: Route[] = [
@@ -15,6 +15,7 @@ export const ecommerceRoutes: Route[] = [
                 resolve: {
                     tasks: MemberTiersResolver,
                     tiers: MemberTierLevels,
+                    dwMemberGroups: DWMemberGroupsResolver,
                 }
             },
             {
@@ -23,6 +24,7 @@ export const ecommerceRoutes: Route[] = [
                 resolve: {
                     tasks: MemberTierDetailResolver,
                     tiers: MemberTierLevels,
+                    dwMemberGroups: DWMemberGroupsResolver,
                 }
             }
         ]

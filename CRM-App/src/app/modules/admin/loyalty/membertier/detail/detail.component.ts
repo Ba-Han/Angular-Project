@@ -110,6 +110,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
     itemName: string;
     tierUpgradeId: number;
     memberTiers: any;
+    dwMemberGroups: any;
     memberTierPagination: MemberTierPagination;
     selectedUpgradeItem: Array<MemberTierUpgrade> = [];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -152,6 +153,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
             downgrade_condition_type: ['', [Validators.required]],
             downgrade_condition_period: [''],
             downgrade_condition_period_value: [''],
+            dw_member_group: ['', [Validators.required]],
             tier_upgrade_Fullname: [this.itemName],
             tier_upgrade_items: new FormControl(this.selectedUpgradeItem)
         });
@@ -197,7 +199,6 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
             price: ['', [Validators.required]],
             upgrade_tier: ['', [Validators.required]],
             tier_FullName:[''],
-          
         });
 
         this._memberTierService.memberTier$
@@ -235,10 +236,17 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
 
         //Member Tiers
         this._memberTierService.memberTierlevels
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((tiers) => {
-                this.memberTiers = tiers;
-            });
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((tiers) => {
+            this.memberTiers = tiers;
+        });
+
+        //DW Member Groups
+        this._memberTierService.dwMemberGroups$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((dw) => {
+            this.dwMemberGroups = dw;
+        });
     }
 
     ngAfterViewInit(): void {

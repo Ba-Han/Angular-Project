@@ -673,6 +673,13 @@
                                 </div>
                             </ng-container>
 
+                            <ng-container *ngIf="memberTier.dw_member_group">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">DW Member Group: </div>
+                                    <div class="ml-6 leading-6">{{memberTier.name}}</div>
+                                </div>
+                            </ng-container>
+
                             <!-- <ng-container *ngIf="memberTier.point_rule">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Point Rule: </div>
@@ -843,6 +850,19 @@
                                         <mat-option value="active">Active</mat-option>
                                         <mat-option value="draft">Draft</mat-option>
                                         <mat-option value="inactive">Inactive</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>DW Member Group</mat-label>
+                                    <mat-select [formControlName]="'dw_member_group'">
+                                        <ng-container *ngFor="let dw of dwMemberGroups">
+                                            <mat-option [value]="dw.id">
+                                                {{ dw.name }}
+                                            </mat-option>
+                                        </ng-container>
                                     </mat-select>
                                 </mat-form-field>
                             </div>

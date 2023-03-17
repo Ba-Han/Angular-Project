@@ -802,6 +802,19 @@
                                 </mat-form-field>
                             </div>
 
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>DW Member Group</mat-label>
+                                    <mat-select [formControlName]="'dw_member_group'">
+                                        <ng-container *ngFor="let dw of dwMemberGroups">
+                                            <mat-option [value]="dw.id">
+                                                {{ dw.name }}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
                             <div class="flex sm:items-center mt-4">
                                 <div class="w-full text-3xl font-bold">Condition</div>
                             </div>
