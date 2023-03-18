@@ -81,6 +81,7 @@ export const appRoutes: Route[] = [
             { path: 'country', loadChildren: () => import('app/modules/admin/setting/country/country.module').then(m => m.CountryModule) },
             { path: 'channel', loadChildren: () => import('app/modules/admin/setting/channel/channel.module').then(m => m.ChannelModule) },
             { path: 'store', loadChildren: () => import('app/modules/admin/setting/store/store.module').then(m => m.StoreModule) },
+            { path: 'point-baskets', loadChildren: () => import('app/modules/admin/loyalty/pointbaskets/pointbaskets.module').then(m => m.PointBasketModule) },
             { path: 'point-rules', loadChildren: () => import('app/modules/admin/loyalty/pointrules/pointrules.module').then(m => m.PointRuleModule) },
             { path: 'member-tier', loadChildren: () => import('app/modules/admin/loyalty/membertier/membertier.module').then(m => m.MemberTierModule) },
             { path: 'product', loadChildren: () => import('app/modules/admin/productcatalog/product/product.module').then(m => m.ProductModule) },
