@@ -18,15 +18,15 @@ import { MemberTier, MemberTierPagination } from 'app/modules/admin/loyalty/memb
     styles: [
         /* language=SCSS */
         `
-            .prule-grid {
+            .prule-grid_point_rule {
                 grid-template-columns: 250px 250px 200px 150px;
 
                 @screen sm {
-                    grid-template-columns: 200px 200px 150px 100px 150px;
+                    grid-template-columns: 160px 160px 150px 150px 150px 150px;
                 }
 
                 @screen md {
-                    grid-template-columns: 200px 200px 150px 100px 150px;
+                    grid-template-columns: 160px 160px 150px 150px 150px 150px;
                 }
 
                 @screen lg {

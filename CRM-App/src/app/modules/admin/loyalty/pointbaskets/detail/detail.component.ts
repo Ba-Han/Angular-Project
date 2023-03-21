@@ -56,7 +56,6 @@ export class PointBasketDetailComponent implements OnInit, AfterViewInit, OnDest
     name: string;
     description: string;
     spendingType: string;
-    validitytypeValue: string;
     minDate: string;
     timeoutId: any;
     timeOutUpId: any;
@@ -104,12 +103,15 @@ export class PointBasketDetailComponent implements OnInit, AfterViewInit, OnDest
         });
 
         this.pointBasket$ = this._pointBasketService.pointBasket$;
-
         this._pointBasketService.pointBasket$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((pointbasket: PointBasket) => {
                 this.pointBasket = pointbasket;
-                //this.validitytypeValue = pointrule.validity_type;
+                this.spendingtypeValue = pointbasket.spending_type;
+                this.totypeValue = pointbasket.to_type;
+                this.toendTypeValue = pointbasket.to_end_type;
+                this.fromtypeValue= pointbasket.from_type;
+                this.fromstarttypeValue = pointbasket.from_start_type;
                 //this.pointRule.point_basket = pointrule.name;
                 //this.pointRule.point_basketName = pointrule.point_basket?.name;
                 this.PointBasketEditForm.patchValue(pointbasket);

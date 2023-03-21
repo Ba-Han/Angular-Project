@@ -27,7 +27,7 @@ import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { SharedModule } from 'app/shared/shared.module';
 import { PointBasketComponent } from 'app/modules/admin/loyalty/pointbaskets/pointbaskets.component';
 import { PointBasketListComponent } from 'app/modules/admin/loyalty/pointbaskets/list/pointbaskets.component';
-import { ecommerceRoutes } from 'app/modules/admin/loyalty/pointrules/pointrules.routing';
+import { ecommerceRoutes } from 'app/modules/admin/loyalty/pointbaskets/pointbaskets.routing';
 import { PointBasketDetailComponent } from 'app/modules/admin/loyalty/pointbaskets/detail/detail.component';
 
 @NgModule({

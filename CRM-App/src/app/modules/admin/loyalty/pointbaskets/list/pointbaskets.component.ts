@@ -79,7 +79,7 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
 
-    pointBaskets$: Observable<PointBasket[]>;
+    pointBaskets$: Observable<any[]>;
     pointBasketPagination: PointBasketPagination;
     //PointBasketListMode: boolean = false;
     PointBasketAddForm: FormGroup;
@@ -140,7 +140,7 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
                 this.pagination = pagination;
                 this._changeDetectorRef.markForCheck();
             });
-
+        //debugger;
         this.pointBaskets$ = this._pointBasketService.pointBaskets$;
 
         // search Point Rules

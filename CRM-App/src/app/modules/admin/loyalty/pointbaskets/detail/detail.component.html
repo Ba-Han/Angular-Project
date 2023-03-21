@@ -32,12 +32,6 @@
                         </button>
                     </div>
 
-                    <!--<div class="flex items-center w-full max-w-3xl mx-auto pt-4">
-                        <div class="flex sm:items-center w-full">
-                            <div class="w-2/4 pr-2">Start Date: {{pointRule.start_date | date:'MMM dd, y'}}</div>
-                            <div class="w-2/4 pr-2">End Date: {{pointRule.end_date | date:'MMM dd, y'}}</div>
-                        </div>
-                    </div>-->
                 </div>
 
                 <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0" style="background:#fff;">
@@ -110,7 +104,7 @@
                             <ng-container *ngIf="pointBasket.to_type === 4">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Spending Validity Type: </div>
-                                    <div class="ml-6 leading-6">{{pointBasket.to_end_date}}</div>
+                                    <div class="ml-6 leading-6">{{pointBasket.to_end_date  | date:'MMM dd, y'}}</div>
                                 </div>
                             </ng-container>
 
@@ -159,7 +153,7 @@
                             <ng-container *ngIf="pointBasket.from_type === 4">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Spending Validity Type: </div>
-                                    <div class="ml-6 leading-6">{{pointBasket.from_start_date}}</div>
+                                    <div class="ml-6 leading-6">{{pointBasket.from_start_date  | date:'MMM dd, y'}}</div>
                                 </div>
                             </ng-container>
 

@@ -62,10 +62,18 @@
                                                         <div class="truncate">
                                                             {{product.name}}
                                                         </div>
+                                                        
+                                                        <ng-container *ngIf="product.spending_type === 1">
+                                                            <div class="truncate">
+                                                                Instant Redemption
+                                                            </div>
+                                                        </ng-container>
 
-                                                        <div class="truncate">
-                                                            {{product.spending_type}}
-                                                        </div>
+                                                        <ng-container *ngIf="product.spending_type === 2">
+                                                            <div class="truncate">
+                                                                Redemption Basket
+                                                            </div>
+                                                        </ng-container>
                                                     </div>
                                                 </a>
                                             </ng-container>
