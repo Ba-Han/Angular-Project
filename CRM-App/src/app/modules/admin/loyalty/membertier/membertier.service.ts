@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { MemberTier, MemberTierPagination, PointRule, PointRulePagination, PointSegment, MemberTierUpgrade, DWMemberGroup, DWMemberGroupPagination } from 'app/modules/admin/loyalty/membertier/membertier.types';
 import { environment } from 'environments/environment';
 
@@ -208,11 +208,21 @@ export class MemberTierService {
     getTierUpgradeById(id: number): Observable<MemberTierUpgrade> {
         return this._httpClient.get(`${this._apiurl}/items/member_tier_upgrade/${id}?fields=*,upgrade_tier.*`
         ).pipe(
-            tap((response: any) => {
-                return response.data;
-            })
+            tap((response: any) => response.data)
         );
     }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    getDeleteTierUpgradeById(id: number){
+        return this._httpClient.delete(`${this._apiurl}/items/member_tier_upgrade/${id}`,
+        { responseType: 'text' })
+        .pipe(
+            map(() => true),
+            catchError((error) => {
+                console.error(error);
+                return of(false);
+            }));
+    };
 
     getMemberTierLevels(): Observable<MemberTier[]> {
         return this._httpClient.get<any>(`${this._apiurl}/items/member_tier`, {

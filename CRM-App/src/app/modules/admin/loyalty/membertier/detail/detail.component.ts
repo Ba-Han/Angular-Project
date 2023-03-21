@@ -577,6 +577,17 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
         this.toogleTierUpgradeFormMode(true);
     }
 
+    //delete function
+    deleteTierUpgradeItem(id: number): void {
+        if (Number(id) > 0) {
+            this.isLoading = true;
+            this._memberTierService.getDeleteTierUpgradeById(id)
+                .subscribe(() => {
+                    this._router.navigate(['/member-tier/'] , { relativeTo: this._activatedRoute });
+                });
+        }
+    }
+
     setTierUpgradeEditForm(id): void {
         if (Number(id) > 0) {
             this.isLoading = true;
@@ -588,9 +599,8 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
                     this.TierUpgradeForm.patchValue(edittier);
                     this.isLoading = false;
                     this.toogleTierUpgradeFormMode(true);
-                    this.matDrawer.open()
+                    this.matDrawer.open();
                 });
         }
-        
     }
 }
