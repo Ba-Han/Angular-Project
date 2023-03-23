@@ -102,6 +102,19 @@ export class UserService {
                 })
             );
     }
+    changeNewPassword(email: string, currentPassord: string, newPassword: string ): Observable<any> {
+        return this._httpClient
+            .patch<boolean>(`${this._apiurl}/users/changepassword`, {
+                email: email,
+                current_password: currentPassord,
+                new_password: newPassword
+            })
+            .pipe(
+                map((updatePass) => {
+                    return updatePass;
+                })
+            );
+    }
     changePassword(pass: string): Observable<any> {
         return this._httpClient
             .patch<User>(`${this._apiurl}/users/me`, {

@@ -85,49 +85,16 @@ export class AuthChangePasswordComponent implements OnInit
 
             this.showAlert = false;
             const currentpass = this.changePasswordForm.get('currentPassword').value;
-            this._userService.checkCurrentPass(currentpass, this.loginEmail)
+            const newpass = this.changePasswordForm.get('passwordConfirm').value;
+            this._userService.changeNewPassword(this.loginEmail, currentpass, newpass)
                 .pipe(
                     finalize(() => {
                         if (this.alert.type != "error") {
-                            this.sendNewPassword();
+                            this.changePasswordForm.enable();
+                            this.changePasswordNgForm.resetForm();
                         }
                     })
             ).subscribe(
-                (response) => {
-                    this.alert = {
-                        type: 'success',
-                        message: 'Your current password is Correct.'
-                    };
-                    this.showAlert = true;
-                },
-                (response) => {
-                    let errorCode:string =  ((response.error.errors && response.error.errors[0].extensions) ? response.error.errors[0].extensions.code : "");
-                    if (errorCode == "INVALID_OTP") {
-                            this.sendNewPassword();
-                    } else {
-                        this.changePasswordForm.enable();
-                        this.alert = {
-                            type: 'error',
-                            message: 'Your current password is Wrong.'
-                        };
-                        this.showAlert = true;
-                    }
-
-                }
-            );
-        }
-    }
-
-    sendNewPassword(): void {
-        const pass = this.changePasswordForm.get('passwordConfirm').value;
-        this._userService.changePassword(pass)
-            .pipe(
-                finalize(() => {
-                    this.changePasswordForm.enable();
-                    this.changePasswordNgForm.resetForm();
-                })
-            )
-            .subscribe(
                 (response) => {
                     this.alert = {
                         type: 'success',
@@ -136,13 +103,26 @@ export class AuthChangePasswordComponent implements OnInit
                     this.showAlert = true;
                 },
                 (response) => {
-                    this.alert = {
-                        type: 'error',
-                        message: 'Something went wrong, please try again.'
-                    };
-                    this.showAlert = true;
+                    let errorCode:string =  ((response.error.errors && response.error.errors[0].extensions) ? response.error.errors[0].extensions.code : "");
+                    if (errorCode == "INVALID_CREDENTIALS") {
+                        this.changePasswordForm.enable();
+                        this.alert = {
+                            type: 'error',
+                            message: 'Your current password is Wrong.'
+                        };
+                        this.showAlert = true;
+                    } else {
+                        this.changePasswordForm.enable();
+                        this.alert = {
+                            type: 'error',
+                            message: 'Something went wrong, please try again.'
+                        };
+                        this.showAlert = true;
+                    }
+
                 }
             );
+        }
     }
 
     onStrengthChanged(value):void {
