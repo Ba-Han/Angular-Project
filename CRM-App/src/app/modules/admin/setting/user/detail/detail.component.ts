@@ -15,6 +15,26 @@ import { UserService } from 'app/modules/admin/setting/user/user.service';
                background-color:#FFF;
             }
 
+            .reset-qr-btn {
+                padding-left: 38px !important;
+            }
+
+            .reset-rq-btn-scss {
+                margin-top: 1.5rem !important;
+            }
+
+            .user-permission {
+                margin-top: 1rem !important;
+            }
+
+            .v-e-d {
+                text-align: center;
+            }
+
+            .user-page-scss {
+                padding-left: 2rem !important;
+            }
+
             tr,td {
                 border: 1px solid rgba(226, 232, 240, var(--tw-border-opacity));
               }
@@ -40,7 +60,6 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     page_roles: any;
     // eslint-disable-next-line @typescript-eslint/member-ordering
     selectedRole: string;
-    
 
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
@@ -113,7 +132,6 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     }
     updateUser(): void {
         // Get the contact object
-        debugger;
         const user = this.UserEditForm.getRawValue();
         const checkBoxes = Object.keys(this.UserEditForm.value).map(key =>
             ({
@@ -143,11 +161,15 @@ export class UserDetailComponent implements OnInit, OnDestroy {
             });
 
         // Update the contact on the server
-        if (this.passwordStrength >= 100) {
-            this._userService.updateUser(user.id, user).subscribe(() => {
+        this._userService.updatePermission(user.id, this.updatedPagePermission).subscribe((res) => {
+            //console.log(res);
+            if(res){
                 this._router.navigate(['/users'], { relativeTo: this._activatedRoute });
-            });
-        }
+            } else {
+                console.log(res);
+            }
+
+        });
     }
 
     onStrengthChanged(value): void {

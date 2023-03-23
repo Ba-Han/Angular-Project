@@ -88,11 +88,11 @@
                 </mat-form-field>
                 <!-- Actions -->
                 <div class="inline-flex items-end justify-between w-full mt-1.5" *ngIf= "isOptNeed">
-                    <a
+                    <!-- <a
                     class="text-md font-medium text-primary-500 hover:underline"
                     [routerLink]="'javascript:;'"
                     (click)="sendQRCodeLink()">Please click on this link if you have not scan the QR code in your Authenticator App
-                    </a>
+                    </a> -->
                 </div>
                 <!-- Actions -->
                 <div class="inline-flex items-end justify-between w-full mt-1.5">
@@ -101,8 +101,8 @@
                         [formControlName]="'rememberMe'">
                         Remember me
                     </mat-checkbox>
-                    Forgot password?
-                    <!-- <a
+                    <!-- Forgot password?
+                    <a
                         class="text-md font-medium text-primary-500 hover:underline"
                         [routerLink]="['/forgot-password']">Forgot password?
                     </a> -->
