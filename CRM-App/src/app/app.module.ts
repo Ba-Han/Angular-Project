@@ -13,6 +13,7 @@ import { LayoutModule } from 'app/layout/layout.module';
 import { AppComponent } from 'app/app.component';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { appRoutes } from 'app/app.routing';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
@@ -26,6 +27,7 @@ const routerConfig: ExtraOptions = {
     imports     : [
         BrowserModule,
         BrowserAnimationsModule,
+        MatDialogModule,
         RouterModule.forRoot(appRoutes, routerConfig),
 
         // Fuse, FuseConfig & FuseMockAPI
