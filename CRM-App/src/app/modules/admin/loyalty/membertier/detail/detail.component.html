@@ -984,16 +984,27 @@
 
                             <div class="mt-8">
                                 <label>Tier Upgrade Item</label>
-                                <ng-container *ngIf="selectedUpgradeItem.length == 0">
+                                <ng-container *ngIf="selectedUpgradeItem.length === 0">
                                     <div class="customPoint mt-3 h-12" style="cursor: pointer; border: 1px solid #ccc; border-radius: 6px; padding: 10px;">
                                         <span style="color:#ccc;">Create Tier Upgrade Item</span>
                                     </div>
                                 </ng-container>
                                 <ng-container *ngIf="selectedUpgradeItem.length > 0">
                                     <ng-container *ngFor="let item of selectedUpgradeItem; trackBy: trackByFn">
-                                        <div [matTooltip]="'Edit Item'" (click)="setTierUpgradeEditForm(item.id)" class="customPoint mt-3 h-12" style="border: 1px solid #ccc;border-radius: 10px;padding: 12px;cursor: pointer;">
-                                            {{item.item_number}}
+                                        <div [matTooltip]="'Edit Item'" (click)="setTierUpgradeEditForm(item.id)" class="customPoint mt-3 h-12" style="border: 1px solid #ccc;border-radius: 10px;padding: 0px;cursor: pointer;">
+                                            <span style="position: relative;left: 15px;bottom: 4px;">
+                                                {{item.item_number}}
+                                            </span>
+
+                                            <button mat-icon-button
+                                                [matTooltip]="'Delete'"
+                                                (click)="deleteTierUpgradeItem(item.id)" style="background:#ccc; position: relative; left: 47rem; bottom: 0px; cursor: pointer;">
+                                            <mat-icon class="text-white"
+                                                    [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                                            </button>
                                         </div>
+
+                                        
                                     </ng-container>
                                 </ng-container>
                             </div>
@@ -1043,7 +1054,7 @@
                                 </mat-form-field>
                             </div>
 
-                            <ng-container *ngIf="downgradeconditionValue == 'main_condition'">
+                            <ng-container *ngIf="downgradeconditionValue === 'main_condition'">
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Downgrade Condition Period</mat-label>

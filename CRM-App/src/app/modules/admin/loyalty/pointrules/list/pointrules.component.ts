@@ -18,15 +18,15 @@ import { MemberTier, MemberTierPagination } from 'app/modules/admin/loyalty/memb
     styles: [
         /* language=SCSS */
         `
-            .prule-grid {
+            .prule-grid_point_rule {
                 grid-template-columns: 250px 250px 200px 150px;
 
                 @screen sm {
-                    grid-template-columns: 200px 200px 150px 100px 150px;
+                    grid-template-columns: 160px 160px 150px 150px 150px 150px;
                 }
 
                 @screen md {
-                    grid-template-columns: 200px 200px 150px 100px 150px;
+                    grid-template-columns: 160px 160px 150px 150px 150px 150px;
                 }
 
                 @screen lg {
@@ -101,7 +101,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     pagination: PointRulePaginagion;
     searchInputControl: FormControl = new FormControl();
     memberTierSearchInputControl: FormControl = new FormControl();
-    pointSegmentSearchInputControl: FormControl = new FormControl();
+    pointBasketSearchInputControl: FormControl = new FormControl();
     AddMode: boolean = false;
     code: string;
     selectedChannel: PointRule | null = null;
@@ -233,6 +233,24 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                     this.isLoading = true;
                     // Search
                     return this._pointRuleService.getMemberTiers(0, 10, 'name', 'asc', query);
+                    this.matDrawer.open();
+                }),
+                map(() => {
+                    this.isLoading = false;
+                    this.matDrawer.open();
+                })
+            )
+            .subscribe();
+
+        //Point Basket Search
+        this.pointBasketSearchInputControl.valueChanges
+            .pipe(
+                takeUntil(this._unsubscribeAll),
+                debounceTime(300),
+                switchMap((query) => {
+                    this.isLoading = true;
+                    // Search
+                    return this._pointRuleService.getPointBaskets(0, 10, 'name', 'asc', query);
                     this.matDrawer.open();
                 }),
                 map(() => {
@@ -487,44 +505,6 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         this.PointRuleAddForm.patchValue(pointBasket);
         this.isLoading = false;
         this.matDrawer.close();
-    }
-
-    createPointBasket(): void {
-        const pointbasket = this.PointBasketForm.getRawValue();
-        if (pointbasket.id > 0) {
-            this._pointRuleService.updatePointBasket(pointbasket.id, pointbasket)
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((basket: any) => {
-                this._pointRuleService.getPointBaskets(0,10,'date_created','desc','').subscribe(
-                    (result: any) => {
-                        console.log(result);
-                    }
-                );
-                this.tooglePointBasketListMode(true);
-            });
-        }
-        else {
-            this._pointRuleService.createPointBasket(pointbasket)
-                .pipe(takeUntil(this._unsubscribeAll))
-                .subscribe((basket: any) => {
-                    this._pointRuleService.getPointBaskets(0,10,'date_created','desc','').subscribe(
-                        (result: any) => {
-                            console.log(result);
-                        }
-                    );
-                    this.tooglePointBasketListMode(true);
-                });
-        }
-    }
-
-    createNewPointBasket(): void {
-        this.PointBasketForm.reset();
-        this.tooglepointBasketAddFormMode(true);
-        this.matDrawer.open();
-    }
-
-    closeBasketForm(): void {
-        this.tooglePointBasketListMode(true);
     }
 
 }
