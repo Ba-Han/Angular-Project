@@ -24,16 +24,51 @@
                     </mat-form-field>
                 </div>
 
-                <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7" style="gap: 2rem;">
+                <div class="relative flex flex-col flex-auto items-center">
+                    <div class="w-full max-w-3xl">
+                        <div class="flex flex-col mt-4 pt-6 space-y-3">
+    
+                            <ng-container *ngIf="user.username">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">User Name: </div>
+                                    <div class="ml-6 leading-6">{{user.username}}</div>
+                                </div>
+                            </ng-container>
+    
+                            <ng-container *ngIf="user.first_name">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">First Name: </div>
+                                    <div class="ml-6 leading-6">{{user.first_name}}</div>
+                                </div>
+                            </ng-container>
+    
+                            <ng-container *ngIf="user.last_name">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Last Name: </div>
+                                    <div class="ml-6 leading-6">{{user.last_name}}</div>
+                                </div>
+                            </ng-container>
 
-                    <button class="ml-2"
+                            <ng-container *ngIf="user.email">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Email: </div>
+                                    <div class="ml-6 leading-6">{{user.email}}</div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center reset-rq-btn-scss -mx-6 sm:-mx-12 pr-4 pl-1 sm:pr-12 reset-qr-btn" style="gap: 1rem;">
+
+                    <!-- <button class="ml-2"
                             mat-flat-button
                             [color]="'primary'"
                             [matTooltip]="'Reset Password'"
                             (click)="updateUser()"
                             >
                         Reset Password
-                    </button>
+                    </button> -->
 
                     <button class="ml-2"
                             mat-flat-button
@@ -45,7 +80,7 @@
                     </button>
                 </div>
 
-                <div class="mt-8">
+                <!-- <div class="mt-8">
                     <mat-form-field class="fuse-mat-no-subscript w-full">
                         <mat-label>First Name</mat-label>
                         <mat-icon matPrefix
@@ -56,9 +91,9 @@
                                [placeholder]="'first_name'"
                                [spellcheck]="false">
                     </mat-form-field>
-                </div>
+                </div> -->
 
-                <div class="mt-8">
+                <!-- <div class="mt-8">
                     <mat-form-field class="fuse-mat-no-subscript w-full">
                         <mat-label>Last Name</mat-label>
                         <mat-icon matPrefix
@@ -69,7 +104,7 @@
                                [placeholder]="'last_name'"
                                [spellcheck]="false">
                     </mat-form-field>
-                </div>
+                </div> -->
 
                 <!-- <div class="mt-8">
                     <mat-form-field class="fuse-mat-no-subscript w-full">
@@ -84,7 +119,7 @@
                     </mat-form-field>
                 </div> -->
 
-                <div class="mt-8">
+                <!-- <div class="mt-8">
                     <mat-form-field class="fuse-mat-no-subscript w-full">
                         <mat-label>Email</mat-label>
                         <mat-icon matPrefix
@@ -94,7 +129,7 @@
                                [formControlName]="'email'"
                                [placeholder]="'email'">
                     </mat-form-field>
-                </div>
+                </div> -->
 
                <!--  <div class="mt-8">
                     <mat-password-strength
@@ -144,37 +179,37 @@
                     </mat-form-field>
                 </div> -->
 
-                <div class="mt-8">
-                    <mat-label>User Permission</mat-label>
-                    <table class="w-full" style="background-color: rgb(255, 255, 255); text-align: center;">
+                <div class="user-permission">
+                    <mat-label>User Permission:</mat-label>
+                    <table class="w-full" style="background-color: rgb(255, 255, 255);">
 
                         <tr class="font-bold">
-                            <td>Page</td>
-                            <td>View</td>
-                            <td>Edit</td>
-                            <td>Delete</td>
+                            <td class="user-page-scss">Page</td>
+                            <td class="v-e-d">View</td>
+                            <td class="v-e-d">Edit</td>
+                            <td class="v-e-d">Delete</td>
                         </tr>
 
                             <tr *ngFor="let key of page_roles">
-                                <td>
+                                <td class="user-page-scss">
                                     {{key.title}}
                                 </td>
 
-                                <td>
+                                <td class="v-e-d">
                                     <div>
                                         <input type="checkbox" [formControlName]="'view-'+ key.id" />
                                     </div>
                                     <!-- {{pr.can_view}} -->
                                 </td>
 
-                                <td>
+                                <td class="v-e-d">
                                     <div>
                                         <input type="checkbox" [formControlName]="'edit-'+ key.id"/>
                                     </div>
                                     <!-- {{pr.can_edit}} -->
                                 </td>
 
-                                <td>
+                                <td class="v-e-d">
                                     <div>
                                         <input type="checkbox" [formControlName]="'delete-'+ key.id"/>
                                     </div>
