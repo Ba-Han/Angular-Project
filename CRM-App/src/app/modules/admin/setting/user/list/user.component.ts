@@ -123,7 +123,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
                     return this._userService.getAppUsers(
                         0,
                         10,
-                        'first_name',
+                        'username',
                         'asc',
                         query
                     );
@@ -141,7 +141,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this._sort && this._paginator) {
             // Set the initial sort
             this._sort.sort({
-                id: 'first_name',
+                id: 'username',
                 start: 'asc',
                 disableClear: true
             });
@@ -157,20 +157,18 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
 
             // Get users if sort or page changes
-           
             merge(this._sort.sortChange, this._paginator.page)
                 .pipe(
                     switchMap(() => {
-                        
                         this.isLoading = true;
-                        const sort =
-                            this._sort.direction == 'desc'
+                        /* const sort =
+                            this._sort.direction === 'desc'
                                 ? '-' + this._sort.active
-                                : this._sort.active;
+                                : this._sort.active; */
                         return this._userService.getAppUsers(
                             this._paginator.pageIndex,
                             this._paginator.pageSize,
-                            sort,
+                            this._sort.active,
                             this._sort.direction
 
                         );
@@ -193,6 +191,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
         return item.id || index;
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     toogleStoreAddFormMode(AddMode: boolean | null = null): void {
         if (AddMode === null) {
             this.AddMode = !this.AddMode;
@@ -217,17 +216,19 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.passwordStrength = value;
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getUserRoles() {
         this._userService
             .getUserRoles()
             .pipe(finalize(() => {}))
             .subscribe((response) => {
-                let roles: any = response.data ? response.data : [];
-                let availableRoles: any = [];
+                const roles: any = response.data ? response.data : [];
+                const availableRoles: any = [];
+                // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for (let i: number = 0; i < roles.length; i++) {
                     if (
-                        roles[i].name == "CRM APP User" ||
-                        roles[i].name == "CRM APP Manager"
+                        roles[i].name === 'CRM APP User' ||
+                        roles[i].name === 'CRM APP Manager'
                     ) {
                         availableRoles.push(roles[i]);
                     }

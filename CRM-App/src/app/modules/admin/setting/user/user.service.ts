@@ -47,7 +47,7 @@ export class UserService {
      * @param order
      * @param search
      */
-    getAppUsers(page: number = 0, limit: number = 10, sort: string = 'first_name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+    getAppUsers(page: number = 0, limit: number = 10, sort: string = 'username', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: UserPagination; users: User[] }> {
         const role = localStorage.getItem("userRoleName");
         const filterUserListByRole = role == "Admin" ? '?fields=*,role.*&filter[role][name][_contains]=CRM APP' : '?fields=*,role.*&filter[role][name][_eq]=CRM APP User';

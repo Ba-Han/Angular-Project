@@ -13,7 +13,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatPasswordStrengthModule } from "@angular-material-extensions/password-strength";
+import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
 import { SharedModule } from 'app/shared/shared.module';
 import { UserComponent } from 'app/modules/admin/setting/user/user.component';
 import { UserListComponent } from 'app/modules/admin/setting/user/list/user.component';

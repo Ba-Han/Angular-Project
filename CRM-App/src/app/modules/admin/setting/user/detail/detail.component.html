@@ -24,6 +24,27 @@
                     </mat-form-field>
                 </div>
 
+                <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7" style="gap: 2rem;">
+
+                    <button class="ml-2"
+                            mat-flat-button
+                            [color]="'primary'"
+                            [matTooltip]="'Reset Password'"
+                            (click)="updateUser()"
+                            >
+                        Reset Password
+                    </button>
+
+                    <button class="ml-2"
+                            mat-flat-button
+                            [color]="'primary'"
+                            [matTooltip]="'Reset QR Code'"
+                            (click)="updateUser()"
+                            >
+                        Reset QR Code
+                    </button>
+                </div>
+
                 <div class="mt-8">
                     <mat-form-field class="fuse-mat-no-subscript w-full">
                         <mat-label>First Name</mat-label>
@@ -50,7 +71,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="mt-8">
+                <!-- <div class="mt-8">
                     <mat-form-field class="fuse-mat-no-subscript w-full">
                         <mat-label>Role</mat-label>
                                   <mat-select [formControlName]="'role'">
@@ -61,7 +82,8 @@
                                     </ng-container>
                                   </mat-select>
                     </mat-form-field>
-                </div>
+                </div> -->
+
                 <div class="mt-8">
                     <mat-form-field class="fuse-mat-no-subscript w-full">
                         <mat-label>Email</mat-label>
@@ -74,7 +96,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="mt-8">
+               <!--  <div class="mt-8">
                     <mat-password-strength
                     #passwordComponent
                     [min]="8"
@@ -102,18 +124,17 @@
                             >
                         </mat-form-field>
                       </div>
-                </div>
+                </div> -->
 
 
-                <div class="mt-8">
+                <!-- <div class="mt-8">
                     <mat-password-strength-info 
                     [passwordComponent]="passwordComponent">
                     
                      </mat-password-strength-info>
-                </div>
+                </div> -->
 
-
-                <div class="mt-8">
+                <!-- <div class="mt-8">
                     <mat-form-field class="fuse-mat-no-subscript w-full">
                         <mat-label>Status</mat-label>
                         <mat-select [formControlName]="'status'">
@@ -121,10 +142,50 @@
                             <mat-option value="inactive">Inactive</mat-option>
                         </mat-select>
                     </mat-form-field>
+                </div> -->
+
+                <div class="mt-8">
+                    <mat-label>User Permission</mat-label>
+                    <table class="w-full" style="background-color: rgb(255, 255, 255); text-align: center;">
+
+                        <tr class="font-bold">
+                            <td>Page</td>
+                            <td>View</td>
+                            <td>Edit</td>
+                            <td>Delete</td>
+                        </tr>
+
+                            <tr *ngFor="let key of page_roles">
+                                <td>
+                                    {{key.title}}
+                                </td>
+
+                                <td>
+                                    <div>
+                                        <input type="checkbox" [formControlName]="'view-'+ key.id" />
+                                    </div>
+                                    <!-- {{pr.can_view}} -->
+                                </td>
+
+                                <td>
+                                    <div>
+                                        <input type="checkbox" [formControlName]="'edit-'+ key.id"/>
+                                    </div>
+                                    <!-- {{pr.can_edit}} -->
+                                </td>
+
+                                <td>
+                                    <div>
+                                        <input type="checkbox" [formControlName]="'delete-'+ key.id"/>
+                                    </div>
+                                    <!-- {{pr.can_delete}} -->
+                                </td>
+
+                        </tr>
+                       
+                      </table>
                 </div>
-
-
-
+                
                 <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                     <button class="ml-2"
                             mat-flat-button

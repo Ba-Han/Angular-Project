@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { Subject, takeUntil, finalize } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { User } from 'app/modules/admin/setting/user/user.types';
+import { PermissionModel, User } from 'app/modules/admin/setting/user/user.types';
 import { UserService } from 'app/modules/admin/setting/user/user.service';
 
 @Component({
@@ -15,20 +15,32 @@ import { UserService } from 'app/modules/admin/setting/user/user.service';
                background-color:#FFF;
             }
 
+            tr,td {
+                border: 1px solid rgba(226, 232, 240, var(--tw-border-opacity));
+              }
+
         `
     ]
 })
+
 export class UserDetailComponent implements OnInit, OnDestroy {
     user: User;
     userId: number;
     isLoading: boolean = false;
     selectedUser: User | null = null;
     editMode: boolean = false;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     UserEditForm: FormGroup;
+    updatedPagePermission: PermissionModel[] = [];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     private passwordStrength: 0;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     roles: any;
-    selectedRole:string;
+    // eslint-disable-next-line @typescript-eslint/member-ordering, @typescript-eslint/naming-convention
+    page_roles: any;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    selectedRole: string;
+    
 
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
@@ -46,7 +58,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     // -----------------------------------------------------------------------------------------------------
 
     ngOnInit(): void {
-        
+
         this.UserEditForm = this._formBuilder.group({
             id: [''],
             status: ['', Validators.required],
@@ -54,7 +66,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
             last_name: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required],
-            role:['', Validators.required]
+            role:['', Validators.required],
+            page_roles:['', Validators.required]
         });
 
         this._userService.user$
@@ -62,6 +75,17 @@ export class UserDetailComponent implements OnInit, OnDestroy {
             .subscribe((user: User) => {
                 this.user = user;
                 this.selectedRole = user.role;
+                this.page_roles = user.page_roles;
+                for(const key of this.page_roles) {
+                    const viewControl = new FormControl(key.can_view);
+                    this.UserEditForm.addControl(`view-${key.id}`, viewControl);
+
+                    const editControl = new FormControl(key.can_edit);
+                    this.UserEditForm.addControl(`edit-${key.id}`, editControl);
+
+                    const deleteControl = new FormControl(key.can_delete);
+                    this.UserEditForm.addControl(`delete-${key.id}`, deleteControl);
+                }
                 this.UserEditForm.patchValue(user);
                 this._changeDetectorRef.markForCheck();
             });
@@ -89,7 +113,35 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     }
     updateUser(): void {
         // Get the contact object
+        debugger;
         const user = this.UserEditForm.getRawValue();
+        const checkBoxes = Object.keys(this.UserEditForm.value).map(key =>
+            ({
+                id : (key),
+                selected : this.UserEditForm.value[key]
+            }));
+
+        this.page_roles.forEach((pr: { id: any }) =>
+            {
+                console.log(pr.id);
+                const vKey = 'view-' + pr.id;
+                const vValue = this.UserEditForm.value[vKey];
+
+                const eKey = 'edit-' + pr.id;
+                const eValue = this.UserEditForm.value[eKey];
+
+                const dKey = 'delete-' + pr.id;
+                const dValue = this.UserEditForm.value[dKey];
+
+                const res: PermissionModel = {
+                    page_id : pr.id,
+                    can_view : vValue,
+                    can_edit : eValue,
+                    can_delete : dValue
+                };
+                this.updatedPagePermission.push(res);
+            });
+
         // Update the contact on the server
         if (this.passwordStrength >= 100) {
             this._userService.updateUser(user.id, user).subscribe(() => {
@@ -98,25 +150,25 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         }
     }
 
-    onStrengthChanged(value):void {
+    onStrengthChanged(value): void {
         this.passwordStrength = value;
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getUserRoles() {
         this._userService.getUserRoles()
             .pipe(
                 finalize(() => {
-                    
                 })
         ).subscribe(
             (response) => {
-                let roles:any = ((response.data) ? response.data : []);
-                let availableRoles: any = [];
-                for (let i:number = 0; i < roles.length; i++) {
-                    if (roles[i].name == "CRM APP User" ||
-                    roles[i].name == "CRM APP Manager" || 
-                    roles[i].name == "CRM Admin") {
-                
+                const roles: any = ((response.data) ? response.data : []);
+                const availableRoles: any = [];
+                // eslint-disable-next-line @typescript-eslint/prefer-for-of
+                for (let i: number = 0; i < roles.length; i++) {
+                    if (roles[i].name === 'CRM APP User' ||
+                    roles[i].name === 'CRM APP Manager' ||
+                    roles[i].name === 'CRM Admin') {
                         availableRoles.push(roles[i]);
                     }
                 }
