@@ -216,7 +216,6 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
         this._importService.importFile(this.importId, collection, this.createDate)
             //.pipe(
             //    tap(() => {
-            //        debugger;
             //        this.activities$ = this._importService.activities$;
             //        this.isLoading = false;
             //    })

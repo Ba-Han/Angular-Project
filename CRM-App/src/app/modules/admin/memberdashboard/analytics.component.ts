@@ -1,3 +1,4 @@
+import { TotalRegisterMember } from './analytics.resolvers';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation, Injectable, ChangeDetectorRef} from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, takeUntil, Observable, tap, finalize, debounceTime} from 'rxjs';
@@ -157,10 +158,10 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
             });
         this._analyticsService.totalRegisterMember$
             .subscribe((response: any) => {
-                let date = new Date();
-                this.registerMember = response ? response.TotalRegisterMember ? response.TotalRegisterMember : 0 : 0;
+                const date = new Date();
+                this.registerMember = response ? response.totalRegisterMember ? response.totalRegisterMember : 0 : 0;
                 this.filterDate = date.toString();
-                this.selectedButton = "month";
+                this.selectedButton = 'month';
 
             });
         this._analyticsService.totalTransactionCounts$
@@ -214,7 +215,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         this._analyticsService.getTotalRegistrationMemberCount(this.filterRegister)
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((response : any) => {
-            this.registerMember = response ? response.TotalRegisterMember ? response.TotalRegisterMember : 0 : 0;
+            this.registerMember = response ? response.totalRegisterMember ? response.totalRegisterMember : 0 : 0;
             this.filterDate = this.filterRegister.year + "-" + this.filterRegister.month + "-" + this.filterRegister.day;
             this.selectedButton = type;
             this.isLoading = false;
@@ -234,7 +235,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         this._analyticsService.getTotalRegistrationMemberCount(this.filterRegister)
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((response : any) => {
-            this.registerMember = response ? response.TotalRegisterMember ? response.TotalRegisterMember : 0 : 0;
+            this.registerMember = response ? response.totalRegisterMember ? response.totalRegisterMember : 0 : 0;
             //this.filterDate = this.filterRegister.year + "-" + this.filterRegister.month + "-" + this.filterActivePoint.day;
             this.selectedButton = "daterange";
             this.filterStartDate = moment(rangestart).format("YYYY-MM-DD");

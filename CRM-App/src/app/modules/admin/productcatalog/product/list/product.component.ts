@@ -4,11 +4,13 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ActivatedRoute, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatDrawer } from '@angular/material/sidenav';
 import { debounceTime, map, merge, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { Product, ProductPagination } from 'app/modules/admin/productcatalog/product/product.types';
 import { ProductService } from 'app/modules/admin/productcatalog/product/product.service';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'product-list',
@@ -31,6 +33,42 @@ import { ProductService } from 'app/modules/admin/productcatalog/product/product
                     grid-template-columns: 150px 200px 150px 150px;
                 }
             }
+
+            .reset_popup {
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                width: 28% !important;
+                height: 34% !important;
+            }
+
+            .parent_popup {
+                position: fixed;
+                display: grid;
+                justify-content: center;
+                padding: 4rem;
+            }
+
+            .child_btn {
+                padding-left: 1.5rem;
+                position: fixed;
+                margin-top: 2rem !important;
+            }
+
+            .update_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(0, 128, 0);
+                padding: 4rem;
+                font-size: 16px;
+            }
+
+            .delete-scss {
+                position: fixed;
+                padding-left: 2rem;
+            }
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -40,6 +78,8 @@ import { ProductService } from 'app/modules/admin/productcatalog/product/product
 export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
 
     products$: Observable<Product[]>;
     product$: Observable<Product>;
@@ -47,6 +87,10 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     pagination: ProductPagination;
     code: number;
     AddMode: boolean = false;
+    canEdit: boolean = false;
+    canDelete: boolean = false;
+    DeleteMode: boolean = false;
+    isSuccess: boolean = false;
     searchInputControl: FormControl = new FormControl();
     ProductAddForm: FormGroup;
 
@@ -60,6 +104,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         private _formBuilder: FormBuilder,
         private _productService: ProductService,
         private _router: Router,
+        private _userService: UserService
     ) {
     }
 
@@ -103,6 +148,9 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
                 })
             )
             .subscribe();
+
+            this.canEdit = this._userService.getViewUserPermissionByNavId('product');
+            this.canDelete = this._userService.getDeleteUserPermissionByNavId('product');
     }
 
     ngAfterViewInit(): void {
@@ -148,6 +196,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         return item.id || index;
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     tooglepointAddFormMode(AddMode: boolean | null = null): void {
         if (AddMode === null) {
             this.AddMode = !this.AddMode;
@@ -160,10 +209,38 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         this._changeDetectorRef.markForCheck();
     }
 
-    createProduct(): void {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    toogleDeleteMode(DeleteMode: boolean | null = null): void {
+        if (DeleteMode === null) {
+            this.DeleteMode = !this.DeleteMode;
+        }
+        else {
+            this.DeleteMode = DeleteMode;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
 
+    cancelPopup(): void {
+        this.toogleDeleteMode(false);
+        this.matDrawer.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    proceedPopup(id: number): void {
+        this._productService.getDeleteExclusionProduct(id).subscribe();
+        this.isSuccess = true;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    DeleteDrawer(): void {
+        this.toogleDeleteMode(true);
+        this.matDrawer.open();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    createProduct(): void {
         const product = this.ProductAddForm.getRawValue();
-        this._productService.createProduct(product).subscribe((product: any) => {
+        this._productService.createProduct(product).subscribe(() => {
             this.tooglepointAddFormMode(false);
         });
 

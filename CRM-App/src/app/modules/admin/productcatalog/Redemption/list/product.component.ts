@@ -9,6 +9,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { Product, ProductPagination } from 'app/modules/admin/productcatalog/Redemption/product.types';
 import { ProductService } from 'app/modules/admin/productcatalog/Redemption/product.service';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'product-list',
@@ -47,6 +48,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     pagination: ProductPagination;
     code: number;
     AddMode: boolean = false;
+    canEdit: boolean = false;
     searchInputControl: FormControl = new FormControl();
     ProductAddForm: FormGroup;
 
@@ -60,6 +62,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         private _formBuilder: FormBuilder,
         private _productService: ProductService,
         private _router: Router,
+        private _userService: UserService
     ) {
     }
 
@@ -103,6 +106,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
                 })
             )
             .subscribe();
+            this.canEdit = this._userService.getViewUserPermissionByNavId('redemption');
     }
 
     ngAfterViewInit(): void {

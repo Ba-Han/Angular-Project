@@ -10,3 +10,17 @@ export interface User
     avatar?: string;
     status?: string;
 }
+
+export interface page_roles
+{
+    id: number;
+    sort: number;
+    nav_id: string;
+    title: string;
+    type: string,
+    link: string,
+    parent_id: number,
+    can_view: boolean,
+    can_edit: boolean,
+    can_delete: boolean
+}

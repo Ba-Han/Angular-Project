@@ -1,147 +1,324 @@
 
-<div class="flex flex-col w-full">
-    <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
-        <div class="mt-3 text-4xl w-full font-bold truncate">Update Login User </div>
-        <button mat-icon-button
-                [matTooltip]="'Close'"
-                [routerLink]="['/users']"
-                style="background:#ccc;">
-            <mat-icon class="text-white"
-                      [svgIcon]="'heroicons_outline:x'"></mat-icon>
-        </button>
-    </div>
+<mat-drawer-container class="flex flex-col w-full">
+    <mat-drawer class="reset_QR_popup dark:bg-gray-900"
+                [mode]="'over'"
+                [opened]="false"
+                [disableClose]="true"
+                #matDrawer>
 
-    <!-- Edit Form -->
-    <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
-        <div class="w-full max-w-3xl">
-            <form [formGroup]="UserEditForm">
-
-                <div class="mt-8 hidden">
-                    <mat-form-field class="fuse-mat-no-subscript w-full">
-                        <input matInput
-                               [formControlName]="'id'"
-                               [placeholder]="'id'" />
-                    </mat-form-field>
-                </div>
-
-                <div class="mt-8">
-                    <mat-form-field class="fuse-mat-no-subscript w-full">
-                        <mat-label>First Name</mat-label>
-                        <mat-icon matPrefix
-                                  class="hidden sm:flex icon-size-5"
-                                  [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
-                        <input matInput
-                               [formControlName]="'first_name'"
-                               [placeholder]="'first_name'"
-                               [spellcheck]="false">
-                    </mat-form-field>
-                </div>
-
-                <div class="mt-8">
-                    <mat-form-field class="fuse-mat-no-subscript w-full">
-                        <mat-label>Last Name</mat-label>
-                        <mat-icon matPrefix
-                                  class="hidden sm:flex icon-size-5"
-                                  [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
-                        <input matInput
-                               [formControlName]="'last_name'"
-                               [placeholder]="'last_name'"
-                               [spellcheck]="false">
-                    </mat-form-field>
-                </div>
-
-                <div class="mt-8">
-                    <mat-form-field class="fuse-mat-no-subscript w-full">
-                        <mat-label>Role</mat-label>
-                                  <mat-select [formControlName]="'role'">
-                                    <ng-container *ngFor="let r of roles">
-                                        <mat-option [value]="r.id">
-                                            {{r.name}}
-                                        </mat-option>
-                                    </ng-container>
-                                  </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="mt-8">
-                    <mat-form-field class="fuse-mat-no-subscript w-full">
-                        <mat-label>Email</mat-label>
-                        <mat-icon matPrefix
-                                  class="hidden sm:flex icon-size-5"
-                                  svgIcon="heroicons_outline:mail"></mat-icon>
-                        <input matInput
-                               [formControlName]="'email'"
-                               [placeholder]="'email'">
-                    </mat-form-field>
-                </div>
-
-                <div class="mt-8">
-                    <mat-password-strength
-                    #passwordComponent
-                    [min]="8"
-                    [enableLowerCaseLetterRule]="true"
-                    [enableSpecialCharRule]="false"
-                    (onStrengthChanged)="onStrengthChanged($event)"
-                    [password]="password.value"
-                  >
-                  </mat-password-strength>
+        <!-- Reset QR Code Popup -->
+        <ng-container *ngIf="ResetQRCodeMode">
+            <ng-container *ngIf="isSuccess">
+                <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
                     <div>
-                        <mat-form-field
-                          style="width: 100%"
-                          class="fuse-mat-no-subscript w-full"
-                        >
-                          <mat-label>Password</mat-label>
-                          <mat-icon matPrefix
-                          class="hidden sm:flex icon-size-5"
-                          svgIcon="heroicons_outline:key"></mat-icon>
-                          <input
-                            matInput
-                            #password
-                            type="password"
-                            [formControlName]="'password'"
-                            [placeholder]=""
-                            >
-                        </mat-form-field>
-                      </div>
+                        <button mat-icon-button style="background-color:#ccc; position: fixed; right: 1rem;"
+                                [matTooltip]="'Close'"
+                                (click)="cancelPopup()">
+                            <mat-icon class="text-white"
+                                        [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                        </button>
+                    </div>
                 </div>
-
-
                 <div class="mt-8">
-                    <mat-password-strength-info 
-                    [passwordComponent]="passwordComponent">
-                    
-                     </mat-password-strength-info>
+                    <fuse-alert [appearance]="'soft'"
+                                [dismissible]="false"
+                                [dismissed]="false"
+                                [name]="'alertBox1'"
+                                [type]="'success'">
+                        <div class="update_scss">
+                            Update Successfully.
+                        </div>
+                    </fuse-alert>
                 </div>
+            </ng-container>
+            <ng-container *ngIf="!isSuccess">
+                <div class="parent_popup">
+                    <div>
+                        <div> Are you sure want to reset your QR code? </div>
+                    </div>    
+                    <div class="child_btn">
+                        <button class="ml-2"
+                                mat-flat-button
+                                [color]="'primary'"
+                                [matTooltip]="'Cancel'"
+                                (click)="cancelPopup()"
+                                >
+                            Cancel
+                        </button>
+    
+                        <button class="ml-2"
+                                mat-flat-button
+                                [color]="'primary'"
+                                [matTooltip]="'Proceed'"
+                                (click)="proceedPopup()"
+                                >
+                            Proceed
+                        </button>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
 
-
+        <!-- After saving user detail Popup -->
+        <ng-container *ngIf="UpdateUserDetailMode">
+            <ng-container *ngIf="isUpadteUserSuccess">
+                <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
+                    <div class="">
+                        <button mat-icon-button style="background-color:#ccc; position: fixed; right: 1rem;"
+                                [matTooltip]="'Close'"
+                                (click)="cancelUserPopup()">
+                            <mat-icon class="text-white"
+                                        [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                        </button>
+                    </div>
+                </div>
                 <div class="mt-8">
-                    <mat-form-field class="fuse-mat-no-subscript w-full">
-                        <mat-label>Status</mat-label>
-                        <mat-select [formControlName]="'status'">
-                            <mat-option value="active">Active</mat-option>
-                            <mat-option value="inactive">Inactive</mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                    <fuse-alert [appearance]="'soft'"
+                                [dismissible]="false"
+                                [dismissed]="false"
+                                [name]="'alertBox1'"
+                                [type]="'success'">
+                        <div class="update_scss">
+                            Update Successfully.
+                        </div>
+                    </fuse-alert>
                 </div>
+            </ng-container>
+        </ng-container>
+        
+    </mat-drawer>
 
+    <mat-drawer-content>
+        <div class="flex flex-col w-full">
+            <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
+                <div class="mt-3 text-4xl w-full font-bold truncate">Update Login User </div>
+                <button mat-icon-button
+                        [matTooltip]="'Close'"
+                        [routerLink]="['/users']"
+                        style="background:#ccc;">
+                    <mat-icon class="text-white"
+                              [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                </button>
+            </div>
+        
+            <!-- Edit Form -->
+            <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
+                <div class="w-full max-w-3xl">
+                    <form [formGroup]="UserEditForm">
+        
+                        <div class="mt-8 hidden">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <input matInput
+                                       [formControlName]="'id'"
+                                       [placeholder]="'id'" />
+                            </mat-form-field>
+                        </div>
+        
+                        <div class="relative flex flex-col flex-auto items-center">
+                            <div class="w-full max-w-3xl">
+                                <div class="flex flex-col mt-4 pt-6 space-y-3">
+            
+                                    <ng-container *ngIf="user.username">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">User Name: </div>
+                                            <div class="ml-6 leading-6">{{user.username}}</div>
+                                        </div>
+                                    </ng-container>
+            
+                                    <ng-container *ngIf="user.first_name">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">First Name: </div>
+                                            <div class="ml-6 leading-6">{{user.first_name}}</div>
+                                        </div>
+                                    </ng-container>
+            
+                                    <ng-container *ngIf="user.last_name">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Last Name: </div>
+                                            <div class="ml-6 leading-6">{{user.last_name}}</div>
+                                        </div>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="user.email">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Email: </div>
+                                            <div class="ml-6 leading-6">{{user.email}}</div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="flex items-center reset-rq-btn-scss -mx-6 sm:-mx-12 pr-4 pl-1 sm:pr-12 reset-qr-btn" style="gap: 1rem;">
+                            <button class="ml-2"
+                                    mat-flat-button
+                                    [color]="'primary'"
+                                    [matTooltip]="'Reset QR Code'"
+                                    (click)="resetQRCodeDrawer()"
+                                    >
+                                Reset QR Code
+                            </button>
+                        </div>
+        
+                        <!-- <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>First Name</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                <input matInput
+                                       [formControlName]="'first_name'"
+                                       [placeholder]="'first_name'"
+                                       [spellcheck]="false">
+                            </mat-form-field>
+                        </div> -->
+        
+                        <!-- <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Last Name</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                <input matInput
+                                       [formControlName]="'last_name'"
+                                       [placeholder]="'last_name'"
+                                       [spellcheck]="false">
+                            </mat-form-field>
+                        </div> -->
+        
+                        <!-- <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Role</mat-label>
+                                          <mat-select [formControlName]="'role'">
+                                            <ng-container *ngFor="let r of roles">
+                                                <mat-option [value]="r.id">
+                                                    {{r.name}}
+                                                </mat-option>
+                                            </ng-container>
+                                          </mat-select>
+                            </mat-form-field>
+                        </div> -->
+        
+                        <!-- <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Email</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          svgIcon="heroicons_outline:mail"></mat-icon>
+                                <input matInput
+                                       [formControlName]="'email'"
+                                       [placeholder]="'email'">
+                            </mat-form-field>
+                        </div> -->
+        
+                       <!--  <div class="mt-8">
+                            <mat-password-strength
+                            #passwordComponent
+                            [min]="8"
+                            [enableLowerCaseLetterRule]="true"
+                            [enableSpecialCharRule]="false"
+                            (onStrengthChanged)="onStrengthChanged($event)"
+                            [password]="password.value"
+                          >
+                          </mat-password-strength>
+                            <div>
+                                <mat-form-field
+                                  style="width: 100%"
+                                  class="fuse-mat-no-subscript w-full"
+                                >
+                                  <mat-label>Password</mat-label>
+                                  <mat-icon matPrefix
+                                  class="hidden sm:flex icon-size-5"
+                                  svgIcon="heroicons_outline:key"></mat-icon>
+                                  <input
+                                    matInput
+                                    #password
+                                    type="password"
+                                    [formControlName]="'password'"
+                                    [placeholder]=""
+                                    >
+                                </mat-form-field>
+                              </div>
+                        </div> -->
+        
+        
+                        <!-- <div class="mt-8">
+                            <mat-password-strength-info 
+                            [passwordComponent]="passwordComponent">
+                            
+                             </mat-password-strength-info>
+                        </div> -->
+        
+                        <!-- <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Status</mat-label>
+                                <mat-select [formControlName]="'status'">
+                                    <mat-option value="active">Active</mat-option>
+                                    <mat-option value="inactive">Inactive</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div> -->
+        
+                        <div class="user-permission">
+                            <mat-label>User Permission:</mat-label>
+                            <table class="w-full" style="background-color: rgb(255, 255, 255);">
+        
+                                <tr class="font-bold">
+                                    <td class="user-page-scss">Page</td>
+                                    <td class="v-e-d">View</td>
+                                    <td class="v-e-d">Edit</td>
+                                    <td class="v-e-d">Delete</td>
+                                </tr>
+        
+                                    <tr *ngFor="let key of page_roles">
+                                        <td class="user-page-scss">
+                                            {{key.title}}
+                                        </td>
+        
+                                        <td class="v-e-d">
+                                            <div>
+                                                <input type="checkbox" [formControlName]="'view-'+ key.id" />
+                                            </div>
+                                            <!-- {{pr.can_view}} -->
+                                        </td>
+        
+                                        <td class="v-e-d">
+                                            <div>
+                                                <input type="checkbox" [formControlName]="'edit-'+ key.id"/>
+                                            </div>
+                                            <!-- {{pr.can_edit}} -->
+                                        </td>
+        
+                                        <td class="v-e-d">
+                                            <div>
+                                                <input type="checkbox" [formControlName]="'delete-'+ key.id"/>
+                                            </div>
+                                            <!-- {{pr.can_delete}} -->
+                                        </td>
+        
+                                </tr>
+                               
+                              </table>
+                        </div>
 
-
-                <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
-                    <button class="ml-2"
-                            mat-flat-button
-                            [disabled]="UserEditForm.invalid"
-                            [color]="'primary'"
-                            [matTooltip]="'Save'"
-                            (click)="updateUser()"
-                            >
-                        Save
-                    </button>
+                        <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                            <button class="ml-2"
+                                    mat-flat-button
+                                    [disabled]="UserEditForm.invalid"
+                                    [color]="'primary'"
+                                    [matTooltip]="'Save'"
+                                    (click)="updateUser()"
+                                    >
+                                Save
+                            </button>
+                        </div>
+        
+                    </form>
                 </div>
-
-            </form>
+            </div>
         </div>
-    </div>
-</div>
-
+    </mat-drawer-content>
+</mat-drawer-container>
 
 <!--<ng-container *ngIf="!editMode">
         <div class="flex flex-col w-full">

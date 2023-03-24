@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, switchMap, ReplaySubject, tap, of } from 'rxjs';
-import { User } from 'app/core/user/user.types';
+import { page_roles, User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 
 @Injectable({
@@ -27,10 +27,15 @@ export class UserService {
     set userRoleName(rolename: string) {
         localStorage.setItem('userRoleName', rolename);
     }
+    // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
     get userRole(): string {
         return localStorage.getItem('userRole') ?? null;
     }
 
+    get userPermissionPages(): page_roles[] {
+        const jStr = localStorage.getItem('userPermissionPages');
+        return JSON.parse(jStr);
+    }
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
     // -----------------------------------------------------------------------------------------------------
@@ -52,7 +57,15 @@ export class UserService {
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
+    getViewUserPermissionByNavId(name: string): any {
+        const foundModel = this.userPermissionPages.find(x => x.nav_id === name);
+        return foundModel?.can_edit ?? false;
+    }
 
+    getDeleteUserPermissionByNavId(name: string): any {
+        const foundModel = this.userPermissionPages.find(x => x.nav_id === name);
+        return foundModel?.can_delete ?? false;
+    }
     /**
      * Get the current logged in user data
      */
@@ -62,6 +75,7 @@ export class UserService {
                 const user = response.data;
                 this.userRole = user.role.id;
                 this.userRoleName = user.role.name;
+                localStorage.setItem('userPermissionPages', JSON.stringify(user.page_roles));
                 user.avatar = response.data.avatar
                     ? `${this._apiurl}/assets/${response.data.avatar}`
                     : null;
@@ -99,6 +113,19 @@ export class UserService {
             .pipe(
                 map((updateUser) => {
                     return updateUser;
+                })
+            );
+    }
+    changeNewPassword(email: string, currentPassord: string, newPassword: string ): Observable<any> {
+        return this._httpClient
+            .patch<boolean>(`${this._apiurl}/users/changepassword`, {
+                email: email,
+                current_password: currentPassord,
+                new_password: newPassword
+            })
+            .pipe(
+                map((updatePass) => {
+                    return updatePass;
                 })
             );
     }

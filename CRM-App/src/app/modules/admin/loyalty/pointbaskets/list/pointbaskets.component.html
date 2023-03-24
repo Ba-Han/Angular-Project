@@ -57,7 +57,7 @@
                                         <ng-container *ngIf="(pointBaskets$ | async) as products">
                                             <ng-container *ngFor="let product of products; trackBy: trackByFn">
                                                 <a class=" cursor-pointer hover:bg-gray-100 dark:hover:bg-hover"
-                                                [routerLink]="['./', product.id]">
+                                                [routerLink]="canEdit ? ['./', product.id] : null">
                                                     <div class="prule-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
                                                         <div class="truncate">
                                                             {{product.name}}

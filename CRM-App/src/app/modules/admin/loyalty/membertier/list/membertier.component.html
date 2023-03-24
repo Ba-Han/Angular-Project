@@ -668,7 +668,7 @@
                                     <ng-container *ngIf="(memberTiers$ | async) as membertiers">
                                         <ng-container *ngFor="let memberTier of memberTiers; trackBy: trackByFn">
                                             <a class=" cursor-pointer hover:bg-gray-100 dark:hover:bg-hover"
-                                               [routerLink]="['./', memberTier.id]">
+                                               [routerLink]="canEdit ? ['./', memberTier.id] : null">
 
                                                 <div class="membertier-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
 

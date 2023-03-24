@@ -173,22 +173,22 @@
                             <ng-container *ngIf="registerMember > 0">
                                 <p>members</p>
                             </ng-container>
-                            <ng-container *ngIf="registerMember == 0">
+                            <ng-container *ngIf="registerMember === 0">
                                 <p>member</p>
                             </ng-container>
                         </div>
                         <div class="mx-6 mt-3 mb-3" style="border: 1px solid #ccc;"></div>
                         <div class="mx-6 mb-2">
-                            <ng-container *ngIf="selectedButton == 'month'">
+                            <ng-container *ngIf="selectedButton === 'month'">
                                 <div style="color: gray !important;">Member Registration For - {{filterDate | date:'MMM, y'}}</div>
                             </ng-container>
-                            <ng-container *ngIf="selectedButton == 'year'">
+                            <ng-container *ngIf="selectedButton === 'year'">
                                 <div style="color: gray !important;">Member Registration For - {{filterDate | date: 'y'}}</div>
                             </ng-container>
-                            <ng-container *ngIf="selectedButton == 'day'">
+                            <ng-container *ngIf="selectedButton === 'day'">
                                 <div style="color: gray !important;">Member Registration For - {{filterDate | date:'MMM dd, y'}}</div>
                             </ng-container>
-                            <ng-container *ngIf="selectedButton == 'daterange'">
+                            <ng-container *ngIf="selectedButton === 'daterange'">
                                 <div style="color: gray !important;">Member Registration between {{filterStartDate | date:'MMM dd, y'}} - {{filterEndDate | date:'MMM dd, y'}}</div>
                             </ng-container>
                         </div>

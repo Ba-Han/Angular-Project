@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { User, UserPagination } from 'app/modules/admin/setting/user/user.types';
 import { environment } from 'environments/environment';
+
 
 @Injectable({
     providedIn: 'root'
@@ -47,7 +48,7 @@ export class UserService {
      * @param order
      * @param search
      */
-    getAppUsers(page: number = 0, limit: number = 10, sort: string = 'first_name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+    getAppUsers(page: number = 0, limit: number = 10, sort: string = 'username', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: UserPagination; users: User[] }> {
         const role = localStorage.getItem("userRoleName");
         const filterUserListByRole = role == "Admin" ? '?fields=*,role.*&filter[role][name][_contains]=CRM APP' : '?fields=*,role.*&filter[role][name][_eq]=CRM APP User';
@@ -114,20 +115,27 @@ export class UserService {
         );
     }
 
-    updateUser(id: string, user: User): Observable<User> {
-        return this._httpClient.patch<User>(`${this._apiurl}/users/${id}`, {
-            "id": user.id,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "email": user.email,
-            "password": user.password,
-            "status": user.status,
-            "role": user.role
-        }).pipe(
-            map((updateUser) => {
-                return updateUser;
-            })
-        )
+    updateQRCode(): Observable<any> {
+        return this._httpClient.patch(`${this._apiurl}/users/resetqrcode`, {
+        }, {responseType: 'text'})
+        .pipe(
+            map(() => true),
+            catchError((error) => {
+                console.error(error);
+                return of(false);
+            }));
+    }
+
+    updatePermission(id: string, updatedPagePermission: any): Observable<any> {
+        return this._httpClient.patch(`${this._apiurl}/users/updatepermission/${id}`, {
+            "page_roles": updatedPagePermission
+        }, {responseType: 'text'})
+        .pipe(
+            map(() => true),
+            catchError((error) => {
+                console.error(error);
+                return of(false);
+            }));
     }
 
      getUserRoles(): Observable<any> {

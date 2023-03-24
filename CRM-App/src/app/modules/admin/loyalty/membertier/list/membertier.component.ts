@@ -11,6 +11,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { MemberTier, MemberTierPagination, PointRule, PointRulePagination, PointSegment, point_segment_id, MemberTierUpgrade, DWMemberGroup } from 'app/modules/admin/loyalty/membertier/membertier.types';
 import { MemberTierService } from 'app/modules/admin/loyalty/membertier/membertier.service';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'membertier-list',
@@ -83,6 +84,7 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
     flashMessage: 'success' | 'error' | null = null;
     isLoading: boolean = false;
     pointsegmentMode: boolean = false;
+    canEdit: boolean = false;
     pagination: MemberTierPagination;
     pointrulepagination: PointRulePagination;
     searchInputControl: FormControl = new FormControl();
@@ -118,6 +120,7 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
         private _formBuilder: FormBuilder,
         private _memberTierService: MemberTierService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
+        private _userService: UserService
     ) {
     }
 
@@ -220,6 +223,7 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
                 })
             )
             .subscribe();
+            this.canEdit = this._userService.getViewUserPermissionByNavId('member-tier');
 
         this.matDrawer.openedChange.subscribe((opened) => {
             if (!opened) {

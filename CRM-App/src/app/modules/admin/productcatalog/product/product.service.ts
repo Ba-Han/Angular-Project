@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { environment } from 'environments/environment';
 import { Product, ProductPagination } from 'app/modules/admin/productcatalog/product/product.types';
 
@@ -105,9 +105,20 @@ export class ProductService {
             /* 'price': product.price, */
             'item_number': product.item_number
         }).pipe(
-            map((updateProduct) => {
-                return updateProduct;
-            })
-        )
+            map(updateProduct => updateProduct)
+        );
     }
+
+    // Delete API method
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    getDeleteExclusionProduct(id: number){
+        return this._httpClient.delete(`${this._apiurl}/items/product_exclusion/${id}`,
+        { responseType: 'text' })
+        .pipe(
+            map(() => true),
+            catchError((error) => {
+                console.error(error);
+                return of(false);
+            }));
+    };
 }

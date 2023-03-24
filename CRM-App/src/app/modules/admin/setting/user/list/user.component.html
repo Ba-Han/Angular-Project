@@ -24,13 +24,13 @@
                                [autocomplete]="'off'"
                                [placeholder]="'Search user'">
                     </mat-form-field>
-                    <button class="ml-4"
+                    <!-- <button class="ml-4"
                             mat-flat-button
                             [color]="'primary'"
                             (click)="toogleStoreAddFormMode(true)">
                         <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                         <span class="ml-2 mr-1">Add</span>
-                    </button>
+                    </button> -->
                 </div>
             </div>
 
@@ -46,14 +46,12 @@
                                 <div class="user-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                      matSort
                                      matSortDisableClear>
-                                    
-                                    <div [mat-sort-header]="'first_name'"> First Name </div>
-                                    <div> Last Name </div>
-                                    <div>  Email </div>
-                                    <div>  Status </div>
-                                    <div>  Role </div>
-                                </div>
 
+                                    <div [mat-sort-header]="'username'"> Username </div>
+                                    <div> First Name </div>
+                                    <div> Last Name </div>
+                                    <div> Email </div>
+                                </div>
 
                                 <!-- Rows -->
                                 <ng-container *ngIf="(users$ | async) as users">
@@ -63,7 +61,11 @@
 
                                             <div class="user-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
 
-                                                <div class="hidden md:block truncate" [matTooltip]="user.first_name">
+                                                <div class="hidden md:block truncate" [matTooltip]="user.username">
+                                                    {{user.username}}
+                                                </div>
+
+                                                <div class="truncate" [matTooltip]="user.first_name">
                                                     {{user.first_name}}
                                                 </div>
 
@@ -75,14 +77,14 @@
                                                     {{user.email}}
                                                 </div>
 
-                                                <div class="truncate">
+                                                <!-- <div class="truncate">
                                                     {{user.status}}
-                                                </div>
+                                                </div> -->
 
                                                 <!--add user role-->
-                                                <div class="truncate" [matTooltip]="user.role.name">
+                                                <!-- <div class="truncate" [matTooltip]="user.role.name">
                                                     {{user.role.name}}
-                                                </div>
+                                                </div> -->
                                             </div>
 
                                         </a>
@@ -152,7 +154,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="mt-8">
+                    <!-- <div class="mt-8">
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Role</mat-label>
                                       <mat-select [formControlName]="'role'" slected="selectedRole">
@@ -161,7 +163,8 @@
                                           </mat-option>
                                       </mat-select>
                         </mat-form-field>
-                    </div>
+                    </div> -->
+
                     <div class="mt-8">
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Email</mat-label>
@@ -174,7 +177,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="mt-8">
+                    <!-- <div class="mt-8">
                         <mat-password-strength
                         #passwordComponent
                         [min]="8"
@@ -210,8 +213,9 @@
                         [passwordComponent]="passwordComponent">
                         
                          </mat-password-strength-info>
-                    </div>
-                    <div class="mt-8">
+                    </div> -->
+
+                    <!-- <div class="mt-8">
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Status</mat-label>
                             <mat-select [formControlName]="'status'">
@@ -219,7 +223,7 @@
                                 <mat-option value="inactive">Inactive</mat-option>
                             </mat-select>
                         </mat-form-field>
-                    </div>
+                    </div> -->
 
 
 
