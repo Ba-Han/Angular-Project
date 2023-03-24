@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, switchMap, ReplaySubject, tap, of } from 'rxjs';
-import { User } from 'app/core/user/user.types';
+import { page_roles, User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 
 @Injectable({
@@ -31,6 +31,10 @@ export class UserService {
         return localStorage.getItem('userRole') ?? null;
     }
 
+    get userPermissionPages() : page_roles[] {
+        const jStr = localStorage.getItem('userPermissionPages');
+        return JSON.parse(jStr);
+    }
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
     // -----------------------------------------------------------------------------------------------------
@@ -52,7 +56,10 @@ export class UserService {
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
-
+    getViewUserPermissionByNavId(name: string) : any {
+        const foundModel = this.userPermissionPages.find(x => x.nav_id === name);
+        return foundModel?.can_edit ?? false;
+    }
     /**
      * Get the current logged in user data
      */
@@ -62,6 +69,7 @@ export class UserService {
                 const user = response.data;
                 this.userRole = user.role.id;
                 this.userRoleName = user.role.name;
+                localStorage.setItem('userPermissionPages', JSON.stringify(user.page_roles));
                 user.avatar = response.data.avatar
                     ? `${this._apiurl}/assets/${response.data.avatar}`
                     : null;
