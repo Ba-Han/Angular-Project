@@ -11,6 +11,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { PointRule, PointRulePaginagion, PointBasket, PointBasketPagination } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 import { PointRuleService } from 'app/modules/admin/loyalty/pointrules/pointrules.service';
 import { MemberTier, MemberTierPagination } from 'app/modules/admin/loyalty/membertier/membertier.types';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'pointrules-list',
@@ -103,6 +104,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     memberTierSearchInputControl: FormControl = new FormControl();
     pointBasketSearchInputControl: FormControl = new FormControl();
     AddMode: boolean = false;
+    canEdit: boolean = false;
     code: string;
     selectedChannel: PointRule | null = null;
     pointbasketId: number;
@@ -126,6 +128,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         private _pointRuleService: PointRuleService,
         private _fuseConfirmationService: FuseConfirmationService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
+        private _userService: UserService
     ) {
         const today = new Date();
         this.minDate = today.toISOString().slice(0, 16);
@@ -196,6 +199,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                 })
             )
             .subscribe();
+            this.canEdit = this._userService.getViewUserPermissionByNavId('point-rules');
 
         //Drawer Mode
         this.matDrawer.openedChange.subscribe((opened) => {

@@ -9,6 +9,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { Store, StorePagination } from 'app/modules/admin/setting/store/store.types';
 import { StoreService } from 'app/modules/admin/setting/store/store.service';
 import { StoreDetailComponent } from 'app/modules/admin/setting/store/detail/detail.component';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'store-list',
@@ -47,6 +48,7 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
     pagination: StorePagination;
     searchInputControl: FormControl = new FormControl();
     AddMode: boolean = false;
+    canEdit: boolean = false;
     StoreAddForm: FormGroup;
     code: string;
     selectedChannel: Store | null = null;
@@ -56,7 +58,8 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
         private _changeDetectorRef: ChangeDetectorRef,
         private _fuseConfirmationService: FuseConfirmationService,
         private _formBuilder: FormBuilder,
-        private _storeService: StoreService
+        private _storeService: StoreService,
+        private _userService: UserService
     ) {
     }
 
@@ -106,6 +109,7 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
                 })
             )
             .subscribe();
+            this.canEdit = this._userService.getViewUserPermissionByNavId('store');
     }
 
     ngAfterViewInit(): void {

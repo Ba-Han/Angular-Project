@@ -27,11 +27,12 @@ export class UserService {
     set userRoleName(rolename: string) {
         localStorage.setItem('userRoleName', rolename);
     }
+    // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
     get userRole(): string {
         return localStorage.getItem('userRole') ?? null;
     }
 
-    get userPermissionPages() : page_roles[] {
+    get userPermissionPages(): page_roles[] {
         const jStr = localStorage.getItem('userPermissionPages');
         return JSON.parse(jStr);
     }
@@ -56,9 +57,14 @@ export class UserService {
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
-    getViewUserPermissionByNavId(name: string) : any {
+    getViewUserPermissionByNavId(name: string): any {
         const foundModel = this.userPermissionPages.find(x => x.nav_id === name);
         return foundModel?.can_edit ?? false;
+    }
+
+    getDeleteUserPermissionByNavId(name: string): any {
+        const foundModel = this.userPermissionPages.find(x => x.nav_id === name);
+        return foundModel?.can_delete ?? false;
     }
     /**
      * Get the current logged in user data

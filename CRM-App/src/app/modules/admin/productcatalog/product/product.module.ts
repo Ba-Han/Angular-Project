@@ -14,6 +14,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SharedModule } from 'app/shared/shared.module';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { ProductComponent } from 'app/modules/admin/productcatalog/product/product.component';
 import { ProductListComponent } from 'app/modules/admin/productcatalog/product/list/product.component';
 import { ProductDetailComponent } from 'app/modules/admin/productcatalog/product/detail/detail.component';
@@ -40,7 +41,8 @@ import { ecommerceRoutes } from 'app/modules/admin/productcatalog/product/produc
         MatSelectModule,
         MatSlideToggleModule,
         MatTooltipModule,
-        SharedModule
+        SharedModule,
+        MatSidenavModule
     ]
 })
 export class ProductModule {

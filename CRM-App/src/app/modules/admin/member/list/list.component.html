@@ -185,7 +185,7 @@
                                 <a class=" cursor-pointer"
                                    [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedMember || selectedMember.id !== member.id,
                                             'bg-primary-50 dark:bg-hover': selectedMember && selectedMember.id === member.id}"
-                                   [routerLink]="['/member', member.id]">
+                                   [routerLink]="canEdit ? ['/member', member.id] : null">
 
                                     <div class="member-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
 

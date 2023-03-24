@@ -10,6 +10,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { Channel, ChannelPagination } from 'app/modules/admin/setting/channel/channel.types';
 import { ChannelService } from 'app/modules/admin/setting/channel/channel.service';
 import { ChannelDetailComponent } from 'app/modules/admin/setting/channel/detail/detail.component';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'channel-list',
@@ -48,6 +49,7 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
     pagination: ChannelPagination;
     code: string;
     AddMode: boolean = false;
+    canEdit: boolean = false;
     searchInputControl: FormControl = new FormControl();
     ChannelAddForm: FormGroup;
    
@@ -61,6 +63,7 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
         private _formBuilder: FormBuilder,
         private _channelService: ChannelService,
         private _router: Router,
+        private _userService: UserService
     ) {
     }
 
@@ -111,6 +114,7 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
                 })
             )
             .subscribe();
+            this.canEdit = this._userService.getViewUserPermissionByNavId('channel');
     }
 
     ngAfterViewInit(): void {

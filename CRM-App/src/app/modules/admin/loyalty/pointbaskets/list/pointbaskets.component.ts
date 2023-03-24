@@ -10,6 +10,7 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { PointBasket, PointBasketPagination } from 'app/modules/admin/loyalty/pointbaskets/pointbaskets.types';
 import { PointBasketService } from 'app/modules/admin/loyalty/pointbaskets/pointbaskets.service';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'pointbaskets-list',
@@ -89,6 +90,7 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
     pagination: PointBasketPagination;
     pointBasketSearchInputControl: FormControl = new FormControl();
     AddMode: boolean = false;
+    canEdit: boolean = false;
     name: string;
     description: string;
     spendingType: string;
@@ -108,6 +110,7 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
         private _pointBasketService: PointBasketService,
         private _fuseConfirmationService: FuseConfirmationService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
+        private _userService: UserService
     ) {
         const today = new Date();
         this.minDate = today.toISOString().slice(0, 16);
@@ -140,7 +143,7 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
                 this.pagination = pagination;
                 this._changeDetectorRef.markForCheck();
             });
-        //debugger;
+
         this.pointBaskets$ = this._pointBasketService.pointBaskets$;
 
         // search Point Rules
@@ -157,6 +160,7 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
                 })
             )
             .subscribe();
+            this.canEdit = this._userService.getViewUserPermissionByNavId('point-baskets');
 
         //Drawer Mode
         this.matDrawer.openedChange.subscribe((opened) => {

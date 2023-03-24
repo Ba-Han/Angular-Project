@@ -12,6 +12,7 @@ import { FuseAlertModule } from '@fuse/components/alert';
 import { GeneralSetting, MemberGroup, UserGroup, MemberGroupPaginagion, UserGroupPaginagion, MemberTier, MemberTierPagination } from 'app/modules/admin/setting/generalsetting/generalsetting.types';
 import { GeneralSettingService } from 'app/modules/admin/setting/generalsetting/generalsetting.service';
 import { MatDrawer } from '@angular/material/sidenav';
+import { UserService } from 'app/core/user/user.service';
 
 
 
@@ -100,6 +101,7 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
 
     setting: GeneralSetting;
     isLoading: boolean = false;
+    canEdit: boolean = false;
     SettingEditForm: FormGroup;
     editMode: boolean = false;
     isSuccess: boolean = false;
@@ -129,7 +131,7 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
         private _settingService: GeneralSettingService,
         private _formBuilder: FormBuilder,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
-
+        private _userService: UserService
     ) {
     }
 
@@ -197,6 +199,8 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
                 this.SettingEditForm.patchValue(this.setting);
                 this._changeDetectorRef.markForCheck();
             });
+
+            this.canEdit = this._userService.getViewUserPermissionByNavId('generalsetting');
         }
 
     ngOnDestroy(): void {

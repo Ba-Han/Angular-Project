@@ -1,10 +1,13 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { Subject, takeUntil, finalize } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PermissionModel, User } from 'app/modules/admin/setting/user/user.types';
 import { UserService } from 'app/modules/admin/setting/user/user.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
     selector: 'user-detail',
@@ -35,6 +38,41 @@ import { UserService } from 'app/modules/admin/setting/user/user.service';
                 padding-left: 2rem !important;
             }
 
+            .reset_QR_popup {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) !important;
+                width: 30% !important;
+                height: 34% !important;
+            }
+
+            .parent_popup {
+                position: fixed;
+                display: grid;
+                justify-content: center;
+                padding: 4rem;
+            }
+
+            .child_btn {
+                padding-left: 1.5rem;
+                position: relative;
+                margin-top: 1rem !important;
+            }
+
+            .update_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(0, 128, 0);
+                padding: 4rem;
+                font-size: 16px;
+            }
+
+            .updaeuser_scss {
+                font-size: 16px;
+                color: rgb(0, 128, 0);
+            }
+
             tr,td {
                 border: 1px solid rgba(226, 232, 240, var(--tw-border-opacity));
               }
@@ -44,6 +82,11 @@ import { UserService } from 'app/modules/admin/setting/user/user.service';
 })
 
 export class UserDetailComponent implements OnInit, OnDestroy {
+    @ViewChild(MatPaginator) private _paginator: MatPaginator;
+    @ViewChild(MatSort) private _sort: MatSort;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+
     user: User;
     userId: number;
     isLoading: boolean = false;
@@ -52,6 +95,12 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     UserEditForm: FormGroup;
     updatedPagePermission: PermissionModel[] = [];
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    ResetQRCodeMode: boolean = false;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    UpdateUserDetailMode: boolean = false;
+    isSuccess: boolean = false;
+    isUpadteUserSuccess: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     private passwordStrength: 0;
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -130,8 +179,60 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         // Mark for check
         this._changeDetectorRef.markForCheck();
     }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    toogleResetQRCodeMode(ResetQRCodeMode: boolean | null = null): void {
+        this.UpdateUserDetailMode = false;
+        if (ResetQRCodeMode === null) {
+            this.ResetQRCodeMode = !this.ResetQRCodeMode;
+        }
+        else {
+            this.ResetQRCodeMode = ResetQRCodeMode;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    toogleUpdateUserDetailMode(UpdateUserDetailMode: boolean | null = null): void {
+        this.ResetQRCodeMode = false;
+        if (UpdateUserDetailMode === null) {
+            this.UpdateUserDetailMode = !this.UpdateUserDetailMode;
+        }
+        else {
+            this.UpdateUserDetailMode = UpdateUserDetailMode;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    resetQRCodeDrawer(): void {
+        this.toogleResetQRCodeMode(true);
+        this.matDrawer.open();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    cancelPopup(): void {
+        this.toogleResetQRCodeMode(false);
+        this.matDrawer.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    cancelUserPopup(): void {
+        this.toogleUpdateUserDetailMode(false);
+        this.matDrawer.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    proceedPopup(): void {
+        // Update QR Code Function
+        this._userService.updateQRCode().subscribe();
+        this.isSuccess = true;
+    }
+
     updateUser(): void {
         // Get the contact object
+        this.toogleUpdateUserDetailMode(true);
+        this.matDrawer.open();
+        this.isUpadteUserSuccess = true;
         const user = this.UserEditForm.getRawValue();
         const checkBoxes = Object.keys(this.UserEditForm.value).map(key =>
             ({
@@ -163,12 +264,11 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         // Update the contact on the server
         this._userService.updatePermission(user.id, this.updatedPagePermission).subscribe((res) => {
             //console.log(res);
-            if(res){
+            /* if(res){
                 this._router.navigate(['/users'], { relativeTo: this._activatedRoute });
             } else {
                 console.log(res);
-            }
-
+            } */
         });
     }
 

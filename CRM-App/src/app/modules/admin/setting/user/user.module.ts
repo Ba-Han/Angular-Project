@@ -15,6 +15,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
 import { SharedModule } from 'app/shared/shared.module';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { UserComponent } from 'app/modules/admin/setting/user/user.component';
 import { UserListComponent } from 'app/modules/admin/setting/user/list/user.component';
 import { UserDetailComponent } from 'app/modules/admin/setting/user/detail/detail.component';
@@ -42,7 +43,8 @@ import { ecommerceRoutes } from 'app/modules/admin/setting/user/user.routing';
         MatSlideToggleModule,
         MatTooltipModule,
         SharedModule,
-        MatPasswordStrengthModule
+        MatPasswordStrengthModule,
+        MatSidenavModule
     ]
 })
 export class AppUserModule {
