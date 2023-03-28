@@ -104,12 +104,12 @@ export class AuthSignInComponent implements OnInit
                     // Re-enable the form
                     this.signInForm.enable();
 
-                    if (errorCode == "INVALID_OTP" || errorCode == "INVALID_PAYLOAD") {
+                    if (errorCode === 'INVALID_OTP' || errorCode === 'INVALID_PAYLOAD') {
                         // Set the alert
                         if (this.isOptNeed) {
                             this.alert = {
                                 type   : 'error',
-                                message: (errorCode == "INVALID_PAYLOAD") ? 'Please enter otp' : "Please enter valid otp"
+                                message: (errorCode === 'INVALID_PAYLOAD') ? 'You do not have permission to login' : 'Please enter valid otp'
                             };
                             this.showAlert = true;
                         }

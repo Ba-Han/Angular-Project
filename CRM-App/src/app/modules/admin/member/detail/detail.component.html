@@ -63,7 +63,7 @@
                     </div>
                     <div class="gap-5">
                         <!--<div class="text-2xl font-bold bg-blue-100 text-left rounded-full py-3 px-6"> <mat-icon [svgIcon]="'heroicons_outline:sparkles'"></mat-icon> Repeat Purchasers </div>-->
-                        <div class="text-2xl font-bold bg-blue-100 text-left rounded-full py-3 px-6"> <mat-icon [svgIcon]="'heroicons_outline:academic-cap'"></mat-icon> {{member.member[0].member_tier}} </div>
+                        <div class="text-2xl font-bold bg-blue-100 text-left rounded-full py-3 px-6"> <mat-icon [svgIcon]="'heroicons_outline:academic-cap'"></mat-icon> {{member.member[0].member_tier.name}} </div>
                     </div>
                 </div>
             </div>
@@ -388,7 +388,7 @@
                                 <td mat-cell [routerLink]="['./memberpoint', point.id]" style="cursor:pointer;"
                                     *matCellDef="let point">
                                     <span class="pr-6 font-medium whitespace-nowrap">
-                                        ${{point.pointsInDoller | number : '1.2-2'}}
+                                        ${{point.pointsInDollar | number : '1.2-2'}}
                                     </span>
                                 </td>
                             </ng-container>

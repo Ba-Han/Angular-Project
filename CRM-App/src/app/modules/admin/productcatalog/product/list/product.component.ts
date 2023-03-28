@@ -91,6 +91,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     canDelete: boolean = false;
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
+    selectedId: number | null = null;
     searchInputControl: FormControl = new FormControl();
     ProductAddForm: FormGroup;
 
@@ -107,14 +108,11 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         private _userService: UserService
     ) {
     }
-
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
 
     ngOnInit(): void {
-
-
         this.ProductAddForm = this._formBuilder.group({
             id: [''],
             status: ['', [Validators.required]],
@@ -226,13 +224,21 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         this._changeDetectorRef.markForCheck();
     }
 
-    proceedPopup(id: number): void {
-        this._productService.getDeleteExclusionProduct(id).subscribe();
+    proceedPopup(): void {
+        if(this.selectedId) {
+            this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+                this._router.navigate(['/product']);
+              });
+            /* document.location.reload(); */
+            this.ngOnInit();
+        }
+        this._productService.getDeleteExclusionProduct(this.selectedId).subscribe();
         this.isSuccess = true;
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    DeleteDrawer(): void {
+    DeleteDrawer(id: number): void {
+        this.selectedId = id;
         this.toogleDeleteMode(true);
         this.matDrawer.open();
         this._changeDetectorRef.markForCheck();

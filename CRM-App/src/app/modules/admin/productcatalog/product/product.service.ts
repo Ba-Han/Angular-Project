@@ -28,11 +28,9 @@ export class ProductService {
         return this._product.asObservable();
     }
 
-
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
-
 
     getProducts(page: number = 0, limit: number = 10, sort: string = 'item_number', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: ProductPagination; products: Product[] }> {

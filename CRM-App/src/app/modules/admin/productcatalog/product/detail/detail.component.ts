@@ -81,7 +81,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     updateProduct(): void {
         const product = this.ProductEditForm.getRawValue();
-
         this._productService.updateProduct(product.id, product).subscribe(() => {
             this._router.navigate(['/product'], { relativeTo: this._activatedRoute });
         });
