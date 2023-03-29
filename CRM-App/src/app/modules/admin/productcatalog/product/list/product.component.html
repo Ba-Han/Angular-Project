@@ -118,7 +118,7 @@
                                         <!-- Rows -->
                                         <ng-container *ngIf="(products$ | async) as products">
                                             <ng-container *ngFor="let product of products; trackBy: trackByFn">
-                                                
+
                                                 <a class=" cursor-pointer hover:bg-gray-100 dark:hover:bg-hover"
                                                     [routerLink]="canEdit ? ['./', product.id] : null">
         
@@ -146,24 +146,24 @@
                                                                 Inactive
                                                             </div>
                                                         </ng-container>
-        
-                                                        <ng-container *ngIf="canDelete">
-                                                            <div class="truncate">
-                                                                <button class="ml-2"
-                                                                    mat-flat-button
-                                                                    [color]="'primary'"
-                                                                    [matTooltip]="'Delete'"
-                                                                    (click)="DeleteDrawer(product.id)"
-                                                                    >
-                                                                    Delete
-                                                                </button>
-                                                            </div>
-                                                        </ng-container>
-        
-                                                        <ng-container *ngIf="!canDelete">
-                                                        </ng-container>
+
                                                     </div>
                                                 </a>
+                                                <div class="deleteDrawerscss">
+                                                    <ng-container *ngIf="canDelete">
+                                                        <button
+                                                                mat-flat-button
+                                                                [color]="'primary'"
+                                                                [matTooltip]="'Delete'"
+                                                                (click)="DeleteDrawer(product.id)"
+                                                                >
+                                                                Delete
+                                                            </button>
+                                                    </ng-container>
+    
+                                                    <ng-container *ngIf="!canDelete">
+                                                    </ng-container>
+                                                </div>
                                             </ng-container>
                                         </ng-container>
                                     </div>

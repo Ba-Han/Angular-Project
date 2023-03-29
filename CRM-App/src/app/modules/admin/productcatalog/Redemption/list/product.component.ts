@@ -4,6 +4,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ActivatedRoute, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatDrawer } from '@angular/material/sidenav';
 import { debounceTime, map, merge, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
@@ -32,6 +33,48 @@ import { UserService } from 'app/core/user/user.service';
                     grid-template-columns: 150px 200px 150px 150px;
                 }
             }
+
+            .reset_popup {
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                width: 28% !important;
+                height: 34% !important;
+            }
+
+            .parent_popup {
+                position: fixed;
+                display: grid;
+                justify-content: center;
+                padding: 4rem;
+            }
+
+            .child_btn {
+                padding-left: 1.5rem;
+                position: fixed;
+                margin-top: 2rem !important;
+            }
+
+            .update_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(0, 128, 0);
+                padding: 4rem;
+                font-size: 16px;
+            }
+
+            .delete-scss {
+                position: fixed;
+                padding-left: 2rem;
+            }
+
+            .deleteDrawerscss {
+                position: relative;
+                bottom: 0.6rem;
+                left: 38rem;
+                margin: -2rem;
+            }
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -41,6 +84,8 @@ import { UserService } from 'app/core/user/user.service';
 export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
 
     products$: Observable<Product[]>;
     product$: Observable<Product>;
@@ -49,6 +94,10 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     code: number;
     AddMode: boolean = false;
     canEdit: boolean = false;
+    canDelete: boolean = false;
+    DeleteMode: boolean = false;
+    isSuccess: boolean = false;
+    selectedId: number | null = null;
     searchInputControl: FormControl = new FormControl();
     ProductAddForm: FormGroup;
 
@@ -107,6 +156,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
             )
             .subscribe();
             this.canEdit = this._userService.getViewUserPermissionByNavId('redemption');
+            this.canDelete = this._userService.getDeleteUserPermissionByNavId('redemption');
     }
 
     ngAfterViewInit(): void {
@@ -152,6 +202,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         return item.id || index;
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     tooglepointAddFormMode(AddMode: boolean | null = null): void {
         if (AddMode === null) {
             this.AddMode = !this.AddMode;
@@ -164,10 +215,46 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         this._changeDetectorRef.markForCheck();
     }
 
-    createProduct(): void {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    toogleDeleteMode(DeleteMode: boolean | null = null): void {
+        if (DeleteMode === null) {
+            this.DeleteMode = !this.DeleteMode;
+        }
+        else {
+            this.DeleteMode = DeleteMode;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
 
+    cancelPopup(): void {
+        if(this.selectedId) {
+            this._router.navigateByUrl('/product', { skipLocationChange: true }).then(() => {
+                this._router.navigate(['/redemption']);
+              });
+            /* document.location.reload(); */
+            //this.ngOnInit();
+        }
+        this.toogleDeleteMode(false);
+        this.matDrawer.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    proceedPopup(): void {
+        this._productService.getDeleteRedemptionProduct(this.selectedId).subscribe();
+        this.isSuccess = true;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    DeleteDrawer(id: number): void {
+        this.selectedId = id;
+        this.toogleDeleteMode(true);
+        this.matDrawer.open();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    createProduct(): void {
         const product = this.ProductAddForm.getRawValue();
-        this._productService.createProduct(product).subscribe((product: any) => {
+        this._productService.createProduct(product).subscribe(() => {
             this.tooglepointAddFormMode(false);
         });
 

@@ -69,6 +69,13 @@ import { UserService } from 'app/core/user/user.service';
                 padding-left: 2rem;
             }
 
+            .deleteDrawerscss {
+                position: relative;
+                bottom: 0.6rem;
+                left: 38rem;
+                margin: -2rem;
+            }
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
