@@ -237,7 +237,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
                 this._router.navigate(['/product']);
               });
             /* document.location.reload(); */
-            this.ngOnInit();
+            //this.ngOnInit();
         }
         this._productService.getDeleteExclusionProduct(this.selectedId).subscribe();
         this.isSuccess = true;

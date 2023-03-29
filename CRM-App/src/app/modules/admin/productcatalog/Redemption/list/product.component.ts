@@ -227,19 +227,19 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     cancelPopup(): void {
-        if(this.selectedId) {
-            this._router.navigateByUrl('/product', { skipLocationChange: true }).then(() => {
-                this._router.navigate(['/redemption']);
-              });
-            /* document.location.reload(); */
-            //this.ngOnInit();
-        }
         this.toogleDeleteMode(false);
         this.matDrawer.close();
         this._changeDetectorRef.markForCheck();
     }
 
     proceedPopup(): void {
+        if(this.selectedId) {
+            this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+                this._router.navigate(['/redemption']);
+              });
+            /* document.location.reload(); */
+            //this.ngOnInit();
+        }
         this._productService.getDeleteRedemptionProduct(this.selectedId).subscribe();
         this.isSuccess = true;
     }
