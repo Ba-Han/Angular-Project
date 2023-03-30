@@ -69,10 +69,10 @@ import { UserService } from 'app/core/user/user.service';
                 padding-left: 2rem;
             }
 
-            .deleteDrawerscss {
+            .deleteProductscss {
                 position: relative;
                 bottom: 0.6rem;
-                left: 38rem;
+                left: 33rem;
                 margin: -2rem;
             }
 
@@ -181,7 +181,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
                     this.isLoading = true;
-                    //const sort = this._sort.direction == "desc" ? "-" + this._sort.active : this._sort.active;
+                    //const sort = this._sort.direction === 'desc' ? '-' + this._sort.active : this._sort.active;
                     return this._productService.getProducts(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
                 }),
                 map(() => {
@@ -226,20 +226,26 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     cancelPopup(): void {
+        this.isSuccess = false;
         this.toogleDeleteMode(false);
         this.matDrawer.close();
         this._changeDetectorRef.markForCheck();
     }
 
     proceedPopup(): void {
-        if(this.selectedId) {
-            this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-                this._router.navigate(['/product']);
-              });
-            /* document.location.reload(); */
-            //this.ngOnInit();
-        }
-        this._productService.getDeleteExclusionProduct(this.selectedId).subscribe();
+        this._productService.getDeleteExclusionProduct(this.selectedId)
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(300),
+            switchMap((query) => {
+                this.isLoading = true;
+                return this._productService.getProducts(0, 10, 'item_number', 'asc');
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        )
+        .subscribe();
         this.isSuccess = true;
     }
 

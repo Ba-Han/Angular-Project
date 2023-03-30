@@ -13,6 +13,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { SharedModule } from 'app/shared/shared.module';
 import { StoreComponent } from 'app/modules/admin/setting/store/store.component';
 import { StoreListComponent } from 'app/modules/admin/setting/store/list/store.component';
@@ -40,7 +41,8 @@ import { ecommerceRoutes } from 'app/modules/admin/setting/store/store.routing';
         MatSelectModule,
         MatSlideToggleModule,
         MatTooltipModule,
-        SharedModule
+        SharedModule,
+        MatSidenavModule
     ]
 })
 export class StoreModule {

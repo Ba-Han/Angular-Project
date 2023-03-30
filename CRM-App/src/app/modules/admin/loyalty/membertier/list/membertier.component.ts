@@ -19,19 +19,19 @@ import { UserService } from 'app/core/user/user.service';
     styles: [
         /* language=SCSS */
         `
-            .membertier-grid {
-                grid-template-columns: 150px 150px 200px auto;
+            .membertier-list-grid {
+                grid-template-columns: 150px 150px 150px auto;
 
                 @screen sm {
-                    grid-template-columns: 150px 150px 200px auto;
+                    grid-template-columns: 150px 150px 150px auto;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 150px 200px auto;
+                    grid-template-columns: 150px 150px 150px auto;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 150px 200px auto;
+                    grid-template-columns: 150px 150px 150px auto;
                 }
             }
             .pointrule-grid{
@@ -68,6 +68,48 @@ import { UserService } from 'app/core/user/user.service';
                    position: fixed !important;
                     bottom: 57px;
             }
+
+            .reset_popup {
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                width: 28% !important;
+                height: 34% !important;
+            }
+
+            .parent_popup {
+                position: fixed;
+                display: grid;
+                justify-content: center;
+                padding: 4rem;
+            }
+
+            .child_btn {
+                padding-left: 1.5rem;
+                position: fixed;
+                margin-top: 2rem !important;
+            }
+
+            .update_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(0, 128, 0);
+                padding: 4rem;
+                font-size: 16px;
+            }
+
+            .delete-scss {
+                position: fixed;
+                padding-left: 2rem;
+            }
+
+            .deleteMemberTierscss {
+                position: relative;
+                bottom: 0.6rem;
+                left: 55rem;
+                margin: -2rem;
+            }
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -77,14 +119,22 @@ import { UserService } from 'app/core/user/user.service';
 export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
-    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
-    @ViewChild('matDrawer', { static: true }) matDrawer2: MatDrawer;
+    //@ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+    //@ViewChild('matDrawer', { static: true }) matDrawer2: MatDrawer;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('drawerOne', { static: true }) drawerOne: MatDrawer;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('drawerTwo', { static: true }) drawerTwo: MatDrawer;
 
     memberTiers$: Observable<MemberTier[]>;
     flashMessage: 'success' | 'error' | null = null;
     isLoading: boolean = false;
     pointsegmentMode: boolean = false;
     canEdit: boolean = false;
+    canDelete: boolean = false;
+    DeleteMode: boolean = false;
+    isSuccess: boolean = false;
+    selectedId: number | null = null;
     pagination: MemberTierPagination;
     pointrulepagination: PointRulePagination;
     searchInputControl: FormControl = new FormControl();
@@ -224,8 +274,9 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
             )
             .subscribe();
             this.canEdit = this._userService.getViewUserPermissionByNavId('member-tier');
+            this.canDelete = this._userService.getDeleteUserPermissionByNavId('member-tier');
 
-        this.matDrawer.openedChange.subscribe((opened) => {
+        this.drawerTwo.openedChange.subscribe((opened) => {
             if (!opened) {
                 // Remove the selected contact when drawer closed
                 //this.selectedMember = null;
@@ -339,6 +390,7 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
         this._changeDetectorRef.markForCheck();
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     toogleTierUpgradeFormMode(tierUpgradeFormMode: boolean | null = null) {
         if (tierUpgradeFormMode === null) {
             this.tierUpgradeFormMode = !this.tierUpgradeFormMode;
@@ -350,6 +402,7 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
         this._changeDetectorRef.markForCheck();
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     toogleMemberListMode(MemberListMode: boolean | null = null) {
         if (MemberListMode === null) {
             this.MemberListMode = !this.MemberListMode;
@@ -371,10 +424,10 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
         memberTier.point_ruleFullname = name;
         this.memberTierAddForm.patchValue(memberTier);
         this.isLoading = false;
-        this.matDrawer.close();
+        this.drawerTwo.close();
     }
 
-    openPointRuleForm(id = 0): void {
+    /* openPointRuleForm(id = 0): void {
         if (Number(id) > 0) {
             this.addedPointSegment = [];
             this.addedPointSegmentId = [];
@@ -421,11 +474,9 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
             this.tooglepointAddFormMode(true);
             this.matDrawer.open();
         }
-        
+    } */
 
-    }
-
-    createPointRule(): void {
+    /* createPointRule(): void {
         const pointrule = this.PointRuleForm.getRawValue();
         pointrule.point_basket = this.addedPointSegmentId;
         if (pointrule.id > 0) {
@@ -437,7 +488,7 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
                     membertier.point_rule = tier.data.id;
                     membertier.point_ruleFullname = tier.data.name;
                     this.memberTierAddForm.patchValue(membertier);
-                    this.matDrawer.close();
+                    this.drawerTwo.close();
                     this.addedPointSegment = [];
                     this.addedPointSegmentId = [];
                 });
@@ -456,19 +507,18 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
                     this.addedPointSegmentId = [];
                 });
         }
-        
-    }
+    } */
 
-    createNewPointSegment(): void {
+    /* createNewPointSegment(): void {
         this.PointSegmentForm.reset();
         this.tooglepointSegmentAddFormMode(true);
-    }
+    } */
 
-    closeSegmentForm(): void {
+    /* closeSegmentForm(): void {
         this.tooglepointSegmentAddFormMode(false);
-    }
+    } */
 
-    createUpdateSegmentPoint(): void {
+    /* createUpdateSegmentPoint(): void {
         this.isLoading = true;
         const segment = this.PointSegmentForm.getRawValue();
         if (Number(segment.id) > 0) {
@@ -486,7 +536,7 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
             //this._memberTierService.createPointSegment(segment)
             //    .pipe(takeUntil(this._unsubscribeAll))
             //    .subscribe((pointsegment: any) => {
-                   
+
             //    });
             var point_segment_id = this.convertToPointSegmentIdObject(segment);
             let index1 = this.addedPointSegment.findIndex(x => x.id === null);
@@ -503,15 +553,13 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
             else {
                 this.addedPointSegmentId.push(point_segment_id);
             }
-            
+
             this.isLoading = false;
             this.tooglepointSegmentAddFormMode(false);
         }
-        
-        
-    }
+    } */
 
-     convertToPointSegmentIdObject(pointsegment: PointSegment): any {
+     /* convertToPointSegmentIdObject(pointsegment: PointSegment): any {
          var point_segment_id = {
              "point_segment_id": {
                  "status": pointsegment.status,
@@ -536,20 +584,62 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
              }
         }
         return point_segment_id;
-    }
+    } */
 
-    editForm(pointsegment: PointSegment): void {
+    /* editForm(pointsegment: PointSegment): void {
         this.tooglepointSegmentAddFormMode(false);
         this.isLoading = true;
         //this._memberTierService.getPointSegmentById(id)
         //    .pipe(takeUntil(this._unsubscribeAll))
         //    .subscribe((pointsegment: any) => {
-                
         //    });
         const editsegment = pointsegment;
         this.PointSegmentForm.patchValue(editsegment);
         this.isLoading = false;
         this.tooglepointSegmentAddFormMode(true);
+    } */
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    toogleDeleteMode(DeleteMode: boolean | null = null): void {
+        if (DeleteMode === null) {
+            this.DeleteMode = !this.DeleteMode;
+        }
+        else {
+            this.DeleteMode = DeleteMode;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    cancelPopup(): void {
+        this.isSuccess = false;
+        this.toogleDeleteMode(false);
+        this.drawerOne.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    proceedPopup(): void {
+        this._memberTierService.getDeleteMemberTier(this.selectedId)
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(300),
+            switchMap((query) => {
+                this.isLoading = true;
+                return this._memberTierService.getMemberTiers(0, 10, 'name', 'asc');
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        )
+        .subscribe();
+        this.isSuccess = true;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    DeleteDrawer(id: number): void {
+        this.selectedId = id;
+        this.toogleDeleteMode(true);
+        this.drawerOne.open();
+        this._changeDetectorRef.markForCheck();
     }
 
     createMemberTier(): void {
@@ -564,7 +654,7 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
     openTierUpgradeForm(): void {
         this.TierUpgradeForm.reset();
         this.toogleTierUpgradeFormMode(true);
-        this.matDrawer.open();
+        this.drawerTwo.open();
     }
 
     createTierUpgrade(): void {
@@ -574,7 +664,7 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
             this._memberTierService.updateTierUpgrade(tierupgrade.id,tierupgrade)
                 .pipe(takeUntil(this._unsubscribeAll))
                 .subscribe((tier: any) => {
-                    let index = this.selectedUpgradeItem.findIndex(x => x.id === tier.data.id);
+                    const index = this.selectedUpgradeItem.findIndex(x => x.id === tier.data.id);
                     this.selectedUpgradeItem[(index)] = tier.data;
                     //this.selectedUpgradeItem.push(tier.data);
                     this.itemName = tier.data.item_number;
@@ -584,7 +674,7 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
                     memberTier.tier_upgrade_Fullname = tier.data.item_number;
                     this.memberTierAddForm.patchValue(memberTier);
                     this.isLoading = false;
-                    this.matDrawer.close();
+                    this.drawerTwo.close();
                 });
         }
         else {
@@ -599,10 +689,10 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
                     memberTier.tier_upgrade_Fullname = tier.data.item_number;
                     this.memberTierAddForm.patchValue(memberTier);
                     this.isLoading = false;
-                    this.matDrawer.close();
+                    this.drawerTwo.close();
                 });
         }
-        
+
     }
 
     closeMemberListMode(): void {
@@ -621,9 +711,9 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
                     this.TierUpgradeForm.patchValue(edittier);
                     this.isLoading = false;
                     this.toogleTierUpgradeFormMode(true);
-                    this.matDrawer.open()
+                    this.drawerTwo.open();
                 });
         }
-        
+
     }
 }

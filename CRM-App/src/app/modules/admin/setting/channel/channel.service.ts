@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { environment } from 'environments/environment';
 import { Channel, ChannelPagination } from 'app/modules/admin/setting/channel/channel.types';
 
@@ -96,7 +96,6 @@ export class ChannelService {
     }
 
     createChnnel(channel: Channel): Observable<Channel> {
-       
         return this.channels$.pipe(
             take(1),
             switchMap(channels => this._httpClient.post<any>(`${this._apiurl}/items/channel`, {
@@ -113,15 +112,26 @@ export class ChannelService {
 
     }
 
-    updateChannel(code:string,channel: Channel): Observable<Channel> {
+    updateChannel(code: string, channel: Channel): Observable<Channel> {
        return this._httpClient.patch<Channel>(`${this._apiurl}/items/channel/${code}`, {
             'code': code,
             'name': channel.name,
             'status': channel.status,
         }).pipe(
-        map((updateChannel) => {   
-           return updateChannel;
-         })
-        )
+        map(updateChannel => updateChannel)
+        );
     }
+
+    // Delete API method
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    getDeleteChannel(code: string){
+        return this._httpClient.delete(`${this._apiurl}/items/channel/${code}`,
+        { responseType: 'text' })
+        .pipe(
+            map(() => true),
+            catchError((error) => {
+                console.error(error);
+                return of(false);
+            }));
+    };
 }

@@ -9,14 +9,14 @@
         <ng-container *ngIf="DeleteMode">
             <ng-container *ngIf="isSuccess">
                 <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
-                    <!-- <div class="">
+                    <div class="">
                         <button mat-icon-button style="background-color:#ccc; position: fixed; right: 1rem;"
                                 [matTooltip]="'Close'"
                                 (click)="cancelPopup()">
                             <mat-icon class="text-white"
                                         [svgIcon]="'heroicons_outline:x'"></mat-icon>
                         </button>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="mt-8">
                     <fuse-alert [appearance]="'soft'"
@@ -25,7 +25,7 @@
                                 [name]="'alertBox1'"
                                 [type]="'success'">
                         <div class="update_scss">
-                            Deleted Successfully.
+                            Deleted successfully.
                         </div>
                     </fuse-alert>
                 </div>
@@ -107,7 +107,7 @@
                                         <div class="product-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                              matSort
                                              matSortDisableClear>
-        
+
                                             <div [mat-sort-header]="'item_number'"> SKU </div>
                                             <div [mat-sort-header]="'item_name'"> Name </div>
                                             <!-- <div [mat-sort-header]="'price'"> Price </div> -->
@@ -149,7 +149,7 @@
 
                                                     </div>
                                                 </a>
-                                                <div class="deleteDrawerscss">
+                                                <div class="deleteProductscss">
                                                     <ng-container *ngIf="canDelete">
                                                         <button
                                                                 mat-flat-button

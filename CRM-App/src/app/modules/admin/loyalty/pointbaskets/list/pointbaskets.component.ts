@@ -18,7 +18,7 @@ import { UserService } from 'app/core/user/user.service';
     styles: [
         /* language=SCSS */
         `
-            .prule-grid {
+            .pointbasket-grid {
                 grid-template-columns: 250px 250px 200px 150px;
 
                 @screen sm {
@@ -46,7 +46,7 @@ import { UserService } from 'app/core/user/user.service';
                          grid-template-columns: 35px 200px 200px;
                      }
                 }
- 
+
             .membercustom-paging {
                    position: fixed !important;
                     bottom: 57px;
@@ -67,6 +67,48 @@ import { UserService } from 'app/core/user/user.service';
                 text-align: center;
                 border-radius: 10px;
                 color: white;
+            }
+
+            .reset_popup {
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                width: 28% !important;
+                height: 34% !important;
+            }
+
+            .parent_popup {
+                position: fixed;
+                display: grid;
+                justify-content: center;
+                padding: 4rem;
+            }
+
+            .child_btn {
+                padding-left: 1.5rem;
+                position: fixed;
+                margin-top: 2rem !important;
+            }
+
+            .update_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(0, 128, 0);
+                padding: 4rem;
+                font-size: 16px;
+            }
+
+            .delete-scss {
+                position: fixed;
+                padding-left: 2rem;
+            }
+
+            .deletePointBasketscss {
+                position: relative;
+                bottom: 0.6rem;
+                left: 26rem;
+                margin: -2rem;
             }
         `
     ],
@@ -91,6 +133,10 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
     pointBasketSearchInputControl: FormControl = new FormControl();
     AddMode: boolean = false;
     canEdit: boolean = false;
+    canDelete: boolean = false;
+    DeleteMode: boolean = false;
+    isSuccess: boolean = false;
+    selectedId: number | null = null;
     name: string;
     description: string;
     spendingType: string;
@@ -161,6 +207,7 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
             )
             .subscribe();
             this.canEdit = this._userService.getViewUserPermissionByNavId('point-baskets');
+            this.canDelete = this._userService.getDeleteUserPermissionByNavId('point-baskets');
 
         //Drawer Mode
         this.matDrawer.openedChange.subscribe((opened) => {
@@ -242,6 +289,49 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
         else {
             this.AddMode = AddMode;
         }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    toogleDeleteMode(DeleteMode: boolean | null = null): void {
+        if (DeleteMode === null) {
+            this.DeleteMode = !this.DeleteMode;
+        }
+        else {
+            this.DeleteMode = DeleteMode;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    cancelPopup(): void {
+        this.isSuccess = false;
+        this.toogleDeleteMode(false);
+        this.matDrawer.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    proceedPopup(): void {
+        this._pointBasketService.getDeletePointBasket(this.selectedId)
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(300),
+            switchMap((query) => {
+                this.isLoading = true;
+                return this._pointBasketService.getPointBaskets(0, 10, 'name', 'asc');
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        )
+        .subscribe();
+        this.isSuccess = true;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    DeleteDrawer(id: number): void {
+        this.selectedId = id;
+        this.toogleDeleteMode(true);
+        this.matDrawer.open();
         this._changeDetectorRef.markForCheck();
     }
 

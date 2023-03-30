@@ -31,7 +31,7 @@ import { UserService } from 'app/core/user/user.service';
                 }
 
                 @screen lg {
-                    grid-template-columns: 160px 160px 150px 150px 150px 150px;
+                    grid-template-columns: 160px 160px 110px 150px 150px 150px;
                 }
             }
 
@@ -47,7 +47,7 @@ import { UserService } from 'app/core/user/user.service';
                          grid-template-columns: 35px 200px 200px;
                      }
                 }
- 
+
             .membercustom-paging {
                    position: fixed !important;
                     bottom: 57px;
@@ -69,6 +69,48 @@ import { UserService } from 'app/core/user/user.service';
                 border-radius: 10px;
                 color: white;
             }
+
+            .reset_popup {
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                width: 28% !important;
+                height: 34% !important;
+            }
+
+            .parent_popup {
+                position: fixed;
+                display: grid;
+                justify-content: center;
+                padding: 4rem;
+            }
+
+            .child_btn {
+                padding-left: 1.5rem;
+                position: fixed;
+                margin-top: 2rem !important;
+            }
+
+            .update_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(0, 128, 0);
+                padding: 4rem;
+                font-size: 16px;
+            }
+
+            .delete-scss {
+                position: fixed;
+                padding-left: 2rem;
+            }
+
+            .deletePointRulescss {
+                position: relative;
+                bottom: 0.6rem;
+                left: 62rem;
+                margin: -2rem;
+            }
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -78,8 +120,11 @@ import { UserService } from 'app/core/user/user.service';
 export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
+    //@ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+    @ViewChild('drawerOne', { static: true }) drawerOne: MatDrawer;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('drawerTwo', { static: true }) drawerTwo: MatDrawer;
 
     memberTiers$: Observable<MemberTier[]>;
     pointBaskets$: Observable<PointBasket[]>;
@@ -105,6 +150,10 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     pointBasketSearchInputControl: FormControl = new FormControl();
     AddMode: boolean = false;
     canEdit: boolean = false;
+    canDelete: boolean = false;
+    DeleteMode: boolean = false;
+    isSuccess: boolean = false;
+    selectedId: number | null = null;
     code: string;
     selectedChannel: PointRule | null = null;
     pointbasketId: number;
@@ -200,9 +249,10 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             )
             .subscribe();
             this.canEdit = this._userService.getViewUserPermissionByNavId('point-rules');
+            this.canDelete = this._userService.getDeleteUserPermissionByNavId('point-rules');
 
         //Drawer Mode
-        this.matDrawer.openedChange.subscribe((opened) => {
+        this.drawerTwo.openedChange.subscribe((opened) => {
             if (!opened) {
                 // Remove the selected contact when drawer closed
                 //this.selectedMember = null;
@@ -237,11 +287,11 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                     this.isLoading = true;
                     // Search
                     return this._pointRuleService.getMemberTiers(0, 10, 'name', 'asc', query);
-                    this.matDrawer.open();
+                    this.drawerTwo.open();
                 }),
                 map(() => {
                     this.isLoading = false;
-                    this.matDrawer.open();
+                    this.drawerTwo.open();
                 })
             )
             .subscribe();
@@ -255,11 +305,11 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                     this.isLoading = true;
                     // Search
                     return this._pointRuleService.getPointBaskets(0, 10, 'name', 'asc', query);
-                    this.matDrawer.open();
+                    this.drawerTwo.open();
                 }),
                 map(() => {
                     this.isLoading = false;
-                    this.matDrawer.open();
+                    this.drawerTwo.open();
                 })
             )
             .subscribe();
@@ -371,6 +421,49 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         this._changeDetectorRef.markForCheck();
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    toogleDeleteMode(DeleteMode: boolean | null = null): void {
+        if (DeleteMode === null) {
+            this.DeleteMode = !this.DeleteMode;
+        }
+        else {
+            this.DeleteMode = DeleteMode;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    cancelPopup(): void {
+        this.isSuccess = false;
+        this.toogleDeleteMode(false);
+        this.drawerOne.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    proceedPopup(): void {
+        this._pointRuleService.getDeletePointRule(this.selectedId)
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(300),
+            switchMap((query) => {
+                this.isLoading = true;
+                return this._pointRuleService.getPointRules(0, 10, 'name', 'asc');
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        )
+        .subscribe();
+        this.isSuccess = true;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    DeleteDrawer(id: number): void {
+        this.selectedId = id;
+        this.toogleDeleteMode(true);
+        this.drawerOne.open();
+        this._changeDetectorRef.markForCheck();
+    }
+
     createPointRule(): void {
         const pointrule = this.PointRuleAddForm.getRawValue();
         this._pointRuleService.createPointRule(pointrule).subscribe(() => {
@@ -385,7 +478,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((pagination: MemberTierPagination) => {
                 this.memberTierPagination = pagination;
-                this.matDrawer.open();
+                this.drawerTwo.open();
                 this._changeDetectorRef.markForCheck();
             });
 
@@ -416,22 +509,22 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                 .pipe(takeUntil(this._unsubscribeAll))
                 .subscribe(() => {
                     this._paginator.pageIndex = 0;
-                    this.matDrawer.open();
+                    this.drawerTwo.open();
                 });
             this._changeDetectorRef.markForCheck();
 
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
-                    this.matDrawer.open();
+                    this.drawerTwo.open();
                     this.isLoading = true;
                     return this._pointRuleService.getMemberTiers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
                 }),
                 map(() => {
                     this.isLoading = false;
-                    this.matDrawer.open();
+                    this.drawerTwo.open();
                 })
             ).subscribe();
-            this.matDrawer.open();
+            this.drawerTwo.open();
         }
     }
 
@@ -441,7 +534,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         memberTier.member_tierFullName = name;
         this.PointRuleAddForm.patchValue(memberTier);
         this.isLoading = false;
-        this.matDrawer.close();
+        this.drawerTwo.close();
     }
 
     setPointBasketDrawer(): void {
@@ -451,7 +544,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((pagination: PointBasketPagination) => {
                 this.pointBasketPagination = pagination;
-                this.matDrawer.open();
+                this.drawerTwo.open();
                 this._changeDetectorRef.markForCheck();
             });
         if (this.timeoutId) {
@@ -481,22 +574,22 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                 .pipe(takeUntil(this._unsubscribeAll))
                 .subscribe(() => {
                     this._paginator.pageIndex = 0;
-                    this.matDrawer.open();
+                    this.drawerTwo.open();
                 });
             this._changeDetectorRef.markForCheck();
 
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
-                    this.matDrawer.open();
+                    this.drawerTwo.open();
                     this.isLoading = true;
                     return this._pointRuleService.getPointBaskets(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
                 }),
                 map(() => {
                     this.isLoading = false;
-                    this.matDrawer.open();
+                    this.drawerTwo.open();
                 })
             ).subscribe();
-            this.matDrawer.open();
+            this.drawerTwo.open();
             this._changeDetectorRef.markForCheck();
         }
     }
@@ -508,7 +601,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         pointBasket.point_basketName = name;
         this.PointRuleAddForm.patchValue(pointBasket);
         this.isLoading = false;
-        this.matDrawer.close();
+        this.drawerTwo.close();
     }
 
 }

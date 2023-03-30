@@ -6,18 +6,18 @@
                 [disableClose]="true"
                 #matDrawer>
 
-        <!-- Delete single product popup -->
+        <!-- Delete single redemption popup -->
         <ng-container *ngIf="DeleteMode">
             <ng-container *ngIf="isSuccess">
                 <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
-                    <!-- <div class="">
+                    <div class="">
                         <button mat-icon-button style="background-color:#ccc; position: fixed; right: 1rem;"
                                 [matTooltip]="'Close'"
                                 (click)="cancelPopup()">
                             <mat-icon class="text-white"
                                         [svgIcon]="'heroicons_outline:x'"></mat-icon>
                         </button>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="mt-8">
                     <fuse-alert [appearance]="'soft'"
@@ -149,7 +149,7 @@
                                                         </ng-container>
                                                     </div>
                                                 </a>
-                                                <div class="deleteDrawerscss">
+                                                <div class="deleteRedemptionscss">
                                                     <ng-container *ngIf="canDelete">
                                                         <button
                                                                 mat-flat-button

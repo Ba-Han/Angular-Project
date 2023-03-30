@@ -69,10 +69,10 @@ import { UserService } from 'app/core/user/user.service';
                 padding-left: 2rem;
             }
 
-            .deleteDrawerscss {
+            .deleteRedemptionscss {
                 position: relative;
                 bottom: 0.6rem;
-                left: 38rem;
+                left: 33rem;
                 margin: -2rem;
             }
         `
@@ -227,20 +227,26 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     cancelPopup(): void {
+        this.isSuccess = false;
         this.toogleDeleteMode(false);
         this.matDrawer.close();
         this._changeDetectorRef.markForCheck();
     }
 
     proceedPopup(): void {
-        if(this.selectedId) {
-            this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-                this._router.navigate(['/redemption']);
-              });
-            /* document.location.reload(); */
-            //this.ngOnInit();
-        }
-        this._productService.getDeleteRedemptionProduct(this.selectedId).subscribe();
+        this._productService.getDeleteRedemptionProduct(this.selectedId)
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(300),
+            switchMap((query) => {
+                this.isLoading = true;
+                return this._productService.getProducts(0, 10, 'item_no', 'asc');
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        )
+        .subscribe();
         this.isSuccess = true;
     }
 

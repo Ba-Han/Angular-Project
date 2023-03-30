@@ -2,7 +2,7 @@ import { PointBasketPagination } from './pointrules.types';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
-import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError, delay } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError, delay, catchError } from 'rxjs';
 import { PointRule, PointRulePaginagion, PointBasket } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 import { MemberTier, MemberTierPagination } from 'app/modules/admin/loyalty/membertier/membertier.types';
 
@@ -341,7 +341,7 @@ export class PointRuleService {
 
     updatePointRule(id: number, pointrule: PointRule): Observable<PointRule> {
         /**
-         * Fix date issue in derectus. 
+         * Fix date issue in derectus.
          * Need to add time greater than 12.00 PM.
          */
 
@@ -354,33 +354,31 @@ export class PointRuleService {
         if (isNaN(parsedDate) && isNaN(parseEndDate))
         {
             return this._httpClient.patch<PointRule>(`${this._apiurl}/items/point_rule/${id}`,
-            {
-                "id": pointrule.id,
-                "name": pointrule.name,
-                "description": pointrule.description,
-                "reward_code": pointrule.reward_code,
-                "type": pointrule.type,
-                "point_value": pointrule.point_value,
-                "status": pointrule.status,
-                "start_date": null,
-                "end_date": null,
-                "member_tier": pointrule.member_tier,
-                "member_tierFullName": pointrule.member_tierFullName,
-                "dollar_value": pointrule.dollar_value,
-                "basket_id": pointrule.basket_id,
-                "point_basket": pointrule.point_basket,
-                "validity_type": pointrule.validity_type,
-            }
-        ).pipe(
-            map((createPointRule) => {
-                return createPointRule;
-            })
-        )
+                {
+                    "id": pointrule.id,
+                    "name": pointrule.name,
+                    "description": pointrule.description,
+                    "reward_code": pointrule.reward_code,
+                    "type": pointrule.type,
+                    "point_value": pointrule.point_value,
+                    "status": pointrule.status,
+                    "start_date": null,
+                    "end_date": null,
+                    "member_tier": pointrule.member_tier,
+                    "member_tierFullName": pointrule.member_tierFullName,
+                    "dollar_value": pointrule.dollar_value,
+                    "basket_id": pointrule.basket_id,
+                    "point_basket": pointrule.point_basket,
+                    "validity_type": pointrule.validity_type,
+                }
+            ).pipe(
+                map(createPointRule => createPointRule)
+            );
         }
         else {
             /* let startDate:any = new Date(pointrule.start_date);
             // startDate.setMinutes(800);
-            
+
             startDate.setHours(startDate.getHours() - 8);
             startDate.setMinutes(startDate.getMinutes() - 0o0);
             let startDateFormat = startDate.getFullYear() + "-" +  (startDate.getMonth()+1) + "-" + startDate.getDate() + "T" + startDate.getHours() + ":" + startDate.getMinutes() + ":00";
@@ -391,7 +389,7 @@ export class PointRuleService {
             endDate.setHours(endDate.getHours() - 8);
             endDate.setMinutes(endDate.getMinutes() - 0o0);
             let endDateFormat = endDate.getFullYear() + "-" +  (endDate.getMonth()+1) + "-" + endDate.getDate() + "T" + endDate.getHours() + ":" + endDate.getMinutes() + ":00"; */
-        
+
             return this._httpClient.patch<PointRule>(`${this._apiurl}/items/point_rule/${id}`,
                 {
                     "id": pointrule.id,
@@ -411,10 +409,21 @@ export class PointRuleService {
                     "validity_type": pointrule.validity_type,
                 }
             ).pipe(
-                map((createPointRule) => {
-                    return createPointRule;
-                })
-            )
+                map(createPointRule => createPointRule)
+            );
         }
     }
+
+    // Delete API method
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    getDeletePointRule(id: number){
+        return this._httpClient.delete(`${this._apiurl}/items/point_rule/${id}`,
+        { responseType: 'text' })
+        .pipe(
+            map(() => true),
+            catchError((error) => {
+                console.error(error);
+                return of(false);
+            }));
+    };
 }

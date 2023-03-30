@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Store, StorePagination } from 'app/modules/admin/setting/store/store.types';
 import { environment } from 'environments/environment';
 
@@ -130,9 +130,20 @@ export class StoreService {
             'region': store.region,
             'country': store.country
         }).pipe(
-            map((updateStore) => {
-                return updateStore;
-            })
-        )
+            map(updateStore => updateStore)
+        );
     }
+
+    // Delete API method
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    getDeleteStore(code: string){
+        return this._httpClient.delete(`${this._apiurl}/items/store/${code}`,
+        { responseType: 'text' })
+        .pipe(
+            map(() => true),
+            catchError((error) => {
+                console.error(error);
+                return of(false);
+            }));
+    };
 }

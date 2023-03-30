@@ -211,6 +211,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     }
 
     cancelPopup(): void {
+        this.isSuccess = false;
         this.toogleResetQRCodeMode(false);
         this.matDrawer.close();
         this._changeDetectorRef.markForCheck();

@@ -41,10 +41,10 @@
                         matInput
                         [formControlName]="'email'">
                     <mat-error *ngIf="signInForm.get('email').hasError('required')">
-                        User name is required
+                        Username is required
                     </mat-error>
                     <mat-error *ngIf="signInForm.get('email').hasError('email')">
-                        Please enter a valid user name
+                        <!-- Please enter username -->
                     </mat-error>
                 </mat-form-field>
 

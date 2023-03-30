@@ -59,55 +59,6 @@
                                 </div>
                             </ng-container>
 
-                            <ng-container *ngIf="pointBasket.to_type === 1">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Spending Validity Type: </div>
-                                    <div class="ml-6 leading-6">Day</div>
-                                </div>
-                            </ng-container>
-
-                            <ng-container *ngIf="pointBasket.to_type === 2">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Spending Validity Type: </div>
-                                    <div class="ml-6 leading-6">Month</div>
-                                </div>
-                            </ng-container>
-
-                            <ng-container *ngIf="pointBasket.to_type === 3">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Spending Validity Type: </div>
-                                    <div class="ml-6 leading-6">Year</div>
-                                </div>
-                            </ng-container>
-
-                            <ng-container *ngIf="pointBasket.to_number">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Validity Number: </div>
-                                    <div class="ml-6 leading-6">{{pointBasket.to_number}}</div>
-                                </div>
-                            </ng-container>
-
-                            <ng-container *ngIf="pointBasket.to_end_type === 1">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Spending End: </div>
-                                    <div class="ml-6 leading-6">Expire Month End</div>
-                                </div>
-                            </ng-container>
-
-                            <ng-container *ngIf="pointBasket.to_end_type === 2">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Spending End: </div>
-                                    <div class="ml-6 leading-6">Expire Date</div>
-                                </div>
-                            </ng-container>
-
-                            <ng-container *ngIf="pointBasket.to_type === 4">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Spending Validity Type: </div>
-                                    <div class="ml-6 leading-6">{{pointBasket.to_end_date  | date:'MMM dd, y'}}</div>
-                                </div>
-                            </ng-container>
-
                             <ng-container *ngIf="pointBasket.from_type === 1">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Spending Validity Type: </div>
@@ -150,10 +101,73 @@
                                 </div>
                             </ng-container>
 
+                            <ng-container *ngIf="pointBasket.to_type === 1">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Spending Validity Type: </div>
+                                    <div class="ml-6 leading-6">Day</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="pointBasket.to_type === 2">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Spending Validity Type: </div>
+                                    <div class="ml-6 leading-6">Month</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="pointBasket.to_type === 3">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Spending Validity Type: </div>
+                                    <div class="ml-6 leading-6">Year</div>
+                                </div>
+                            </ng-container>
+
                             <ng-container *ngIf="pointBasket.from_type === 4">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Spending Validity Type: </div>
+                                    <div class="ml-6 leading-6">Date</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="pointBasket.from_start_date">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Start Date: </div>
                                     <div class="ml-6 leading-6">{{pointBasket.from_start_date  | date:'MMM dd, y'}}</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="pointBasket.to_type === 4">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Spending Validity Type: </div>
+                                    <div class="ml-6 leading-6">Date</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="pointBasket.to_end_date">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">End Date: </div>
+                                    <div class="ml-6 leading-6">{{pointBasket.to_end_date  | date:'MMM dd, y'}}</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="pointBasket.to_number">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Validity Number: </div>
+                                    <div class="ml-6 leading-6">{{pointBasket.to_number}}</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="pointBasket.to_end_type === 1">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Spending End: </div>
+                                    <div class="ml-6 leading-6">Expire Month End</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="pointBasket.to_end_type === 2">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Spending End: </div>
+                                    <div class="ml-6 leading-6">Expire Date</div>
                                 </div>
                             </ng-container>
 
