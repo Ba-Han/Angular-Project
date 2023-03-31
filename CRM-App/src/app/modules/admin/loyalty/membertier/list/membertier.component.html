@@ -1,11 +1,72 @@
 <mat-drawer-container class="flex flex-col w-full">
-    <mat-drawer class="w-2/4 dark:bg-gray-900"
+
+    <mat-drawer #drawerOne class="reset_popup dark:bg-gray-900"
+                [mode]="'over'"
+                [opened]="false"
+                [position]="'start'"
+                [disableClose]="true"
+                #matDrawer>
+
+        <!-- Delete single member tier popup -->
+        <ng-container *ngIf="DeleteMode">
+            <ng-container *ngIf="isSuccess">
+                <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
+                    <div class="">
+                        <button mat-icon-button style="background-color:#ccc; position: fixed; right: 1rem;"
+                                [matTooltip]="'Close'"
+                                (click)="cancelPopup()">
+                            <mat-icon class="text-white"
+                                        [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-8">
+                    <fuse-alert [appearance]="'soft'"
+                                [dismissible]="false"
+                                [dismissed]="false"
+                                [name]="'alertBox1'"
+                                [type]="'success'">
+                        <div class="update_scss">
+                            Deleted Successfully.
+                        </div>
+                    </fuse-alert>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!isSuccess">
+                <div class="parent_popup">
+                    <div>
+                        <div class="delete-scss"> Are you sure want to delete? </div>
+                    </div>    
+                    <div class="child_btn">
+                        <button class="ml-2"
+                                mat-flat-button
+                                [color]="'primary'"
+                                [matTooltip]="'Cancel'"
+                                (click)="cancelPopup()"
+                                >
+                            Cancel
+                        </button>
+    
+                        <button class="ml-2"
+                                mat-flat-button
+                                [color]="'primary'"
+                                [matTooltip]="'Proceed'"
+                                (click)="proceedPopup()"
+                                >
+                            Proceed
+                        </button>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+    </mat-drawer>
+
+    <mat-drawer #drawerTwo class="w-2/4 dark:bg-gray-900"
                 [mode]="'over'"
                 [opened]="false"
                 [position]="'end'"
                 [disableClose]="true"
                 #matDrawer>
-
 
         <!-- Point Rule Add Form -->
         <ng-container *ngIf="!pointsegmentMode && !tierUpgradeFormMode && !MemberListMode">
@@ -77,7 +138,7 @@
                             <mat-select [formControlName]="'type'">
                                 <mat-option value="tier_rule">Tier Rule</mat-option>
                                 <mat-option value="event_rule">Event Rule</mat-option>
-                                <!--<mat-option value="referral_rule">Customer Referral</mat-option>-->
+                                <!-- <mat-option value="referral_rule">Customer Referral</mat-option> -->
                                 <mat-option value="birthday_rule">Birthday Event</mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -435,7 +496,7 @@
                 <div class="">
                     <button mat-icon-button style="background-color:#ccc;"
                             [matTooltip]="'Close'"
-                            (click)="matDrawer.close()">
+                            (click)="drawerTwo.close()">
                         <mat-icon class="text-white"
                                   [svgIcon]="'heroicons_outline:x'"></mat-icon>
                     </button>
@@ -608,8 +669,6 @@
 
     </mat-drawer>
 
-
-
     <mat-drawer-content class="p-5">
         <!-- Member Tier List-->
         <ng-container *ngIf="!pointAddFormMode">
@@ -652,7 +711,7 @@
                             <ng-container *ngIf="memberTiers.length > 0; else noMemberTiers">
                                 <div class="grid">
                                     <!-- Header -->
-                                    <div class="membertier-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                    <div class="membertier-list-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                          matSort
                                          matSortDisableClear>
                                         <div [mat-sort-header]="'name'"> Name</div>
@@ -670,7 +729,7 @@
                                             <a class=" cursor-pointer hover:bg-gray-100 dark:hover:bg-hover"
                                                [routerLink]="canEdit ? ['./', memberTier.id] : null">
 
-                                                <div class="membertier-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                                                <div class="membertier-list-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
 
                                                     <div class="truncate">
                                                         {{memberTier.name}}
@@ -690,7 +749,21 @@
 
                                                 </div>
                                             </a>
-
+                                            <div class="deleteMemberTierscss">
+                                                <ng-container *ngIf="canDelete">
+                                                    <button
+                                                            mat-flat-button
+                                                            [color]="'primary'"
+                                                            [matTooltip]="'Delete'"
+                                                            (click)="DeleteDrawer(memberTier.id)"
+                                                            >
+                                                            Delete
+                                                        </button>
+                                                </ng-container>
+    
+                                                <ng-container *ngIf="!canDelete">
+                                                </ng-container>
+                                            </div>
                                             <div class="grid">
                                                 <ng-container *ngIf="selectedMemberTier?.id === memberTier.id">
                                                     <ng-container *ngTemplateOutlet="rowDetailsTemplate; context: {$implicit: memberTier}"></ng-container>
@@ -880,7 +953,7 @@
 
                             <div class="mt-8">
                                 <label>Tier Upgrade Item</label>
-                                <ng-container *ngIf="selectedUpgradeItem.length == 0">
+                                <ng-container *ngIf="selectedUpgradeItem.length === 0">
                                     <div class="customPoint mt-3 h-12" style="cursor: pointer; border: 1px solid #ccc; border-radius: 6px; padding: 10px;">
                                         <span style="color:#ccc;">Create Tier Upgrade Item</span>
                                     </div>
@@ -938,7 +1011,7 @@
                                 </mat-form-field>
                             </div>
 
-                            <ng-container *ngIf="downgradeconditionValue == 'main_condition'">
+                            <ng-container *ngIf="downgradeconditionValue === 'main_condition'">
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Downgrade Condition Period</mat-label>
@@ -980,7 +1053,5 @@
                 </div>
             </div>
         </ng-container>
-
     </mat-drawer-content>
-
 </mat-drawer-container>

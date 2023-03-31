@@ -154,29 +154,24 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         this._memberService.member$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((member: Member) => {
-                
-
                 // Get the contact
                 this.member = member;
                 this.member.earning = member.earning;
                 this.member.spending = member.spending;
                 this.member.soonExpiredPoint = member.soonExpiredPoint;
-                if ((this.member.member[0].address_line_1 == "" || this.member.member[0].address_line_1 == null) && (this.member.member[0].address_line_2 == "" || this.member.member[0].address_line_2 == null)
+                if ((this.member.member[0].address_line_1 == '' || this.member.member[0].address_line_1 == null) && (this.member.member[0].address_line_2 == '' || this.member.member[0].address_line_2 == null)
                     && (this.member.member[0].postal_code == "" || this.member.member[0].postal_code == null) && (this.member.member[0].city == "" || this.member.member[0].city == null)) {
                     this.isAddressexit = false;
                 }
-               
+
                 // Patch values to the form
                 this.memberForm.patchValue(member.member[0]);
                 if (member.member[0].member_tier != null) {
-                    const tierId = this.memberTiers.find(x => x.name == member.member[0].member_tier).id;
+                    const tierId = this.memberTiers.find(x => x.name === member.member[0].member_tier).id;
                     this.memberForm.get('member_tier').setValue(tierId);
-                } 
+                }
                     this._changeDetectorRef.markForCheck();
             });
-
-        
-       
 
         this._memberService.points$
         .pipe(takeUntil(this._unsubscribeAll))
@@ -194,8 +189,6 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                 this.recentTransactionsDataSource.data = transactions;
 
             });
-
-       
     }
 
      ngAfterViewInit(): void
@@ -255,7 +248,6 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         else
         {
             this.editMode = editMode;
-           
         }
         this._changeDetectorRef.markForCheck();
     }
@@ -274,7 +266,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         this.showAlert = false;
         const member = this.memberForm.getRawValue();
         member.date_of_birth = this.datePipe.transform(member.date_of_birth, 'yyyy-MM-dd');
-        let sameUserPhone = member.mobile_phone == this.member.member[0].mobile_phone ? true : false;
+        const sameUserPhone = member.mobile_phone === this.member.member[0].mobile_phone ? true : false;
         //let showHideError = this.phoneValidateError ? false : true;
         this._memberService.checkMemberPhone(member.mobile_phone)
         .pipe(
@@ -295,13 +287,14 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                 this._changeDetectorRef.markForCheck();
              })
         )
-        .subscribe(response => {
+        .subscribe((response) => {
             this.phoneValidateError = response ? response.success : false;
-            } 
-        )
+            }
+        );
     }
 
-    updateMemberInfo(id: number, member : MemberInfo){
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    updateMemberInfo(id: number, member: MemberInfo){
         this._memberService.updateMember(id, member)
             .pipe(
                 finalize(() => {
@@ -310,22 +303,25 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             )
             .subscribe(
                 (response: any) => {
-                    this.updateMemberDw(member.id, member);
+                    //this.updateMemberDw(member.id, member);
                     this.alert = {
                         type: 'success',
                         message: 'Update Successfully.'
                     };
                     this.member.earning = this.member.earning;
                     this.member.spending = this.member.spending;
-                    let bathDatestring = response.data != null ? response.data.date_of_birth : "";
-                    let date = new Date(bathDatestring);
+                    const bathDatestring = response.data[0] != null ? response.data[0].date_of_birth : '';
+                    const date = new Date(bathDatestring);
                     const modifyBirthDate = new Date(date.setDate(date.getDate() + Number(1)));
                     //const modifyBirthDate = new Date(date.setDate(date.getDate()));
-                    response.data.member_tier = this.memberTiers.find(x => x.id == response.data.member_tier).name;
-                    response.data.date_of_birth = modifyBirthDate;
-                    this.member.member[0] = response.data;
-                    if ((response.data.address_line_1 == "" || response.data.address_line_1 == null) && (response.data.address_line_2 == "" || response.data.address_line_2 == null)
-                        && (response.data.postal_code == "" || response.data.postal_code == null) && (response.data.city == "" || response.data.city == null)) {
+                    //response.data[0].member_tier = this.memberTiers.find(x => x.id === response.data[0].member_tier.name);
+                    response.data.member_tier = this.memberTiers.find(x => x.id === response.data[0].member_tier.name);
+                    response.data[0].date_of_birth = modifyBirthDate;
+                    this.member.member[0] = response.data[0];
+                    // eslint-disable-next-line eqeqeq
+                    if ((response.data.address_line_1 == '' || response.data.address_line_1 == null) && (response.data.address_line_2 == '' || response.data.address_line_2 == null)
+                        // eslint-disable-next-line eqeqeq
+                        && (response.data.postal_code == '' || response.data.postal_code == null) && (response.data.city == '' || response.data.city == null)) {
                         this.isAddressexit = false;
                     }
                     else {
@@ -343,12 +339,12 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
 
-    updateMemberDw(id:Number, member: any): void {
-        this._memberService.updateMemberDw(id, member).subscribe((response: any) => {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    updateMemberDw(id: Number, member: any): void {
+        this._memberService.updateMemberDw(id, member).subscribe((response: any) =>
             // Set the alert
-            return response;
-           
-        },
+             response
+        ,
         (response) => {
             // Set the alert
             this.alert = {
@@ -356,8 +352,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                 message: 'Somthing went wrong!'
             };
             return response;
-        }); 
+        });
     }
 
-    
 }

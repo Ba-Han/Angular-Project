@@ -53,7 +53,7 @@ import { UserService } from 'app/modules/admin/setting/user/user.service';
                 }
 
                 @screen lg {
-                    grid-template-columns: 200px 150px 300px 150px 150px;
+                    grid-template-columns: 245px 150px 150px 245px;
                 }
             }
         `,

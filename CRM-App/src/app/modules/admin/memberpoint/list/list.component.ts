@@ -13,6 +13,7 @@ import { MemberPointService } from 'app/modules/admin/memberpoint/memberpoint.se
 import { MemberService } from 'app/modules/admin/member/member.service';
 import { MemberPoint, MemberPointPagination } from 'app/modules/admin/memberpoint/memberpoint.types';
 import { GeneralSetting } from 'app/modules/admin/setting/generalsetting/generalsetting.types';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector       : 'memberpoint-list',
@@ -20,24 +21,66 @@ import { GeneralSetting } from 'app/modules/admin/setting/generalsetting/general
     styles         : [
         `
             .memberpoint-grid {
-                grid-template-columns: 200px 150px 80px 100px 100px 100px 120px;
+                grid-template-columns: 150px 150px 80px 100px 100px 100px 120px;
 
                 @screen sm {
-                    grid-template-columns: 200px 150px 80px 100px 100px 100px 120px;
+                    grid-template-columns: 150px 150px 80px 100px 100px 100px 120px;
                 }
 
                 @screen md {
-                    grid-template-columns: 200px 150px 80px 100px 100px 100px 120px;
+                    grid-template-columns: 150px 150px 80px 100px 100px 100px 120px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 200px 150px 80px 100px 120px 100px 120px;
+                    grid-template-columns: 150px 150px 80px 100px 120px 100px 120px;
                 }
             }
             .membercustom-paging {
-                   position: fixed !important;
-                    bottom: 57px;
-                }
+                position: fixed !important;
+                bottom: 57px;
+            }
+
+            .reset_popup {
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                width: 28% !important;
+                height: 34% !important;
+            }
+
+            .parent_popup {
+                position: fixed;
+                display: grid;
+                justify-content: center;
+                padding: 4rem;
+            }
+
+            .child_btn {
+                padding-left: 1.5rem;
+                position: fixed;
+                margin-top: 2rem !important;
+            }
+
+            .update_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(0, 128, 0);
+                padding: 4rem;
+                font-size: 16px;
+            }
+
+            .delete-scss {
+                position: fixed;
+                padding-left: 2rem;
+            }
+
+            .deleteMemberPointscss {
+                position: relative;
+                bottom: 0.6rem;
+                left: 62rem;
+                margin: -2rem;
+            }
         `
     ],
     encapsulation  : ViewEncapsulation.None,
@@ -48,6 +91,8 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
 {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
 
     memberPoints$: Observable<MemberPoint[]>;
     memberPointsCount: number = 0;
@@ -56,6 +101,11 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
     setting: GeneralSetting;
     memberId: number;
     pointAddFormMode: boolean = false;
+    canEdit: boolean = false;
+    canDelete: boolean = false;
+    DeleteMode: boolean = false;
+    isSuccess: boolean = false;
+    selectedId: number | null = null;
     memberPointAddForm: FormGroup;
     pointsTableColumns: string[] = ['id', 'point_type', 'reward_code', 'point', 'transaction_document_no', 'status', 'date_created', 'pointsInDoller', 'real_amount', 'vat_amount', 'total_amount'];
     searchInputControl: FormControl = new FormControl();
@@ -63,7 +113,6 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
     selectedMemberPoint: MemberPoint | null = null;;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-   
     constructor( private _activatedRoute: ActivatedRoute,
         private _fuseConfirmationService: FuseConfirmationService,
         private _changeDetectorRef: ChangeDetectorRef,
@@ -72,6 +121,7 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
         private _formBuilder: FormBuilder,
         @Inject(DOCUMENT) private _document: any,
         private _router: Router,
+        private _userService: UserService
     )
     {
     }
@@ -82,7 +132,6 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
 
     ngOnInit(): void
     {
-        
         this._activatedRoute.url.subscribe((param) => {
             if (param != null) {
                 this.memberId = Number(param[0].path);
@@ -138,7 +187,9 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
                  this.isLoading = false;
              })
          ).subscribe();
-            
+
+        this.canEdit = this._userService.getViewUserPermissionByNavId('member');
+        this.canDelete = this._userService.getDeleteUserPermissionByNavId('member');
     }
 
     ngAfterViewInit(): void
@@ -189,7 +240,49 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
          this._changeDetectorRef.markForCheck();
      }
 
-  
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    toogleDeleteMode(DeleteMode: boolean | null = null): void {
+        if (DeleteMode === null) {
+            this.DeleteMode = !this.DeleteMode;
+        }
+        else {
+            this.DeleteMode = DeleteMode;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    cancelPopup(): void {
+        this.isSuccess = false;
+        this.toogleDeleteMode(false);
+        this.matDrawer.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    proceedPopup(): void {
+        this._memberPointService.getDeleteMemberPoint(this.selectedId)
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(300),
+            switchMap((query) => {
+                this.isLoading = true;
+                return this._memberPointService.getData(Number(this.memberId),0, 10, 'date_created', '');
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        )
+        .subscribe();
+        this.isSuccess = true;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    DeleteDrawer(id: number): void {
+        this.selectedId = id;
+        this.toogleDeleteMode(true);
+        this.matDrawer.open();
+        this._changeDetectorRef.markForCheck();
+    }
+
     createMemberPoint(): void
     {
         const newmemberPoint = this.memberPointAddForm.getRawValue();
@@ -214,7 +307,8 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
 
         this._changeDetectorRef.markForCheck();
     }
-   
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     AddFormclose(): void {
         this.tooglepointAddFormMode(false);
     }

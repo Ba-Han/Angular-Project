@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Transaction, TransactionPagination } from 'app/modules/admin/transaction/transaction.types';
 import { environment } from 'environments/environment';
 
@@ -38,7 +38,6 @@ export class TransactionService
         return this._pagination.asObservable();
     }
 
-   
     getData(id: number = 0, page: number = 0, limit: number = 10, sort: string = 'date_created', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: TransactionPagination; members: Transaction[] }>
     {
@@ -83,5 +82,18 @@ export class TransactionService
               })
           );
       }
+
+    // Delete API method
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    getDeleteTransaction(id: number){
+        return this._httpClient.delete(`${this._apiurl}/transaction/${id}`,
+        { responseType: 'text' })
+        .pipe(
+            map(() => true),
+            catchError((error) => {
+                console.error(error);
+                return of(false);
+            }));
+    };
 
 }

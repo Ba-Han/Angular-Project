@@ -224,6 +224,19 @@ export class MemberTierService {
             }));
     };
 
+    // Delete API method
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    getDeleteMemberTier(id: number){
+        return this._httpClient.delete(`${this._apiurl}/items/member_tier/${id}`,
+        { responseType: 'text' })
+        .pipe(
+            map(() => true),
+            catchError((error) => {
+                console.error(error);
+                return of(false);
+            }));
+    };
+
     getMemberTierLevels(): Observable<MemberTier[]> {
         return this._httpClient.get<any>(`${this._apiurl}/items/member_tier`, {
             //params: { limit: 5, sort: '-date_created' }
@@ -392,6 +405,7 @@ export class MemberTierService {
         )
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     UpdatePointSegment(id: number, pointsegment: PointSegment): Observable<PointSegment> {
         return this._httpClient.patch<PointSegment>(`${this._apiurl}/items/point_segment/${id}`, {
             "id": id,

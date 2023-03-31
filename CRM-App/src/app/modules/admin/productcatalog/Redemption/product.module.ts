@@ -13,6 +13,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { SharedModule } from 'app/shared/shared.module';
 import { ProductComponent } from 'app/modules/admin/productcatalog/Redemption/product.component';
 import { ProductListComponent } from 'app/modules/admin/productcatalog/Redemption/list/product.component';
@@ -40,7 +41,8 @@ import { ecommerceRoutes } from 'app/modules/admin/productcatalog/Redemption/pro
         MatSelectModule,
         MatSlideToggleModule,
         MatTooltipModule,
-        SharedModule
+        SharedModule,
+        MatSidenavModule
     ]
 })
 export class ProductModule {

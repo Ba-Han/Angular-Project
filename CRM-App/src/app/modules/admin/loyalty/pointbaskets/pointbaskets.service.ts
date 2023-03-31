@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
-import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError, delay } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError, delay, catchError } from 'rxjs';
 import { PointBasketPagination, PointBasket } from 'app/modules/admin/loyalty/pointbaskets/pointbaskets.types';
 
 @Injectable({
@@ -155,4 +155,16 @@ export class PointBasketService {
         );
     }
 
+    // Delete API method
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    getDeletePointBasket(id: number){
+        return this._httpClient.delete(`${this._apiurl}/items/point_basket/${id}`,
+        { responseType: 'text' })
+        .pipe(
+            map(() => true),
+            catchError((error) => {
+                console.error(error);
+                return of(false);
+            }));
+    };
 }

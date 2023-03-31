@@ -69,6 +69,13 @@ import { UserService } from 'app/core/user/user.service';
                 padding-left: 2rem;
             }
 
+            .deleteProductscss {
+                position: relative;
+                bottom: 0.6rem;
+                left: 33rem;
+                margin: -2rem;
+            }
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -91,6 +98,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     canDelete: boolean = false;
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
+    selectedId: number | null = null;
     searchInputControl: FormControl = new FormControl();
     ProductAddForm: FormGroup;
 
@@ -107,14 +115,11 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         private _userService: UserService
     ) {
     }
-
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
 
     ngOnInit(): void {
-
-
         this.ProductAddForm = this._formBuilder.group({
             id: [''],
             status: ['', [Validators.required]],
@@ -176,7 +181,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
                     this.isLoading = true;
-                    //const sort = this._sort.direction == "desc" ? "-" + this._sort.active : this._sort.active;
+                    //const sort = this._sort.direction === 'desc' ? '-' + this._sort.active : this._sort.active;
                     return this._productService.getProducts(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
                 }),
                 map(() => {
@@ -221,18 +226,32 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     cancelPopup(): void {
+        this.isSuccess = false;
         this.toogleDeleteMode(false);
         this.matDrawer.close();
         this._changeDetectorRef.markForCheck();
     }
 
-    proceedPopup(id: number): void {
-        this._productService.getDeleteExclusionProduct(id).subscribe();
+    proceedPopup(): void {
+        this._productService.getDeleteExclusionProduct(this.selectedId)
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(300),
+            switchMap((query) => {
+                this.isLoading = true;
+                return this._productService.getProducts(0, 10, 'item_number', 'asc');
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        )
+        .subscribe();
         this.isSuccess = true;
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    DeleteDrawer(): void {
+    DeleteDrawer(id: number): void {
+        this.selectedId = id;
         this.toogleDeleteMode(true);
         this.matDrawer.open();
         this._changeDetectorRef.markForCheck();

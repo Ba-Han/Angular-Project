@@ -183,8 +183,8 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
 
         this._analyticsService.earnPoints$
             .subscribe((response: any) => {
-                this.earnPoint.totalEarnPoint = response ? response.TotalEarnPoint ? response.TotalEarnPoint : 0 : 0;
-                this.earnPoint.totalEarnDolarValue = response ? response.TotalEarnDolarValue ? response.TotalEarnDolarValue : 0 : 0;
+                this.earnPoint.totalEarnPoint = response ? response.totalEarnPoint ? response.totalEarnPoint : 0 : 0;
+                this.earnPoint.totalEarnDolarValue = response ? response.totalEarnDolarValue ? response.totalEarnDolarValue : 0 : 0;
             });
         this._prepareChartData();
     }

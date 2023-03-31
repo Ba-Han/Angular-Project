@@ -4,6 +4,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ActivatedRoute, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatDrawer } from '@angular/material/sidenav';
 import { debounceTime, map,tap, merge, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
@@ -33,6 +34,48 @@ import { UserService } from 'app/core/user/user.service';
                     grid-template-columns: 150px 200px 150px;
                 }
             }
+
+            .reset_popup {
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                width: 28% !important;
+                height: 34% !important;
+            }
+
+            .parent_popup {
+                position: fixed;
+                display: grid;
+                justify-content: center;
+                padding: 4rem;
+            }
+
+            .child_btn {
+                padding-left: 1.5rem;
+                position: fixed;
+                margin-top: 2rem !important;
+            }
+
+            .update_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(0, 128, 0);
+                padding: 4rem;
+                font-size: 16px;
+            }
+
+            .delete-scss {
+                position: fixed;
+                padding-left: 2rem;
+            }
+
+            .deleteChannelscss {
+                position: relative;
+                bottom: 0.6rem;
+                left: 33rem;
+                margin: -2rem;
+            }
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -42,6 +85,8 @@ import { UserService } from 'app/core/user/user.service';
 export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
 
     channels$: Observable<any[]>;
     channel$: Observable<Channel>;
@@ -50,9 +95,13 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
     code: string;
     AddMode: boolean = false;
     canEdit: boolean = false;
+    canDelete: boolean = false;
+    DeleteMode: boolean = false;
+    isSuccess: boolean = false;
+    selectedCode: string | null = null;
     searchInputControl: FormControl = new FormControl();
     ChannelAddForm: FormGroup;
-   
+
     selectedChannel: Channel | null = null;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -72,8 +121,6 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
     // -----------------------------------------------------------------------------------------------------
 
     ngOnInit(): void {
-
-        
         this.ChannelAddForm = this._formBuilder.group({
             code: ['', Validators.required],
             status: ['active', Validators.required],
@@ -100,7 +147,6 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.channels$ = this._channelService.channels$;
 
         // search
-       
         this.searchInputControl.valueChanges
             .pipe(
                 takeUntil(this._unsubscribeAll),
@@ -115,6 +161,7 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
             )
             .subscribe();
             this.canEdit = this._userService.getViewUserPermissionByNavId('channel');
+            this.canDelete = this._userService.getDeleteUserPermissionByNavId('channel');
     }
 
     ngAfterViewInit(): void {
@@ -155,11 +202,12 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
- 
+
     trackByFn(index: number, item: any): any {
         return item.id || index;
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     tooglepointAddFormMode(AddMode: boolean | null = null): void {
         if (AddMode === null) {
             this.AddMode = !this.AddMode;
@@ -172,11 +220,54 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
         this._changeDetectorRef.markForCheck();
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    toogleDeleteMode(DeleteMode: boolean | null = null): void {
+        if (DeleteMode === null) {
+            this.DeleteMode = !this.DeleteMode;
+        }
+        else {
+            this.DeleteMode = DeleteMode;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    cancelPopup(): void {
+        this.isSuccess = false;
+        this.toogleDeleteMode(false);
+        this.matDrawer.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    proceedPopup(): void {
+        this._channelService.getDeleteChannel(this.selectedCode)
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(300),
+            switchMap((query) => {
+                this.isLoading = true;
+                return this._channelService.getChannels(0, 10, 'name', 'asc');
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        )
+        .subscribe();
+        this.isSuccess = true;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    DeleteDrawer(code: string): void {
+        this.selectedCode = code;
+        this.toogleDeleteMode(true);
+        this.matDrawer.open();
+        this._changeDetectorRef.markForCheck();
+    }
+
     createChannel(): void {
         const channel = this.ChannelAddForm.getRawValue();
         this.isLoading = false;
         this._channelService.createChnnel(channel)
-            .subscribe((channel: any) => {
+            .subscribe(() => {
                 this.tooglepointAddFormMode(false);
             });
     }
