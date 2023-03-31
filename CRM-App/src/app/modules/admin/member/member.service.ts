@@ -214,7 +214,7 @@ export class MemberService
         );
     }
 
-    updateMember(id:number,member: MemberInfo): Observable<Member> {
+    updateMember(id: number,member: MemberInfo): Observable<Member> {
         return this._httpClient.patch<Member>(`${this._apiurl}/items/member/${id}`, {
             "id": id,
             "first_name": member.first_name,

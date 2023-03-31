@@ -213,18 +213,18 @@
                                             {{member.total_redeemed_points}}
                                         </div>
                                         <div class="hidden lg:block" style="text-align:center;">
-                                            <ng-container *ngIf="member.accept_email == true">
+                                            <ng-container *ngIf="member.accept_email === true">
                                                 Yes
                                             </ng-container>
-                                            <ng-container *ngIf="member.accept_email == false">
+                                            <ng-container *ngIf="member.accept_email === false">
                                                 No
                                             </ng-container>
                                         </div>
                                         <div class="hidden lg:block" style="text-align:center;">
-                                            <ng-container *ngIf="member.accept_mobile_sms == true">
+                                            <ng-container *ngIf="member.accept_mobile_sms === true">
                                                 Yes
                                             </ng-container>
-                                            <ng-container *ngIf="member.accept_mobile_sms == false">
+                                            <ng-container *ngIf="member.accept_mobile_sms === false">
                                                 No
                                             </ng-container>
                                         </div>

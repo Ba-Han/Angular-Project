@@ -132,10 +132,10 @@
                         <div class="flex p-2">
                             <mat-icon svgIcon="heroicons_solid:mail-open" class="icon-size-5"></mat-icon>
                             <div class="font-bold ml-2 leading-6 w-2/4">  Allow Email : </div>
-                            <ng-container *ngIf="member.member[0].accept_email == true">
+                            <ng-container *ngIf="member.member[0].accept_email === true">
                                 <div class="ml-2 leading-6 w-3/4">Yes</div>
                             </ng-container>
-                            <ng-container *ngIf="member.member[0].accept_email == false">
+                            <ng-container *ngIf="member.member[0].accept_email === false">
                                 <div class="ml-2 leading-6 w-3/4">No</div>
                             </ng-container>
 
@@ -145,10 +145,10 @@
                         <div class="flex p-2">
                             <mat-icon svgIcon="heroicons_solid:chat-alt" class="icon-size-5"></mat-icon>
                             <div class="font-bold ml-2 leading-6 w-2/4">  Allow SMS : </div>
-                            <ng-container *ngIf="member.member[0].accept_mobile_sms == true">
+                            <ng-container *ngIf="member.member[0].accept_mobile_sms === true">
                                 <div class="ml-2 leading-6 w-3/4">Yes</div>
                             </ng-container>
-                            <ng-container *ngIf="member.member[0].accept_mobile_sms == false">
+                            <ng-container *ngIf="member.member[0].accept_mobile_sms === false">
                                 <div class="ml-2 leading-6 w-3/4">No</div>
                             </ng-container>
                         </div>

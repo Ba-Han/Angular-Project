@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { MemberPoint, MemberPointPagination, PointSegment, PointSegmentPagination } from 'app/modules/admin/memberpoint/memberpoint.types';
 import { environment } from 'environments/environment';
 import { Member } from '../member/member.types';
@@ -270,5 +270,16 @@ export class MemberPointService
           );
       }
 
-
+    // Delete API method
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    getDeleteMemberPoint(id: number){
+        return this._httpClient.delete(`${this._apiurl}/items/member_point/${id}`,
+        { responseType: 'text' })
+        .pipe(
+            map(() => true),
+            catchError((error) => {
+                console.error(error);
+                return of(false);
+            }));
+    };
 }
