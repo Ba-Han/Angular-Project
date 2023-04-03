@@ -67,7 +67,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     pointDetailAddMode: boolean = false;
     transactionDetailMode: boolean = false;
     isLoading: boolean = false;
-    memberTiers:any;
+    memberTiers: any;
     tagsEditMode: boolean = false;
     member: Member;
     memberForm: FormGroup;
@@ -165,9 +165,10 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                 }
 
                 // Patch values to the form
+                
                 this.memberForm.patchValue(member.member[0]);
                 if (member.member[0].member_tier != null) {
-                    const tierId = this.memberTiers.find(x => x.name === member.member[0].member_tier).id;
+                    const tierId = this.memberTiers.find(x => x.id === member.member[0].member_tier_id);
                     this.memberForm.get('member_tier').setValue(tierId);
                 }
                     this._changeDetectorRef.markForCheck();
@@ -189,6 +190,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                 this.recentTransactionsDataSource.data = transactions;
 
             });
+
     }
 
      ngAfterViewInit(): void

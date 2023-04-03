@@ -45,6 +45,10 @@
                 <div class="w-full max-w-3xl">
                     <div class="flex flex-col mt-4 pt-6 space-y-3">
                         <div class="flex sm:items-center">
+                            <div class="w-1/4">User Name: </div>
+                            <div class="ml-6 leading-6">{{loginUser.username}}</div>
+                        </div>
+                        <div class="flex sm:items-center">
                             <div class="w-1/4">First Name: </div>
                             <div class="ml-6 leading-6">{{loginUser.first_name}}</div>
                         </div>
@@ -96,6 +100,19 @@
                                 <input matInput
                                        [formControlName]="'id'"
                                        [placeholder]="'id'" />
+                            </mat-form-field>
+                        </div>
+
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>User Name</mat-label>
+                                <mat-icon matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                <input matInput
+                                       [formControlName]="'username'"
+                                       [placeholder]="'username'"
+                                       [spellcheck]="false">
                             </mat-form-field>
                         </div>
 
