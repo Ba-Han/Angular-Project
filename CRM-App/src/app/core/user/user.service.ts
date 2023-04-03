@@ -106,14 +106,13 @@ export class UserService {
     updateProfile(user: User): Observable<any> {
         return this._httpClient
             .patch<User>(`${this._apiurl}/users/me`, {
+                username: user.username,
                 first_name: user.first_name,
                 last_name: user.last_name,
                 email: user.email,
             })
             .pipe(
-                map((updateUser) => {
-                    return updateUser;
-                })
+                map(updateUser => updateUser)
             );
     }
     changeNewPassword(email: string, currentPassord: string, newPassword: string ): Observable<any> {
@@ -124,9 +123,7 @@ export class UserService {
                 new_password: newPassword
             })
             .pipe(
-                map((updatePass) => {
-                    return updatePass;
-                })
+                map(updatePass => updatePass)
             );
     }
     changePassword(pass: string): Observable<any> {
@@ -135,9 +132,7 @@ export class UserService {
                 password: pass,
             })
             .pipe(
-                map((updatePass) => {
-                    return updatePass;
-                })
+                map(updatePass => updatePass)
             );
     }
     checkCurrentPass(pass: string, email: string): Observable<any> {
@@ -147,9 +142,7 @@ export class UserService {
                 password: pass,
             })
             .pipe(
-                map((updatePass) => {
-                    return updatePass;
-                })
+                map(updatePass => updatePass)
             );
     }
 
@@ -170,10 +163,8 @@ export class UserService {
                 tfa_url: url,
             })
             .pipe(
-                map((updateUser) => {
-                    return updateUser;
-                })
+                map(updateUser => updateUser)
             );
     }
-    
+
 }

@@ -805,8 +805,8 @@
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Allow Email</mat-label>
                             <mat-select [formControlName]="'accept_email'">
-                                <mat-option value="true">Yes</mat-option>
-                                <mat-option value="false">No</mat-option>
+                                <mat-option [value]="true">Yes</mat-option>
+                                <mat-option [value]="false">No</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -816,8 +816,8 @@
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Allow SMS</mat-label>
                             <mat-select [formControlName]="'accept_mobile_sms'">
-                                <mat-option value="true">Yes</mat-option>
-                                <mat-option value="false">No</mat-option>
+                                <mat-option [value]="true">Yes</mat-option>
+                                <mat-option [value]="false">No</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>

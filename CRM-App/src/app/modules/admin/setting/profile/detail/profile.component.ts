@@ -27,12 +27,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
     UserEditForm: FormGroup;
     ChangePasswordForm: FormGroup;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('changePasswordNgForm') changePasswordNgForm: NgForm;
 
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     alert: { type: FuseAlertType; message: string } = {
         type: 'success',
         message: ''
     };
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     showAlert: boolean = false;
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
@@ -51,6 +54,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.UserEditForm = this._formBuilder.group({
             id: [''],
+            username: ['', Validators.required],
             first_name: ['', Validators.required],
             last_name: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
@@ -114,7 +118,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 finalize(() => {
                     this.showAlert = true;
                 })
-        )
+            )
             .subscribe(
                 (response) => {
                     this.alert = {
@@ -133,11 +137,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     changeUserPassword(): void {
         this.showAlert = false;
         const currentpass = this.ChangePasswordForm.get('currentPassword').value;
-       
+
         this._userService.checkCurrentPass(currentpass, this.loginEmail)
             .pipe(
                 finalize(() => {
-                    if (this.alert.type == "error") {
+                    if (this.alert.type === 'error') {
                         this.showAlert = true;
                     }
                     else {
