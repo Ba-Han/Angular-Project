@@ -56,6 +56,19 @@ import { UserService } from 'app/modules/admin/setting/user/user.service';
                     grid-template-columns: 245px 150px 150px 245px;
                 }
             }
+
+            .sort-asc::after {
+                content: '\u2191';
+              }
+
+            .sort-desc::after {
+                content: '\u2193';
+            }
+
+            .user-2-sort {
+                position: static;
+                width: 9rem !important;
+            }
         `,
     ],
     encapsulation: ViewEncapsulation.None,
@@ -75,6 +88,8 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
     UserAddForm: FormGroup;
     code: string;
     selectedChannel: User | null = null;
+    isAscending: boolean = true;
+    selectedCoulumn = 'username';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     private passwordStrength: 0;
     roles: any;
@@ -201,6 +216,28 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
 
         // Mark for check
         this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingPageList() {
+        this.isAscending = !this.isAscending;
+        if ( this.isAscending && this.selectedCoulumn === 'username' ) {
+            this._userService.getAppUsers(0, 10, 'username', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'username' ) {
+            this._userService.getAppUsers(0, 10, 'username', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'firstname' ) {
+            this._userService.getAppUsers(0, 10, 'first_name', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'firstname' ) {
+            this._userService.getAppUsers(0, 10, 'first_name', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'lastname' ) {
+            this._userService.getAppUsers(0, 10, 'last_name', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'lastname' ) {
+            this._userService.getAppUsers(0, 10, 'last_name', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'email' ) {
+            this._userService.getAppUsers(0, 10, 'email', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'email' ) {
+            this._userService.getAppUsers(0, 10, 'email', 'desc').subscribe();
+        }
     }
 
     createUser(): void {

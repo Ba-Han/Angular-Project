@@ -59,6 +59,7 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(MatSort) private _sort: MatSort;
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild(MatExpansionModule) accordion: MatExpansionModule;
 
     members$: Observable<Member[]>;
@@ -82,13 +83,15 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
     searchText: string;
     searchFilter: string;
     selectTier: boolean;
-    selectTierType : string;
+    selectTierType: string;
     memberTiers: any;
     optionList: any;
     searchInputControl: FormControl = new FormControl();
     selectedMember: Member | null = null;
     selectedProductForm: FormGroup;
     searchForm: FormGroup;
+    isAscending: boolean = true;
+    selectedCoulumn = 'membercode';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -114,8 +117,8 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
     // -----------------------------------------------------------------------------------------------------
 
     ngOnInit(): void {
-        let searchFilterTierId = this._activatedRoute.snapshot.paramMap.get('membertierid');
-        this.searchFilter = searchFilterTierId ? '{"member_tier":{"_eq":"' + searchFilterTierId + '"}}' : "";
+        const searchFilterTierId = this._activatedRoute.snapshot.paramMap.get('membertierid');
+        this.searchFilter = searchFilterTierId ? '{"member_tier":{"_eq":"' + searchFilterTierId + '"}}' : '';
         this.selectTier = false;
         this.searchForm = this._formBuilder.group({
             field: [''],
@@ -148,7 +151,7 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
                 this._changeDetectorRef.markForCheck();
             });
 
-        //Subscribe to search input field value changes  
+        //Subscribe to search input field value changes
           this.searchInputControl.valueChanges
             .pipe(
                 takeUntil(this._unsubscribeAll),
@@ -204,7 +207,7 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
                             this._sort.direction,
                             this.searchValue,
                             this.searchFilter,
-                            this.searchField == "full_name" ? 'custom' : '',
+                            this.searchField === 'full_name' ? 'custom' : '',
                         );
                     }),
                     map(() => {
@@ -237,22 +240,50 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
         return item.id || index;
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingPageList() {
+        this.isAscending = !this.isAscending;
+        if ( this.isAscending && this.selectedCoulumn === 'membercode' ) {
+            this._memberService.getMembers(0, 10, 'member_code', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'membercode' ) {
+            this._memberService.getMembers(0, 10, 'member_code', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'firstname' ) {
+            this._memberService.getMembers(0, 10, 'first_name', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'firstname' ) {
+            this._memberService.getMembers(0, 10, 'first_name', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'lastname' ) {
+            this._memberService.getMembers(0, 10, 'last_name', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'lastname' ) {
+            this._memberService.getMembers(0, 10, 'last_name', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'email' ) {
+            this._memberService.getMembers(0, 10, 'email', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'email' ) {
+            this._memberService.getMembers(0, 10, 'email', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'mobile' ) {
+            this._memberService.getMembers(0, 10, 'mobile_phone', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'mobile' ) {
+            this._memberService.getMembers(0, 10, 'mobile_phone', 'desc').subscribe();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     advanceSearch() {
-        let searchOption =
-            this.searchForm.value.option && this.searchForm.value.option != ''
+        const searchOption =
+            this.searchForm.value.option && this.searchForm.value.option !== ''
                 ? this.searchForm.value.option
                 : 'member_code';
-        let searchField =
-            this.searchForm.value.field && this.searchForm.value.field != ''
+        const searchField =
+            this.searchForm.value.field && this.searchForm.value.field !== ''
                 ? this.searchForm.value.field
                 : '_eq';
         let searchText = this.searchForm.value.searchValue;
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         let filter = '';
         if (this.selectTier) {
             searchText = this.searchForm.value.searchTierValue;
         }
-        searchText = searchText === null ? "" : searchText;
-        if ( searchText !== "") {
+        searchText = searchText === null ? '' : searchText;
+        if ( searchText !== '') {
             filter =
                 '{"' +
                 searchField +
@@ -260,7 +291,7 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
                 searchOption +
                 '":"' +
                 searchText +
-                '"}}';  
+                '"}}';
         }
         this.searchFilter = filter;
         this.searchField = searchField;
@@ -268,19 +299,21 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
         // this.searchForm.value.searchValue = "mahesh";
 
         return this._memberService
-            .getMembers(0, 10, 'member_code', 'asc', this.searchValue, filter,  this.searchField == "full_name" ? 'custom' : '')
+            .getMembers(0, 10, 'member_code', 'asc', this.searchValue, filter,  this.searchField === 'full_name' ? 'custom' : '')
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((tier: any) => {});
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     clearSearch() {
         this.searchForm.reset();
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     fieldChange(e) {
         this.selectTier = false;
         this.optionList = this.getOptionList();
-        if (e.value == 'member_tier' || e.value == 'status') {
+        if (e.value === 'member_tier' || e.value === 'status') {
             this.selectTierType = e.value;
             this.selectTier = true;
             this.optionList = [
@@ -290,32 +323,36 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getTierList() {
         this._memberTierService
             .getTierList()
             .pipe(finalize(() => {}))
             .subscribe((response) => {
-                let tiers: any = response.data ? response.data : [];
+                const tiers: any = response.data ? response.data : [];
                 this.memberTiers = tiers;
                 this.ngOnInit();
             });
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getOptionList() {
-        let optionList: any = [
+        const optionList: any = [
             { value: '_eq', name: 'Equals' },
             { value: '_neq', name: 'Not Equals' },
             { value: '_contains', name: 'Contain' },
-            { value: '_ncontains', name: "Doesn't contain" },
+            { value: '_ncontains', name: 'Doesn\'t contain' },
             { value: '_starts_with', name: 'Starts with' },
             { value: '_ends_with', name: 'Ends with' },
         ];
         return optionList;
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     openAdvancedSearch(panel: MatExpansionPanel) {
         panel.open();
     }
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     closeAdvancedSearch(panel: MatExpansionPanel) {
         panel.close();
     }

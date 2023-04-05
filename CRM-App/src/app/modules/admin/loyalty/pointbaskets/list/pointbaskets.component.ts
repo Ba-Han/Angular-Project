@@ -110,6 +110,19 @@ import { UserService } from 'app/core/user/user.service';
                 left: 26rem;
                 margin: -2rem;
             }
+
+            .sort-asc::after {
+                content: '\u2191';
+              }
+
+            .sort-desc::after {
+                content: '\u2193';
+            }
+
+            .pointbasket-2-sort {
+                position: static;
+                width: 11rem !important;
+            }
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -148,6 +161,8 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
     toendTypeValue = 0;
     fromtypeValue = 0;
     fromstarttypeValue = 0;
+    isAscending: boolean = true;
+    selectedCoulumn = 'name';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -333,6 +348,20 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
         this.toogleDeleteMode(true);
         this.matDrawer.open();
         this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingPageList() {
+        this.isAscending = !this.isAscending;
+        if ( this.isAscending && this.selectedCoulumn === 'name' ) {
+            this._pointBasketService.getPointBaskets(0, 10, 'name', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'name' ) {
+            this._pointBasketService.getPointBaskets(0, 10, 'name', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'redemptiontype' ) {
+            this._pointBasketService.getPointBaskets(0, 10, 'spending_type', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'redemptiontype' ) {
+            this._pointBasketService.getPointBaskets(0, 10, 'spending_type', 'desc').subscribe();
+        }
     }
 
     createPointBasket(): void {

@@ -24,6 +24,24 @@
                                [autocomplete]="'off'"
                                [placeholder]="'Search user'">
                     </mat-form-field>
+
+                    <!--sorting dropdown-->
+                    <mat-form-field class="ml-4 fuse-mat-no-subscript store-2-sort">
+                        <mat-select [(ngModel)]="selectedCoulumn">
+                            <mat-option value="username">Username</mat-option>
+                            <mat-option value="firstname">First Name</mat-option>
+                            <mat-option value="lastname">Last Name</mat-option>
+                            <mat-option value="email">Email</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <!--sorting button-->
+                    <button
+                        (click)="sortingPageList()"
+                        [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
+                        mat-flat-button
+                        [color]="'primary'">
+                    </button>
+
                     <!-- <button class="ml-4"
                             mat-flat-button
                             [color]="'primary'"
@@ -47,7 +65,8 @@
                                      matSort
                                      matSortDisableClear>
 
-                                    <div [mat-sort-header]="'username'"> Username </div>
+                                    <!-- <div [mat-sort-header]="'username'"> Username </div> -->
+                                    <div> Username </div>
                                     <div> First Name </div>
                                     <div> Last Name </div>
                                     <div> Email </div>

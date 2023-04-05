@@ -75,6 +75,19 @@ import { UserService } from 'app/core/user/user.service';
                 left: 50rem;
                 margin: -2rem;
             }
+
+            .sort-asc::after {
+                content: '\u2191';
+              }
+
+            .sort-desc::after {
+                content: '\u2193';
+            }
+
+            .store-2-sort {
+                position: static;
+                width: 9rem !important;
+            }
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -101,6 +114,8 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
     StoreAddForm: FormGroup;
     code: string;
     selectedChannel: Store | null = null;
+    isAscending: boolean = true;
+    selectedCoulumn = 'storename';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -259,6 +274,28 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.toogleDeleteMode(true);
         this.matDrawer.open();
         this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingPageList() {
+        this.isAscending = !this.isAscending;
+        if ( this.isAscending && this.selectedCoulumn === 'storename' ) {
+            this._storeService.getStores(0, 10, 'name', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'storename' ) {
+            this._storeService.getStores(0, 10, 'name', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'storecode' ) {
+            this._storeService.getStores(0, 10, 'code', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'storecode' ) {
+            this._storeService.getStores(0, 10, 'code', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'country' ) {
+            this._storeService.getStores(0, 10, 'country', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'country' ) {
+            this._storeService.getStores(0, 10, 'country', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'status' ) {
+            this._storeService.getStores(0, 10, 'status', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'status' ) {
+            this._storeService.getStores(0, 10, 'status', 'desc').subscribe();
+        }
     }
 
     createStore(): void {

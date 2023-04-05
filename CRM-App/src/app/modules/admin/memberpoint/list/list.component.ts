@@ -81,6 +81,19 @@ import { UserService } from 'app/core/user/user.service';
                 left: 62rem;
                 margin: -2rem;
             }
+
+            .sort-asc::after {
+                content: '\u2191';
+              }
+
+            .sort-desc::after {
+                content: '\u2193';
+            }
+
+            .memberpoint-2-sort {
+                position: static;
+                width: 10rem !important;
+            }
         `
     ],
     encapsulation  : ViewEncapsulation.None,
@@ -110,7 +123,9 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
     pointsTableColumns: string[] = ['id', 'point_type', 'reward_code', 'point', 'transaction_document_no', 'status', 'date_created', 'pointsInDoller', 'real_amount', 'vat_amount', 'total_amount'];
     searchInputControl: FormControl = new FormControl();
     transactionSearchInputControl: FormControl = new FormControl();
-    selectedMemberPoint: MemberPoint | null = null;;
+    selectedMemberPoint: MemberPoint | null = null;
+    isAscending: boolean = true;
+    selectedCoulumn = 'documentno';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor( private _activatedRoute: ActivatedRoute,
@@ -146,7 +161,7 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
             point_type_int: ['', [Validators.required]],
             reward_code: ['', [Validators.required]],
             point: ['', [Validators.required]],
-            status: ['', [Validators.required]],
+            /* status: ['', [Validators.required]], */
             comment: ['', [Validators.required]],
         });
 
@@ -281,6 +296,24 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
         this.toogleDeleteMode(true);
         this.matDrawer.open();
         this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingPageList() {
+        this.isAscending = !this.isAscending;
+        if ( this.isAscending && this.selectedCoulumn === 'documentno' ) {
+            this._memberPointService.getData(Number(this.memberId),0, 10, 'transaction_document_no', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'documentno' ) {
+            this._memberPointService.getData(Number(this.memberId),0, 10, 'transaction_document_no', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'pointtype' ) {
+            this._memberPointService.getData(Number(this.memberId),0, 10, 'point_type', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'pointtype' ) {
+            this._memberPointService.getData(Number(this.memberId),0, 10, 'point_type', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'points' ) {
+            this._memberPointService.getData(Number(this.memberId),0, 10, 'point', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'points' ) {
+            this._memberPointService.getData(Number(this.memberId),0, 10, 'point', 'desc').subscribe();
+        }
     }
 
     createMemberPoint(): void

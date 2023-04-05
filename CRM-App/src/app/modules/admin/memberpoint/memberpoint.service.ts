@@ -77,7 +77,7 @@ export class MemberPointService
     get transactionpagination$(): Observable<TransactionPagination> {
         return this._transactionpagination.asObservable();
     }
-   
+
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
@@ -208,7 +208,7 @@ export class MemberPointService
             switchMap(memberPoints => this._httpClient.post<any>(`${this._apiurl}/items/member_point`, {
                 'point_type': memberPoint.point_type,
                 'point_type_int': memberPoint.point_type_int,
-                'status': memberPoint.status,
+                /* 'status': memberPoint.status, */
                 'reward_code': memberPoint.reward_code,
                 'point': memberPoint.point,
                 'member': memberPoint.member,
@@ -234,7 +234,7 @@ export class MemberPointService
                   'id': memberPoint.id,
                   'point_type': memberPoint.point_type,
                   'point_type_int': memberPoint.point_type_int,
-                  'status': memberPoint.status,
+                  /* 'status': memberPoint.status, */
                   'reward_code': memberPoint.reward_code,
                   'point': memberPoint.point,
                   'member': memberPoint.member,

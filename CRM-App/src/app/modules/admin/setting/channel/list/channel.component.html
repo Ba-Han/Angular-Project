@@ -86,6 +86,23 @@
                                         [autocomplete]="'off'"
                                         [placeholder]="'Search channel'">
                             </mat-form-field>
+
+                            <!--sorting dropdown-->
+                            <mat-form-field class="ml-4 fuse-mat-no-subscript channel-2-sort">
+                                <mat-select [(ngModel)]="selectedCoulumn">
+                                    <mat-option value="channelcode">Channel Code</mat-option>
+                                    <mat-option value="channelname">Channel Name</mat-option>
+                                    <mat-option value="status">Status</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <!--sorting button-->
+                            <button
+                                (click)="sortingPageList()"
+                                [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
+                                mat-flat-button
+                                [color]="'primary'">
+                            </button>
+                            
                             <button class="ml-4"
                                     mat-flat-button
                                     [color]="'primary'"
@@ -108,10 +125,14 @@
                                         <div class="channel-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                                 matSort
                                                 matSortDisableClear>
+                                            
+                                            <div> Channel Code </div>
+                                            <div> Channel Name </div>
+                                            <div> Status </div>
         
-                                            <div [mat-sort-header]="'code'"> Channel Code </div>
+                                            <!-- <div [mat-sort-header]="'code'"> Channel Code </div>
                                             <div [mat-sort-header]="'name'"> Channel Name </div>
-                                            <div [mat-sort-header]="'status'"> Status </div>
+                                            <div [mat-sort-header]="'status'"> Status </div> -->
                                         </div>
         
         

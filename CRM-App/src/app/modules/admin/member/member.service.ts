@@ -81,7 +81,7 @@ export class MemberService
         return this._httpClient.get<any>(`${this._apiurl}/${fullurl}`, {
             params: {
                 meta: 'filter_count',
-                fields: fields == '' ?'id,member_code,first_name,last_name,email,mobile_phone,registration_date, member_tier.name, accept_email,accept_mobile_sms, total_points, total_redeemed_points,expiredTotalPoints,dollerValueEarningExpired'
+                fields: fields == '' ?'id,member_code,first_name,last_name,email,mobile_phone,registration_date, member_tier.name, accept_email,accept_mobile_sms, available_points , total_points, total_redeemed_points,expiredTotalPoints,dollerValueEarningExpired'
                 :'m.id,mt.name as member_tier, member_code,first_name,last_name,email,mobile_phone,registration_date,accept_email,accept_mobile_sms',
                 filter:filter,
                 page: page+1,

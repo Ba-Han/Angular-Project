@@ -111,6 +111,19 @@ import { UserService } from 'app/core/user/user.service';
                 left: 62rem;
                 margin: -2rem;
             }
+
+            .sort-asc::after {
+                content: '\u2191';
+              }
+
+            .sort-desc::after {
+                content: '\u2193';
+            }
+
+            .pointrule-2-sort {
+                position: static;
+                width: 10rem !important;
+            }
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -169,6 +182,8 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     fromtypeValue = 0;
     fromstarttypeValue = 0;
     isButtonDisabled: boolean = true;
+    isAscending: boolean = true;
+    selectedCoulumn = 'name';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -462,6 +477,36 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         this.toogleDeleteMode(true);
         this.drawerOne.open();
         this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingPageList() {
+        this.isAscending = !this.isAscending;
+        if ( this.isAscending && this.selectedCoulumn === 'name' ) {
+            this._pointRuleService.getPointRules(0, 10, 'name', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'name' ) {
+            this._pointRuleService.getPointRules(0, 10, 'name', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'rewardcode' ) {
+            this._pointRuleService.getPointRules(0, 10, 'reward_code', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'rewardcode' ) {
+            this._pointRuleService.getPointRules(0, 10, 'reward_code', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'pointvalue' ) {
+            this._pointRuleService.getPointRules(0, 10, 'point_value', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'pointvalue' ) {
+            this._pointRuleService.getPointRules(0, 10, 'point_value', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'membertier' ) {
+            this._pointRuleService.getPointRules(0, 10, 'member_tierFullName', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'membertier' ) {
+            this._pointRuleService.getPointRules(0, 10, 'member_tierFullName', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'startdate' ) {
+            this._pointRuleService.getPointRules(0, 10, 'start_date', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'startdate' ) {
+            this._pointRuleService.getPointRules(0, 10, 'start_date', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'enddate' ) {
+            this._pointRuleService.getPointRules(0, 10, 'end_date', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'enddate' ) {
+            this._pointRuleService.getPointRules(0, 10, 'end_date', 'desc').subscribe();
+        }
     }
 
     createPointRule(): void {

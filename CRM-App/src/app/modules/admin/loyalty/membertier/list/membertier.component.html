@@ -692,6 +692,23 @@
                                    [autocomplete]="'off'"
                                    [placeholder]="'Search member tier'">
                         </mat-form-field>
+
+                        <!--sorting dropdown-->
+                        <mat-form-field class="ml-4 fuse-mat-no-subscript membertier-2-sort">
+                            <mat-select [(ngModel)]="selectedCoulumn">
+                                <mat-option value="name">Name</mat-option>
+                                <mat-option value="code">Code</mat-option>
+                                <mat-option value="level">Level</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <!--sorting button-->
+                        <button
+                            (click)="sortingPageList()"
+                            [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
+                            mat-flat-button
+                            [color]="'primary'">
+                        </button>
+
                         <button class="ml-4"
                                 mat-flat-button
                                 [color]="'primary'"
@@ -714,10 +731,16 @@
                                     <div class="membertier-list-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                          matSort
                                          matSortDisableClear>
-                                        <div [mat-sort-header]="'name'"> Name</div>
+
+                                        <div> Name</div>
+                                        <div> Code </div>
+                                        <div> Level </div>
+                                        <div>  Condition </div>
+
+                                        <!-- <div [mat-sort-header]="'name'"> Name</div>
                                         <div [mat-sort-header]="'code'"> Code </div>
                                         <div [mat-sort-header]="'level'"> Level </div>
-                                        <div>  Condition </div>
+                                        <div>  Condition </div> -->
                                         <!--<div [mat-sort-header]="'point_rule'" class="lg:flex items-center"> Point Rule </div>-->
                                         <!--<div class="hidden sm:block">Details</div>-->
                                     </div>

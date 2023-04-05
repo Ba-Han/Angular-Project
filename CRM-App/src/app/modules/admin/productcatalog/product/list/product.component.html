@@ -85,6 +85,23 @@
                                        [autocomplete]="'off'"
                                        [placeholder]="'Search product'">
                             </mat-form-field>
+
+                            <!--sorting dropdown-->
+                            <mat-form-field class="ml-4 fuse-mat-no-subscript">
+                                <mat-select [(ngModel)]="selectedCoulumn">
+                                    <mat-option value="sku">SKU</mat-option>
+                                    <mat-option value="name">Name</mat-option>
+                                    <mat-option value="status">Status</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <!--sorting button-->
+                            <button
+                                (click)="sortingPageList()"
+                                [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
+                                mat-flat-button
+                                [color]="'primary'">
+                            </button>                                                         
+
                             <button class="ml-4"
                                     mat-flat-button
                                     [color]="'primary'"
@@ -108,10 +125,14 @@
                                              matSort
                                              matSortDisableClear>
 
-                                            <div [mat-sort-header]="'item_number'"> SKU </div>
-                                            <div [mat-sort-header]="'item_name'"> Name </div>
+                                            <div> SKU </div>
+                                            <div> Name </div>
+                                            <div> Status </div>
+
+                                            <!-- <div [mat-sort-header]="'item_number'"> SKU </div> -->
+                                            <!-- <div [mat-sort-header]="'item_name'"> Name </div> -->
                                             <!-- <div [mat-sort-header]="'price'"> Price </div> -->
-                                            <div [mat-sort-header]="'status'"> Status </div>
+                                            <!-- <div [mat-sort-header]="'status'"> Status </div> -->
                                         </div>
         
         

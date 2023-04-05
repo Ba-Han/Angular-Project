@@ -104,12 +104,13 @@
                         </div>
 
                         <div class="mt-8">
-                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-form-field class="fuse-mat-no-subscript w-full" disabled>
                                 <mat-label>User Name</mat-label>
                                 <mat-icon matPrefix
                                           class="hidden sm:flex icon-size-5"
                                           [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
                                 <input matInput
+                                       [readonly] = "true"
                                        [formControlName]="'username'"
                                        [placeholder]="'username'"
                                        [spellcheck]="false">

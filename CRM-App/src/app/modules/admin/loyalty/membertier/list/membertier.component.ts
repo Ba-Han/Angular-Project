@@ -110,6 +110,19 @@ import { UserService } from 'app/core/user/user.service';
                 left: 55rem;
                 margin: -2rem;
             }
+
+            .sort-asc::after {
+                content: '\u2191';
+              }
+
+            .sort-desc::after {
+                content: '\u2193';
+            }
+
+            .membertier-2-sort {
+                position: static;
+                width: 10rem !important;
+            }
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -159,6 +172,8 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
     memberTiers: any;
     dwMemberGroups: any;
     pointruleId: number;
+    isAscending: boolean = true;
+    selectedCoulumn = 'name';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -640,6 +655,24 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
         this.toogleDeleteMode(true);
         this.drawerOne.open();
         this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingPageList() {
+        this.isAscending = !this.isAscending;
+        if ( this.isAscending && this.selectedCoulumn === 'name' ) {
+            this._memberTierService.getMemberTiers(0, 10, 'name', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'name' ) {
+            this._memberTierService.getMemberTiers(0, 10, 'name', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'code' ) {
+            this._memberTierService.getMemberTiers(0, 10, 'code', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'code' ) {
+            this._memberTierService.getMemberTiers(0, 10, 'code', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'level' ) {
+            this._memberTierService.getMemberTiers(0, 10, 'level', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'level' ) {
+            this._memberTierService.getMemberTiers(0, 10, 'level', 'desc').subscribe();
+        }
     }
 
     createMemberTier(): void {
