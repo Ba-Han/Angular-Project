@@ -41,10 +41,12 @@
             </div>
 
             <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
-                <div class="flex sm:items-center w-full">
-                    <div class="w-2/4 pr-2">Spending Valid From: {{memberPoint.spending_valid_from | date:'MMM dd, y'}}</div>
-                    <div class="w-2/4 pr-2">Spending Valid To: {{memberPoint.spending_valid_to | date:'MMM dd, y'}}</div>
-                </div>
+                <ng-container *ngIf="memberPoint.point_type === 'earning'">
+                    <div class="flex sm:items-center w-full">
+                        <div class="w-2/4 pr-2">Spending Valid From: {{memberPoint.spending_valid_from | date:'MMM dd, y'}}</div>
+                        <div class="w-2/4 pr-2">Spending Valid To: {{memberPoint.spending_valid_to | date:'MMM dd, y'}}</div>
+                    </div>
+                </ng-container>
             </div>
 
         </div>
@@ -68,16 +70,16 @@
                         </div>
                     </ng-container> 
 
-                    <ng-container *ngIf="memberPoint.point_type_int == '0'">
+                    <ng-container *ngIf="memberPoint.point_type_int === 0">
                         <div class="flex sm:items-center">
-                            <div class="w-1/4">Point Type Int: </div>
+                            <div class="w-1/4">Adjustment Type: </div>
                             <div class="ml-6 leading-6">add</div>
                         </div>
                     </ng-container>
 
-                    <ng-container *ngIf="memberPoint.point_type_int == '1'">
+                    <ng-container *ngIf="memberPoint.point_type_int === 1">
                         <div class="flex sm:items-center">
-                            <div class="w-1/4">Point Type Int: </div>
+                            <div class="w-1/4">Adjustment Type: </div>
                             <div class="ml-6 leading-6">reduce</div>
                         </div>
                     </ng-container>

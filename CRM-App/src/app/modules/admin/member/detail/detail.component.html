@@ -201,7 +201,7 @@
                                             </ng-container>
                                         </div>
                                         
-                                        <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints == 0">
+                                        <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints === 0">
                                             <div class="ml-1.5 font-semibold">-</div>
                                         </ng-container>
                                     </div>
@@ -210,7 +210,7 @@
                                     <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints > 0">
                                         <div class="ml-1.5 font-semibold" style="font-size: 12px;">{{member.soonExpiredPoint.soonExpiredDate | date:'MMM dd, yyyy'}}</div>
                                     </ng-container>
-                                    <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints == 0">
+                                    <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints === 0">
                                         <div class="ml-1.5 font-semibold">-</div>
                                     </ng-container>
                                 </div>
@@ -233,7 +233,7 @@
                                             <ng-container *ngIf="member.soonExpiredPoint.soonExpiredDollars > 0">
                                                 <div class="ml-1.5 font-semibold" style="font-size: 12px;">${{member.soonExpiredPoint.soonExpiredDollars}}</div>
                                             </ng-container>
-                                            <ng-container *ngIf="member.soonExpiredPoint.soonExpiredDollars == 0">
+                                            <ng-container *ngIf="member.soonExpiredPoint.soonExpiredDollars === 0">
                                                 <div class="ml-1.5 font-semibold">-</div>
                                             </ng-container>
                                         </div>
@@ -243,7 +243,7 @@
                                     <ng-container *ngIf="member.soonExpiredPoint.soonExpiredDollars > 0">
                                         <div class="ml-1.5 font-semibold" style="font-size: 12px;">{{member.soonExpiredPoint.soonExpiredDate | date:'MMM dd, y'}}</div>
                                     </ng-container>
-                                    <ng-container *ngIf="member.soonExpiredPoint.soonExpiredDollars == 0">
+                                    <ng-container *ngIf="member.soonExpiredPoint.soonExpiredDollars === 0">
                                         <div class="ml-1.5 font-semibold">-</div>
                                     </ng-container>
                                 </div>
@@ -333,10 +333,14 @@
 
                             <!-- Document No. -->
                             <ng-container matColumnDef="transaction_document_no">
-                                <th mat-header-cell
+                                <!-- <th mat-header-cell
                                     mat-sort-header
                                     *matHeaderCellDef style="background:#e2e8f0;">
-                                    Document No.
+                                    Document No
+                                </th> -->
+                                <th mat-header-cell
+                                    *matHeaderCellDef style="background:#e2e8f0;">
+                                    Document No
                                 </th>
                                 <td mat-cell [routerLink]="['./memberpoint', point.id]" style="cursor:pointer;"
                                     *matCellDef="let point">
@@ -350,8 +354,12 @@
                              
                             <!-- Type -->
                             <ng-container matColumnDef="point_type">
-                                <th mat-header-cell
+                                <!-- <th mat-header-cell
                                     mat-sort-header
+                                    *matHeaderCellDef style="background:#e2e8f0;">
+                                    Point Type
+                                </th> -->
+                                <th mat-header-cell
                                     *matHeaderCellDef style="background:#e2e8f0;">
                                     Point Type
                                 </th>
@@ -365,8 +373,12 @@
 
                             <!-- Point -->
                             <ng-container matColumnDef="point">
-                                <th mat-header-cell
+                                <!-- <th mat-header-cell
                                     mat-sort-header
+                                    *matHeaderCellDef style="background:#e2e8f0;">
+                                    Points
+                                </th> -->
+                                <th mat-header-cell
                                     *matHeaderCellDef style="background:#e2e8f0;">
                                     Points
                                 </th>
@@ -380,8 +392,12 @@
 
                             <!-- Dollar Value -->
                             <ng-container matColumnDef="pointsInDoller">
-                                <th mat-header-cell
+                                <!-- <th mat-header-cell
                                     mat-sort-header
+                                    *matHeaderCellDef style="background:#e2e8f0;">
+                                    $ Value
+                                </th> -->
+                                <th mat-header-cell
                                     *matHeaderCellDef style="background:#e2e8f0;">
                                     $ Value
                                 </th>
@@ -409,7 +425,7 @@
                                 </ng-container>
                             </ng-container>
 
-                            <ng-container *ngIf="transactions.length == 0">
+                            <ng-container *ngIf="transactions.length === 0">
                                 <ng-container matColumnDef="recentPointsTableFooter">
                                     <td class="py-6 px-0 border-0"
                                         mat-footer-cell
@@ -453,20 +469,24 @@
 
                             <!-- Transaction ID -->
                             <ng-container matColumnDef="document_no">
-                                <th mat-header-cell
+                                <!-- <th mat-header-cell
                                     mat-sort-header
                                     *matHeaderCellDef style="background:#e2e8f0;">
                                     Order No.
+                                </th> -->
+                                <th mat-header-cell
+                                    *matHeaderCellDef style="background:#e2e8f0;">
+                                    Order No
                                 </th>
                                 <ng-container mat-cell *matCellDef="let transaction">
-                                    <ng-container *ngIf="transaction.point_type != 'adjustment'">
+                                    <ng-container *ngIf="transaction.point_type !== 'adjustment'">
                                         <td mat-cell [routerLink]="['./transaction', transaction.id]" style="cursor:pointer;">
                                             <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
                                                 {{transaction.document_no}}
                                             </span>
                                         </td>
                                     </ng-container>
-                                    <ng-container *ngIf="transaction.point_type == 'adjustment'">
+                                    <ng-container *ngIf="transaction.point_type === 'adjustment'">
                                         <td mat-cell>
                                             <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
                                                 {{transaction.document_no}}
@@ -479,20 +499,24 @@
 
                             <!-- Amount -->
                             <ng-container matColumnDef="total_amount">
-                                <th mat-header-cell
+                                <!-- <th mat-header-cell
                                     mat-sort-header
+                                    *matHeaderCellDef style="background:#e2e8f0;">
+                                    Amount
+                                </th> -->
+                                <th mat-header-cell
                                     *matHeaderCellDef style="background:#e2e8f0;">
                                     Amount
                                 </th>
                                 <ng-container mat-cell *matCellDef="let transaction">
-                                    <ng-container *ngIf="transaction.point_type != 'adjustment'">
+                                    <ng-container *ngIf="transaction.point_type !== 'adjustment'">
                                         <td mat-cell [routerLink]="['./transaction', transaction.id]" style="cursor:pointer;">
                                             <span class="pr-6 font-medium whitespace-nowrap">
                                                 ${{transaction.total_amount| number : '1.2-2'}}
                                             </span>
                                         </td>
                                     </ng-container>
-                                    <ng-container *ngIf="transaction.point_type == 'adjustment'">
+                                    <ng-container *ngIf="transaction.point_type === 'adjustment'">
                                         <td mat-cell>
                                             <span class="pr-6 font-medium whitespace-nowrap">
                                                 ${{transaction.total_amount| number : '1.2-2'}}
@@ -505,34 +529,38 @@
 
                             <!-- Name -->
                             <ng-container matColumnDef="channel_name">
-                                <th mat-header-cell
+                                <!-- <th mat-header-cell
                                     mat-sort-header
+                                    *matHeaderCellDef style="background:#e2e8f0;">
+                                    Channel
+                                </th> -->
+                                <th mat-header-cell
                                     *matHeaderCellDef style="background:#e2e8f0;">
                                     Channel
                                 </th>
                                 <ng-container mat-cell *matCellDef="let transaction">
-                                    <ng-container *ngIf="transaction.point_type != 'adjustment'">
+                                    <ng-container *ngIf="transaction.point_type !== 'adjustment'">
                                         <td mat-cell [routerLink]="['./transaction', transaction.id]" style="cursor:pointer;">
-                                            <ng-container *ngIf="transaction.transaction_channel != null">
+                                            <ng-container *ngIf="transaction.transaction_channel !== null">
                                                 <span class="pr-6 whitespace-nowrap">
                                                     {{transaction.transaction_channel.name}}
                                                 </span>
                                             </ng-container>
-                                            <ng-container *ngIf="transaction.transaction_channel == null">
+                                            <ng-container *ngIf="transaction.transaction_channel === null">
                                                 <span class="pr-6 whitespace-nowrap">
                                                     -
                                                 </span>
                                             </ng-container>
                                         </td>
                                     </ng-container>
-                                    <ng-container *ngIf="transaction.point_type == 'adjustment'">
+                                    <ng-container *ngIf="transaction.point_type === 'adjustment'">
                                         <td mat-cell>
-                                            <ng-container *ngIf="transaction.transaction_channel != null">
+                                            <ng-container *ngIf="transaction.transaction_channel !== null">
                                                 <span class="pr-6 whitespace-nowrap">
                                                     {{transaction.transaction_channel.name}}
                                                 </span>
                                             </ng-container>
-                                            <ng-container *ngIf="transaction.transaction_channel == null">
+                                            <ng-container *ngIf="transaction.transaction_channel === null">
                                                 <span class="pr-6 whitespace-nowrap">
                                                     -
                                                 </span>
@@ -545,20 +573,24 @@
 
                             <!-- Points -->
                             <ng-container matColumnDef="point">
-                                <th mat-header-cell
+                                <!-- <th mat-header-cell
                                     mat-sort-header
                                     *matHeaderCellDef style="background:#e2e8f0;">
                                     Points
+                                </th> -->
+                                <th mat-header-cell
+                                    *matHeaderCellDef style="background:#e2e8f0;">
+                                    Earned Points
                                 </th>
                                 <ng-container mat-cell *matCellDef="let transaction">
-                                    <ng-container *ngIf="transaction.point_type != 'adjustment'">
+                                    <ng-container *ngIf="transaction.point_type !== 'adjustment'">
                                         <td mat-cell [routerLink]="['./transaction', transaction.id]" style="cursor:pointer;">
                                             <span class="pr-6 whitespace-nowrap">
                                                 {{transaction.point}}
                                             </span>
                                         </td>
                                     </ng-container>
-                                    <ng-container *ngIf="transaction.point_type == 'adjustment'">
+                                    <ng-container *ngIf="transaction.point_type === 'adjustment'">
                                         <td mat-cell>
                                             <span class="pr-6 whitespace-nowrap">
                                                 {{transaction.point}}
@@ -570,21 +602,21 @@
                             </ng-container>
 
                             <!-- $ Value -->
-                            <ng-container matColumnDef="point_amount">
+                            <!-- <ng-container matColumnDef="point_amount">
                                 <th mat-header-cell
                                     mat-sort-header
                                     *matHeaderCellDef style="background:#e2e8f0;">
                                     $ Value
                                 </th>
                                 <ng-container mat-cell *matCellDef="let transaction">
-                                    <ng-container *ngIf="transaction.point_type != 'adjustment'">
+                                    <ng-container *ngIf="transaction.point_type !== 'adjustment'">
                                         <td mat-cell [routerLink]="['./transaction', transaction.id]" style="cursor:pointer;">
                                             <span class="pr-6 whitespace-nowrap">
                                                 ${{transaction.point_amount | number : '1.2-2'}}
                                             </span>
                                         </td>
                                     </ng-container>
-                                    <ng-container *ngIf="transaction.point_type == 'adjustment'">
+                                    <ng-container *ngIf="transaction.point_type === 'adjustment'">
                                         <td mat-cell>
                                             <span class="pr-6 whitespace-nowrap">
                                                 ${{transaction.point_amount | number : '1.2-2'}}
@@ -593,24 +625,28 @@
                                     </ng-container>
                                 </ng-container>
 
-                            </ng-container>
+                            </ng-container> -->
 
                             <!-- Point Type -->
                             <ng-container matColumnDef="point_type">
-                                <th mat-header-cell
+                                <!-- <th mat-header-cell
                                     mat-sort-header
+                                    *matHeaderCellDef style="background:#e2e8f0;">
+                                    Point Type
+                                </th> -->
+                                <th mat-header-cell
                                     *matHeaderCellDef style="background:#e2e8f0;">
                                     Point Type
                                 </th>
                                 <ng-container mat-cell *matCellDef="let transaction">
-                                    <ng-container *ngIf="transaction.point_type != 'adjustment'">
+                                    <ng-container *ngIf="transaction.point_type !== 'adjustment'">
                                         <td mat-cell [routerLink]="['./transaction', transaction.id]" style="cursor:pointer;">
                                             <span class="pr-6 whitespace-nowrap" style="text-transform:capitalize;">
                                                 {{transaction.point_type}}
                                             </span>
                                         </td>
                                     </ng-container>
-                                    <ng-container *ngIf="transaction.point_type == 'adjustment'">
+                                    <ng-container *ngIf="transaction.point_type === 'adjustment'">
                                         <td mat-cell>
                                             <span class="pr-6 whitespace-nowrap" style="text-transform:capitalize;">
                                                 {{transaction.point_type}}
@@ -622,20 +658,24 @@
 
                             <!-- Date -->
                             <ng-container matColumnDef="purchase_date">
-                                <th mat-header-cell
+                                <!-- <th mat-header-cell
                                     mat-sort-header
+                                    *matHeaderCellDef style="background:#e2e8f0;">
+                                    Date
+                                </th> -->
+                                <th mat-header-cell
                                     *matHeaderCellDef style="background:#e2e8f0;">
                                     Date
                                 </th>
                                 <ng-container mat-cell *matCellDef="let transaction">
-                                    <ng-container *ngIf="transaction.point_type != 'adjustment'">
+                                    <ng-container *ngIf="transaction.point_type !=='adjustment'">
                                         <td mat-cell [routerLink]="['./transaction', transaction.id]" style="cursor:pointer;">
                                             <span class="pr-6 whitespace-nowrap">
                                                 {{transaction.purchase_date | date:'MMM dd, y'}}
                                             </span>
                                         </td>
                                     </ng-container>
-                                    <ng-container *ngIf="transaction.point_type == 'adjustment'">
+                                    <ng-container *ngIf="transaction.point_type === 'adjustment'">
                                         <td mat-cell>
                                             <span class="pr-6 whitespace-nowrap">
                                                 {{transaction.purchase_date | date:'MMM dd, y'}}
@@ -659,7 +699,7 @@
                                 </ng-container>
                             </ng-container>
 
-                            <ng-container *ngIf="transactions.length == 0">
+                            <ng-container *ngIf="transactions.length === 0">
                                 <ng-container matColumnDef="recentTransactionsTableFooter">
                                     <td class="py-6 px-0 border-0"
                                         mat-footer-cell

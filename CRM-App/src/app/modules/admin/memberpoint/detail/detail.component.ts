@@ -68,7 +68,7 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
     memberId: number;
     pointType: boolean = false;
     searchInputControl: FormControl = new FormControl();
-    pointTypeInt: string;
+    adjustmentType: number;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
 
@@ -102,7 +102,7 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
         //this.selectedMember = this._memberPointService.memberFullName;
         //this.selectedPointBasket = this._memberPointService.pointBasketFullName;
         //this.basketId = this._memberPointService.pointBasketId;
-        
+
         //MemberPointEditForm
         this.memberPointEditForm = this._formBuilder.group({
             id: [''],
@@ -119,8 +119,8 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((memberPoint: MemberPoint) => {
                 this.memberPoint = memberPoint;
-                this.pointType = memberPoint.point_type.toString().toLowerCase() == "adjustment" ? true : false;
-                this.pointTypeInt = memberPoint.point_type_int;
+                this.pointType = memberPoint.point_type.toString().toLowerCase() === 'adjustment' ? true : false;
+                this.adjustmentType = memberPoint.point_type_int;
                 // Patch values to the form
                 this.memberPointEditForm.patchValue(memberPoint);
                 this.toggleEditMode(false);
@@ -129,7 +129,7 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
     }
 
     ngAfterViewInit(): void {
-        
+
     }
 
     toggleEditMode(editMode: boolean | null = null): void

@@ -297,6 +297,26 @@
                                     [autocomplete]="'off'"
                                     [placeholder]="'Search point rule'">
                             </mat-form-field>
+
+                            <!--sorting dropdown-->
+                            <mat-form-field class="ml-4 fuse-mat-no-subscript pointrule-2-sort">
+                                <mat-select [(ngModel)]="selectedCoulumn">
+                                    <mat-option value="name">Name</mat-option>
+                                    <mat-option value="rewardcode">Reward Code</mat-option>
+                                    <mat-option value="pointvalue">Point Value</mat-option>
+                                    <mat-option value="membertier">Member Tier</mat-option>
+                                    <mat-option value="startdate">Start Date</mat-option>
+                                    <mat-option value="enddate">End Date</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <!--sorting button-->
+                            <button
+                                (click)="sortingPageList()"
+                                [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
+                                mat-flat-button
+                                [color]="'primary'">
+                            </button>
+
                             <button class="ml-4"
                                     mat-flat-button
                                     [color]="'primary'"
@@ -318,12 +338,19 @@
                                             matSort
                                             matSortDisableClear>
 
-                                            <div [mat-sort-header]="'name'"> Name </div>
+                                            <div> Name </div>
+                                            <div> Reward Code </div>
+                                            <div> Point Value </div>
+                                            <div> Member Tier </div>
+                                            <div> Start Date </div>
+                                            <div> End Date </div>
+
+                                            <!-- <div [mat-sort-header]="'name'"> Name </div>
                                             <div [mat-sort-header]="'reward_code'"> Reward Code </div>
                                             <div [mat-sort-header]="'point_value'"> Point Value </div>
                                             <div [mat-sort-header]="'member_tierFullName'"> Member Tier </div>
                                             <div [mat-sort-header]="'start_date'"> Start Date </div>
-                                            <div [mat-sort-header]="'end_date'"> End Date </div>
+                                            <div [mat-sort-header]="'end_date'"> End Date </div> -->
                                         </div>
 
                                         <!-- Rows -->

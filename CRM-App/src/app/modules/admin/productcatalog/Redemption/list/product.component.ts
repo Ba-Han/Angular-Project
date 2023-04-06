@@ -18,19 +18,19 @@ import { UserService } from 'app/core/user/user.service';
     styles: [
         /* language=SCSS */
         `
-            .product-grid {
+            .product-redemption-grid {
                 grid-template-columns: 150px 150px 150px 150px;
 
                 @screen sm {
-                    grid-template-columns: 150px 200px 150px 150px;
+                    grid-template-columns: 150px 250px 150px 150px;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 200px 150px 150px;
+                    grid-template-columns: 150px 250px 150px 150px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 200px 150px 150px;
+                    grid-template-columns: 150px 250px 150px 150px;
                 }
             }
 
@@ -72,9 +72,18 @@ import { UserService } from 'app/core/user/user.service';
             .deleteRedemptionscss {
                 position: relative;
                 bottom: 0.6rem;
-                left: 33rem;
+                left: 36rem;
                 margin: -2rem;
             }
+
+            .sort-asc::after {
+                content: '\u2191';
+              }
+
+            .sort-desc::after {
+                content: '\u2193';
+            }
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -102,6 +111,8 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     ProductAddForm: FormGroup;
 
     selectedChannel: Product | null = null;
+    isAscending: boolean = true;
+    selectedCoulumn = 'sku';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -113,6 +124,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         private _router: Router,
         private _userService: UserService
     ) {
+
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -256,6 +268,24 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.toogleDeleteMode(true);
         this.matDrawer.open();
         this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingPageList() {
+        this.isAscending = !this.isAscending;
+        if ( this.isAscending && this.selectedCoulumn === 'sku' ) {
+            this._productService.getProducts(0, 10, 'item_no', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'sku' ) {
+            this._productService.getProducts(0, 10, 'item_no', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'name' ) {
+            this._productService.getProducts(0, 10, 'item_name', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'name' ) {
+            this._productService.getProducts(0, 10, 'item_name', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'status' ) {
+            this._productService.getProducts(0, 10, 'status', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'status' ) {
+            this._productService.getProducts(0, 10, 'status', 'desc').subscribe();
+        }
     }
 
     createProduct(): void {

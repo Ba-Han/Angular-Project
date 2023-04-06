@@ -82,6 +82,22 @@
                                     [autocomplete]="'off'"
                                     [placeholder]="'Search Point Basket'">
                             </mat-form-field>
+
+                            <!--sorting dropdown-->
+                            <mat-form-field class="ml-4 fuse-mat-no-subscript pointbasket-2-sort">
+                                <mat-select [(ngModel)]="selectedCoulumn">
+                                    <mat-option value="name">Name</mat-option>
+                                    <mat-option value="redemptiontype">Redemption Type</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <!--sorting button-->
+                            <button
+                                (click)="sortingPageList()"
+                                [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
+                                mat-flat-button
+                                [color]="'primary'">
+                            </button>
+
                             <button class="ml-4"
                                     mat-flat-button
                                     [color]="'primary'"
@@ -103,8 +119,11 @@
                                             matSort
                                             matSortDisableClear>
 
-                                            <div [mat-sort-header]="'name'"> Name </div>
-                                            <div [mat-sort-header]="'spending_type'"> Redemption Type</div>
+                                            <div> Name </div>
+                                            <div> Redemption Type</div>
+
+                                            <!-- <div [mat-sort-header]="'name'"> Name </div>
+                                            <div [mat-sort-header]="'spending_type'"> Redemption Type</div> -->
                                         </div>
 
                                         <!-- Rows -->

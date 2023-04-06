@@ -21,18 +21,18 @@ import { UserService } from 'app/core/user/user.service';
         /* language=SCSS */
         `
             .transaction-grid {
-                grid-template-columns: 150px 100px 120px 100px 100px 100px 100px;
+                grid-template-columns: 150px 120px 120px 100px 100px 100px;
 
                 @screen sm {
-                    grid-template-columns: 150px 100px 120px 100px 100px 100px 100px;
+                    grid-template-columns: 150px 120px 120px 100px 100px 100px;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 100px 120px 100px 100px 100px 100px;
+                    grid-template-columns: 150px 120px 120px 100px 100px 100px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 100px 120px 100px 100px 100px 100px;
+                    grid-template-columns: 150px 120px 120px 100px 100px 100px;
                 }
             }
             .custom-paging {
@@ -82,6 +82,19 @@ import { UserService } from 'app/core/user/user.service';
                 left: 60rem;
                 margin: -2rem;
             }
+
+            .sort-asc::after {
+                content: '\u2191';
+              }
+
+            .sort-desc::after {
+                content: '\u2193';
+            }
+
+            .transaction-2-sort {
+                position: static;
+                width: 10rem !important;
+            }
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -107,6 +120,8 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
     memberId: number;
     transactionlistMode: boolean = false;
     TransactionDetail: boolean = false;
+    isAscending: boolean = true;
+    selectedCoulumn = 'orderno';
     searchInputControl: FormControl = new FormControl();
     //selectedMemberPoint: Transaction | null = null;;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -285,6 +300,24 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
         this.toogleDeleteMode(true);
         this.matDrawer.open();
         this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingPageList() {
+        this.isAscending = !this.isAscending;
+        if ( this.isAscending && this.selectedCoulumn === 'orderno' ) {
+            this._transactionService.getData(Number(this.memberId), 0, 10, 'document_no', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'orderno' ) {
+            this._transactionService.getData(Number(this.memberId),0, 10, 'document_no', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'amount' ) {
+            this._transactionService.getData(Number(this.memberId),0, 10, 'total_amount', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'amount' ) {
+            this._transactionService.getData(Number(this.memberId),0, 10, 'total_amount', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'date' ) {
+            this._transactionService.getData(Number(this.memberId),0, 10, 'transaction_date', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'date' ) {
+            this._transactionService.getData(Number(this.memberId),0, 10, 'transaction_date', 'desc').subscribe();
+        }
     }
 
     openDetail(): void {

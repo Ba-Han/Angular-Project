@@ -76,6 +76,14 @@ import { UserService } from 'app/core/user/user.service';
                 margin: -2rem;
             }
 
+            .sort-asc::after {
+                content: '\u2191';
+              }
+
+            .sort-desc::after {
+                content: '\u2193';
+            }
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -103,6 +111,8 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     ProductAddForm: FormGroup;
 
     selectedChannel: Product | null = null;
+    isAscending: boolean = true;
+    selectedCoulumn = 'sku';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -255,6 +265,24 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.toogleDeleteMode(true);
         this.matDrawer.open();
         this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingPageList() {
+        this.isAscending = !this.isAscending;
+        if ( this.isAscending && this.selectedCoulumn === 'sku' ) {
+            this._productService.getProducts(0, 10, 'item_number', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'sku' ) {
+            this._productService.getProducts(0, 10, 'item_number', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'name' ) {
+            this._productService.getProducts(0, 10, 'item_name', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'name' ) {
+            this._productService.getProducts(0, 10, 'item_name', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'status' ) {
+            this._productService.getProducts(0, 10, 'status', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'status' ) {
+            this._productService.getProducts(0, 10, 'status', 'desc').subscribe();
+        }
     }
 
     createProduct(): void {

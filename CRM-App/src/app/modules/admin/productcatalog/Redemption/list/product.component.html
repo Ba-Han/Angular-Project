@@ -86,6 +86,23 @@
                                        [autocomplete]="'off'"
                                        [placeholder]="'Search product'">
                             </mat-form-field>
+
+                            <!--sorting dropdown-->
+                            <mat-form-field class="ml-4 fuse-mat-no-subscript">
+                                <mat-select [(ngModel)]="selectedCoulumn">
+                                    <mat-option value="sku">SKU</mat-option>
+                                    <mat-option value="name">Name</mat-option>
+                                    <mat-option value="status">Status</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <!--sorting button-->
+                            <button
+                                (click)="sortingPageList()"
+                                [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
+                                mat-flat-button
+                                [color]="'primary'">
+                            </button>
+
                             <button class="ml-4"
                                     mat-flat-button
                                     [color]="'primary'"
@@ -105,14 +122,18 @@
                                 <ng-container *ngIf="products.length > 0; else noProducts">
                                     <div class="grid">
                                         <!-- Header -->
-                                        <div class="product-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                        <div class="product-redemption-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                              matSort
                                              matSortDisableClear>
-        
-                                            <div [mat-sort-header]="'item_no'"> SKU </div>
-                                            <div [mat-sort-header]="'item_name'"> Name </div>
+
+                                            <div> SKU </div>
+                                            <div> Name </div>
+                                            <div> Status </div>
+
+                                            <!-- <div [mat-sort-header]="'item_no'"> SKU </div> -->
+                                            <!-- <div [mat-sort-header]="'item_name'"> Name </div> -->
                                             <!-- <div [mat-sort-header]="'price'"> Price </div> -->
-                                            <div [mat-sort-header]="'status'"> Status </div>
+                                            <!-- <div [mat-sort-header]="'status'"> Status </div> -->
                                         </div>
         
         
@@ -122,7 +143,7 @@
                                                 <a class=" cursor-pointer hover:bg-gray-100 dark:hover:bg-hover"
                                                    [routerLink]="canEdit ? ['./', product.id] : null">
         
-                                                    <div class="product-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                                                    <div class="product-redemption-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
                                                        
                                                         <div class="hidden md:block truncate">
                                                             {{product.item_no}}

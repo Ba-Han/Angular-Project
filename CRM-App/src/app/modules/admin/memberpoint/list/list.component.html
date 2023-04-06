@@ -89,6 +89,23 @@
                                        [autocomplete]="'off'"
                                        [placeholder]="'Search member point'">
                             </mat-form-field>
+
+                            <!--sorting dropdown-->
+                            <mat-form-field class="ml-4 fuse-mat-no-subscript memberpoint-2-sort">
+                                <mat-select [(ngModel)]="selectedCoulumn">
+                                    <mat-option value="documentno">Document No</mat-option>
+                                    <mat-option value="pointtype">Point Type</mat-option>
+                                    <mat-option value="points">Points</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <!--sorting button-->
+                            <button
+                                (click)="sortingPageList()"
+                                [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
+                                mat-flat-button
+                                [color]="'primary'">
+                            </button>
+
                             <button class="ml-4"
                                     mat-flat-button
                                     [color]="'primary'"
@@ -107,7 +124,29 @@
                                     <div class="memberpoint-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                          matSort
                                          matSortDisableClear>
-                                        <div class="sm:block"
+
+                                        <div class="sm:block">
+                                            Document No
+                                        </div>
+                                        <div class="sm:block">
+                                            Point Type
+                                        </div>
+                                        <div class="hidden md:block">
+                                            Points
+                                        </div>
+                                        <div class="hidden md:block">
+                                            $ Value
+                                        </div>
+                                        <div class="hidden md:block">
+                                            Total Amount (Exclusive GST)
+                                        </div>
+                                        <div class="hidden md:block" style="justify-content:center;display: flex !important;align-items: flex-start;">
+                                            GST
+                                        </div>
+                                        <div class="hidden md:block">
+                                            Total Amount (Inclusive GST)
+                                        </div>
+                                        <!-- <div class="sm:block"
                                              [mat-sort-header]="'transaction_document_no'">
                                             Document No.
                                         </div>
@@ -134,7 +173,7 @@
                                         <div class="hidden md:block"
                                              [mat-sort-header]="'total_amount'">
                                             Total Amount (Inclusive GST)
-                                        </div>
+                                        </div> -->
                                     </div>
     
                                     <!-- Rows -->
@@ -234,6 +273,13 @@
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Point Type</mat-label>
+                                    <mat-select [formControlName]="'point_type'"> 
+                                        <mat-option value="adjustment">Adjustment</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <!-- <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Point Type</mat-label>
                                     <mat-icon matPrefix
                                               class="hidden sm:flex icon-size-5"
                                               [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
@@ -241,12 +287,12 @@
                                            [formControlName]="'point_type'"
                                            [placeholder]="'Point Type'"
                                            [spellcheck]="false">
-                                </mat-form-field>
+                                </mat-form-field> -->
                             </div>
     
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
-                                    <mat-label>Point Type Int</mat-label>
+                                    <mat-label>Adjustment Type</mat-label>
                                     <mat-select [formControlName]="'point_type_int'"> 
                                         <mat-option [value]="0">Add</mat-option>
                                         <mat-option [value]="1">Reduce</mat-option>
@@ -368,7 +414,7 @@
                                 </mat-form-field>
                             </div>
     
-                            <div class="mt-8">
+                            <!-- <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Status</mat-label>
                                     <mat-select [formControlName]="'status'">
@@ -376,7 +422,7 @@
                                         <mat-option value="inactive">Inactive</mat-option>
                                     </mat-select>
                                 </mat-form-field>
-                            </div>
+                            </div> -->
     
                             <div class="flex items-center justify-end mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                                 <button class="ml-2" style="width:16%;"

@@ -15,8 +15,8 @@ export class AnalyticsService
     private _beWowMembers: BehaviorSubject<any> = new BehaviorSubject(null);
     private _totalRegisterMember: BehaviorSubject<any> = new BehaviorSubject(null);
     private _totalTransactionCounts: BehaviorSubject<any> = new BehaviorSubject(null);
-    private _totalActivePoints:BehaviorSubject<any> = new BehaviorSubject(null);
-    private _totalExpiredPoints:BehaviorSubject<any> = new BehaviorSubject(null);
+    private _totalActivePoints: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _totalExpiredPoints: BehaviorSubject<any> = new BehaviorSubject(null);
     private _tiers: BehaviorSubject<any> = new BehaviorSubject(null);
     private _stores: BehaviorSubject<any> = new BehaviorSubject(null);
     private _totalEarnPoints: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -79,7 +79,7 @@ export class AnalyticsService
 
     getTotalMember(): Observable<any>
     {
-        return this._httpClient.get<any>(`${this._apiurl}/items/memberaggregate?level=0`).pipe(
+        return this._httpClient.get<any>(`${this._apiurl}/items/memberaggregate`).pipe(
             tap((response: any) => {
                 this._totalMembers.next(response);
             })
@@ -118,7 +118,7 @@ export class AnalyticsService
             );
     }
 
-    getTotalRegistrationMemberCount(filter : RegisteredMember): Observable<any> {
+    getTotalRegistrationMemberCount(filter: RegisteredMember): Observable<any> {
         return this._httpClient.get<any>(`${this._apiurl}/dashboard/getTotalRegisterMember`, {
             params: {
                 type: filter.type,
@@ -135,7 +135,7 @@ export class AnalyticsService
         );
     }
 
-    getAllTransactoinCount(filter : DateParameter): Observable<any> {
+    getAllTransactoinCount(filter: DateParameter): Observable<any> {
         return this._httpClient.get<any>(`${this._apiurl}/dashboard/getTotalTransaction`, {
             params: {
                 store: filter.store,
@@ -153,7 +153,7 @@ export class AnalyticsService
         );
     }
 
-    getTotalActivePoint(filter : ActivePoint): Observable<ActivePoint> {
+    getTotalActivePoint(filter: ActivePoint): Observable<ActivePoint> {
 
         return this._httpClient.get<DateParameter>(`${this._apiurl}/dashboard/getTotalActivePoint`, {
             params: {
@@ -165,16 +165,13 @@ export class AnalyticsService
                 startdate: filter.startdate,
                 enddate: filter.enddate,
             }
-           
+
         }).pipe(
-            tap((response: any) => {
-                return this._totalActivePoints.next(response);
-            })
+            tap((response: any) => this._totalActivePoints.next(response))
         );
     }
-   
 
-    getTotalExpeiredPoint(filter : ExpiredPoint): Observable<ExpiredPoint> {
+    getTotalExpeiredPoint(filter: ExpiredPoint): Observable<ExpiredPoint> {
 
         return this._httpClient.get<DateParameter>(`${this._apiurl}/dashboard/getTotalExpiredPoint`, {
             params: {
@@ -186,15 +183,13 @@ export class AnalyticsService
                 startdate: filter.startdate,
                 enddate: filter.enddate,
             }
-           
+
         }).pipe(
-            tap((response: any) => {
-                return this._totalExpiredPoints.next(response);
-            })
+            tap((response: any) => this._totalExpiredPoints.next(response))
         );
     }
 
-    getAllEarnPoint(filter : EarnPoint): Observable<any> {
+    getAllEarnPoint(filter: EarnPoint): Observable<any> {
         return this._httpClient.get<any>(`${this._apiurl}/dashboard/getTotalEarnPoint`, {
             params: {
                 channel : filter.channel,

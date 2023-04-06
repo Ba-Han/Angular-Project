@@ -345,7 +345,7 @@
                     <div class="w-full">
                        
                         <div class="flex w-full justify-end">
-                            <div class="flex justify-start p-5 pr-2 w-full text-1xl">Total Issued Points</div>
+                            <div class="flex justify-start p-5 pr-2 w-full text-1xl">Total Generated Points</div>
                             <div class="flex justify-end p-5 w-full">
                                 <mat-label>Filter By Channel: </mat-label>
                             </div>
@@ -393,12 +393,12 @@
 
                     <div class="grid grid-cols-2 w-full mt-5">
                         <div class="card-header card-header-twittercolor h-30">
-                            <h4 class="card-title">Total Issued Points</h4>
+                            <h4 class="card-title">Total Generated Points</h4>
                             <p class="card-category text-5xl font-bold tracking-tighter leading-tight">{{earnPoint.totalEarnPoint | number:'1.0-0'}}</p>
                         </div>
 
                         <div class="card-header card-header-twittercolor h-30">
-                            <h4 class="card-title">Total Issued Dollars</h4>
+                            <h4 class="card-title">Total Generated Dollars</h4>
                             <p class="card-category text-5xl font-bold tracking-tighter leading-tight">$ {{earnPoint.totalEarnDolarValue | number:'1.0-0'}}</p>
                         </div>
 
@@ -407,19 +407,19 @@
                     <div class="mx-6 mt-3 mb-3" style="border: 1px solid #ccc;"></div>
                     <div class="mx-6 mb-2">
                         <ng-container *ngIf="earnPoint.type == 'all'">
-                            <div style="color: gray !important;">Total Issued Points - For All</div>
+                            <div style="color: gray !important;">Total Generated Points - For All</div>
                         </ng-container>
                         <ng-container *ngIf="earnPoint.type == 'month'">
-                            <div style="color: gray !important;">Total Issued Points - {{earnPoint.filterShowDate | date:'MMM, y'}}</div>
+                            <div style="color: gray !important;">Total Generated Points - {{earnPoint.filterShowDate | date:'MMM, y'}}</div>
                         </ng-container>
                         <ng-container *ngIf="earnPoint.type == 'year'">
-                            <div style="color: gray !important;">Total Issued Points For - {{earnPoint.filterShowDate | date:'y'}}</div>
+                            <div style="color: gray !important;">Total Generated Points For - {{earnPoint.filterShowDate | date:'y'}}</div>
                         </ng-container>
                         <ng-container *ngIf="earnPoint.type == 'day'">
-                            <div style="color: gray !important;">Total Issued Points For - {{earnPoint.filterShowDate | date:'MMM dd, y'}}</div>
+                            <div style="color: gray !important;">Total Generated Points For - {{earnPoint.filterShowDate | date:'MMM dd, y'}}</div>
                         </ng-container>
                         <ng-container *ngIf="earnPoint.type == 'range'">
-                            <div style="color: gray !important;">Total Issued Points between {{earnPoint.filterShowStartDate | date:'MMM dd, y'}} - {{earnPoint.filterShowEndDate | date:'MMM dd, y'}}</div>
+                            <div style="color: gray !important;">Total Generated Points between {{earnPoint.filterShowStartDate | date:'MMM dd, y'}} - {{earnPoint.filterShowEndDate | date:'MMM dd, y'}}</div>
                         </ng-container>
                     </div>
                 </div>
