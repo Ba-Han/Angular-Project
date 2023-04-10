@@ -1,5 +1,66 @@
 <mat-drawer-container class="flex flex-col w-full">
-    <mat-drawer class="w-2/4 dark:bg-gray-900"
+    <mat-drawer #drawerOne class="reset_popup dark:bg-gray-900"
+                [mode]="'over'"
+                [opened]="false"
+                [position]="'start'"
+                [disableClose]="true"
+                #matDrawer>
+
+        <!-- Delete single member tier popup -->
+        <ng-container *ngIf="DeleteMode">
+            <ng-container *ngIf="isSuccess">
+                <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
+                    <div class="">
+                        <!-- <button mat-icon-button style="background-color:#ccc; position: fixed; right: 1rem;"
+                                [matTooltip]="'Close'"
+                                (click)="cancelPopup()">
+                            <mat-icon class="text-white"
+                                        [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                        </button> -->
+                    </div>
+                </div>
+                <div class="mt-8">
+                    <fuse-alert [appearance]="'soft'"
+                                [dismissible]="false"
+                                [dismissed]="false"
+                                [name]="'alertBox1'"
+                                [type]="'success'">
+                        <div class="update_scss">
+                            Deleted Successfully.
+                        </div>
+                    </fuse-alert>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!isSuccess">
+                <div class="parent_popup">
+                    <div>
+                        <div class="delete-scss"> Are you sure want to delete? </div>
+                    </div>    
+                    <div class="child_btn">
+                        <button class="ml-2"
+                                mat-flat-button
+                                [color]="'primary'"
+                                [matTooltip]="'Cancel'"
+                                (click)="cancelPopup()"
+                                >
+                            Cancel
+                        </button>
+    
+                        <button class="ml-2"
+                                mat-flat-button
+                                [color]="'primary'"
+                                [matTooltip]="'Proceed'"
+                                (click)="proceedPopup()"
+                                >
+                            Proceed
+                        </button>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+    </mat-drawer>
+    
+    <mat-drawer #drawerTwo class="w-2/4 dark:bg-gray-900"
                 [mode]="'over'"
                 [opened]="false"
                 [position]="'end'"
@@ -430,7 +491,7 @@
                 <div class="">
                     <button mat-icon-button style="background-color:#ccc;"
                             [matTooltip]="'Close'"
-                            (click)="matDrawer.close()">
+                            (click)="drawerTwo.close()">
                         <mat-icon class="text-white"
                                   [svgIcon]="'heroicons_outline:x'"></mat-icon>
                     </button>
@@ -603,8 +664,6 @@
         </ng-container>
         
     </mat-drawer>
-
-
 
     <mat-drawer-content class="p-5">
         <div class="flex flex-col w-full">
@@ -1089,6 +1148,22 @@
                                         (click)="updateMemberTier()">
                                     Save
                                 </button>
+
+                                <div class="ml-4">
+                                    <ng-container *ngIf="canDelete">
+                                        <button
+                                                mat-flat-button
+                                                [color]="'primary'"
+                                                [matTooltip]="'Delete'"
+                                                (click)="DeleteDrawer(memberTier.id)"
+                                                >
+                                                Delete
+                                            </button>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="!canDelete">
+                                    </ng-container>
+                                </div>
                             </div>
 
                         </form>

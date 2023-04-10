@@ -1,9 +1,14 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatDrawer } from '@angular/material/sidenav';
 import { Subject, takeUntil } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Channel } from 'app/modules/admin/setting/channel/channel.types';
 import { ChannelService } from 'app/modules/admin/setting/channel/channel.service';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'channel-detail',
@@ -14,23 +19,69 @@ import { ChannelService } from 'app/modules/admin/setting/channel/channel.servic
                background-color:#FFF;
             }
 
+            .reset_popup {
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                width: 28% !important;
+                height: 34% !important;
+            }
+
+            .parent_popup {
+                position: fixed;
+                display: grid;
+                justify-content: center;
+                padding: 4rem;
+            }
+
+            .child_btn {
+                padding-left: 1.5rem;
+                position: fixed;
+                margin-top: 2rem !important;
+            }
+
+            .update_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(0, 128, 0);
+                padding: 4rem;
+                font-size: 16px;
+            }
+
+            .delete-scss {
+                position: fixed;
+                padding-left: 2rem;
+            }
+
         `
     ]
 })
 export class ChannelDetailComponent implements OnInit, OnDestroy {
+    @ViewChild(MatPaginator) private _paginator: MatPaginator;
+    @ViewChild(MatSort) private _sort: MatSort;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+
     channel: Channel;
     channelId: number;
     isLoading: boolean = false;
     ChannelEditForm: FormGroup;
     selectedChannel: Channel | null = null;
     editMode: boolean = false;
+    canDelete: boolean = false;
+    DeleteMode: boolean = false;
+    isSuccess: boolean = false;
+    selectedCode: string | null = null;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _channelService: ChannelService,
         private _formBuilder: FormBuilder,
-        
+        private _router: Router,
+        private _activatedRoute: ActivatedRoute,
+        private _userService: UserService
     ) {
     }
 
@@ -43,7 +94,6 @@ export class ChannelDetailComponent implements OnInit, OnDestroy {
             code: ['', Validators.required],
             status: ['',Validators.required],
             name: ['',Validators.required],
-            
         });
         this._channelService.channel$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -52,6 +102,8 @@ export class ChannelDetailComponent implements OnInit, OnDestroy {
                 this.ChannelEditForm.patchValue(channel);
                 this._changeDetectorRef.markForCheck();
             });
+
+        this.canDelete = this._userService.getDeleteUserPermissionByNavId('channel');
     }
 
     ngOnDestroy(): void {
@@ -75,12 +127,44 @@ export class ChannelDetailComponent implements OnInit, OnDestroy {
         this._changeDetectorRef.markForCheck();
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    toogleDeleteMode(DeleteMode: boolean | null = null): void {
+        if (DeleteMode === null) {
+            this.DeleteMode = !this.DeleteMode;
+        }
+        else {
+            this.DeleteMode = DeleteMode;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    cancelPopup(): void {
+        this.isSuccess = false;
+        this.toogleDeleteMode(false);
+        this.matDrawer.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    proceedPopup(): void {
+        this._channelService.getDeleteChannel(this.selectedCode).subscribe(() => {
+            this._router.navigate(['/channel'], { relativeTo: this._activatedRoute });
+        });
+        this.isSuccess = true;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    DeleteDrawer(code: string): void {
+        this.selectedCode = code;
+        this.toogleDeleteMode(true);
+        this.matDrawer.open();
+        this._changeDetectorRef.markForCheck();
+    }
+
     updateChannel(): void {
         // Get the contact object
         const channel = this.ChannelEditForm.getRawValue();
         // Update the contact on the server
         this._channelService.updateChannel(channel.code, channel).subscribe(() => {
-
 
         });
     }

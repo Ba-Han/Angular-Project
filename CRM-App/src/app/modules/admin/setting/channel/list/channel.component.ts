@@ -35,48 +35,6 @@ import { UserService } from 'app/core/user/user.service';
                 }
             }
 
-            .reset_popup {
-                position: fixed !important;
-                top: 50% !important;
-                left: 50% !important;
-                transform: translate(-50%, -50%) !important;
-                width: 28% !important;
-                height: 34% !important;
-            }
-
-            .parent_popup {
-                position: fixed;
-                display: grid;
-                justify-content: center;
-                padding: 4rem;
-            }
-
-            .child_btn {
-                padding-left: 1.5rem;
-                position: fixed;
-                margin-top: 2rem !important;
-            }
-
-            .update_scss {
-                position: unset;
-                text-align: center;
-                color: rgb(0, 128, 0);
-                padding: 4rem;
-                font-size: 16px;
-            }
-
-            .delete-scss {
-                position: fixed;
-                padding-left: 2rem;
-            }
-
-            .deleteChannelscss {
-                position: relative;
-                bottom: 0.6rem;
-                left: 33rem;
-                margin: -2rem;
-            }
-
             .sort-asc::after {
                 content: '\u2191';
               }
@@ -89,6 +47,13 @@ import { UserService } from 'app/core/user/user.service';
                 position: static;
                 width: 10rem !important;
             }
+
+            .sort-btn-01 {
+                border-radius: 3px !important;
+                padding: 12px !important;
+                min-width: 5px !important;
+            }
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -108,10 +73,6 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
     code: string;
     AddMode: boolean = false;
     canEdit: boolean = false;
-    canDelete: boolean = false;
-    DeleteMode: boolean = false;
-    isSuccess: boolean = false;
-    selectedCode: string | null = null;
     searchInputControl: FormControl = new FormControl();
     ChannelAddForm: FormGroup;
 
@@ -176,7 +137,6 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
             )
             .subscribe();
             this.canEdit = this._userService.getViewUserPermissionByNavId('channel');
-            this.canDelete = this._userService.getDeleteUserPermissionByNavId('channel');
     }
 
     ngAfterViewInit(): void {
@@ -232,49 +192,6 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
         }
 
         // Mark for check
-        this._changeDetectorRef.markForCheck();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    toogleDeleteMode(DeleteMode: boolean | null = null): void {
-        if (DeleteMode === null) {
-            this.DeleteMode = !this.DeleteMode;
-        }
-        else {
-            this.DeleteMode = DeleteMode;
-        }
-        this._changeDetectorRef.markForCheck();
-    }
-
-    cancelPopup(): void {
-        this.isSuccess = false;
-        this.toogleDeleteMode(false);
-        this.matDrawer.close();
-        this._changeDetectorRef.markForCheck();
-    }
-
-    proceedPopup(): void {
-        this._channelService.getDeleteChannel(this.selectedCode)
-        .pipe(
-            takeUntil(this._unsubscribeAll),
-            debounceTime(300),
-            switchMap((query) => {
-                this.isLoading = true;
-                return this._channelService.getChannels(0, 10, 'name', 'asc');
-            }),
-            map(() => {
-                this.isLoading = false;
-            })
-        )
-        .subscribe();
-        this.isSuccess = true;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    DeleteDrawer(code: string): void {
-        this.selectedCode = code;
-        this.toogleDeleteMode(true);
-        this.matDrawer.open();
         this._changeDetectorRef.markForCheck();
     }
 

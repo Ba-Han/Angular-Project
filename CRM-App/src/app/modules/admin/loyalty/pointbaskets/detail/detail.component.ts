@@ -11,6 +11,7 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { PointBasket, PointBasketPagination } from 'app/modules/admin/loyalty/pointbaskets/pointbaskets.types';
 import { PointBasketService } from 'app/modules/admin/loyalty/pointbaskets/pointbaskets.service';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'pointbaskets-detail',
@@ -28,6 +29,41 @@ import { PointBasketService } from 'app/modules/admin/loyalty/pointbaskets/point
                     @screen lg {
                         grid-template-columns: 35px 200px 200px;
                     }
+                }
+
+                .reset_popup {
+                    position: fixed !important;
+                    top: 50% !important;
+                    left: 50% !important;
+                    transform: translate(-50%, -50%) !important;
+                    width: 28% !important;
+                    height: 34% !important;
+                }
+
+                .parent_popup {
+                    position: fixed;
+                    display: grid;
+                    justify-content: center;
+                    padding: 4rem;
+                }
+
+                .child_btn {
+                    padding-left: 1.5rem;
+                    position: fixed;
+                    margin-top: 2rem !important;
+                }
+
+                .update_scss {
+                    position: unset;
+                    text-align: center;
+                    color: rgb(0, 128, 0);
+                    padding: 4rem;
+                    font-size: 16px;
+                }
+
+                .delete-scss {
+                    position: fixed;
+                    padding-left: 2rem;
                 }
         `
     ],
@@ -53,13 +89,16 @@ export class PointBasketDetailComponent implements OnInit, AfterViewInit, OnDest
     AddMode: boolean = false;
     PointBasketEditForm: FormGroup;
     code: string;
+    canDelete: boolean = false;
+    DeleteMode: boolean = false;
+    isSuccess: boolean = false;
+    selectedId: number | null = null;
     name: string;
     description: string;
     spendingType: string;
     minDate: string;
     timeoutId: any;
     timeOutUpId: any;
-    selectedId: number;
     spendingtypeValue = 0;
     totypeValue = 0;
     toendTypeValue = 0;
@@ -77,6 +116,7 @@ export class PointBasketDetailComponent implements OnInit, AfterViewInit, OnDest
         private _router: Router,
         private _activatedRoute: ActivatedRoute,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
+        private _userService: UserService
     ) {
         const today = new Date();
         this.minDate = today.toISOString().slice(0, 16);
@@ -159,6 +199,8 @@ export class PointBasketDetailComponent implements OnInit, AfterViewInit, OnDest
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
+
+            this.canDelete = this._userService.getDeleteUserPermissionByNavId('point-baskets');
     }
 
     ngAfterViewInit(): void {
@@ -214,12 +256,44 @@ export class PointBasketDetailComponent implements OnInit, AfterViewInit, OnDest
         this._changeDetectorRef.markForCheck();
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    toogleDeleteMode(DeleteMode: boolean | null = null): void {
+        if (DeleteMode === null) {
+            this.DeleteMode = !this.DeleteMode;
+        }
+        else {
+            this.DeleteMode = DeleteMode;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    cancelPopup(): void {
+        this.isSuccess = false;
+        this.toogleDeleteMode(false);
+        this.matDrawer.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    proceedPopup(): void {
+        this._pointBasketService.getDeletePointBasket(this.selectedId).subscribe(() => {
+            this._router.navigate(['/point-baskets'], { relativeTo: this._activatedRoute });
+        });
+        this.isSuccess = true;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    DeleteDrawer(id: number): void {
+        this.selectedId = id;
+        this.toogleDeleteMode(true);
+        this.matDrawer.open();
+        this._changeDetectorRef.markForCheck();
+    }
+
     updatePointBasket(): void {
         const pointbasket = this.PointBasketEditForm.getRawValue();
         this._pointBasketService.updatePointBasket(pointbasket.id,pointbasket).subscribe(() => {
             this._router.navigate(['/point-baskets'], { relativeTo: this._activatedRoute });
         });
-
     }
 }
 

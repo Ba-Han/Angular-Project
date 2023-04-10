@@ -9,7 +9,7 @@
                 #matDrawer>
 
         <!-- Delete single transaction popup -->
-        <ng-container *ngIf="DeleteMode">
+        <!-- <ng-container *ngIf="DeleteMode">
             <ng-container *ngIf="isSuccess">
                 <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
                     <div class="">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
             </ng-container>
-        </ng-container>
+        </ng-container> -->
 
     </mat-drawer>
     <mat-drawer-content>
@@ -99,7 +99,7 @@
                             </mat-select>
                         </mat-form-field>
                         <!--sorting button-->
-                        <button
+                        <button class="ml-2 sort-btn-01"
                             (click)="sortingPageList()"
                             [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
                             mat-flat-button
@@ -257,7 +257,7 @@
                                                     </div>
                                                 </div>
                                             </ng-container>
-                                            <div class="deleteTransactionscss">
+                                           <!--  <div class="deleteTransactionscss">
                                                 <ng-container *ngIf="canDelete">
                                                     <button
                                                             mat-flat-button
@@ -271,7 +271,7 @@
         
                                                 <ng-container *ngIf="!canDelete">
                                                 </ng-container>
-                                            </div>
+                                            </div> -->
                                         </ng-container>
                                     </ng-container>
                                 </ng-container>

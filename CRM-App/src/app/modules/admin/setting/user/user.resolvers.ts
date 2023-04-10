@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
-import { UserService } from 'app/modules/admin/setting/user/user.service';
+import { CRMUserService } from 'app/modules/admin/setting/user/user.service';
 import { User, UserPagination } from 'app/modules/admin/setting/user/user.types';
 
 @Injectable({
@@ -9,10 +9,10 @@ import { User, UserPagination } from 'app/modules/admin/setting/user/user.types'
 })
 export class UsersResolver implements Resolve<any>
 {
-    constructor(private _userService: UserService) {
+    constructor(private _crmUserService: CRMUserService) {
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ pagination: UserPagination; users: User[] }> {
-        return this._userService.getAppUsers();
+        return this._crmUserService.getAppUsers();
     }
 }
 
@@ -22,12 +22,12 @@ export class UsersResolver implements Resolve<any>
 export class UserResolver implements Resolve<any>
 {
     constructor(
-        private _userService: UserService,
+        private _crmUserService: CRMUserService,
         private _router: Router
     ) {
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<User> {
-        return this._userService.getUserById(route.paramMap.get('id'))
+        return this._crmUserService.getUserById(route.paramMap.get('id'))
             .pipe(
                 // Error here means the requested store is not available
                 catchError((error) => {

@@ -21,18 +21,18 @@ import { UserService } from 'app/core/user/user.service';
     styles         : [
         `
             .memberpoint-grid {
-                grid-template-columns: 150px 150px 80px 100px 100px 100px 120px;
+                grid-template-columns: 150px 150px 100px 100px 150px 180px;
 
                 @screen sm {
-                    grid-template-columns: 150px 150px 80px 100px 100px 100px 120px;
+                    grid-template-columns: 150px 150px 100px 100px 150px 180px;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 150px 80px 100px 100px 100px 120px;
+                    grid-template-columns: 150px 150px 100px 100px 150px 180px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 150px 80px 100px 120px 100px 120px;
+                    grid-template-columns: 150px 150px 100px 100px 150px 180px;
                 }
             }
             .membercustom-paging {
@@ -93,6 +93,12 @@ import { UserService } from 'app/core/user/user.service';
             .memberpoint-2-sort {
                 position: static;
                 width: 10rem !important;
+            }
+
+            .sort-btn-01 {
+                border-radius: 3px !important;
+                padding: 12px !important;
+                min-width: 5px !important;
             }
         `
     ],

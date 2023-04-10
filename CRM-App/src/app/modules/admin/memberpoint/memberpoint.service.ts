@@ -25,7 +25,7 @@ export class MemberPointService
     private _pointBasketFullName: string = '';
     private _pointBasketId: number = 0;
     private _apiurl: string = '';
-    
+
     /**
      * Constructor
      */
@@ -175,7 +175,7 @@ export class MemberPointService
                 meta: 'filter_count',
                 page: page + 1,
                 limit: limit,
-                sort: "name",
+                sort: 'name',
                 order,
                 search
             }

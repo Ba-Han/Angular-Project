@@ -1,64 +1,10 @@
 
 <mat-drawer-container class="flex flex-col w-full">
-    <mat-drawer class="reset_popup dark:bg-gray-900"
+    <mat-drawer class="dark:bg-gray-900"
                 [mode]="'over'"
                 [opened]="false"
                 [disableClose]="true"
                 #matDrawer>
-
-        <!-- Delete single channel popup -->
-        <ng-container *ngIf="DeleteMode">
-            <ng-container *ngIf="isSuccess">
-                <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
-                    <div class="">
-                        <button mat-icon-button style="background-color:#ccc; position: fixed; right: 1rem;"
-                                [matTooltip]="'Close'"
-                                (click)="cancelPopup()">
-                            <mat-icon class="text-white"
-                                        [svgIcon]="'heroicons_outline:x'"></mat-icon>
-                        </button>
-                    </div>
-                </div>
-                <div class="mt-8">
-                    <fuse-alert [appearance]="'soft'"
-                                [dismissible]="false"
-                                [dismissed]="false"
-                                [name]="'alertBox1'"
-                                [type]="'success'">
-                        <div class="update_scss">
-                            Deleted Successfully.
-                        </div>
-                    </fuse-alert>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="!isSuccess">
-                <div class="parent_popup">
-                    <div>
-                        <div class="delete-scss"> Are you sure want to delete? </div>
-                    </div>    
-                    <div class="child_btn">
-                        <button class="ml-2"
-                                mat-flat-button
-                                [color]="'primary'"
-                                [matTooltip]="'Cancel'"
-                                (click)="cancelPopup()"
-                                >
-                            Cancel
-                        </button>
-    
-                        <button class="ml-2"
-                                mat-flat-button
-                                [color]="'primary'"
-                                [matTooltip]="'Proceed'"
-                                (click)="proceedPopup()"
-                                >
-                            Proceed
-                        </button>
-                    </div>
-                </div>
-            </ng-container>
-        </ng-container>
-        
     </mat-drawer>
 
     <mat-drawer-content>
@@ -96,7 +42,7 @@
                                 </mat-select>
                             </mat-form-field>
                             <!--sorting button-->
-                            <button
+                            <button class="ml-2 sort-btn-01"
                                 (click)="sortingPageList()"
                                 [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
                                 mat-flat-button
@@ -178,21 +124,6 @@
                                                         </ng-container>
                                                     </div>
                                                 </a>
-                                                <div class="deleteChannelscss">
-                                                    <ng-container *ngIf="canDelete">
-                                                        <button
-                                                                mat-flat-button
-                                                                [color]="'primary'"
-                                                                [matTooltip]="'Delete'"
-                                                                (click)="DeleteDrawer(channel.code)"
-                                                                >
-                                                                Delete
-                                                            </button>
-                                                    </ng-container>
-        
-                                                    <ng-container *ngIf="!canDelete">
-                                                    </ng-container>
-                                                </div>
                                             </ng-container>
                                         </ng-container>
                                     </div>

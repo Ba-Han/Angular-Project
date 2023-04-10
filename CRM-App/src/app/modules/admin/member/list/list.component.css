@@ -16,6 +16,12 @@
     width: 10rem !important;
 }
 
+.sort-btn-01 {
+    border-radius: 3px !important;
+    padding: 12px !important;
+    min-width: 5px !important;
+}
+
 .advancedSearch-gird {
     grid-template-columns: 150px 150px 150px 100px 100px auto;
 }

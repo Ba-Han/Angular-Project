@@ -8,7 +8,7 @@ import { environment } from 'environments/environment';
 @Injectable({
     providedIn: 'root'
 })
-export class UserService {
+export class CRMUserService {
     // Private
     private _pagination: BehaviorSubject<UserPagination | null> = new BehaviorSubject(null);
     private _users: BehaviorSubject<User[] | null> = new BehaviorSubject(null);

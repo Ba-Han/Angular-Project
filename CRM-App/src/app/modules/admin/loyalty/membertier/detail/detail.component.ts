@@ -12,6 +12,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { MemberTier, MemberTierPagination, PointRule, PointRulePagination, PointSegment, point_segment_id, MemberTierUpgrade } from 'app/modules/admin/loyalty/membertier/membertier.types';
 import { MemberTierService } from 'app/modules/admin/loyalty/membertier/membertier.service';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'membertier-detail',
@@ -34,6 +35,7 @@ import { MemberTierService } from 'app/modules/admin/loyalty/membertier/memberti
                     grid-template-columns: 150px 150px 200px auto;
                 }
             }
+
             .pointrule-grid{
                grid-template-columns: 60px 100px;
 
@@ -49,10 +51,12 @@ import { MemberTierService } from 'app/modules/admin/loyalty/membertier/memberti
                         grid-template-columns: 60px 150px 150px;
                     }
            }
+
            .membercustom-paging {
                    position: fixed !important;
                     bottom: 57px;
             }
+
             .tier-grid{
                grid-template-columns: 60px 100px;
 
@@ -67,7 +71,43 @@ import { MemberTierService } from 'app/modules/admin/loyalty/membertier/memberti
                     @screen lg {
                         grid-template-columns: 60px 150px 150px;
                     }
-           }
+                }
+
+                .reset_popup {
+                    position: fixed !important;
+                    top: 50% !important;
+                    left: 50% !important;
+                    transform: translate(-50%, -50%) !important;
+                    width: 28% !important;
+                    height: 34% !important;
+                }
+
+                .parent_popup {
+                    position: fixed;
+                    display: grid;
+                    justify-content: center;
+                    padding: 4rem;
+                }
+
+                .child_btn {
+                    padding-left: 1.5rem;
+                    position: fixed;
+                    margin-top: 2rem !important;
+                }
+
+                .update_scss {
+                    position: unset;
+                    text-align: center;
+                    color: rgb(0, 128, 0);
+                    padding: 4rem;
+                    font-size: 16px;
+                }
+
+                .delete-scss {
+                    position: fixed;
+                    padding-left: 2rem;
+                }
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -77,11 +117,20 @@ import { MemberTierService } from 'app/modules/admin/loyalty/membertier/memberti
 export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
-    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
-   
+    //@ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+    //@ViewChild('matDrawer', { static: true }) matDrawer2: MatDrawer;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('drawerOne', { static: true }) drawerOne: MatDrawer;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('drawerTwo', { static: true }) drawerTwo: MatDrawer;
+
     memberTiers$: Observable<MemberTier[]>;
     memberTier: MemberTier;
     memberTierId: number;
+    canDelete: boolean = false;
+    DeleteMode: boolean = false;
+    isSuccess: boolean = false;
+    selectedId: number | null = null;
     flashMessage: 'success' | 'error' | null = null;
     isLoading: boolean = false;
     pointsegmentMode: boolean = false;
@@ -126,6 +175,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _activatedRoute: ActivatedRoute,
         private _router: Router,
+        private _userService: UserService
     ) {
     }
 
@@ -207,7 +257,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
                 this.memberTier = tier;
                 this.selectedUpgradeItem = tier.tier_upgrade_items;
                 //this.memberTier.point_ruleFullname = tier.point_rule.name;
-                //this.memberTier.tier_upgrade_Fullname = 
+                //this.memberTier.tier_upgrade_Fullname =
                 //this.tierUpgradeId =;
                 this.downgradeconditionValue = tier.downgrade_condition_type;
                 this.memberTierAddForm.patchValue(this.memberTier);
@@ -216,7 +266,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
 
         // Subscribe to search input field value changes
 
-        this.matDrawer.openedChange.subscribe((opened) => {
+        this.drawerTwo.openedChange.subscribe((opened) => {
             if (!opened) {
                 this._changeDetectorRef.markForCheck();
             }
@@ -247,6 +297,8 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
         .subscribe((dw) => {
             this.dwMemberGroups = dw;
         });
+
+        this.canDelete = this._userService.getDeleteUserPermissionByNavId('member-tier');
     }
 
     ngAfterViewInit(): void {
@@ -325,6 +377,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
         this._changeDetectorRef.markForCheck();
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     toogleTierUpgradeFormMode(tierUpgradeFormMode: boolean | null = null) {
         if (tierUpgradeFormMode === null) {
             this.tierUpgradeFormMode = !this.tierUpgradeFormMode;
@@ -336,6 +389,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
         this._changeDetectorRef.markForCheck();
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     toogleMemberListMode(MemberListMode: boolean | null = null) {
         if (MemberListMode === null) {
             this.MemberListMode = !this.MemberListMode;
@@ -346,7 +400,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
 
         this._changeDetectorRef.markForCheck();
     }
-    
+
     AddFormclose(): void {
         this.tooglepointAddFormMode(false);
     }
@@ -357,7 +411,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
         memberTier.point_ruleFullname = name;
         this.memberTierAddForm.patchValue(memberTier);
         this.isLoading = false;
-        this.matDrawer.close();
+        this.drawerOne.close();
     }
 
     /* openPointRuleForm(id): void {
@@ -419,16 +473,16 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
             });
     } */
 
-    createNewPointSegment(): void {
+    /* createNewPointSegment(): void {
         this.PointSegmentForm.reset();
         this.tooglepointSegmentAddFormMode(true);
-    }
+    } */
 
-    closeSegmentForm(): void {
+    /* closeSegmentForm(): void {
         this.tooglepointSegmentAddFormMode(false);
-    }
+    } */
 
-    createUpdateSegmentPoint(): void {
+    /* createUpdateSegmentPoint(): void {
         this.isLoading = true;
         const segment = this.PointSegmentForm.getRawValue();
         if (Number(segment.id) > 0) {
@@ -441,7 +495,6 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
                     this.isLoading = false;
                     this.tooglepointSegmentAddFormMode(false);
                 });
-           
         }
         else {
             //this._memberTierService.createPointSegment(segment)
@@ -470,9 +523,9 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
         }
 
 
-    }
+    } */
 
-    convertToPointSegmentIdObject(pointsegment: PointSegment): any {
+    /* convertToPointSegmentIdObject(pointsegment: PointSegment): any {
         var point_segment_id = {
             "point_segment_id": {
                 "status": pointsegment.status,
@@ -497,15 +550,15 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
             }
         }
         return point_segment_id;
-    }
+    } */
 
-    editForm(pointsegment: PointSegment): void {
+    /* editForm(pointsegment: PointSegment): void {
         this.tooglepointSegmentAddFormMode(false);
         this.isLoading = true;
         //this._memberTierService.getPointSegmentById(id)
         //    .pipe(takeUntil(this._unsubscribeAll))
         //    .subscribe((pointsegment: any) => {
-                
+
         //    });
         //const editsegment = pointsegment;
         //pointsegment = PointSegment;
@@ -517,6 +570,39 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
         this.PointSegmentForm.patchValue(pointsegment);
         this.isLoading = false;
         this.tooglepointSegmentAddFormMode(true);
+    } */
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    toogleDeleteMode(DeleteMode: boolean | null = null): void {
+        if (DeleteMode === null) {
+            this.DeleteMode = !this.DeleteMode;
+        }
+        else {
+            this.DeleteMode = DeleteMode;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    cancelPopup(): void {
+        this.isSuccess = false;
+        this.toogleDeleteMode(false);
+        this.drawerOne.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    proceedPopup(): void {
+        this._memberTierService.getDeleteMemberTier(this.selectedId).subscribe(() => {
+            this._router.navigate(['/member-tier'], { relativeTo: this._activatedRoute });
+        });
+        this.isSuccess = true;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    DeleteDrawer(id: number): void {
+        this.selectedId = id;
+        this.toogleDeleteMode(true);
+        this.drawerOne.open();
+        this._changeDetectorRef.markForCheck();
     }
 
     updateMemberTier(): void {
@@ -531,7 +617,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
     openTierUpgradeForm(): void {
         this.TierUpgradeForm.reset();
         this.toogleTierUpgradeFormMode(true);
-        this.matDrawer.open();
+        this.drawerTwo.open();
     }
 
     createTierUpgrade(): void {
@@ -542,7 +628,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
                 .pipe(takeUntil(this._unsubscribeAll))
                 .subscribe((tier: any) => {
                     //this.selectedUpgradeItem.push(tier.data.id);
-                    let index = this.selectedUpgradeItem.findIndex(x => x.id === tier.data.id);
+                    const index = this.selectedUpgradeItem.findIndex(x => x.id === tier.data.id);
                     this.selectedUpgradeItem[(index)] = tier.data;
                     this.itemName = tier.data.item_number;
                     const memberTier = this.memberTierAddForm.getRawValue();
@@ -551,7 +637,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
                     memberTier.tier_upgrade_Fullname = tier.data.item_number;
                     this.memberTierAddForm.patchValue(memberTier);
                     this.isLoading = false;
-                    this.matDrawer.close();
+                    this.drawerTwo.close();
                 });
         }
         else {
@@ -566,7 +652,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
                     memberTier.tier_upgrade_Fullname = tier.data.item_number;
                     this.memberTierAddForm.patchValue(memberTier);
                     this.isLoading = false;
-                    this.matDrawer.close();
+                    this.drawerTwo.close();
                 });
         }
 
@@ -599,7 +685,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
                     this.TierUpgradeForm.patchValue(edittier);
                     this.isLoading = false;
                     this.toogleTierUpgradeFormMode(true);
-                    this.matDrawer.open();
+                    this.drawerTwo.open();
                 });
         }
     }
