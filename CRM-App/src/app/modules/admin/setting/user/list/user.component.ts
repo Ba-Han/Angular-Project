@@ -33,7 +33,8 @@ import {
     User,
     UserPagination,
 } from 'app/modules/admin/setting/user/user.types';
-import { UserService } from 'app/modules/admin/setting/user/user.service';
+import { CRMUserService } from 'app/modules/admin/setting/user/user.service';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'user-list',
@@ -69,6 +70,12 @@ import { UserService } from 'app/modules/admin/setting/user/user.service';
                 position: static;
                 width: 9rem !important;
             }
+
+            .sort-btn-01 {
+                border-radius: 3px !important;
+                padding: 12px !important;
+                min-width: 5px !important;
+            }
         `,
     ],
     encapsulation: ViewEncapsulation.None,
@@ -87,6 +94,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
     AddMode: boolean = false;
     UserAddForm: FormGroup;
     code: string;
+    canEdit: boolean = false;
     selectedChannel: User | null = null;
     isAscending: boolean = true;
     selectedCoulumn = 'username';
@@ -99,6 +107,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
         private _changeDetectorRef: ChangeDetectorRef,
         private _fuseConfirmationService: FuseConfirmationService,
         private _formBuilder: FormBuilder,
+        private _crmUserService: CRMUserService,
         private _userService: UserService
     ) {}
 
@@ -118,7 +127,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         // Get the pagination
-        this._userService.pagination$
+        this._crmUserService.pagination$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((pagination: UserPagination) => {
                 this.pagination = pagination;
@@ -126,7 +135,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
             });
 
         // Get the users []
-        this.users$ = this._userService.users$;
+        this.users$ = this._crmUserService.users$;
 
         // search
         this.searchInputControl.valueChanges
@@ -135,7 +144,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
                 debounceTime(300),
                 switchMap((query) => {
                     this.isLoading = true;
-                    return this._userService.getAppUsers(
+                    return this._crmUserService.getAppUsers(
                         0,
                         10,
                         'username',
@@ -150,6 +159,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
             .subscribe();
 
         this.getUserRoles();
+        this.canEdit = this._userService.getViewUserPermissionByNavId('loginuser');
     }
 
     ngAfterViewInit(): void {
@@ -180,7 +190,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
                             this._sort.direction === 'desc'
                                 ? '-' + this._sort.active
                                 : this._sort.active; */
-                        return this._userService.getAppUsers(
+                        return this._crmUserService.getAppUsers(
                             this._paginator.pageIndex,
                             this._paginator.pageSize,
                             this._sort.active,
@@ -222,28 +232,28 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
     sortingPageList() {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'username' ) {
-            this._userService.getAppUsers(0, 10, 'username', 'asc').subscribe();
+            this._crmUserService.getAppUsers(0, 10, 'username', 'asc').subscribe();
         } else if ( !this.isAscending && this.selectedCoulumn === 'username' ) {
-            this._userService.getAppUsers(0, 10, 'username', 'desc').subscribe();
+            this._crmUserService.getAppUsers(0, 10, 'username', 'desc').subscribe();
         } else if ( this.isAscending && this.selectedCoulumn === 'firstname' ) {
-            this._userService.getAppUsers(0, 10, 'first_name', 'asc').subscribe();
+            this._crmUserService.getAppUsers(0, 10, 'first_name', 'asc').subscribe();
         } else if ( !this.isAscending && this.selectedCoulumn === 'firstname' ) {
-            this._userService.getAppUsers(0, 10, 'first_name', 'desc').subscribe();
+            this._crmUserService.getAppUsers(0, 10, 'first_name', 'desc').subscribe();
         } else if ( this.isAscending && this.selectedCoulumn === 'lastname' ) {
-            this._userService.getAppUsers(0, 10, 'last_name', 'asc').subscribe();
+            this._crmUserService.getAppUsers(0, 10, 'last_name', 'asc').subscribe();
         } else if ( !this.isAscending && this.selectedCoulumn === 'lastname' ) {
-            this._userService.getAppUsers(0, 10, 'last_name', 'desc').subscribe();
+            this._crmUserService.getAppUsers(0, 10, 'last_name', 'desc').subscribe();
         } else if ( this.isAscending && this.selectedCoulumn === 'email' ) {
-            this._userService.getAppUsers(0, 10, 'email', 'asc').subscribe();
+            this._crmUserService.getAppUsers(0, 10, 'email', 'asc').subscribe();
         } else if ( !this.isAscending && this.selectedCoulumn === 'email' ) {
-            this._userService.getAppUsers(0, 10, 'email', 'desc').subscribe();
+            this._crmUserService.getAppUsers(0, 10, 'email', 'desc').subscribe();
         }
     }
 
     createUser(): void {
         const user = this.UserAddForm.getRawValue();
         if (this.passwordStrength >= 100) {
-            this._userService.createUser(user).subscribe(() => {
+            this._crmUserService.createUser(user).subscribe(() => {
                 this.toogleStoreAddFormMode(false);
             });
         }
@@ -255,7 +265,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getUserRoles() {
-        this._userService
+        this._crmUserService
             .getUserRoles()
             .pipe(finalize(() => {}))
             .subscribe((response) => {

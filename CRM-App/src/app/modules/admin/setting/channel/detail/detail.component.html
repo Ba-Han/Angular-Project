@@ -1,148 +1,228 @@
 
 
-<div class="flex flex-col w-full" style="background:#fff;">
-    
+<mat-drawer-container class="flex flex-col w-full">
+    <mat-drawer class="reset_popup dark:bg-gray-900"
+                [mode]="'over'"
+                [opened]="false"
+                [disableClose]="true"
+                #matDrawer>
 
-    <ng-container *ngIf="!editMode">
-        <div class="relative w-full h-40 sm:h-20 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
-            <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
-                <div class="mt-3 text-4xl w-full font-bold truncate">
-                    {{channel.name}}
-                    <button mat-stroked-button
-                            (click)="toggleEditMode(true)">
-                        <mat-icon class="icon-size-5"
-                                  [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
-                        <span class="ml-2">Edit</span>
-                    </button>
-                </div>
-                <button mat-icon-button
-                        [matTooltip]="'Close'"
-                        [routerLink]="['/channel']"
-                        style="background:#ccc;">
-                    <mat-icon class="text-white"
-                              [svgIcon]="'heroicons_outline:x'"></mat-icon>
-                </button>
-            </div>
-            <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0 custom-layout">
-                <div class="w-full max-w-3xl">
-                    <div class="flex flex-col mt-4 pt-6 space-y-3">
-
-                        <ng-container *ngIf="channel.code">
-                            <div class="flex sm:items-center">
-                                <div class="w-1/4">Channel Code: </div>
-                                <div class="ml-6 leading-6">{{channel.code}}</div>
-                            </div>
-                        </ng-container>
-
-                        <ng-container *ngIf="channel.status === 'active'">
-                            <div class="flex sm:items-center">
-                                <div class="w-1/4">Status: </div>
-                                <div class="ml-6 leading-6">Active</div>
-                            </div>
-                        </ng-container>
-
-                        <ng-container *ngIf="channel.status === 'inactive'">
-                            <div class="flex sm:items-center">
-                                <div class="w-1/4">Status: </div>
-                                <div class="ml-6 leading-6">Inactive</div>
-                            </div>
-                        </ng-container>
-                        
-                        <!--<ng-container *ngIf="channel.user_updated">
-                            <div class="flex sm:items-center">
-                                <div class="w-1/4">User Updated Date: </div>
-                                <div class="ml-6 leading-6">{{channel.user_updated | date:'MMM dd, y'}}</div>
-                            </div>
-                        </ng-container>-->
-
-                        <!--<ng-container *ngIf="channel.date_created">
-                            <div class="flex sm:items-center">
-                                <div class="w-1/4">Created Date: </div>
-                                <div class="ml-6 leading-6">{{channel.date_created | date:'MMM dd, y'}}</div>
-                            </div>
-                        </ng-container>-->
-
-                        <!--<ng-container *ngIf="channel.date_updated">
-                            <div class="flex sm:items-center">
-                                <div class="w-1/4">Last Update Date: </div>
-                                <div class="ml-6 leading-6">{{channel.date_updated | date:'MMM dd, y'}}</div>
-                            </div>
-                        </ng-container>-->
+        <!-- Delete single channel popup -->
+        <ng-container *ngIf="DeleteMode">
+            <ng-container *ngIf="isSuccess">
+                <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
+                    <div class="">
+                        <!-- <button mat-icon-button style="background-color:#ccc; position: fixed; right: 1rem;"
+                                [matTooltip]="'Close'"
+                                (click)="cancelPopup()">
+                            <mat-icon class="text-white"
+                                        [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                        </button> -->
                     </div>
                 </div>
-            </div>
-        </div>
-       
-    </ng-container>
-
-    <ng-container *ngIf="editMode">
-        <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
-            <div class="mt-3 text-4xl w-full font-bold truncate">Edit Channel</div>
-            <button mat-icon-button
-                    [matTooltip]="'Close'"
-                    (click)="toggleEditMode(false)"
-                    style="background:#ccc;">
-                <mat-icon class="text-white"
-                          [svgIcon]="'heroicons_outline:x'"></mat-icon>
-            </button>
-        </div>
-
-        <!-- Edit Form -->
-        <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
-            <div class="w-full max-w-3xl">
-                <form [formGroup]="ChannelEditForm">
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full" disabled>
-                            <mat-label>Code</mat-label>
-                            <mat-icon matPrefix
-                                      class="hidden sm:flex icon-size-5"
-                                      [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
-                            <input matInput [readonly] = "true"
-                                   [formControlName]="'code'"
-                                   [placeholder]="'code'"
-                                   [spellcheck]="false">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Name</mat-label>
-                            <mat-icon matPrefix
-                                      class="hidden sm:flex icon-size-5"
-                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                            <input matInput
-                                   [formControlName]="'name'"
-                                   [placeholder]="'name'">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Status</mat-label>
-                            <mat-select [formControlName]="'status'">
-                                <mat-option value="active">Active</mat-option>
-                                <mat-option value="inactive">Inactive</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-
-
-                    <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                <div class="mt-8">
+                    <fuse-alert [appearance]="'soft'"
+                                [dismissible]="false"
+                                [dismissed]="false"
+                                [name]="'alertBox1'"
+                                [type]="'success'">
+                        <div class="update_scss">
+                            Deleted Successfully.
+                        </div>
+                    </fuse-alert>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!isSuccess">
+                <div class="parent_popup">
+                    <div>
+                        <div class="delete-scss"> Are you sure want to delete? </div>
+                    </div>    
+                    <div class="child_btn">
                         <button class="ml-2"
                                 mat-flat-button
-                                [disabled]="ChannelEditForm.invalid"
                                 [color]="'primary'"
-                                [matTooltip]="'Save'"
-                                (click)="updateChannel()"
-                                [routerLink]="['/channel']">
-                            Save
+                                [matTooltip]="'Cancel'"
+                                (click)="cancelPopup()"
+                                >
+                            Cancel
+                        </button>
+    
+                        <button class="ml-2"
+                                mat-flat-button
+                                [color]="'primary'"
+                                [matTooltip]="'Proceed'"
+                                (click)="proceedPopup()"
+                                >
+                            Proceed
                         </button>
                     </div>
+                </div>
+            </ng-container>
+        </ng-container>
+        
+    </mat-drawer>
 
-                </form>
-            </div>
+    <mat-drawer-content>
+        <div class="flex flex-col w-full" style="background:#fff;">
+
+            <ng-container *ngIf="!editMode">
+                <div class="relative w-full h-40 sm:h-20 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
+                    <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
+                        <div class="mt-3 text-4xl w-full font-bold truncate">
+                            {{channel.name}}
+                            <button mat-stroked-button
+                                    (click)="toggleEditMode(true)">
+                                <mat-icon class="icon-size-5"
+                                        [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                                <span class="ml-2">Edit</span>
+                            </button>
+                        </div>
+                        <button mat-icon-button
+                                [matTooltip]="'Close'"
+                                [routerLink]="['/channel']"
+                                style="background:#ccc;">
+                            <mat-icon class="text-white"
+                                    [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                        </button>
+                    </div>
+                    <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0 custom-layout">
+                        <div class="w-full max-w-3xl">
+                            <div class="flex flex-col mt-4 pt-6 space-y-3">
+
+                                <ng-container *ngIf="channel.code">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Channel Code: </div>
+                                        <div class="ml-6 leading-6">{{channel.code}}</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="channel.status === 'active'">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Status: </div>
+                                        <div class="ml-6 leading-6">Active</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="channel.status === 'inactive'">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Status: </div>
+                                        <div class="ml-6 leading-6">Inactive</div>
+                                    </div>
+                                </ng-container>
+                                
+                                <!--<ng-container *ngIf="channel.user_updated">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">User Updated Date: </div>
+                                        <div class="ml-6 leading-6">{{channel.user_updated | date:'MMM dd, y'}}</div>
+                                    </div>
+                                </ng-container>-->
+
+                                <!--<ng-container *ngIf="channel.date_created">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Created Date: </div>
+                                        <div class="ml-6 leading-6">{{channel.date_created | date:'MMM dd, y'}}</div>
+                                    </div>
+                                </ng-container>-->
+
+                                <!--<ng-container *ngIf="channel.date_updated">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Last Update Date: </div>
+                                        <div class="ml-6 leading-6">{{channel.date_updated | date:'MMM dd, y'}}</div>
+                                    </div>
+                                </ng-container>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            </ng-container>
+
+            <ng-container *ngIf="editMode">
+                <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
+                    <div class="mt-3 text-4xl w-full font-bold truncate">Edit Channel</div>
+                    <button mat-icon-button
+                            [matTooltip]="'Close'"
+                            (click)="toggleEditMode(false)"
+                            style="background:#ccc;">
+                        <mat-icon class="text-white"
+                                [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+
+                <!-- Edit Form -->
+                <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
+                    <div class="w-full max-w-3xl">
+                        <form [formGroup]="ChannelEditForm">
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full" disabled>
+                                    <mat-label>Code</mat-label>
+                                    <mat-icon matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                                    <input matInput [readonly] = "true"
+                                        [formControlName]="'code'"
+                                        [placeholder]="'code'"
+                                        [spellcheck]="false">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Name</mat-label>
+                                    <mat-icon matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                    <input matInput
+                                        [formControlName]="'name'"
+                                        [placeholder]="'name'">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Status</mat-label>
+                                    <mat-select [formControlName]="'status'">
+                                        <mat-option value="active">Active</mat-option>
+                                        <mat-option value="inactive">Inactive</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+
+
+                            <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                                <button class="ml-2"
+                                        mat-flat-button
+                                        [disabled]="ChannelEditForm.invalid"
+                                        [color]="'primary'"
+                                        [matTooltip]="'Save'"
+                                        (click)="updateChannel()"
+                                        [routerLink]="['/channel']">
+                                    Save
+                                </button>
+
+                                <div class="ml-4">
+                                    <ng-container *ngIf="canDelete">
+                                        <button
+                                                mat-flat-button
+                                                [color]="'primary'"
+                                                [matTooltip]="'Delete'"
+                                                (click)="DeleteDrawer(channel.code)"
+                                                >
+                                                Delete
+                                            </button>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="!canDelete">
+                                    </ng-container>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </ng-container>
         </div>
-    </ng-container>
-</div>
+    </mat-drawer-content>
+</mat-drawer-container>

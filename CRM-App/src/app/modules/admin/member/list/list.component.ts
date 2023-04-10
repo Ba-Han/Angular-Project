@@ -263,6 +263,10 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
             this._memberService.getMembers(0, 10, 'mobile_phone', 'asc').subscribe();
         } else if ( !this.isAscending && this.selectedCoulumn === 'mobile' ) {
             this._memberService.getMembers(0, 10, 'mobile_phone', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'availablepoints' ) {
+            this._memberService.getMembers(0, 10, 'available_points', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'availablepoints' ) {
+            this._memberService.getMembers(0, 10, 'available_points', 'desc').subscribe();
         }
     }
 

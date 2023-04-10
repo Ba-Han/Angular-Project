@@ -4,10 +4,12 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { Subject, takeUntil, finalize } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PermissionModel, User } from 'app/modules/admin/setting/user/user.types';
-import { UserService } from 'app/modules/admin/setting/user/user.service';
+import { CRMUserService } from 'app/modules/admin/setting/user/user.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDrawer } from '@angular/material/sidenav';
+import { UserService } from 'app/core/user/user.service';
+
 
 @Component({
     selector: 'user-detail',
@@ -99,8 +101,10 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     ResetQRCodeMode: boolean = false;
     // eslint-disable-next-line @typescript-eslint/naming-convention
     UpdateUserDetailMode: boolean = false;
+    canEdit: boolean = false;
     isSuccess: boolean = false;
     isUpadteUserSuccess: boolean = false;
+    checkboxChecked: boolean = true;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     private passwordStrength: 0;
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -112,10 +116,11 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
-        private _userService: UserService,
+        private _crmUserService: CRMUserService,
         private _formBuilder: FormBuilder,
         private _router: Router,
         private _activatedRoute: ActivatedRoute,
+        private _userService: UserService
 
     ) {
         this.getUserRoles();
@@ -138,7 +143,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
             page_roles:['', Validators.required]
         });
 
-        this._userService.user$
+        this._crmUserService.user$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((user: User) => {
                 this.user = user;
@@ -157,6 +162,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
                 this.UserEditForm.patchValue(user);
                 this._changeDetectorRef.markForCheck();
             });
+
+            this.canEdit = this._userService.getViewUserPermissionByNavId('loginuser');
     }
 
     ngOnDestroy(): void {
@@ -225,7 +232,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
     proceedPopup(): void {
         // Update QR Code Function
-        this._userService.updateQRCode().subscribe();
+        this._crmUserService.updateQRCode().subscribe();
         this.isSuccess = true;
     }
 
@@ -263,7 +270,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
             });
 
         // Update the contact on the server
-        this._userService.updatePermission(user.id, this.updatedPagePermission).subscribe((res) => {
+        this._crmUserService.updatePermission(user.id, this.updatedPagePermission).subscribe((res) => {
             //console.log(res);
             /* if(res){
                 this._router.navigate(['/users'], { relativeTo: this._activatedRoute });
@@ -279,7 +286,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getUserRoles() {
-        this._userService.getUserRoles()
+        this._crmUserService.getUserRoles()
             .pipe(
                 finalize(() => {
                 })
@@ -300,4 +307,13 @@ export class UserDetailComponent implements OnInit, OnDestroy {
             }
         );
     }
+
+    /* onCheckboxChange(event: any): void {
+        if (event.target.checked) {
+            this.checkboxChecked = true;
+          } else {
+            this.checkboxChecked = false;
+          }
+        //this.checkboxChecked = event.target.checked;
+      } */
 }

@@ -21,18 +21,18 @@ import { UserService } from 'app/core/user/user.service';
         /* language=SCSS */
         `
             .transaction-grid {
-                grid-template-columns: 150px 120px 120px 100px 100px 100px;
+                grid-template-columns: 150px 120px 120px 120px 120px 120px;
 
                 @screen sm {
-                    grid-template-columns: 150px 120px 120px 100px 100px 100px;
+                    grid-template-columns: 150px 120px 120px 120px 120px 120px;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 120px 120px 100px 100px 100px;
+                    grid-template-columns: 150px 120px 120px 120px 120px 120px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 120px 120px 100px 100px 100px;
+                    grid-template-columns: 150px 120px 120px 120px 120px 120px;
                 }
             }
             .custom-paging {
@@ -94,6 +94,12 @@ import { UserService } from 'app/core/user/user.service';
             .transaction-2-sort {
                 position: static;
                 width: 10rem !important;
+            }
+
+            .sort-btn-01 {
+                border-radius: 3px !important;
+                padding: 12px !important;
+                min-width: 5px !important;
             }
         `
     ],
