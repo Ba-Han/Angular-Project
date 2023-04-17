@@ -308,12 +308,12 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         );
     }
 
-    /* onCheckboxChange(event: any): void {
-        if (event.target.checked) {
+    /* onCheckboxChange(event: any, id: number): void {
+        this.checkboxChecked = event.target.checked;
+        if (this.checkboxChecked) {
             this.checkboxChecked = true;
           } else {
             this.checkboxChecked = false;
           }
-        //this.checkboxChecked = event.target.checked;
       } */
 }

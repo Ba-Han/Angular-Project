@@ -73,7 +73,7 @@
                 <div class="">
                     <button mat-icon-button style="background-color:#ccc;"
                             [matTooltip]="'Close'"
-                            (click)="matDrawer.close()">
+                            (click)="drawerTwo.close()">
                         <mat-icon class="text-white"
                                     [svgIcon]="'heroicons_outline:x'"></mat-icon>
                     </button>
@@ -150,12 +150,12 @@
 
                             <div class="">
                                 <mat-paginator class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
-                                               [ngClass]="{'pointer-events-none': isLoading}"
-                                               [length]="memberTierPagination.length"
-                                               [pageIndex]="memberTierPagination.page"
-                                               [pageSize]="memberTierPagination.limit"
-                                               [pageSizeOptions]="[10, 25, 100]"
-                                               [showFirstLastButtons]="true"></mat-paginator>
+                                    [ngClass]="{'pointer-events-none': isLoading}"
+                                    [length]="memberTierPagination.length"
+                                    [pageIndex]="memberTierPagination.page"
+                                    [pageSize]="memberTierPagination.limit"
+                                    [pageSizeOptions]="[10, 25, 100]"
+                                    [showFirstLastButtons]="true"></mat-paginator>
                             </div>
 
 
@@ -175,7 +175,7 @@
                 <div class="">
                     <button mat-icon-button style="background-color:#ccc;"
                             [matTooltip]="'Close'"
-                            (click)="matDrawer.close()">
+                            (click)="drawerTwo.close()">
                         <mat-icon class="text-white"
                                     [svgIcon]="'heroicons_outline:x'"></mat-icon>
                     </button>
@@ -255,12 +255,12 @@
 
                             <div class="">
                                 <mat-paginator class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
-                                               [ngClass]="{'pointer-events-none': isLoading}"
-                                               [length]="pointBasketPagination.length"
-                                               [pageIndex]="pointBasketPagination.page"
-                                               [pageSize]="pointBasketPagination.limit"
-                                               [pageSizeOptions]="[10, 25, 100]"
-                                               [showFirstLastButtons]="true"></mat-paginator>
+                                    [ngClass]="{'pointer-events-none': isLoading}"
+                                    [length]="pointBasketPagination.length"
+                                    [pageIndex]="pointBasketPagination.page"
+                                    [pageSize]="pointBasketPagination.limit"
+                                    [pageSizeOptions]="[10, 25, 100]"
+                                    [showFirstLastButtons]="true"></mat-paginator>
                             </div>
                         </ng-container>
                     </ng-container>
