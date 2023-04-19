@@ -83,6 +83,10 @@ import { UserService } from 'app/core/user/user.service';
                     padding-left: 2rem;
                 }
 
+                .mat-paginator-container {
+                    margin-left: 0 !important;
+                }
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
