@@ -248,7 +248,7 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
                 })
             )
             .subscribe();
-            this.canEdit = this._userService.getViewUserPermissionByNavId('member-tier');
+            this.canEdit = this._userService.getEditUserPermissionByNavId('member-tier');
 
         this.drawerTwo.openedChange.subscribe((opened) => {
             if (!opened) {

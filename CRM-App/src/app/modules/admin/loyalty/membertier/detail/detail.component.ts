@@ -103,6 +103,22 @@ import { UserService } from 'app/core/user/user.service';
                     font-size: 16px;
                 }
 
+                .successMessage_scss {
+                    position: unset;
+                    text-align: center;
+                    color: rgb(0, 128, 0);
+                    padding: 3rem;
+                    font-size: 16px;
+                }
+
+                .errorMessage_scss {
+                    position: unset;
+                    text-align: center;
+                    color: rgb(255, 49, 49);
+                    padding: 3rem;
+                    font-size: 16px;
+                }
+
                 .delete-scss {
                     position: fixed;
                     padding-left: 2rem;
@@ -131,6 +147,8 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
     selectedId: number | null = null;
+    successMessage: string | null = null;
+    errorMessage: string | null = null;
     flashMessage: 'success' | 'error' | null = null;
     isLoading: boolean = false;
     pointsegmentMode: boolean = false;
@@ -591,10 +609,25 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
     }
 
     proceedPopup(): void {
-        this._memberTierService.getDeleteMemberTier(this.selectedId).subscribe(() => {
-            this._router.navigate(['/member-tier'], { relativeTo: this._activatedRoute });
-        });
-        this.isSuccess = true;
+        this._memberTierService.getDeleteMemberTier(this.selectedId)
+        .subscribe(() => {
+            },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this.successMessage = 'Deleted Successfully.';
+                    this._router.navigate(['/member-tier'], { relativeTo: this._activatedRoute });
+                    this.isSuccess = true;
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this.isSuccess = true;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention

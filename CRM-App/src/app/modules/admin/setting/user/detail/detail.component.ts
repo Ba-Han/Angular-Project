@@ -163,7 +163,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
                 this._changeDetectorRef.markForCheck();
             });
 
-            this.canEdit = this._userService.getViewUserPermissionByNavId('loginuser');
+            this.canEdit = this._userService.getEditUserPermissionByNavId('loginuser');
     }
 
     ngOnDestroy(): void {
@@ -307,13 +307,4 @@ export class UserDetailComponent implements OnInit, OnDestroy {
             }
         );
     }
-
-    /* onCheckboxChange(event: any, id: number): void {
-        this.checkboxChecked = event.target.checked;
-        if (this.checkboxChecked) {
-            this.checkboxChecked = true;
-          } else {
-            this.checkboxChecked = false;
-          }
-      } */
 }

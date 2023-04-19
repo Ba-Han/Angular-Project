@@ -136,7 +136,7 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
                 })
             )
             .subscribe();
-            this.canEdit = this._userService.getViewUserPermissionByNavId('channel');
+            this.canEdit = this._userService.getEditUserPermissionByNavId('channel');
     }
 
     ngAfterViewInit(): void {

@@ -104,7 +104,6 @@ export class MemberTierService {
                 };
                 //const memberTier = response.data;
 
-                
                 /* for (var i = 0; i < response.data.length; i++) {
                     if (response.data != null) {
                         response.data[i]["point_ruleFullname"] = response.data[i].point_rule.name;
@@ -114,7 +113,7 @@ export class MemberTierService {
                         response.data[i]["point_ruleFullname"] = "";
                         response.data[i].point_rule = "";
                     }
-                    
+
                 } */
                 this._pagination.next(pagination);
                 this._memberTiers.next(response.data);
@@ -128,9 +127,7 @@ export class MemberTierService {
     getMemberTierById(id: number): Observable<MemberTier> {
         return this._httpClient.get(`${this._apiurl}/items/member_tier/${id}?fields=*,tier_upgrade_items.*,point_rule.*`
         ).pipe(
-            tap((response: any) => {
-                return this._memberTier.next(response.data);
-            })
+            tap((response: any) => this._memberTier.next(response.data))
         );
     }
 
@@ -171,37 +168,28 @@ export class MemberTierService {
         if (isdetail) {
             return this._httpClient.get(`${this._apiurl}/items/point_rule/${id}?fields=*,point_basket.*`
             ).pipe(
-                tap((response: any) => {
-                    return response.data;
-                })
+                tap((response: any) => response.data)
             );
         }
         else {
             return this._httpClient.get(`${this._apiurl}/items/point_rule/${id}`
             ).pipe(
-                tap((response: any) => {
-                    return response.data;
-                })
+                tap((response: any) => response.data)
             );
         }
-        
     }
 
     getPointSegmentById(id: number): Observable<PointSegment> {
         return this._httpClient.get(`${this._apiurl}/items/point_segment/${id}`
         ).pipe(
-            tap((response: any) => {
-                return response.data;
-            })
+            tap((response: any) => response.data)
         );
     }
 
     getSegmentDetailById(id: number): Observable<PointSegment> {
         return this._httpClient.get(`${this._apiurl}/items/point_segment/${id}`
         ).pipe(
-            tap((response: any) => {
-                return response.data;
-            })
+            tap((response: any) => response.data)
         );
     }
 
@@ -228,13 +216,7 @@ export class MemberTierService {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getDeleteMemberTier(id: number){
         return this._httpClient.delete(`${this._apiurl}/items/member_tier/${id}`,
-        { responseType: 'text' })
-        .pipe(
-            map(() => true),
-            catchError((error) => {
-                console.error(error);
-                return of(false);
-            }));
+        { observe: 'response' });
     };
 
     getMemberTierLevels(): Observable<MemberTier[]> {
@@ -338,12 +320,10 @@ export class MemberTierService {
                 "dw_member_group": memberTier.dw_member_group,
                 /* "point_rule": memberTier.point_rule, */
                 "tier_upgrade_items": memberTier.tier_upgrade_items
-    
+
             }).pipe(
-                tap((response: any) => {
-                    return response.data;
-                })
-            )
+                tap((response: any) => response.data)
+            );
         } else {
             return this._httpClient.patch<MemberTier>(`${this._apiurl}/items/member_tier/${id}`, {
                 "id": id,
@@ -364,12 +344,10 @@ export class MemberTierService {
                 "dw_member_group": memberTier.dw_member_group,
                 /* "point_rule": memberTier.point_rule, */
                 "tier_upgrade_items": memberTier.tier_upgrade_items
-    
+
             }).pipe(
-                tap((response: any) => {
-                    return response.data;
-                })
-            )
+                tap((response: any) => response.data)
+            );
         }
     }
 
@@ -399,10 +377,8 @@ export class MemberTierService {
             "spending_to_day": pointsegment.spending_to_day,
             "spending_to_month": pointsegment.spending_to_month
         }).pipe(
-            tap((response: any) => {
-                return response.data;
-            })
-        )
+            tap((response: any) => response.data)
+        );
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -433,10 +409,8 @@ export class MemberTierService {
             "spending_to_day": pointsegment.spending_to_day,
             "spending_to_month": pointsegment.spending_to_month
         }).pipe(
-            tap((response: any) => {
-                return response.data;
-            })
-        )
+            tap((response: any) => response.data)
+        );
     }
 
     createPointRule(pointrule: PointRule): Observable<PointRule> {
@@ -455,10 +429,8 @@ export class MemberTierService {
             "reward_code": pointrule.reward_code,
             "point_basket": pointrule.point_basket
         }).pipe(
-            tap((response: any) => {
-                return response.data;
-            })
-        )
+            tap((response: any) => response.data)
+        );
     }
 
     updatePointRule(id: number,pointrule: PointRule): Observable<PointRule> {
@@ -478,9 +450,7 @@ export class MemberTierService {
             "reward_code": pointrule.reward_code,
             "point_basket": pointrule.point_basket
         }).pipe(
-            tap((response: any) => {
-                return response.data;
-            })
+            tap((response: any) => response.data)
         )
     }
 
@@ -492,10 +462,8 @@ export class MemberTierService {
             "price": tierupgrade.price,
             "upgrade_tier": tierupgrade.upgrade_tier
         }).pipe(
-            tap((response: any) => {
-                return response.data;
-            })
-        )
+            tap((response: any) => response.data)
+        );
     }
 
     updateTierUpgrade(id: number,tierupgrade: MemberTierUpgrade): Observable<MemberTierUpgrade> {
@@ -507,10 +475,8 @@ export class MemberTierService {
             "price": tierupgrade.price,
             "upgrade_tier": tierupgrade.upgrade_tier
         }).pipe(
-            tap((response: any) => {
-                return response.data;
-            })
-        )
+            tap((response: any) => response.data)
+        );
     }
 
     getTierList(): Observable<any> {

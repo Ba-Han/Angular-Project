@@ -356,7 +356,7 @@
                                       <mat-optgroup [label]="'POS'">
                                         <mat-option value="allstore" (click)="earnPointfieldChange('allstore','pos')">All Store</mat-option>
                                         <ng-container *ngFor="let store of stores$">
-                                            <ng-container *ngIf="store.code != 'BHG_ONLINE'">
+                                            <ng-container *ngIf="store.code !== 'BHG_ONLINE'">
                                                 <mat-option [value]="store.code" (click)="earnPointfieldChange(store.code,'pos')"> {{store.name}}</mat-option>
                                             </ng-container>
                                         </ng-container>
@@ -364,7 +364,7 @@
                                       <mat-optgroup [label]="'Ecommerce'">
                                         <mat-option value="allstore" (click)="earnPointfieldChange('allstore','m_portal')">All Store</mat-option>
                                         <ng-container *ngFor="let store of stores$">
-                                            <ng-container *ngIf="store.code == 'BHG_ONLINE'">
+                                            <ng-container *ngIf="store.code === 'BHG_ONLINE'">
                                                 <mat-option [value]="store.code" (click)="earnPointfieldChange(store.code,'m_portal')"> {{store.name}}</mat-option>
                                             </ng-container>
                                         </ng-container>

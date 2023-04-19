@@ -138,12 +138,6 @@ export class StoreService {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getDeleteStore(code: string){
         return this._httpClient.delete(`${this._apiurl}/items/store/${code}`,
-        { responseType: 'text' })
-        .pipe(
-            map(() => true),
-            catchError((error) => {
-                console.error(error);
-                return of(false);
-            }));
+        { observe: 'response' });
     };
 }

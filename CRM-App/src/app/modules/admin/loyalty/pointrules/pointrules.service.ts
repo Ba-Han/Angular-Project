@@ -418,12 +418,6 @@ export class PointRuleService {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getDeletePointRule(id: number){
         return this._httpClient.delete(`${this._apiurl}/items/point_rule/${id}`,
-        { responseType: 'text' })
-        .pipe(
-            map(() => true),
-            catchError((error) => {
-                console.error(error);
-                return of(false);
-            }));
+        { observe: 'response' });
     };
 }

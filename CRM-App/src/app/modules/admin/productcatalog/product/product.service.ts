@@ -111,12 +111,6 @@ export class ProductService {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getDeleteExclusionProduct(id: number){
         return this._httpClient.delete(`${this._apiurl}/items/product_exclusion/${id}`,
-        { responseType: 'text' })
-        .pipe(
-            map(() => true),
-            catchError((error) => {
-                console.error(error);
-                return of(false);
-            }));
+        { observe: 'response' });
     };
 }

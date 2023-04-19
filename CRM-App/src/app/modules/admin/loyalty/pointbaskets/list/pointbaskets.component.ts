@@ -181,7 +181,7 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
                 })
             )
             .subscribe();
-            this.canEdit = this._userService.getViewUserPermissionByNavId('point-baskets');
+            this.canEdit = this._userService.getEditUserPermissionByNavId('point-baskets');
 
         //Drawer Mode
         this.matDrawer.openedChange.subscribe((opened) => {

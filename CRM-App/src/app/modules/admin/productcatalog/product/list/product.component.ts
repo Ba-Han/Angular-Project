@@ -124,7 +124,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
             )
             .subscribe();
 
-            this.canEdit = this._userService.getViewUserPermissionByNavId('product');
+            this.canEdit = this._userService.getEditUserPermissionByNavId('product');
     }
 
     ngAfterViewInit(): void {

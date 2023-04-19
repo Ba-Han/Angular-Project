@@ -49,6 +49,22 @@ import { UserService } from 'app/core/user/user.service';
                 font-size: 16px;
             }
 
+            .successMessage_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(0, 128, 0);
+                padding: 3rem;
+                font-size: 16px;
+            }
+
+            .errorMessage_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(255, 49, 49);
+                padding: 3rem;
+                font-size: 16px;
+            }
+
             .delete-scss {
                 position: fixed;
                 padding-left: 2rem;
@@ -72,6 +88,8 @@ export class StoreDetailComponent implements OnInit, OnDestroy {
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
     selectedCode: string | null = null;
+    successMessage: string | null = null;
+    errorMessage: string | null = null;
     StoreEditForm: FormGroup;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -153,10 +171,25 @@ export class StoreDetailComponent implements OnInit, OnDestroy {
     }
 
     proceedPopup(): void {
-        this._storeService.getDeleteStore(this.selectedCode).subscribe(() => {
-            this._router.navigate(['/store'], { relativeTo: this._activatedRoute });
-        });
-        this.isSuccess = true;
+        this._storeService.getDeleteStore(this.selectedCode)
+        .subscribe(() => {
+            },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this.successMessage = 'Deleted Successfully.';
+                    this._router.navigate(['/store'], { relativeTo: this._activatedRoute });
+                    this.isSuccess = true;
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this.isSuccess = true;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention

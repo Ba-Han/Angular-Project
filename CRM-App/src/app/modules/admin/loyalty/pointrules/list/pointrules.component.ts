@@ -223,7 +223,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                 })
             )
             .subscribe();
-            this.canEdit = this._userService.getViewUserPermissionByNavId('point-rules');
+            this.canEdit = this._userService.getEditUserPermissionByNavId('point-rules');
 
         //Drawer Mode
         this.drawerTwo.openedChange.subscribe((opened) => {

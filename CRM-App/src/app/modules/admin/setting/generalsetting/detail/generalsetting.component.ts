@@ -200,7 +200,7 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
                 this._changeDetectorRef.markForCheck();
             });
 
-            this.canEdit = this._userService.getViewUserPermissionByNavId('generalsetting');
+            this.canEdit = this._userService.getEditUserPermissionByNavId('generalsetting');
         }
 
     ngOnDestroy(): void {

@@ -4,11 +4,12 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDrawer } from '@angular/material/sidenav';
-import { Subject, takeUntil } from 'rxjs';
+import { catchError, Subject, takeUntil, throwError, Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Channel } from 'app/modules/admin/setting/channel/channel.types';
 import { ChannelService } from 'app/modules/admin/setting/channel/channel.service';
 import { UserService } from 'app/core/user/user.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'channel-detail',
@@ -41,11 +42,19 @@ import { UserService } from 'app/core/user/user.service';
                 margin-top: 2rem !important;
             }
 
-            .update_scss {
+            .successMessage_scss {
                 position: unset;
                 text-align: center;
                 color: rgb(0, 128, 0);
-                padding: 4rem;
+                padding: 3rem;
+                font-size: 16px;
+            }
+
+            .errorMessage_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(255, 49, 49);
+                padding: 3rem;
                 font-size: 16px;
             }
 
@@ -73,6 +82,8 @@ export class ChannelDetailComponent implements OnInit, OnDestroy {
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
     selectedCode: string | null = null;
+    successMessage: string | null = null;
+    errorMessage: string | null = null;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -146,10 +157,25 @@ export class ChannelDetailComponent implements OnInit, OnDestroy {
     }
 
     proceedPopup(): void {
-        this._channelService.getDeleteChannel(this.selectedCode).subscribe(() => {
-            this._router.navigate(['/channel'], { relativeTo: this._activatedRoute });
-        });
-        this.isSuccess = true;
+        this._channelService.getDeleteChannel(this.selectedCode)
+        .subscribe(() => {
+            },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this.successMessage = 'Deleted Successfully.';
+                    this._router.navigate(['/channel'], { relativeTo: this._activatedRoute });
+                    this.isSuccess = true;
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this.isSuccess = true;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
