@@ -10,13 +10,15 @@
         <ng-container *ngIf="DeleteMode">
             <ng-container *ngIf="isSuccess">
                 <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
-                    <div class="">
-                        <!-- <button mat-icon-button style="background-color:#ccc; position: fixed; right: 1rem;"
+                    <div>
+                        <button
+                                *ngIf="errorMessage"      
+                                mat-icon-button style="background-color:#ccc; position: fixed; right: 1rem;"
                                 [matTooltip]="'Close'"
-                                (click)="cancelPopup()">
+                                [routerLink]="['/point-rules']">
                             <mat-icon class="text-white"
                                         [svgIcon]="'heroicons_outline:x'"></mat-icon>
-                        </button> -->
+                        </button>
                     </div>
                 </div>
                 <div class="mt-8">
@@ -25,12 +27,16 @@
                                 [dismissed]="false"
                                 [name]="'alertBox1'"
                                 [type]="'success'">
-                        <div class="update_scss">
-                            Deleted Successfully.
+                        <div class="successMessage_scss" *ngIf="successMessage">
+                            {{ successMessage }} 
+                        </div>
+                        <div class="errorMessage_scss" *ngIf="errorMessage">
+                            {{ errorMessage }} 
                         </div>
                     </fuse-alert>
                 </div>
             </ng-container>
+
             <ng-container *ngIf="!isSuccess">
                 <div class="parent_popup">
                     <div>
@@ -73,7 +79,7 @@
                 <div class="">
                     <button mat-icon-button style="background-color:#ccc;"
                             [matTooltip]="'Close'"
-                            (click)="matDrawer.close()">
+                            (click)="drawerTwo.close()">
                         <mat-icon class="text-white"
                                     [svgIcon]="'heroicons_outline:x'"></mat-icon>
                     </button>
@@ -150,12 +156,12 @@
 
                             <div class="">
                                 <mat-paginator class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
-                                               [ngClass]="{'pointer-events-none': isLoading}"
-                                               [length]="memberTierPagination.length"
-                                               [pageIndex]="memberTierPagination.page"
-                                               [pageSize]="memberTierPagination.limit"
-                                               [pageSizeOptions]="[10, 25, 100]"
-                                               [showFirstLastButtons]="true"></mat-paginator>
+                                    [ngClass]="{'pointer-events-none': isLoading}"
+                                    [length]="memberTierPagination.length"
+                                    [pageIndex]="memberTierPagination.page"
+                                    [pageSize]="memberTierPagination.limit"
+                                    [pageSizeOptions]="[10, 25, 100]"
+                                    [showFirstLastButtons]="true"></mat-paginator>
                             </div>
 
 
@@ -175,7 +181,7 @@
                 <div class="">
                     <button mat-icon-button style="background-color:#ccc;"
                             [matTooltip]="'Close'"
-                            (click)="matDrawer.close()">
+                            (click)="drawerTwo.close()">
                         <mat-icon class="text-white"
                                     [svgIcon]="'heroicons_outline:x'"></mat-icon>
                     </button>
@@ -255,12 +261,12 @@
 
                             <div class="">
                                 <mat-paginator class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
-                                               [ngClass]="{'pointer-events-none': isLoading}"
-                                               [length]="pointBasketPagination.length"
-                                               [pageIndex]="pointBasketPagination.page"
-                                               [pageSize]="pointBasketPagination.limit"
-                                               [pageSizeOptions]="[10, 25, 100]"
-                                               [showFirstLastButtons]="true"></mat-paginator>
+                                    [ngClass]="{'pointer-events-none': isLoading}"
+                                    [length]="pointBasketPagination.length"
+                                    [pageIndex]="pointBasketPagination.page"
+                                    [pageSize]="pointBasketPagination.limit"
+                                    [pageSizeOptions]="[10, 25, 100]"
+                                    [showFirstLastButtons]="true"></mat-paginator>
                             </div>
                         </ng-container>
                     </ng-container>
@@ -626,7 +632,7 @@
                             </ng-container>
 
                             <div class="flex justify-end items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
-                                <button
+                                <button style="width: 6rem;"
                                         mat-flat-button
                                         [disabled]="PointRuleEditForm.invalid"
                                         [color]="'primary'"
@@ -637,7 +643,7 @@
 
                                 <div class="ml-4">
                                     <ng-container *ngIf="canDelete">
-                                        <button
+                                        <button style="width: 6rem;"
                                                 mat-flat-button
                                                 [color]="'primary'"
                                                 [matTooltip]="'Delete'"

@@ -61,9 +61,30 @@ import { UserService } from 'app/core/user/user.service';
                     padding: 4rem;
                     font-size: 16px;
                 }
+
+                .successMessage_scss {
+                    position: unset;
+                    text-align: center;
+                    color: rgb(0, 128, 0);
+                    padding: 3rem;
+                    font-size: 16px;
+                }
+
+                .errorMessage_scss {
+                    position: unset;
+                    text-align: center;
+                    color: rgb(255, 49, 49);
+                    padding: 3rem;
+                    font-size: 16px;
+                }
+
                 .delete-scss {
                     position: fixed;
                     padding-left: 2rem;
+                }
+
+                .mat-paginator-container {
+                    margin-left: 0 !important;
                 }
 
         `
@@ -112,6 +133,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
     selectedId: number | null = null;
+    successMessage: string | null = null;
+    errorMessage: string | null = null;
     code: string;
     addedPointSegmentId: Array<any> = [];
     selectedChannel: PointRule | null = null;
@@ -415,10 +438,25 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     proceedPopup(): void {
-        this._pointRuleService.getDeletePointRule(this.selectedId).subscribe(() => {
-            this._router.navigate(['/point-rules'], { relativeTo: this._activatedRoute });
-        });
-        this.isSuccess = true;
+        this._pointRuleService.getDeletePointRule(this.selectedId)
+        .subscribe(() => {
+            },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this.successMessage = 'Deleted Successfully.';
+                    this._router.navigate(['/point-rules'], { relativeTo: this._activatedRoute });
+                    this.isSuccess = true;
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this.isSuccess = true;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention

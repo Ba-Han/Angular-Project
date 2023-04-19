@@ -115,13 +115,7 @@ export class ProductService {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getDeleteRedemptionProduct(id: number){
         return this._httpClient.delete(`${this._apiurl}/items/redemption_exclusion/${id}`,
-        { responseType: 'text' })
-        .pipe(
-            map(() => true),
-            catchError((error) => {
-                console.error(error);
-                return of(false);
-            }));
+        { observe: 'response' });
     };
 
 }

@@ -57,7 +57,7 @@ export class UserService {
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
-    getViewUserPermissionByNavId(name: string): any {
+    getEditUserPermissionByNavId(name: string): any {
         const foundModel = this.userPermissionPages.find(x => x.nav_id === name);
         return foundModel?.can_edit ?? false;
     }

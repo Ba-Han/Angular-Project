@@ -159,12 +159,6 @@ export class PointBasketService {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getDeletePointBasket(id: number){
         return this._httpClient.delete(`${this._apiurl}/items/point_basket/${id}`,
-        { responseType: 'text' })
-        .pipe(
-            map(() => true),
-            catchError((error) => {
-                console.error(error);
-                return of(false);
-            }));
+        { observe: 'response' });
     };
 }

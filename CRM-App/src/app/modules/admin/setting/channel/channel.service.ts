@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { environment } from 'environments/environment';
 import { Channel, ChannelPagination } from 'app/modules/admin/setting/channel/channel.types';
@@ -124,14 +124,8 @@ export class ChannelService {
 
     // Delete API method
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    getDeleteChannel(code: string){
+    getDeleteChannel(code: string) {
         return this._httpClient.delete(`${this._apiurl}/items/channel/${code}`,
-        { responseType: 'text' })
-        .pipe(
-            map(() => true),
-            catchError((error) => {
-                console.error(error);
-                return of(false);
-            }));
+        { observe: 'response' });
     };
 }

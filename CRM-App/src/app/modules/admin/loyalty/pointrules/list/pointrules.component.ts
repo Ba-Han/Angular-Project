@@ -88,6 +88,11 @@ import { UserService } from 'app/core/user/user.service';
                 padding: 12px !important;
                 min-width: 5px !important;
             }
+
+            .mat-paginator-container {
+                margin-left: 0 !important;
+            }
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -223,7 +228,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                 })
             )
             .subscribe();
-            this.canEdit = this._userService.getViewUserPermissionByNavId('point-rules');
+            this.canEdit = this._userService.getEditUserPermissionByNavId('point-rules');
 
         //Drawer Mode
         this.drawerTwo.openedChange.subscribe((opened) => {

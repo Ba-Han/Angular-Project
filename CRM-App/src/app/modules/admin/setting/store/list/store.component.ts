@@ -133,7 +133,7 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
                 })
             )
             .subscribe();
-            this.canEdit = this._userService.getViewUserPermissionByNavId('store');
+            this.canEdit = this._userService.getEditUserPermissionByNavId('store');
     }
 
     ngAfterViewInit(): void {

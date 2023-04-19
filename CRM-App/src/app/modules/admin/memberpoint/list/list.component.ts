@@ -209,7 +209,7 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
              })
          ).subscribe();
 
-        this.canEdit = this._userService.getViewUserPermissionByNavId('member');
+        this.canEdit = this._userService.getEditUserPermissionByNavId('member');
         this.canDelete = this._userService.getDeleteUserPermissionByNavId('member');
     }
 

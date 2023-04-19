@@ -168,7 +168,7 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
                 })
             )
             .subscribe();
-            this.canEdit = this._userService.getViewUserPermissionByNavId('member');
+            this.canEdit = this._userService.getEditUserPermissionByNavId('member');
     }
 
     ngAfterViewInit(): void {

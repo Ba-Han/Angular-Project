@@ -159,7 +159,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
             .subscribe();
 
         this.getUserRoles();
-        this.canEdit = this._userService.getViewUserPermissionByNavId('loginuser');
+        this.canEdit = this._userService.getEditUserPermissionByNavId('loginuser');
     }
 
     ngAfterViewInit(): void {
