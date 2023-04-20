@@ -90,7 +90,7 @@ import { UserService } from 'app/core/user/user.service';
             }
 
             .mat-paginator-container {
-                margin-left: 0 !important;
+                margin-left: 0;
             }
 
         `

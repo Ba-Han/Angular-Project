@@ -28,11 +28,12 @@
 .custom-paging {
     position: fixed !important;
     margin-bottom: 55px;
+    padding-left: 280px;
 }
 
-.mat-paginator-container {
+/* .mat-paginator-container {
     margin-left: 281px;
-}
+} */
 
 
 /*------ Accordian Advanced Search ------*/
