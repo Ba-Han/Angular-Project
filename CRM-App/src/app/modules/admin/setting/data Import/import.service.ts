@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
-import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { ImportActivityPagination, ImportActivity } from 'app/modules/admin/setting/data Import/import.types';
 import { FormGroup } from '@angular/forms';
 
@@ -33,9 +33,9 @@ export class ImportService {
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
 
-    getActivities(page: number = 0, limit: number = 10, sort: string = 'import_date', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+    /* getActivities(page: number = 0, limit: number = 10, sort: string = 'date', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: ImportActivityPagination; activities: ImportActivity[] }> {
-        return this._httpClient.get(`${this._apiurl}/items/import_activity?sort=-import_date`, {
+        return this._httpClient.get(`${this._apiurl}/manualupload/memberpoint`, {
             params: {
                 meta: 'filter_count',
                 page: page + 1,
@@ -63,10 +63,21 @@ export class ImportService {
                 this._activities.next(response.data);
             })
         );
+    } */
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    proceedUploadFile(id: number): Observable<any>{
+        return this._httpClient.post(`${this._apiurl}/manualupload/memberpoint/process/${id}`,
+        { responseType: 'text' })
+        .pipe(
+            map(() => true),
+            catchError((error) => {
+                console.error(error);
+                return of(false);
+            }));
     }
 
-
-    importFile(fileid: string, name: string, date: string): Observable<any> {
+    /* importFile(fileid: string, name: string, date: string): Observable<any> {
         //return this._httpClient.post<any>(`${this._apiurl}/items/import_activity`, {
         //    "status": "active",
         //    "collection_name": name,
@@ -75,8 +86,6 @@ export class ImportService {
         //}).pipe(
 
         //    tap((response) => {
-               
-              
         //        return this._activities.next(response.data);
         //    })
 
@@ -84,7 +93,7 @@ export class ImportService {
 
         return this.activities$.pipe(
             take(1),
-            switchMap(activities => this._httpClient.post<any>(`${this._apiurl}/items/import_activity`, {
+            switchMap(activities => this._httpClient.post<any>(`${this._apiurl}/manualupload/memberpoint`, {
                 "status": "active",
                 "collection_name": name,
                 "import_file": fileid,
@@ -101,5 +110,5 @@ export class ImportService {
             ))
         );
 
-    }
+    } */
 }

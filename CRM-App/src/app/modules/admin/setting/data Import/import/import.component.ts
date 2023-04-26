@@ -11,6 +11,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { ImportActivity, ImportActivityPagination } from 'app/modules/admin/setting/data Import/import.types';
 import { ImportService } from 'app/modules/admin/setting/data Import/import.service';
 import { DatePipe } from '@angular/common';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'import-list',
@@ -18,20 +19,19 @@ import { DatePipe } from '@angular/common';
     styles: [
         `
             .import-grid{
-                 grid-template-columns: 150px 150px 150px 150px;
+                 grid-template-columns: 150px 150px auto 120px 120px 120px;
 
                 @screen sm {
-                    grid-template-columns: 150px 150px 150px 150px;
+                    grid-template-columns: 150px 150px auto 120px 120px 120px;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 150px 150px 150px;
+                    grid-template-columns: 150px 150px auto 120px 120px 120px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 150px 150px 150px;
+                    grid-template-columns: 150px 150px auto 120px 120px 120px;
                 }
-
             }
         `
     ],
@@ -52,15 +52,20 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
     CountryAddForm: FormGroup;
     fileToUpload: File;
     memberUploadForm: FormGroup;
-    importId: string;
+    uploadData: any;
+    uploadId: number;
     createDate: string;
     _apiurl: string;
     isLoading: boolean = false;
     isDisable: boolean = true;
     isUpload: boolean = false;
+    canEdit: boolean = false;
     pagination: ImportActivityPagination;
     memberList$: Observable<ImportActivity[]>;
     exclusion$: Observable<ImportActivity[]>;
+    uploadSuccess = false;
+    errorMessage: string | null = null;
+    proccedErrorMessage: string | null = null;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -70,6 +75,7 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
         private _formBuilder: FormBuilder,
         private _httpClient: HttpClient,
         private datePipe: DatePipe,
+        private _userService: UserService
     ) {
         this._apiurl = environment.apiurl;
     }
@@ -92,12 +98,10 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
                 this._changeDetectorRef.markForCheck();
             });
 
-        
         this.activities$ = this._importService.activities$;
 
         // search
-
-        this.searchInputControl.valueChanges
+        /* this.searchInputControl.valueChanges
             .pipe(
                 takeUntil(this._unsubscribeAll),
                 debounceTime(300),
@@ -109,12 +113,12 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.isLoading = false;
                 })
             )
-            .subscribe();
-
+            .subscribe(); */
+            this.canEdit = this._userService.getEditUserPermissionByNavId('manual-upload');
     }
 
     ngAfterViewInit(): void {
-        if (this._sort && this._paginator) {
+        /* if (this._sort && this._paginator) {
             // Set the initial sort
             this._sort.sort({
                 id: 'import_date',
@@ -142,7 +146,7 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.isLoading = false;
                 })
             ).subscribe();
-        }
+        } */
     }
 
     ngOnDestroy(): void {
@@ -155,6 +159,7 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
         return item.id || index;
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     toogleMember(MemberMode: boolean | null = null): void {
         if (MemberMode === null) {
             this.MemberMode = !this.MemberMode;
@@ -166,6 +171,7 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
         // Mark for check
         this._changeDetectorRef.markForCheck();
     }
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     toogleProductExclusion(MemberListMode: boolean | null = null): void {
         if (MemberListMode === null) {
             this.MemberListMode = !this.MemberListMode;
@@ -177,6 +183,7 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
         // Mark for check
         this._changeDetectorRef.markForCheck();
     }
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     toogleMemberList(ProductExclusionMode: boolean | null = null): void {
         if (ProductExclusionMode === null) {
             this.ProductExclusionMode = !this.ProductExclusionMode;
@@ -187,6 +194,7 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
         this._changeDetectorRef.markForCheck();
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onFileSelect(event) {
         if (event.target.files.length > 0) {
             this.fileToUpload = event.target.files[0];
@@ -195,34 +203,48 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     uploadFile(): void {
-        const formData = new FormData();
+        const formData: FormData = new FormData();
         //const upload = this.memberUploadForm.getRawValue();
         formData.append('file', this.fileToUpload);
-        this._httpClient.post<any>(`${this._apiurl}/files`, formData).subscribe(
-            (res) => {
-                this.importId = res.data.id;
-                this.isDisable = false;
-                this.uploadButton(false);
-                console.log("check" + this.isUpload);
+        this._httpClient.post(`${this._apiurl}/manualupload/memberpoint`, formData).subscribe(
+            (response: any) => {
+                this.uploadId = response.id;
+                this.uploadData = response.data;
+                this._changeDetectorRef.markForCheck();
             },
-            (err) => console.log(err)
+            (error) => {
+                this.errorMessage = error.error.message;
+                this._changeDetectorRef.markForCheck();
+                //console.log(error);
+                //console.log('catcherror');
+              }
         );
+        this._changeDetectorRef.markForCheck();
     }
 
-    importFile(collection): void {
+    proceedUploadFile(): void {
+        this._importService.proceedUploadFile(this.uploadId).subscribe();
+        if (this.uploadId) {
+            this.uploadSuccess = true;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    /* importFile(collection): void {
         this.isLoading = true;
-        let date = new Date();
+        const date = new Date();
         this.createDate = this.datePipe.transform(date, 'yyyy-MM-ddThh:mm:ss');
-        this._importService.importFile(this.importId, collection, this.createDate)
+        //this._importService.importFile(this.importId, collection, this.createDate)
             //.pipe(
             //    tap(() => {
             //        this.activities$ = this._importService.activities$;
             //        this.isLoading = false;
             //    })
 
-            .subscribe();
+            //.subscribe();
 
-    }
+    } */
+
     uploadButton(isUpload: boolean | null = null): void {
         if (isUpload === null) {
             this.isUpload = !this.isUpload;

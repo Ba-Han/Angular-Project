@@ -1,15 +1,19 @@
 export interface ImportActivity {
-    id: number,
-    status: string,
-    user_created: string,
-    date_created: string,
-    user_updated: string,
-    date_updated: string,
-    import_date: string,
-    import_file: string,
-    remark: string,
-    job_completed_date: string,
-    collection_name: string
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    id: number;
+    member_code: string;
+    name: string;
+    email: string;
+    member_tier_id: number;
+    member_tier: string;
+    date: string;
+    points: number;
+    expirydate: string;
+    comment: string;
+    reward_code: string;
+    point_basket: string;
+    document_no: string;
+    point_rule: string;
 }
 export interface ImportActivityPagination {
     length: number;

@@ -86,7 +86,7 @@ export const appRoutes: Route[] = [
             { path: 'member-tier', loadChildren: () => import('app/modules/admin/loyalty/membertier/membertier.module').then(m => m.MemberTierModule) },
             { path: 'product', loadChildren: () => import('app/modules/admin/productcatalog/product/product.module').then(m => m.ProductModule) },
             { path: 'transaction', loadChildren: () => import('app/modules/admin/transaction/transaction.module').then(m => m.TransactionModule) },
-            { path: 'import', loadChildren: () => import('app/modules/admin/setting/data Import/import.module').then(m => m.ImportModule) },
+            { path: 'manual-upload', loadChildren: () => import('app/modules/admin/setting/data Import/import.module').then(m => m.ImportModule) },
             { path: 'generalsetting', loadChildren: () => import('app/modules/admin/setting/generalsetting/generalsetting.module').then(m => m.GeneralSettingModule) },
             { path: 'users', loadChildren: () => import('app/modules/admin/setting/user/user.module').then(m => m.AppUserModule) },
             { path: 'change-password', loadChildren: () => import('app/modules/auth/profile/change-password.module').then(m => m.AuthChangePasswordModule) },
