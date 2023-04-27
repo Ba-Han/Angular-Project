@@ -211,6 +211,8 @@ export class MemberPointService
                 /* 'status': memberPoint.status, */
                 'reward_code': memberPoint.reward_code,
                 'point': memberPoint.point,
+                'expiry_date': memberPoint.expiry_date,
+                /* 'expiry_date': memberPoint.expiry_date, */
                 'member': memberPoint.member,
                 'comment': memberPoint.comment,
             }).pipe(
@@ -237,6 +239,8 @@ export class MemberPointService
                   /* 'status': memberPoint.status, */
                   'reward_code': memberPoint.reward_code,
                   'point': memberPoint.point,
+                  'earning_valid_to': memberPoint.earning_valid_to,
+                  /* 'expiry_date': memberPoint.expiry_date, */
                   'member': memberPoint.member,
                   'comment': memberPoint.comment,
               }).pipe(
