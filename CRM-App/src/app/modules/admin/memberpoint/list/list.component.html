@@ -343,8 +343,23 @@
                                 <input matInput [formControlName]="'member'" />
                             </mat-form-field>
     
-    
-    
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Expiry Date</mat-label>
+                                    <mat-icon matPrefix
+                                              class="hidden sm:flex icon-size-5"
+                                              [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                    <input matInput type="datetime-local"
+                                           [min]="minDate"
+                                           [formControlName]="'expiry_date'"
+                                           [placeholder]="'Expiry Date'">
+                                    <!-- <mat-datepicker-toggle matSuffix
+                                                           [for]="earningvalidToDatepicker">
+                                    </mat-datepicker-toggle> -->
+                                    <mat-datepicker #earningvalidToDatepicker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
                             <!--<div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Earning Valid From</mat-label>

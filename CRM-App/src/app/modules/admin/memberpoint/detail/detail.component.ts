@@ -67,6 +67,7 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
     memberPoints: MemberPoint[];
     memberId: number;
     pointType: boolean = false;
+    minDate: string;
     searchInputControl: FormControl = new FormControl();
     adjustmentType: number;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -83,6 +84,8 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
         private _viewContainerRef: ViewContainerRef,
     )
     {
+        const today = new Date();
+        this.minDate = today.toISOString().slice(0, 16);
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -111,7 +114,9 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
             point_type_int: ['', [Validators.required]],
             reward_code: ['', [Validators.required]],
             point: ['', [Validators.required]],
-            status: ['', [Validators.required]],
+            earning_valid_to: ['', [Validators.required]],
+            /* expiry_date: ['', [Validators.required]], */
+            /* status: ['', [Validators.required]], */
             comment: ['', [Validators.required]],
         });
 
@@ -155,7 +160,6 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
         });
     }
 
-   
     ngOnDestroy(): void
     {
         // Unsubscribe from all subscriptions

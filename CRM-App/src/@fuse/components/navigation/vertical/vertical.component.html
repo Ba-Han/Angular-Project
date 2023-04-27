@@ -36,12 +36,12 @@
 
                 <!-- Basic -->
                 <ng-container *ngIf="item.type === 'basic'">
-                    <ng-container *ngIf="item.title === 'Country' && item.title === 'Data Import'">
+                    <ng-container *ngIf="item.title === 'Country'">
                         <fuse-vertical-navigation-basic-item style="display: none;"
                         [item]="item"
                         [name]="name"></fuse-vertical-navigation-basic-item>
                     </ng-container>
-                    <ng-container *ngIf="item.title !== 'Country' && item.title !== 'Data Import'">
+                    <ng-container *ngIf="item.title !== 'Country'">
                         <fuse-vertical-navigation-basic-item style="display: block;"
                         [item]="item"
                         [name]="name"></fuse-vertical-navigation-basic-item>

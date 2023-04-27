@@ -118,6 +118,7 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
     isLoading: boolean = false;
     pagination: MemberPointPagination;
     setting: GeneralSetting;
+    minDate: string;
     memberId: number;
     pointAddFormMode: boolean = false;
     canEdit: boolean = false;
@@ -145,6 +146,8 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
         private _userService: UserService
     )
     {
+        const today = new Date();
+        this.minDate = today.toISOString().slice(0, 16);
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -167,6 +170,8 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
             point_type_int: ['', [Validators.required]],
             reward_code: ['', [Validators.required]],
             point: ['', [Validators.required]],
+            expiry_date: ['', [Validators.required]],
+            /* expiry_date: ['', [Validators.required]], */
             /* status: ['', [Validators.required]], */
             comment: ['', [Validators.required]],
         });
