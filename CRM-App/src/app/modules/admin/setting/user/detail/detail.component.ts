@@ -34,6 +34,7 @@ import { UserService } from 'app/core/user/user.service';
 
             .v-e-d {
                 text-align: center;
+                width: 13%;
             }
 
             .user-page-scss {
@@ -47,6 +48,7 @@ import { UserService } from 'app/core/user/user.service';
                 transform: translate(-50%, -50%) !important;
                 width: 30% !important;
                 height: 34% !important;
+                border-radius: 8px;
             }
 
             .parent_popup {
@@ -76,7 +78,8 @@ import { UserService } from 'app/core/user/user.service';
             }
 
             tr,td {
-                border: 1px solid rgba(226, 232, 240, var(--tw-border-opacity));
+                border: 1px solid rgba(203,213,225,var(--tw-border-opacity))!important;
+                height: 2rem;
               }
 
         `
