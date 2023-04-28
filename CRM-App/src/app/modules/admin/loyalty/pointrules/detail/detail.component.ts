@@ -39,6 +39,7 @@ import { UserService } from 'app/core/user/user.service';
                     transform: translate(-50%, -50%) !important;
                     width: 28% !important;
                     height: 34% !important;
+                    border-radius: 8px;
                 }
 
                 .parent_popup {
@@ -146,6 +147,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     minDate: string;
     timeoutId: any;
     timeOutUpId: any;
+    typeRuleValue: string;
+    pointRewardedAtValue = 0;
     spendingtypeValue = 0;
     totypeValue = 0;
     toendTypeValue = 0;
@@ -180,13 +183,16 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             description: [''],
             reward_code: ['', [Validators.required]],
             type: ['', [Validators.required]],
-            point_value: ['', [Validators.required]],
+            point_value: [''],
             status: ['', [Validators.required]],
             start_date: [''],
             end_date: [''],
             member_tier: ['', [Validators.required]],
             member_tierFullName: ['', [Validators.required]],
-            dollar_value: ['', [Validators.required]],
+            dollar_value: [''],
+            point_amount: [''],
+            min_expense: [''],
+            point_rewarded_at: [''],
             validity_type: ['', [Validators.required]],
             basket_id: [''],
             point_basket: ['', [Validators.required]],
@@ -215,6 +221,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((pointrule: PointRule) => {
                 this.pointRule = pointrule;
+                this.typeRuleValue = pointrule.type;
+                this.pointRewardedAtValue = pointrule.point_rewarded_at;
                 this.validitytypeValue = pointrule.validity_type;
                 //this.pointRule.point_basket = pointrule.name;
                 this.pointRule.point_basketName = pointrule.point_basket?.name;

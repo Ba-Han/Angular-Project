@@ -141,6 +141,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     minDate: string;
     timeoutId: any;
     timeOutUpId: any;
+    pointRewardedAtValue = 0;
     spendingtypeValue = 0;
     totypeValue = 0;
     toendTypeValue = 0;
@@ -175,13 +176,16 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             description: [''],
             reward_code: ['', [Validators.required]],
             type: ['', [Validators.required]],
-            point_value: ['', [Validators.required]],
+            point_value: [''],
             status: ['', [Validators.required]],
             start_date: [''],
             end_date: [''],
             member_tier: ['', [Validators.required]],
             member_tierFullName: ['', [Validators.required]],
-            dollar_value: ['', [Validators.required]],
+            dollar_value: [''],
+            point_amount: [''],
+            min_expense: [''],
+            point_rewarded_at: [''],
             validity_type: ['', [Validators.required]],
             basket_id: [''],
             point_basket: ['', [Validators.required]],

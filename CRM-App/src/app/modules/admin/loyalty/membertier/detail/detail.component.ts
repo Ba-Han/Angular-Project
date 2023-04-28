@@ -80,6 +80,7 @@ import { UserService } from 'app/core/user/user.service';
                     transform: translate(-50%, -50%) !important;
                     width: 28% !important;
                     height: 34% !important;
+                    border-radius: 8px;
                 }
 
                 .parent_popup {

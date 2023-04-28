@@ -141,8 +141,11 @@
                                             Order Total
                                         </div>
                                         <div class="hidden md:block" style="text-align: center;">
-                                            Point Calculated Amount
+                                            Date
                                         </div>
+                                        <!-- <div class="hidden md:block" style="text-align: center;">
+                                            Point Calculated Amount
+                                        </div> -->
                                         <!-- <div class="hidden md:block">
                                             Total Amount (Exclusive GST)
                                         </div>
@@ -213,8 +216,12 @@
                                                     </div>
 
                                                     <div class="hidden md:block truncate" style="text-align: center;">
-                                                        {{memberPoint.point_calculated_amount}}
+                                                        {{memberPoint.date_created | date:'MMM dd, y'}}
                                                     </div>
+
+                                                    <!-- <div class="hidden md:block truncate" style="text-align: center;">
+                                                        {{memberPoint.point_calculated_amount}}
+                                                    </div> -->
     
                                                     <!-- <div class="hidden md:block truncate" style="text-align: center;">
                                                         ${{ ((memberPoint.point_type === "adjustment" || memberPoint.real_amount === null || memberPoint.real_amount === "" ? 0 : memberPoint.real_amount))  | number : '1.2-2' }}

@@ -7,19 +7,27 @@
         </div>
 
         <div class="w-full mt-5">
-            <mat-card class="flex" style="column-gap:40px;box-shadow: 1px 1px 15px 1px #ccc;">
-                <div class="w-full" style="border: 1px dashed black;">
-                    <div class="mb-5"> <span class="text-2xl font-bold justify-center" style="position: relative; top: 1rem; left: 1rem;"> Select File And Upload </span></div>
+            <mat-card class="flex" style="column-gap:40px;box-shadow: 1px 1px 15px 1px #ccc; border-radius: 10px;">
+                <div class="w-full" style="border: 1px dashed black; border-radius: 10px">
+                    <div class="mb-5"> <span class="text-2xl font-bold justify-center" style="position: relative; top: 1rem; left: 1rem; border-bottom: 1px solid black;"> Select File And Upload </span></div>
                     <div class="w-full h-50 flex items-center justify-center" style="cursor:pointer; border-radius: 3px;">
                         <div style="border-bottom: 1px solid black;">
-                            <input class="ng-hide mr-9" id="input-file-id" multiple type="file" (change)="onFileSelect($event)" style="margin-bottom: 9px;" />
+                            <input class="ng-hide mr-9" #fileInput multiple type="file" (change)="onFileSelect($event)" style="margin-bottom: 9px;" />
+                            <button mat-icon-button [matTooltip]="'ClearFileUpload'" *ngIf="fileToUpload" (click)="clearFileToUpload()" style="width: 35px; height: 35px; border-radius: 3px; border: 1px solid #2777ff; top: 1px;">
+                                <span>x</span>
+                            </button>
                         </div>
 
                         <!--<label for="input-file-id" class="md-button md-raised md-primary">Choose Files</label>-->
                         <button for="input-file-id" class="h-10 md-button md-raised md-primary" (click)="uploadFile()" style="background: #2777ff;color:#fff;width: 10% !important;margin-left: 10px; border-radius: 3px; font-weight: 700;">Upload</button>
                     </div>
-                    <div *ngIf="errorMessage" style="position: relative; bottom: 4rem; text-align: center; color: red;">
+                    <div *ngIf="errorMessage" style="position: relative; bottom: 21%; text-align: center; color: red;">
                         {{ errorMessage }}
+                    </div>
+                    <div style="position: relative; bottom: 4rem; padding-left: 21rem;">
+                        <span>* MemberCode or Email column is required.</span> <br/>
+                        <span>* ExpiryDate or BasketName column is required.</span> <br/>
+                        <span>* Point column is required.</span>
                     </div>
                 </div>
 
@@ -115,9 +123,11 @@
     
             <div class="flex justify-end items-center mt-10 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                 
-                <div *ngIf="uploadSuccess" style="padding: 1rem;color: green; font-size: 15px;">Uploaded Successfully!</div>
-    
+                <div *ngIf="uploadSuccess" style="padding: 1rem;color: green; font-size: 15px;">
+                    Uploaded Successfully!
+                </div>
                 <button
+                        *ngIf="!uploadSuccess"
                         for="input-file-id"
                         class="h-10 md-button md-raised md-primary"
                         style="width: 6rem; background: #2777ff;color:#fff; border-radius: 3px; font-weight: 700;"

@@ -346,19 +346,58 @@
                                 </div>
                             </ng-container>
 
-                            <ng-container *ngIf="pointRule.dollar_value">
+                            <ng-container *ngIf="pointRule.type === 'referral_rule'">
                                 <div class="flex sm:items-center">
-                                    <div class="w-1/4">Dollar Value: </div>
-                                    <div class="ml-6 leading-6">{{pointRule.dollar_value}}</div>
+                                    <div class="w-1/4">Type: </div>
+                                    <div class="ml-6 leading-6">Referral Rule</div>
                                 </div>
                             </ng-container>
 
-                            <ng-container *ngIf="pointRule.point_value">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Point Value: </div>
-                                    <div class="ml-6 leading-6">{{pointRule.point_value}}</div>
-                                </div>
+                            <ng-container *ngIf="pointRule.type === 'referral_rule'">
+                                <ng-container *ngIf="pointRule.point_amount">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Aamount: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.point_amount}}</div>
+                                    </div>
+                                </ng-container>
+    
+                                <ng-container *ngIf="pointRule.min_expense">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Min Expense: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.min_expense}}</div>
+                                    </div>
+                                </ng-container>
+    
+                                <ng-container *ngIf="pointRule.point_rewarded_at === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rewarded At: </div>
+                                        <div class="ml-6 leading-6">After Register</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.point_rewarded_at === 2">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rewarded At: </div>
+                                        <div class="ml-6 leading-6">After First Purchase</div>
+                                    </div>
+                                </ng-container>
                             </ng-container>
+
+                            <ng-container *ngIf="pointRule.type === 'basic_rule' || pointRule.type === 'event_rule' || pointRule.type === 'birthday_rule'">
+                                <ng-container *ngIf="pointRule.dollar_value">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Dollar Value: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.dollar_value}}</div>
+                                    </div>
+                                </ng-container>
+    
+                                <ng-container *ngIf="pointRule.point_value">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Value: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.point_value}}</div>
+                                    </div>
+                                </ng-container>
+                            </ng-container>                      
 
                             <ng-container *ngIf="pointRule.reward_code">
                                 <div class="flex sm:items-center">
@@ -504,39 +543,77 @@
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Type</mat-label>
-                                    <mat-select [formControlName]="'type'">
+                                    <mat-select [formControlName]="'type'" [(ngModel)]="typeRuleValue">
                                         <mat-option value="basic_rule">Basic Rule</mat-option>
                                         <mat-option value="event_rule">Event Rule</mat-option>
-                                        <!--<mat-option value="referral_rule">Customer Referral</mat-option>-->
                                         <mat-option value="birthday_rule">Birthday Event</mat-option>
+                                        <mat-option value="referral_rule">Referral Rule</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
 
-                            <!--addDollarValue-->
-                            <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
-                                    <mat-label>Dollar Value</mat-label>
-                                    <mat-icon matPrefix
-                                            class="hidden sm:flex icon-size-5"
-                                            [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                    <input matInput type="number"
-                                        [formControlName]="'dollar_value'"
-                                        [placeholder]="'Dollar Value'">
-                                </mat-form-field>
+                            <ng-container *ngIf="typeRuleValue === 'basic_rule' || typeRuleValue === 'event_rule' || typeRuleValue === 'birthday_rule'">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
+                                        <mat-label>Dollar Value</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'dollar_value'"
+                                            [placeholder]="'Dollar Value'">
+                                    </mat-form-field>
+    
+                                    <mat-label>To</mat-label>
+    
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/3 ml-4">
+                                        <mat-label>Point Value</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'point_value'"
+                                            [placeholder]="'Point Value'">
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
 
-                                <mat-label>To</mat-label>
-
-                                <mat-form-field class="fuse-mat-no-subscript w-1/3 ml-4">
-                                    <mat-label>Point Value</mat-label>
-                                    <mat-icon matPrefix
-                                            class="hidden sm:flex icon-size-5"
-                                            [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                    <input matInput type="number"
-                                        [formControlName]="'point_value'"
-                                        [placeholder]="'Point Value'">
-                                </mat-form-field>
-                            </div>
+                            <ng-container *ngIf="typeRuleValue === 'referral_rule'">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Point Amount</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'point_amount'"
+                                            [placeholder]="'Point Amount'">
+                                    </mat-form-field>
+                                </div>
+    
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Minimum Expense</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'min_expense'"
+                                            [placeholder]="'Min Expense'">
+                                    </mat-form-field>
+                                </div>
+    
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Point Reward At</mat-label>
+                                        <mat-select [formControlName]="'point_rewarded_at'" [(ngModel)]="pointRewardedAtValue">
+                                            <mat-option [value]="0">None</mat-option>
+                                            <mat-option [value]="1">After Register</mat-option>
+                                            <mat-option [value]="2">After First Purchase</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
 
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">

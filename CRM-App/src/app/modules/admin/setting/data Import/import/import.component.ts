@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatPaginator } from '@angular/material/paginator';
@@ -42,6 +42,9 @@ import { UserService } from 'app/core/user/user.service';
 export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('fileInput') fileInput: ElementRef;
+
 
     searchInputControl: FormControl = new FormControl();
     code: string;
@@ -199,11 +202,19 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
         if (event.target.files.length > 0) {
             this.fileToUpload = event.target.files[0];
             this.memberUploadForm.get('upload').setValue(this.fileToUpload);
+            this._changeDetectorRef.markForCheck();
         }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    clearFileToUpload(): void {
+        this.fileInput.nativeElement.value = '';
+        this.fileToUpload = null;
+        this._changeDetectorRef.markForCheck();
     }
 
     uploadFile(): void {
-        const formData: FormData = new FormData();
+        const formData = new FormData();
         //const upload = this.memberUploadForm.getRawValue();
         formData.append('file', this.fileToUpload);
         this._httpClient.post(`${this._apiurl}/manualupload/memberpoint`, formData).subscribe(
