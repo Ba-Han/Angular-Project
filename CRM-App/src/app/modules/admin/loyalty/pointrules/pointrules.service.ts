@@ -261,44 +261,18 @@ export class PointRuleService {
 
     createPointRule(pointrule: PointRule): Observable<PointRule> {
         /**
-         * Fix date issue in derectus. 
+         * Fix date issue in derectus.
          * Need to add time greater than 12.00 PM.
          */
-        const dateValue = pointrule.start_date;
-        const parsedDate = Date.parse(dateValue);
+        const startDateValue = !pointrule.start_date ? null : pointrule.start_date;
+        const endDateValue = !pointrule.end_date ? null : pointrule.end_date;
+        const dollarValue = !pointrule.dollar_value ? 0 : pointrule.dollar_value;
+        const pointValue = !pointrule.point_value ? 0 : pointrule.point_value;
+        const pointAmount = !pointrule.point_amount ? 0 : pointrule.point_amount;
+        const minimumExpense = !pointrule.min_expense ? 0 : pointrule.min_expense;
+        const pointRewardedAt = !pointrule.point_rewarded_at ? 0 : pointrule.point_rewarded_at;
 
-        const dateValue1 = pointrule.end_date;
-        const parseEndDate = Date.parse(dateValue1);
-        if (isNaN(parsedDate) && isNaN(parseEndDate))
-        {
-            return this.pointRules$.pipe(
-                take(1),
-                switchMap(pointrules => this._httpClient.post<any>(`${this._apiurl}/items/point_rule`, {
-                    "name": pointrule.name,
-                    "description": pointrule.description,
-                    "reward_code": pointrule.reward_code,
-                    "type": pointrule.type,
-                    "point_value": pointrule.point_value,
-                    "status": pointrule.status,
-                    "start_date": null,
-                    "end_date": null,
-                    "member_tier": pointrule.member_tier,
-                    "member_tierFullName": pointrule.member_tierFullName,
-                    "dollar_value": pointrule.dollar_value,
-                    "basket_id": pointrule.basket_id,
-                    "point_basketName": pointrule.point_basketName,
-                    "validity_type": pointrule.validity_type,
-                }).pipe(
-                    map((newPointRule) => {
-                        this._pointRules.next([newPointRule.data, ...pointrules]);
-                        return newPointRule;
-                    })
-                ))
-            );
-        }
-        else
-        {
-            /* let startDate:any = new Date(pointrule.start_date);
+        /* let startDate:any = new Date(pointrule.start_date);
 
             // startDate.setMinutes(800);
             startDate.setHours(startDate.getHours() - 8);
@@ -312,31 +286,33 @@ export class PointRuleService {
             endDate.setMinutes(endDate.getMinutes() - 0o0);
             let endDateFormat = endDate.getFullYear() + "-" +  (endDate.getMonth()+1) + "-" + endDate.getDate() + "T" + endDate.getHours() + ":" + endDate.getMinutes() + ":00"; */
 
-            return this.pointRules$.pipe(
-                take(1),
-                switchMap(pointrules => this._httpClient.post<any>(`${this._apiurl}/items/point_rule`, {
-                    "name": pointrule.name,
-                    "description": pointrule.description,
-                    "reward_code": pointrule.reward_code,
-                    "type": pointrule.type,
-                    "point_value": pointrule.point_value,
-                    "status": pointrule.status,
-                    "start_date": pointrule.start_date,
-                    "end_date": pointrule.end_date,
-                    "member_tier": pointrule.member_tier,
-                    "member_tierFullName": pointrule.member_tierFullName,
-                    "dollar_value": pointrule.dollar_value,
-                    "basket_id": pointrule.basket_id,
-                    "point_basket": pointrule.point_basket,
-                    "validity_type": pointrule.validity_type,
-                }).pipe(
-                    map((newPointRule) => {
-                        this._pointRules.next([newPointRule.data, ...pointrules]);
-                        return newPointRule;
-                    })
-                ))
-            );
-        }
+        return this.pointRules$.pipe(
+            take(1),
+            switchMap(pointrules => this._httpClient.post<any>(`${this._apiurl}/items/point_rule`, {
+                "name": pointrule.name,
+                "description": pointrule.description,
+                "reward_code": pointrule.reward_code,
+                "type": pointrule.type,
+                "point_value": pointValue,
+                "status": pointrule.status,
+                "start_date": startDateValue,
+                "end_date": endDateValue,
+                "member_tier": pointrule.member_tier,
+                "member_tierFullName": pointrule.member_tierFullName,
+                "dollar_value": dollarValue,
+                "point_amount": pointAmount,
+                "min_expense": minimumExpense,
+                "point_rewarded_at": pointRewardedAt,
+                "basket_id": pointrule.basket_id,
+                "point_basket": pointrule.point_basket,
+                "validity_type": pointrule.validity_type,
+            }).pipe(
+                map((newPointRule) => {
+                    this._pointRules.next([newPointRule.data, ...pointrules]);
+                    return newPointRule;
+                })
+            ))
+        );
     }
 
     updatePointRule(id: number, pointrule: PointRule): Observable<PointRule> {
@@ -344,39 +320,15 @@ export class PointRuleService {
          * Fix date issue in derectus.
          * Need to add time greater than 12.00 PM.
          */
+        const startDateValue = !pointrule.start_date ? null : pointrule.start_date;
+        const endDateValue = !pointrule.end_date ? null : pointrule.end_date;
+        const dollarValue = !pointrule.dollar_value ? 0 : pointrule.dollar_value;
+        const pointValue = !pointrule.point_value ? 0 : pointrule.point_value;
+        const pointAmount = !pointrule.point_amount ? 0 : pointrule.point_amount;
+        const minimumExpense = !pointrule.min_expense ? 0 : pointrule.min_expense;
+        const pointRewardedAt = !pointrule.point_rewarded_at ? 0 : pointrule.point_rewarded_at;
 
-        const dateValue = pointrule.start_date;
-        const parsedDate = Date.parse(dateValue);
-
-        const dateValue1 = pointrule.end_date;
-        const parseEndDate = Date.parse(dateValue1);
-
-        if (isNaN(parsedDate) && isNaN(parseEndDate))
-        {
-            return this._httpClient.patch<PointRule>(`${this._apiurl}/items/point_rule/${id}`,
-                {
-                    "id": pointrule.id,
-                    "name": pointrule.name,
-                    "description": pointrule.description,
-                    "reward_code": pointrule.reward_code,
-                    "type": pointrule.type,
-                    "point_value": pointrule.point_value,
-                    "status": pointrule.status,
-                    "start_date": null,
-                    "end_date": null,
-                    "member_tier": pointrule.member_tier,
-                    "member_tierFullName": pointrule.member_tierFullName,
-                    "dollar_value": pointrule.dollar_value,
-                    "basket_id": pointrule.basket_id,
-                    "point_basket": pointrule.point_basket,
-                    "validity_type": pointrule.validity_type,
-                }
-            ).pipe(
-                map(createPointRule => createPointRule)
-            );
-        }
-        else {
-            /* let startDate:any = new Date(pointrule.start_date);
+        /* let startDate:any = new Date(pointrule.start_date);
             // startDate.setMinutes(800);
 
             startDate.setHours(startDate.getHours() - 8);
@@ -390,28 +342,30 @@ export class PointRuleService {
             endDate.setMinutes(endDate.getMinutes() - 0o0);
             let endDateFormat = endDate.getFullYear() + "-" +  (endDate.getMonth()+1) + "-" + endDate.getDate() + "T" + endDate.getHours() + ":" + endDate.getMinutes() + ":00"; */
 
-            return this._httpClient.patch<PointRule>(`${this._apiurl}/items/point_rule/${id}`,
-                {
-                    "id": pointrule.id,
-                    "name": pointrule.name,
-                    "description": pointrule.description,
-                    "reward_code": pointrule.reward_code,
-                    "type": pointrule.type,
-                    "point_value": pointrule.point_value,
-                    "status": pointrule.status,
-                    "start_date": pointrule.start_date,
-                    "end_date": pointrule.end_date,
-                    "member_tier": pointrule.member_tier,
-                    "member_tierFullName": pointrule.member_tierFullName,
-                    "dollar_value": pointrule.dollar_value,
-                    "basket_id": pointrule.basket_id,
-                    "point_basket": pointrule.point_basket,
-                    "validity_type": pointrule.validity_type,
-                }
-            ).pipe(
-                map(createPointRule => createPointRule)
-            );
-        }
+        return this._httpClient.patch<PointRule>(`${this._apiurl}/items/point_rule/${id}`,
+            {
+                "id": pointrule.id,
+                "name": pointrule.name,
+                "description": pointrule.description,
+                "reward_code": pointrule.reward_code,
+                "type": pointrule.type,
+                "point_value": pointValue,
+                "status": pointrule.status,
+                "start_date": startDateValue,
+                "end_date": endDateValue,
+                "member_tier": pointrule.member_tier,
+                "member_tierFullName": pointrule.member_tierFullName,
+                "dollar_value": dollarValue,
+                "point_amount": pointAmount,
+                "min_expense": minimumExpense,
+                "point_rewarded_at": pointRewardedAt,
+                "basket_id": pointrule.basket_id,
+                "point_basket": pointrule.point_basket,
+                "validity_type": pointrule.validity_type,
+            }
+        ).pipe(
+            map(createPointRule => createPointRule)
+        );
     }
 
     // Delete API method

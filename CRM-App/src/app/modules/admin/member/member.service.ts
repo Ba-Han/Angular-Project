@@ -26,7 +26,6 @@ export class MemberService
     private _memberPoint: BehaviorSubject<MemberPoint> = new BehaviorSubject(null);
     private _memberPoints: BehaviorSubject<MemberPoint[]> = new BehaviorSubject(null);
     private _setting: BehaviorSubject<GeneralSetting | null> = new BehaviorSubject(null);
-   
 
     private _isAddressexit: boolean = true;
 
@@ -48,7 +47,7 @@ export class MemberService
     {
         return this._members.asObservable();
     }
-  
+
     get pagination$(): Observable<MemberPagination>
     {
          return this._pagination.asObservable();
@@ -57,7 +56,7 @@ export class MemberService
     get memberTiers(): Observable<MemberTier[]>{
         return this._tiers.asObservable();
     }
-    
+
     get transactions$(): Observable<any>
     {
         return this._transactions.asObservable();
@@ -74,14 +73,16 @@ export class MemberService
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
 
+    // eslint-disable-next-line max-len, @typescript-eslint/no-shadow
     getMembers(page: number = 0, limit: number = 10, sort: string = 'member_code', order: 'asc' | 'desc' | '' = 'asc', search: string = '', filter: string = '', fields: string = ''):
         Observable<{ pagination: MemberPagination; members: Member[] }>
     {
-        const fullurl = fields == "" ?  "items/member" : "member/0/memberLists";
+        const fullurl = fields === '' ?  'items/member' : 'member/0/memberLists';
         return this._httpClient.get<any>(`${this._apiurl}/${fullurl}`, {
             params: {
                 meta: 'filter_count',
-                fields: fields == '' ?'id,member_code,first_name,last_name,email,mobile_phone,registration_date, member_tier.name, accept_email,accept_mobile_sms, available_points , total_points, total_redeemed_points,expiredTotalPoints,dollerValueEarningExpired'
+                // eslint-disable-next-line max-len
+                fields: fields === '' ?'id,member_code,first_name,last_name,email,mobile_phone,registration_date, member_tier.name, accept_email,accept_mobile_sms, available_points, referral_code ,total_points, total_redeemed_points,expiredTotalPoints,dollerValueEarningExpired'
                 :'m.id,mt.name as member_tier, member_code,first_name,last_name,email,mobile_phone,registration_date,accept_email,accept_mobile_sms',
                 filter:filter,
                 page: page+1,
@@ -111,22 +112,19 @@ export class MemberService
                 this._pagination.next(pagination);
 
                 const members = response.data;
-                let memberIds = [];
+                const memberIds = [];
                 for(const member of members){
                     memberIds.push(member.id);
-                    if(fields == "custom"){
-                        member.member_tier = member ? member.member_tier : "";
+                    if(fields === 'custom'){
+                        member.member_tier = member ? member.member_tier : '';
                     }
                     else{
-                        member.member_tier = (member.member_tier && member.member_tier.name) ? member.member_tier.name : "";
+                        member.member_tier = (member.member_tier && member.member_tier.name) ? member.member_tier.name : '';
                     }
-                    
                     member.totalPoint = 0;
                     member.redeemTotalPoint = 0;
                 }
-
                 this._members.next(members);
-                
             })
         );
     }
@@ -139,16 +137,18 @@ export class MemberService
         .pipe(
             tap((response) => {
                 const member = response;
-                let bathDatestring = member.member != null ? member.member[0].date_of_birth : '';
-                let date = new Date(bathDatestring);
+                const bathDatestring = member.member != null ? member.member[0].date_of_birth : '';
+                const date = new Date(bathDatestring);
                 //const modifyBirthDate = new Date(date.setDate(date.getDate() + Number(1)));
                 const modifyBirthDate = new Date(date.setDate(date.getDate()));
                 member.member[0].date_of_birth = modifyBirthDate;
+                // eslint-disable-next-line max-len
                 member.earning = member.earning != null ? member.earning : { totalPoint: 0, earning_valid_from: '', earning_valid_to: '' , spending_valid_from: '', spending_valid_to: '' };
                 member.earning.earning_valid_from = member.earning.earning_valid_from ? new Date(member.earning.earning_valid_from).toDateString() : '';
                 member.earning.earning_valid_to = member.earning.earning_valid_to ? new Date(member.earning.earning_valid_to).toDateString() : '';
                 member.earning.spending_valid_from = member.earning.spending_valid_from ? new Date(member.earning.spending_valid_from).toDateString() : '';
                 member.earning.spending_valid_to = member.earning.spending_valid_to ? new Date(member.earning.spending_valid_to).toDateString() : '';
+                // eslint-disable-next-line max-len
                 member.spending = member.spending != null ? member.spending : { totalPoint: 0, earning_valid_from: '', earning_valid_to: '' , spending_valid_from: '', spending_valid_to: '' };
                 member.spending.earning_valid_from = member.spending.earning_valid_from ? new Date(member.spending.earning_valid_from).toDateString() : '';
                 member.spending.earning_valid_to = member.spending.earning_valid_to ? new Date(member.spending.earning_valid_to).toDateString() : '';
@@ -203,14 +203,12 @@ export class MemberService
         );
     }
 
-    checkMemberPhone(phno: string):Observable<any>{
+    checkMemberPhone(phno: string): Observable<any>{
         return this._httpClient.get<any>(`${this._apiurl}/utility/checkmobile`, {
             params: { mobile : phno}
         })
         .pipe(
-            tap((response) => {
-                return response;
-            })
+            tap(response => response)
         );
     }
 
@@ -230,13 +228,12 @@ export class MemberService
             "accept_email": member.accept_email,
             "accept_mobile_sms": member.accept_mobile_sms
         }).pipe(
-            map((updateMember) => {
-                return updateMember;
-            })
-        )
+            map(updateMember => updateMember)
+        );
     }
 
-    updateMemberDw(id:Number, member: MemberInfo): Observable<Member> {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    updateMemberDw(id: Number, member: MemberInfo): Observable<Member> {
         return this._httpClient.post<Member>(`${this._apiurl}/membership/${id}/update-dw/`, {
             "id": id,
             "first_name": member.first_name,
@@ -252,9 +249,7 @@ export class MemberService
             "accept_email": member.accept_email,
             "accept_mobile_sms": member.accept_mobile_sms
         }).pipe(
-            map((updateMember) => {
-                return updateMember;
-            })
-        )
+            map(updateMember => updateMember)
+        );
     }
 }

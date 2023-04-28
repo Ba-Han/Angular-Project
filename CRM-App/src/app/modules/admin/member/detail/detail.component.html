@@ -54,10 +54,10 @@
                     <!-- Name -->
                     <div class="text-4xl font-bold" style="word-break: break-word;white-space: normal;">
                         {{member.member[0].first_name}} {{member.member[0].last_name}}
-                        <ng-container *ngIf="member.member[0].gender === 'male'">
+                        <ng-container *ngIf="member.member[0].gender === 'Male'">
                             <mat-icon svgIcon="mat_outline:male"></mat-icon>
                         </ng-container>
-                        <ng-container *ngIf="member.member[0].gender === 'female'">
+                        <ng-container *ngIf="member.member[0].gender === 'Female'">
                             <mat-icon svgIcon="mat_outline:female"></mat-icon>
                         </ng-container>
                     </div>
@@ -81,6 +81,14 @@
                             <mat-icon [svgIcon]="'mat_solid:card_membership'" class="icon-size-5"></mat-icon>
                             <div class="font-bold ml-2 leading-6 w-2/4">  Member Code : </div>
                             <div class="ml-2 leading-6 w-3/4">{{member.member[0].member_code}}</div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="member.member[0].referral_code">
+                        <div class="flex p-2">
+                            <mat-icon [svgIcon]="'mat_solid:card_membership'" class="icon-size-5"></mat-icon>
+                            <div class="font-bold ml-2 leading-6 w-2/4">  Referral Code : </div>
+                            <div class="ml-2 leading-6 w-3/4">{{member.member[0].referral_code}}</div>
                         </div>
                     </ng-container>
 
