@@ -411,15 +411,15 @@
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Type</mat-label>
                                     <mat-select [formControlName]="'type'" [(ngModel)]="typeRuleValue">
-                                        <mat-option value="basic_rule">Basic Rule</mat-option>
-                                        <mat-option value="event_rule">Event Rule</mat-option>
-                                        <mat-option value="birthday_rule">Birthday Event</mat-option>
-                                        <mat-option value="referral_rule">Referral Rule</mat-option>
+                                        <mat-option [value]="0">Basic Rule</mat-option>
+                                        <mat-option [value]="1">Event Rule</mat-option>
+                                        <mat-option [value]="2">Birthday Event</mat-option>
+                                        <mat-option [value]="3">Referral Rule</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
 
-                            <ng-container *ngIf="typeRuleValue === 'basic_rule' || typeRuleValue === 'event_rule' || typeRuleValue === 'birthday_rule'">
+                            <ng-container *ngIf="typeRuleValue === 0 || typeRuleValue === 1 || typeRuleValue === 2">
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
                                         <mat-label>Dollar Value</mat-label>
@@ -445,7 +445,18 @@
                                 </div>
                             </ng-container>
 
-                            <ng-container *ngIf="typeRuleValue === 'referral_rule'">
+                            <ng-container *ngIf="typeRuleValue === 3">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Point Reward At</mat-label>
+                                        <mat-select [formControlName]="'point_rewarded_at'" [(ngModel)]="pointRewardedAtValue">
+                                            <mat-option [value]="0">None</mat-option>
+                                            <mat-option [value]="1">After Register</mat-option>
+                                            <mat-option [value]="2">After First Purchase</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Point Amount</mat-label>
@@ -467,17 +478,6 @@
                                         <input matInput type="number"
                                             [formControlName]="'min_expense'"
                                             [placeholder]="'Min Expense'">
-                                    </mat-form-field>
-                                </div>
-    
-                                <div class="mt-8">
-                                    <mat-form-field class="fuse-mat-no-subscript w-full">
-                                        <mat-label>Point Reward At</mat-label>
-                                        <mat-select [formControlName]="'point_rewarded_at'" [(ngModel)]="pointRewardedAtValue">
-                                            <mat-option [value]="0">None</mat-option>
-                                            <mat-option [value]="1">After Register</mat-option>
-                                            <mat-option [value]="2">After First Purchase</mat-option>
-                                        </mat-select>
                                     </mat-form-field>
                                 </div>
                             </ng-container>

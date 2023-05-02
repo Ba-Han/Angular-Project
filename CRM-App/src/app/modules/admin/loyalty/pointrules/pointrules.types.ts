@@ -8,7 +8,7 @@ export interface PointRule {
     "date_updated": string,
     "name": string,
     "description": string,
-    "type": string,
+    "type": number,
     "start_date": string,
     "end_date": string,
     "point_value": number,
