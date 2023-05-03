@@ -168,7 +168,7 @@
                     </div>
 
                     <!-- Point Basket -->
-                    <ng-container *ngIf="addedPointSegment.length == 0">
+                    <ng-container *ngIf="addedPointSegment.length === 0">
                         <div class="mt-8">
                             <mat-label>Point Basket</mat-label>
                             <div class="customPoint mt-3 h-12" style="cursor: pointer; border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
@@ -770,98 +770,132 @@
                                 <div class="w-full text-3xl font-bold">Condition</div>
                             </div>
 
-                            <ng-container *ngIf="memberTier.condition_type === 'min_order'">
+                            <ng-container *ngIf="memberTier.condition_type === 0">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Condition Type: </div>
                                     <div class="ml-6 leading-6">Min Order Value (per order)</div>
                                 </div>
+
+                                <ng-container *ngIf="memberTier.min_condition_amount">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Min Amount: </div>
+                                        <div class="ml-6 leading-6">{{memberTier.min_condition_amount}}</div>
+                                    </div>
+                                </ng-container>
+                                
+                                <ng-container *ngIf="memberTier.max_condition_amount">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Max Amount: </div>
+                                        <div class="ml-6 leading-6">{{memberTier.max_condition_amount}}</div>
+                                    </div>
+                                </ng-container>
                             </ng-container>
 
-                            <ng-container *ngIf="memberTier.condition_type === 'total_order'">
+                            <ng-container *ngIf="memberTier.condition_type === 1">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Condition Type: </div>
                                     <div class="ml-6 leading-6">Total Order Amount (period)</div>
                                 </div>
+
+                                <ng-container *ngIf="memberTier.condition_period === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Condition Period: </div>
+                                        <div class="ml-6 leading-6">Days</div>
+                                    </div>
+                                </ng-container>
+    
+                                <ng-container *ngIf="memberTier.condition_period === 2">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Condition Period: </div>
+                                        <div class="ml-6 leading-6">Months</div>
+                                    </div>
+                                </ng-container>
+    
+                                <ng-container *ngIf="memberTier.condition_period === 3">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Condition Period: </div>
+                                        <div class="ml-6 leading-6">Years</div>
+                                    </div>
+                                </ng-container>
+    
+                                <ng-container *ngIf="memberTier.condition_period_value">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Condition Period value: </div>
+                                        <div class="ml-6 leading-6">{{memberTier.condition_period_value}} </div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="memberTier.min_condition_amount">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Min Amount: </div>
+                                        <div class="ml-6 leading-6">{{memberTier.min_condition_amount}}</div>
+                                    </div>
+                                </ng-container>
+                                
+                                <ng-container *ngIf="memberTier.max_condition_amount">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Max Amount: </div>
+                                        <div class="ml-6 leading-6">{{memberTier.max_condition_amount}}</div>
+                                    </div>
+                                </ng-container>
                             </ng-container>
 
-                            <ng-container *ngIf="memberTier.condition_period === 'days'">
+                            <ng-container *ngIf="memberTier.condition_type === 2">
                                 <div class="flex sm:items-center">
-                                    <div class="w-1/4">Condition Period: </div>
-                                    <div class="ml-6 leading-6">Days</div>
+                                    <div class="w-1/4">Condition Type: </div>
+                                    <div class="ml-6 leading-6">Point Range</div>
                                 </div>
-                            </ng-container>
 
-                            <ng-container *ngIf="memberTier.condition_period === 'months'">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Condition Period: </div>
-                                    <div class="ml-6 leading-6">Months</div>
-                                </div>
-                            </ng-container>
+                                <ng-container *ngIf="memberTier.min_point">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Min Point: </div>
+                                        <div class="ml-6 leading-6">{{memberTier.min_point}}</div>
+                                    </div>
+                                </ng-container>
 
-                            <ng-container *ngIf="memberTier.condition_period === 'years'">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Condition Period: </div>
-                                    <div class="ml-6 leading-6">Years</div>
-                                </div>
+                                <ng-container *ngIf="memberTier.max_point">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Max Point: </div>
+                                        <div class="ml-6 leading-6">{{memberTier.max_point}}</div>
+                                    </div>
+                                </ng-container>
                             </ng-container>
-
-                            <ng-container *ngIf="memberTier.condition_period_value">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Condition Period value: </div>
-                                    <div class="ml-6 leading-6">{{memberTier.condition_period_value}} </div>
-                                </div>
-                            </ng-container>
-
-                            <ng-container *ngIf="memberTier.min_condition_amount">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Min Condition Amount: </div>
-                                    <div class="ml-6 leading-6">{{memberTier.min_condition_amount}}</div>
-                                </div>
-                            </ng-container>
-
-                            <ng-container *ngIf="memberTier.max_condition_amount">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Max Condition Amount: </div>
-                                    <div class="ml-6 leading-6">{{memberTier.max_condition_amount}}</div>
-                                </div>
-                            </ng-container>
-
 
                             <div class="flex sm:items-center mt-3">
                                 <div class="w-full text-3xl font-bold">Downgrade Condition </div>
                             </div>
 
-                            <ng-container *ngIf="memberTier.downgrade_condition_type === 'never'">
+                            <ng-container *ngIf="memberTier.downgrade_condition_type === 0">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Downgrade Condition Type: </div>
                                     <div class="ml-6 leading-6">Never</div>
                                 </div>
                             </ng-container>
 
-                            <ng-container *ngIf="memberTier.downgrade_condition_type === 'main_condition'">
+                            <ng-container *ngIf="memberTier.downgrade_condition_type === 1">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Downgrade Condition Type: </div>
                                     <div class="ml-6 leading-6">Main Condition</div>
                                 </div>
 
-                                <ng-container *ngIf="memberTier.downgrade_condition_period === 'day'">
+                                <ng-container *ngIf="memberTier.downgrade_condition_period === 1">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Downgrade Condition Period: </div>
-                                        <div class="ml-6 leading-6">Day</div>
+                                        <div class="ml-6 leading-6">Days</div>
                                     </div>
                                 </ng-container>
 
-                                <ng-container *ngIf="memberTier.downgrade_condition_period === 'month'">
+                                <ng-container *ngIf="memberTier.downgrade_condition_period === 2">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Downgrade Condition Period: </div>
-                                        <div class="ml-6 leading-6">Month</div>
+                                        <div class="ml-6 leading-6">Months</div>
                                     </div>
                                 </ng-container>
 
-                                <ng-container *ngIf="memberTier.downgrade_condition_period === 'year'">
+                                <ng-container *ngIf="memberTier.downgrade_condition_period === 3">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Downgrade Condition Period: </div>
-                                        <div class="ml-6 leading-6">Year</div>
+                                        <div class="ml-6 leading-6">Years</div>
                                     </div>
                                 </ng-container>
     
@@ -871,11 +905,8 @@
                                         <div class="ml-6 leading-6">{{memberTier.downgrade_condition_period_value}}</div>
                                     </div>
                                 </ng-container>
-
                             </ng-container>
-
                         </div>
-
                     </div>
                 </div>
             </ng-container>
@@ -992,55 +1023,108 @@
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Condition Type</mat-label>
-                                    <mat-select [formControlName]="'condition_type'">
-                                        <mat-option value="min_order">Min Order Value (per order)</mat-option>
-                                        <mat-option value="total_order">Total Order Amount (period)</mat-option>
+                                    <mat-select [formControlName]="'condition_type'" [(ngModel)]="conditionTypeValue">
+                                        <mat-option [value]="0">Min Order Value (per order)</mat-option>
+                                        <mat-option [value]="1">Total Order Amount (period)</mat-option>
+                                        <mat-option [value]="2">Point Range</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
 
-                            <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-full">
-                                    <mat-label>Condition Period</mat-label>
-                                    <mat-select [formControlName]="'condition_period'">
-                                        <mat-option value="days">Days</mat-option>
-                                        <mat-option value="months">Months</mat-option>
-                                        <mat-option value="years">Years</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
+                            <ng-container *ngIf="conditionTypeValue === 0">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
+                                        <mat-label>Min Amount</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'min_condition_amount'"
+                                               [placeholder]="'Min Condition Amount'">
+                                    </mat-form-field>
+    
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/4">
+                                        <mat-label>Max Amount</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'max_condition_amount'"
+                                               [placeholder]="'Max Condition Amount'">
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
 
-                            <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
-                                    <mat-label>Condition Period Value</mat-label>
-                                    <mat-icon matPrefix
-                                              class="hidden sm:flex icon-size-5"
-                                              [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                    <input matInput type="number"
-                                           [formControlName]="'condition_period_value'"
-                                           [placeholder]="'Condition Period Value'">
-                                </mat-form-field>
 
-                                <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
-                                    <mat-label>Min Amount</mat-label>
-                                    <mat-icon matPrefix
-                                              class="hidden sm:flex icon-size-5"
-                                              [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                    <input matInput type="number"
-                                           [formControlName]="'min_condition_amount'"
-                                           [placeholder]="'Min Condition Amount'">
-                                </mat-form-field>
+                            <ng-container *ngIf="conditionTypeValue === 1">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Condition Period</mat-label>
+                                        <mat-select [formControlName]="'condition_period'" [(ngModel)]="conditionPeriodValue">
+                                            <mat-option [value]="0">None</mat-option>
+                                            <mat-option [value]="1">Days</mat-option>
+                                            <mat-option [value]="2">Months</mat-option>
+                                            <mat-option [value]="3">Years</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
+                                        <mat-label>Condition Period Value</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'condition_period_value'"
+                                               [placeholder]="'Condition Period Value'">
+                                    </mat-form-field>
 
-                                <mat-form-field class="fuse-mat-no-subscript w-1/4">
-                                    <mat-label>Max Amount</mat-label>
-                                    <mat-icon matPrefix
-                                              class="hidden sm:flex icon-size-5"
-                                              [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                    <input matInput type="number"
-                                           [formControlName]="'max_condition_amount'"
-                                           [placeholder]="'Max Condition Amount'">
-                                </mat-form-field>
-                            </div>
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
+                                        <mat-label>Min Amount</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'min_condition_amount'"
+                                               [placeholder]="'Min Condition Amount'">
+                                    </mat-form-field>
+    
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/4">
+                                        <mat-label>Max Amount</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'max_condition_amount'"
+                                               [placeholder]="'Max Condition Amount'">
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="conditionTypeValue === 2">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
+                                        <mat-label>Min Point</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'min_point'"
+                                               [placeholder]="'Min Point'">
+                                    </mat-form-field>
+    
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/4">
+                                        <mat-label>Max Point</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'max_point'"
+                                               [placeholder]="'Max Point'">
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
 
                             <mat-form-field class="fuse-mat-no-subscript w-full hidden">
                                 <input matInput readonly style="cursor:pointer;"
@@ -1068,8 +1152,6 @@
                                                     [svgIcon]="'heroicons_outline:x'"></mat-icon>
                                             </button>
                                         </div>
-
-                                        
                                     </ng-container>
                                 </ng-container>
                             </div>
@@ -1113,20 +1195,21 @@
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Downgrade Condition Type</mat-label>
                                     <mat-select [formControlName]="'downgrade_condition_type'" [(ngModel)]="downgradeconditionValue">
-                                        <mat-option value="never">Never</mat-option>
-                                        <mat-option value="main_condition">Main Condition</mat-option>
+                                        <mat-option [value]="0">Never</mat-option>
+                                        <mat-option [value]="1">Main Condition</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
 
-                            <ng-container *ngIf="downgradeconditionValue === 'main_condition'">
+                            <ng-container *ngIf="downgradeconditionValue === 1">
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Downgrade Condition Period</mat-label>
-                                        <mat-select [formControlName]="'downgrade_condition_period'">
-                                            <mat-option value="day">Day</mat-option>
-                                            <mat-option value="month">Month</mat-option>
-                                            <mat-option value="year">Year</mat-option>
+                                        <mat-select [formControlName]="'downgrade_condition_period'" [(ngModel)]="downgradeConditionPeriodTypeValue">
+                                            <mat-option [value]="0">None</mat-option>
+                                            <mat-option [value]="1">Days</mat-option>
+                                            <mat-option [value]="2">Months</mat-option>
+                                            <mat-option [value]="3">Years</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
