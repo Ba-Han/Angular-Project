@@ -11,6 +11,8 @@ export interface GeneralSetting
     //default_member_tierName: string,
     user_updated: string;
     date_updated: string;
+    min_point: number;
+    max_point: number;
     memberGroupArray: MemberGroup[];
     userGroupArray: UserGroup[];
     memberTierDefaultArray: MemberTier[];

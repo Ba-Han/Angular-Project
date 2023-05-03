@@ -144,6 +144,8 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
             id: [''],
             transaction_rounding: ['', [Validators.required]],
             point_conversion: [''],
+            min_point: [''],
+            max_point: [''],
             member_groups: [''],
             user_groups: [''],
             default_member_tier: [''],
