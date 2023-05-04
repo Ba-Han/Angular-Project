@@ -123,6 +123,7 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
     fromstarttypeValue = 0;
     isAscending: boolean = true;
     selectedCoulumn = 'name';
+    errorMessage: string | null = null;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -284,6 +285,19 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
         const pointbasket = this.PointBasketAddForm.getRawValue();
         this._pointBasketService.createPointBasket(pointbasket).subscribe(() => {
             this.toogleStoreAddFormMode(false);
-        });
+        },
+        (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    //this.toogleStoreAddFormMode(false);
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
     }
 }

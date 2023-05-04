@@ -112,6 +112,7 @@ export class PointBasketDetailComponent implements OnInit, AfterViewInit, OnDest
     selectedId: number | null = null;
     successMessage: string | null = null;
     errorMessage: string | null = null;
+    noneErrorMessage: string | null = null;
     name: string;
     description: string;
     spendingType: string;
@@ -327,7 +328,20 @@ export class PointBasketDetailComponent implements OnInit, AfterViewInit, OnDest
         const pointbasket = this.PointBasketEditForm.getRawValue();
         this._pointBasketService.updatePointBasket(pointbasket.id,pointbasket).subscribe(() => {
             this._router.navigate(['/point-baskets'], { relativeTo: this._activatedRoute });
-        });
+        },
+        (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    //this._router.navigate(['/point-baskets'], { relativeTo: this._activatedRoute });
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.noneErrorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
     }
 }
 

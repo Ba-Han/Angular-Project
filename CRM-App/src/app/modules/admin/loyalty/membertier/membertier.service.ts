@@ -232,123 +232,81 @@ export class MemberTierService {
 
     createMemberTier(memberTier: MemberTier): Observable<MemberTier> {
 
-        const periodValue = memberTier.downgrade_condition_period_value;
-
-        if (periodValue === '')
-        {
-            return this.memberTiers$.pipe(
-                take(1),
-                switchMap(tiers => this._httpClient.post<any>(`${this._apiurl}/items/member_tier`, {
-                    "status": memberTier.status,
-                    "description": memberTier.description,
-                    "name": memberTier.name,
-                    "level": memberTier.level,
-                    "condition_type": memberTier.condition_type,
-                    "condition_period": memberTier.condition_period,
-                    "condition_period_value": memberTier.condition_period_value,
-                    "level_image": null,
-                    "code": memberTier.code,
-                    "min_condition_amount": memberTier.min_condition_amount,
-                    "max_condition_amount": memberTier.max_condition_amount,
-                    "downgrade_condition_type": memberTier.downgrade_condition_type,
-                    "downgrade_condition_period": memberTier.downgrade_condition_period,
-                    "downgrade_condition_period_value": null,
-                    "dw_member_group": memberTier.dw_member_group,
-                    /* "point_rule": memberTier.point_rule, */
-                    "tier_upgrade_items": memberTier.tier_upgrade_items
-                }).pipe(
-                    map((newTier) => {
-                        this._memberTiers.next([newTier.data, ...tiers]);
-                        return newTier;
-                    })
-                ))
-            );
-        } else {
-            return this.memberTiers$.pipe(
-                take(1),
-                switchMap(tiers => this._httpClient.post<any>(`${this._apiurl}/items/member_tier`, {
-                    "status": memberTier.status,
-                    "description": memberTier.description,
-                    "name": memberTier.name,
-                    "level": memberTier.level,
-                    "condition_type": memberTier.condition_type,
-                    "condition_period": memberTier.condition_period,
-                    "condition_period_value": memberTier.condition_period_value,
-                    "level_image": null,
-                    "code": memberTier.code,
-                    "min_condition_amount": memberTier.min_condition_amount,
-                    "max_condition_amount": memberTier.max_condition_amount,
-                    "downgrade_condition_type": memberTier.downgrade_condition_type,
-                    "downgrade_condition_period": memberTier.downgrade_condition_period,
-                    "downgrade_condition_period_value": memberTier.downgrade_condition_period_value,
-                    "dw_member_group": memberTier.dw_member_group,
-                    /* "point_rule": memberTier.point_rule, */
-                    "tier_upgrade_items": memberTier.tier_upgrade_items
-                }).pipe(
-                    map((newTier) => {
-                        this._memberTiers.next([newTier.data, ...tiers]);
-                        return newTier;
-                    })
-                ))
-            );
-        }
+        const conditionPeriod = !memberTier.condition_period ? 0 : memberTier.condition_period;
+        const conditionPeriodValue = !memberTier.condition_period_value ? 0 : memberTier.condition_period_value;
+        const minAmount = !memberTier.min_condition_amount ? 0 : memberTier.min_condition_amount;
+        const maxAmount = !memberTier.max_condition_amount ? 0 : memberTier.max_condition_amount;
+        const minPoint = !memberTier.min_point ? 0 : memberTier.min_point;
+        const maxPoint = !memberTier.max_point ? 0 : memberTier.max_point;
+        const downgradeConditionPeriod = !memberTier.downgrade_condition_period ? 0 : memberTier.downgrade_condition_period;
+        const downgradeConditionPeriodValue = !memberTier.downgrade_condition_period_value ? 0 : memberTier.downgrade_condition_period_value;
+        return this.memberTiers$.pipe(
+            take(1),
+            switchMap(tiers => this._httpClient.post<any>(`${this._apiurl}/items/member_tier`, {
+                "status": memberTier.status,
+                "description": memberTier.description,
+                "name": memberTier.name,
+                "level": memberTier.level,
+                "condition_type": memberTier.condition_type,
+                "condition_period": conditionPeriod,
+                "condition_period_value": conditionPeriodValue,
+                "level_image": null,
+                "code": memberTier.code,
+                "min_condition_amount": minAmount,
+                "max_condition_amount": maxAmount,
+                "downgrade_condition_type": memberTier.downgrade_condition_type,
+                "downgrade_condition_period": downgradeConditionPeriod,
+                "downgrade_condition_period_value": downgradeConditionPeriodValue,
+                "min_point": minPoint,
+                "max_point": maxPoint,
+                "dw_member_group": memberTier.dw_member_group,
+                /* "point_rule": memberTier.point_rule, */
+                "tier_upgrade_items": memberTier.tier_upgrade_items
+            }).pipe(
+                map((newTier) => {
+                    this._memberTiers.next([newTier.data, ...tiers]);
+                    return newTier;
+                })
+            ))
+        );
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     UpdateMemberTier(id: number, memberTier: MemberTier): Observable<MemberTier[]> {
 
-        const updateperiodValue = memberTier.downgrade_condition_period_value;
+        const conditionPeriod = !memberTier.condition_period ? 0 : memberTier.condition_period;
+        const conditionPeriodValue = !memberTier.condition_period_value ? 0 : memberTier.condition_period_value;
+        const minAmount = !memberTier.min_condition_amount ? 0 : memberTier.min_condition_amount;
+        const maxAmount = !memberTier.max_condition_amount ? 0 : memberTier.max_condition_amount;
+        const minPoint = !memberTier.min_point ? 0 : memberTier.min_point;
+        const maxPoint = !memberTier.max_point ? 0 : memberTier.max_point;
+        const downgradeConditionPeriod = !memberTier.downgrade_condition_period ? 0 : memberTier.downgrade_condition_period;
+        const downgradeConditionPeriodValue = !memberTier.downgrade_condition_period_value ? 0 : memberTier.downgrade_condition_period_value;
+        return this._httpClient.patch<MemberTier>(`${this._apiurl}/items/member_tier/${id}`, {
+            "id": id,
+            "status": memberTier.status,
+            "description": memberTier.description,
+            "name": memberTier.name,
+            "level": memberTier.level,
+            "condition_type": memberTier.condition_type,
+            "condition_period": conditionPeriod,
+            "condition_period_value": conditionPeriodValue,
+            "level_image": null,
+            "code": memberTier.code,
+            "min_condition_amount": minAmount,
+            "max_condition_amount": maxAmount,
+            "downgrade_condition_type": memberTier.downgrade_condition_type,
+            "downgrade_condition_period": downgradeConditionPeriod,
+            "downgrade_condition_period_value": downgradeConditionPeriodValue,
+            "min_point": minPoint,
+            "max_point": maxPoint,
+            "dw_member_group": memberTier.dw_member_group,
+            /* "point_rule": memberTier.point_rule, */
+            "tier_upgrade_items": memberTier.tier_upgrade_items
 
-        if (updateperiodValue === '')
-        {
-            return this._httpClient.patch<MemberTier>(`${this._apiurl}/items/member_tier/${id}`, {
-                "id": id,
-                "status": memberTier.status,
-                "description": memberTier.description,
-                "name": memberTier.name,
-                "level": memberTier.level,
-                "condition_type": memberTier.condition_type,
-                "condition_period": memberTier.condition_period,
-                "condition_period_value": memberTier.condition_period_value,
-                "level_image": null,
-                "code": memberTier.code,
-                "min_condition_amount": memberTier.min_condition_amount,
-                "max_condition_amount": memberTier.max_condition_amount,
-                "downgrade_condition_type": memberTier.downgrade_condition_type,
-                "downgrade_condition_period": memberTier.downgrade_condition_period,
-                "downgrade_condition_period_value": null,
-                "dw_member_group": memberTier.dw_member_group,
-                /* "point_rule": memberTier.point_rule, */
-                "tier_upgrade_items": memberTier.tier_upgrade_items
-
-            }).pipe(
-                tap((response: any) => response.data)
-            );
-        } else {
-            return this._httpClient.patch<MemberTier>(`${this._apiurl}/items/member_tier/${id}`, {
-                "id": id,
-                "status": memberTier.status,
-                "description": memberTier.description,
-                "name": memberTier.name,
-                "level": memberTier.level,
-                "condition_type": memberTier.condition_type,
-                "condition_period": memberTier.condition_period,
-                "condition_period_value": memberTier.condition_period_value,
-                "level_image": null,
-                "code": memberTier.code,
-                "min_condition_amount": memberTier.min_condition_amount,
-                "max_condition_amount": memberTier.max_condition_amount,
-                "downgrade_condition_type": memberTier.downgrade_condition_type,
-                "downgrade_condition_period": memberTier.downgrade_condition_period,
-                "downgrade_condition_period_value": memberTier.downgrade_condition_period_value,
-                "dw_member_group": memberTier.dw_member_group,
-                /* "point_rule": memberTier.point_rule, */
-                "tier_upgrade_items": memberTier.tier_upgrade_items
-
-            }).pipe(
-                tap((response: any) => response.data)
-            );
-        }
+        }).pipe(
+            tap((response: any) => response.data)
+        );
     }
 
     createPointSegment(pointsegment: PointSegment): Observable<PointSegment> {

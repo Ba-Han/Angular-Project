@@ -147,7 +147,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     minDate: string;
     timeoutId: any;
     timeOutUpId: any;
-    typeRuleValue: string;
+    typeRuleValue: number;
     pointRewardedAtValue = 0;
     spendingtypeValue = 0;
     totypeValue = 0;

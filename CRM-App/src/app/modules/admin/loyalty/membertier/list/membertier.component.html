@@ -841,56 +841,108 @@
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Condition Type</mat-label>
-                                    <mat-select [formControlName]="'condition_type'">
-                                        <mat-option value="min_order">Min Order Value (per order)</mat-option>
-                                        <mat-option value="total_order">Total Order Amount (period)</mat-option>
+                                    <mat-select [formControlName]="'condition_type'" [(ngModel)]="conditionTypeValue">
+                                        <mat-option [value]="0">Min Order Value (per order)</mat-option>
+                                        <mat-option [value]="1">Total Order Amount (period)</mat-option>
+                                        <mat-option [value]="2">Point Range</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
 
-                            <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-full">
-                                    <mat-label>Condition Period</mat-label>
-                                    <mat-select [formControlName]="'condition_period'">
-                                        <mat-option value="days">Days</mat-option>
-                                        <mat-option value="months">Months</mat-option>
-                                        <mat-option value="years">Years</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
+                            <ng-container *ngIf="conditionTypeValue === 0">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
+                                        <mat-label>Min Amount</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'min_condition_amount'"
+                                               [placeholder]="'Min Condition Amount'">
+                                    </mat-form-field>
+    
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/4">
+                                        <mat-label>Max Amount</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'max_condition_amount'"
+                                               [placeholder]="'Max Condition Amount'">
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
 
-                            <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
-                                    <mat-label>Condition Period Value</mat-label>
-                                    <mat-icon matPrefix
-                                              class="hidden sm:flex icon-size-5"
-                                              [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                    <input matInput type="number"
-                                           [formControlName]="'condition_period_value'"
-                                           [placeholder]="'Condition Period Value'">
-                                </mat-form-field>
 
-                                <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
-                                    <mat-label>Min Amount</mat-label>
-                                    <mat-icon matPrefix
-                                              class="hidden sm:flex icon-size-5"
-                                              [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                    <input matInput type="number"
-                                           [formControlName]="'min_condition_amount'"
-                                           [placeholder]="'Min Condition Amount'">
-                                </mat-form-field>
+                            <ng-container *ngIf="conditionTypeValue === 1">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Condition Period</mat-label>
+                                        <mat-select [formControlName]="'condition_period'" [(ngModel)]="conditionPeriodValue">
+                                            <mat-option [value]="0">None</mat-option>
+                                            <mat-option [value]="1">Days</mat-option>
+                                            <mat-option [value]="2">Months</mat-option>
+                                            <mat-option [value]="3">Years</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
+                                        <mat-label>Condition Period Value</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'condition_period_value'"
+                                               [placeholder]="'Condition Period Value'">
+                                    </mat-form-field>
 
-                                <mat-form-field class="fuse-mat-no-subscript w-1/4">
-                                    <mat-label>Max Amount</mat-label>
-                                    <mat-icon matPrefix
-                                              class="hidden sm:flex icon-size-5"
-                                              [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                    <input matInput type="number"
-                                           [formControlName]="'max_condition_amount'"
-                                           [placeholder]="'Max Condition Amount'">
-                                </mat-form-field>
-                            </div>
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
+                                        <mat-label>Min Amount</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'min_condition_amount'"
+                                               [placeholder]="'Min Condition Amount'">
+                                    </mat-form-field>
+    
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/4">
+                                        <mat-label>Max Amount</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'max_condition_amount'"
+                                               [placeholder]="'Max Condition Amount'">
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
 
+                            <ng-container *ngIf="conditionTypeValue === 2">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
+                                        <mat-label>Min Point</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'min_point'"
+                                               [placeholder]="'Min Point'">
+                                    </mat-form-field>
+    
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/4">
+                                        <mat-label>Max Point</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'max_point'"
+                                               [placeholder]="'Max Point'">
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
 
                             <mat-form-field class="fuse-mat-no-subscript w-full hidden">
                                 <input matInput readonly style="cursor:pointer;"
@@ -951,20 +1003,21 @@
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Downgrade Condition Type</mat-label>
                                     <mat-select [formControlName]="'downgrade_condition_type'" [(ngModel)]="downgradeconditionValue">
-                                        <mat-option value="never">Never</mat-option>
-                                        <mat-option value="main_condition">Main Condition</mat-option>
+                                        <mat-option [value]="0">Never</mat-option>
+                                        <mat-option [value]="1">Main Condition</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
 
-                            <ng-container *ngIf="downgradeconditionValue === 'main_condition'">
+                            <ng-container *ngIf="downgradeconditionValue === 1">
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Downgrade Condition Period</mat-label>
-                                        <mat-select [formControlName]="'downgrade_condition_period'">
-                                            <mat-option value="day">Days</mat-option>
-                                            <mat-option value="month">Months</mat-option>
-                                            <mat-option value="year">Years</mat-option>
+                                        <mat-select [formControlName]="'downgrade_condition_period'" [(ngModel)]="downgradeConditionPeriodTypeValue">
+                                            <mat-option [value]="0">None</mat-option>
+                                            <mat-option [value]="1">Days</mat-option>
+                                            <mat-option [value]="2">Months</mat-option>
+                                            <mat-option [value]="3">Years</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>

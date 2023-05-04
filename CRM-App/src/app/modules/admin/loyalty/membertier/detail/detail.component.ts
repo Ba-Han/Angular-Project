@@ -170,7 +170,8 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
     pointsegmentEditMode: boolean = false;
     tierUpgradeFormMode: boolean = false;
     MemberListMode: boolean = false;
-    downgradeconditionValue: string;
+    downgradeconditionValue: number;
+    conditionTypeValue: number;
     selectedValue: string;
     earningToValue: string;
     spendingFromValue: string;
@@ -179,6 +180,8 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
     tierUpgradeId: number;
     memberTiers: any;
     dwMemberGroups: any;
+    conditionPeriodValue: number = 0;
+    downgradeConditionPeriodTypeValue: number = 0;
     memberTierPagination: MemberTierPagination;
     selectedUpgradeItem: Array<MemberTierUpgrade> = [];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -215,10 +218,12 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
             description: [''],
             level: ['', [Validators.required]],
             condition_type: ['', [Validators.required]],
-            condition_period: ['', [Validators.required]],
-            condition_period_value: ['', [Validators.required]],
-            min_condition_amount: ['', [Validators.required]],
-            max_condition_amount: ['', [Validators.required]],
+            condition_period: [''],
+            condition_period_value: [''],
+            min_condition_amount: [''],
+            max_condition_amount: [''],
+            min_point: [''],
+            max_point: [''],
             downgrade_condition_type: ['', [Validators.required]],
             downgrade_condition_period: [''],
             downgrade_condition_period_value: [''],
@@ -275,6 +280,9 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
             .subscribe((tier: any) => {
                 this.memberTier = tier;
                 this.selectedUpgradeItem = tier.tier_upgrade_items;
+                this.conditionTypeValue = tier.condition_type;
+                this.downgradeConditionPeriodTypeValue = tier.downgrade_condition_period;
+                this.conditionPeriodValue = tier.condition_period;
                 //this.memberTier.point_ruleFullname = tier.point_rule.name;
                 //this.memberTier.tier_upgrade_Fullname =
                 //this.tierUpgradeId =;

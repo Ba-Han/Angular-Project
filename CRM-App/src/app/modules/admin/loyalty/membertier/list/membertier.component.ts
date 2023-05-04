@@ -134,6 +134,8 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
     pointruleId: number;
     isAscending: boolean = true;
     selectedCoulumn = 'name';
+    conditionPeriodValue: number = 0;
+    downgradeConditionPeriodTypeValue: number = 0;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -163,11 +165,13 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
             description: [''],
             level: ['', [Validators.required]],
             condition_type: ['', [Validators.required]],
-            condition_period: ['', [Validators.required]],
-            condition_period_value: ['', [Validators.required]],
-            min_condition_amount: ['', [Validators.required]],
-            max_condition_amount: ['', [Validators.required]],
-            point_rule: [''],
+            condition_period: [''],
+            condition_period_value: [''],
+            min_condition_amount: [''],
+            max_condition_amount: [''],
+            min_point: [''],
+            max_point: [''],
+            /* point_rule: [''], */
             downgrade_condition_type: ['', [Validators.required]],
             downgrade_condition_period: [''],
             downgrade_condition_period_value: [''],

@@ -23,19 +23,21 @@ export interface MemberTier
     name: string;
     description?: string;
     level: string;
-    condition_type: string;
-    condition_period: string;
-    condition_period_value: string;
-    min_condition_amount: string;
-    max_condition_amount: string;
+    condition_type: number;
+    condition_period: number;
+    condition_period_value: number;
+    min_condition_amount: number;
+    max_condition_amount: number;
     /* point_rule: []; */
-    downgrade_condition_type: string;
-    downgrade_condition_period: string;
-    downgrade_condition_period_value: string;
+    min_point: number;
+    max_point: number;
+    downgrade_condition_type: number;
+    downgrade_condition_period: number;
+    downgrade_condition_period_value: number;
     date_created: string;
     date_updated: string;
     /* point_ruleFullname: string, */
-    dw_member_group: string;
+    dw_member_group: number;
     dw_member_groupName: string;
     tier_upgrade_items: [];
     tier_upgrade_Fullname: string;
