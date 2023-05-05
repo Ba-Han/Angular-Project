@@ -203,8 +203,6 @@ export class GeneralSettingService {
                 'id': setting.id,
                 'transaction_rounding': setting.transaction_rounding,
                 'point_conversion': setting.point_conversion,
-                'min_point': setting.min_point,
-                'max_point': setting.max_point,
                 'member_groups': strMemberGroup,
                 'user_groups': strUserGroup,
                 'default_member_tier': setting.default_member_tier,

@@ -105,10 +105,8 @@ export class ProductService {
             /* 'price': product.price ? product.price : null, */
             'item_no': product.item_no
         }).pipe(
-            map((updateProduct) => {
-                return updateProduct;
-            })
-        )
+            map(updateProduct => updateProduct)
+        );
     }
 
     // Delete API method
