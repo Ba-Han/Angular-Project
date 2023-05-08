@@ -1,36 +1,36 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { ActivatedRoute, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDrawer } from '@angular/material/sidenav';
 import { debounceTime, map, merge, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { Channel, Store, StorePagination } from 'app/modules/admin/setting/store/store.types';
-import { StoreService } from 'app/modules/admin/setting/store/store.service';
-import { StoreDetailComponent } from 'app/modules/admin/setting/store/detail/detail.component';
+import { PointRange, PointRangePagination } from 'app/modules/admin/setting/point range setting/pointrange.types';
+import { PointRangeService } from 'app/modules/admin/setting/point range setting/pointrange.service';
 import { UserService } from 'app/core/user/user.service';
 
 @Component({
-    selector: 'store-list',
-    templateUrl: './store.component.html',
+    selector: 'point range setting-list',
+    templateUrl: './pointrange.component.html',
     styles: [
         /* language=SCSS */
         `
-            .store-grid {
-                grid-template-columns: 150px 150px 150px;
+            .pointrange-grid {
+                grid-template-columns: 150px 150px 150px 150px 150px;
 
                 @screen sm {
-                    grid-template-columns: 150px 300px 150px 150px;
+                    grid-template-columns: 150px 150px 150px 150px 150px;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 300px 150px 150px;
+                    grid-template-columns: 150px 150px 150px 150px 150px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 300px 150px 150px;
+                    grid-template-columns: 150px 150px 150px 150px 150px;
                 }
             }
 
@@ -42,51 +42,47 @@ import { UserService } from 'app/core/user/user.service';
                 content: '\u2193';
             }
 
-            .store-2-sort {
-                position: static;
-                width: 9rem !important;
-            }
-
             .sort-btn-01 {
                 border-radius: 3px !important;
                 padding: 12px !important;
                 min-width: 5px !important;
             }
+
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: fuseAnimations
 })
-export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PointRangeListComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
 
-    stores$: Observable<Store[]>;
-    store$: Observable<Store>;
+    pointranges$: Observable<PointRange[]>;
+    pointrange$: Observable<PointRange>;
     isLoading: boolean = false;
-    pagination: StorePagination;
-    searchInputControl: FormControl = new FormControl();
+    pagination: PointRangePagination;
     AddMode: boolean = false;
     canEdit: boolean = false;
-    StoreAddForm: FormGroup;
-    code: string;
-    selectedChannel: Store | null = null;
+    searchInputControl: FormControl = new FormControl();
+    PointRangeAddForm: FormGroup;
     isAscending: boolean = true;
-    channels$: Observable<Channel[]>;
-    getChannelData: any;
-    selectedCoulumn = 'storename';
+    selectedCoulumn = 'starttype';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
+        private _activatedRoute: ActivatedRoute,
         private _fuseConfirmationService: FuseConfirmationService,
         private _formBuilder: FormBuilder,
-        private _storeService: StoreService,
+        private _pointRangeService: PointRangeService,
+        private _router: Router,
         private _userService: UserService
     ) {
+
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -95,37 +91,26 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngOnInit(): void {
 
-        this.StoreAddForm = this._formBuilder.group({
-            code: ['', Validators.required],
-            status: ['active', Validators.required],
-            name: ['', Validators.required],
-            address_line_1: [''],
-            address_line_2: [''],
-            city: [''],
-            state: [''],
-            postal_code: [''],
-            region: [''],
-            country: ['SG', Validators.required],
-            channel_code: ['', Validators.required],
+
+        this.PointRangeAddForm = this._formBuilder.group({
+            id: [''],
+            start_type: ['', [Validators.required]],
+            start_day_type: [''],
+            end_type: ['', [Validators.required]],
+            end_day_type: ['', [Validators.required]],
+            end_day_value: ['', [Validators.required]]
         });
 
         // Get the pagination
-        this._storeService.pagination$
+        this._pointRangeService.pagination$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((pagination: StorePagination) => {
+            .subscribe((pagination: PointRangePagination) => {
                 this.pagination = pagination;
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
 
-        // Get the stores []
-        this.stores$ = this._storeService.stores$;
-        //Get the Channel []
-        this._storeService.channels$
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((channel) => {
-            this.getChannelData = channel;
-        });
+        this.pointranges$ = this._pointRangeService.pointranges$;
 
         // search
         this.searchInputControl.valueChanges
@@ -134,21 +119,21 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
                 debounceTime(300),
                 switchMap((query) => {
                     this.isLoading = true;
-                    return this._storeService.getStores(0, 10, 'name', 'asc', query);
+                    return this._pointRangeService.getPointRange(0, 10, 'start_type', 'asc', query);
                 }),
                 map(() => {
                     this.isLoading = false;
                 })
             )
             .subscribe();
-            this.canEdit = this._userService.getEditUserPermissionByNavId('store');
+            this.canEdit = this._userService.getEditUserPermissionByNavId('pointrangesetting');
     }
 
     ngAfterViewInit(): void {
         if (this._sort && this._paginator) {
             // Set the initial sort
             this._sort.sort({
-                id: 'name',
+                id: 'start_type',
                 start: 'asc',
                 disableClear: true
             });
@@ -168,7 +153,7 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
                 switchMap(() => {
                     this.isLoading = true;
                     //const sort = this._sort.direction == "desc" ? "-" + this._sort.active : this._sort.active;
-                    return this._storeService.getStores(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    return this._pointRangeService.getPointRange(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
                 }),
                 map(() => {
                     this.isLoading = false;
@@ -188,7 +173,7 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    toogleStoreAddFormMode(AddMode: boolean | null = null): void {
+    tooglepointAddFormMode(AddMode: boolean | null = null): void {
         if (AddMode === null) {
             this.AddMode = !this.AddMode;
         }
@@ -203,29 +188,37 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingPageList() {
         this.isAscending = !this.isAscending;
-        if ( this.isAscending && this.selectedCoulumn === 'storename' ) {
-            this._storeService.getStores(0, 10, 'name', 'asc').subscribe();
-        } else if ( !this.isAscending && this.selectedCoulumn === 'storename' ) {
-            this._storeService.getStores(0, 10, 'name', 'desc').subscribe();
-        } else if ( this.isAscending && this.selectedCoulumn === 'storecode' ) {
-            this._storeService.getStores(0, 10, 'code', 'asc').subscribe();
-        } else if ( !this.isAscending && this.selectedCoulumn === 'storecode' ) {
-            this._storeService.getStores(0, 10, 'code', 'desc').subscribe();
-        } else if ( this.isAscending && this.selectedCoulumn === 'country' ) {
-            this._storeService.getStores(0, 10, 'country', 'asc').subscribe();
-        } else if ( !this.isAscending && this.selectedCoulumn === 'country' ) {
-            this._storeService.getStores(0, 10, 'country', 'desc').subscribe();
-        } else if ( this.isAscending && this.selectedCoulumn === 'status' ) {
-            this._storeService.getStores(0, 10, 'status', 'asc').subscribe();
-        } else if ( !this.isAscending && this.selectedCoulumn === 'status' ) {
-            this._storeService.getStores(0, 10, 'status', 'desc').subscribe();
+        if ( this.isAscending && this.selectedCoulumn === 'starttype' ) {
+            this._pointRangeService.getPointRange(0, 10, 'start_type', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'starttype' ) {
+            this._pointRangeService.getPointRange(0, 10, 'start_type', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'startdaytype' ) {
+            this._pointRangeService.getPointRange(0, 10, 'start_day_type', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'startdaytype' ) {
+            this._pointRangeService.getPointRange(0, 10, 'start_day_type', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'endtype' ) {
+            this._pointRangeService.getPointRange(0, 10, 'end_type', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'endtype' ) {
+            this._pointRangeService.getPointRange(0, 10, 'end_type', 'desc').subscribe();
+        }
+        else if ( !this.isAscending && this.selectedCoulumn === 'enddaytype' ) {
+            this._pointRangeService.getPointRange(0, 10, 'end_day_type', 'asc').subscribe();
+        }
+        else if ( !this.isAscending && this.selectedCoulumn === 'enddaytype' ) {
+            this._pointRangeService.getPointRange(0, 10, 'end_day_type', 'desc').subscribe();
+        }
+        else if ( !this.isAscending && this.selectedCoulumn === 'value' ) {
+            this._pointRangeService.getPointRange(0, 10, 'end_day_value', 'asc').subscribe();
+        }
+        else if ( !this.isAscending && this.selectedCoulumn === 'value' ) {
+            this._pointRangeService.getPointRange(0, 10, 'end_day_value', 'desc').subscribe();
         }
     }
 
-    createStore(): void {
-        const store = this.StoreAddForm.getRawValue();
-        this._storeService.createStore(store).subscribe(() => {
-            this.toogleStoreAddFormMode(false);
+    createPointRange(): void {
+        const pointrange = this.PointRangeAddForm.getRawValue();
+        this._pointRangeService.createPointRange(pointrange).subscribe(() => {
+            this.tooglepointAddFormMode(false);
         });
 
     }

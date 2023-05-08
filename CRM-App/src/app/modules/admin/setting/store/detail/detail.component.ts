@@ -6,7 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from 'app/modules/admin/setting/store/store.types';
+import { Store, Channel } from 'app/modules/admin/setting/store/store.types';
 import { StoreService } from 'app/modules/admin/setting/store/store.service';
 import { UserService } from 'app/core/user/user.service';
 
@@ -81,6 +81,7 @@ export class StoreDetailComponent implements OnInit, OnDestroy {
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
 
     store: Store;
+    getChannelData: any;
     storeId: number;
     isLoading: boolean = false;
     selectedCountry: Store | null = null;
@@ -120,6 +121,7 @@ export class StoreDetailComponent implements OnInit, OnDestroy {
             postal_code: [''],
             region: [''],
             country: ['', Validators.required],
+            channel_code: ['', Validators.required],
         });
 
         this._storeService.store$
@@ -129,6 +131,14 @@ export class StoreDetailComponent implements OnInit, OnDestroy {
                 this.StoreEditForm.patchValue(store);
                 this._changeDetectorRef.markForCheck();
             });
+
+        //Get the Channel []
+        this._storeService.channels$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((channel) => {
+            this.getChannelData = channel;
+        });
+
         this.canDelete = this._userService.getDeleteUserPermissionByNavId('store');
     }
 

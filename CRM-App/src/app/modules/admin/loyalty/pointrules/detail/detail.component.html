@@ -406,6 +406,27 @@
                                 </div>
                             </ng-container>
 
+                            <ng-container *ngIf="pointRule.store_selection_type === 0">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Store Selection Type: </div>
+                                    <div class="ml-6 leading-6">All</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="pointRule.store_selection_type === 1">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Store Selection Type: </div>
+                                    <div class="ml-6 leading-6">Selected</div>
+                                </div>
+
+                                <ng-container *ngIf="pointRule.store_codes">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Store Selection Code: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.store_codes}}</div>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+
                             <ng-container *ngIf="pointRule.status === 'active'">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Status: </div>
@@ -615,6 +636,31 @@
                                 </div>
                             </ng-container>
 
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Store Selection Type</mat-label>
+                                    <mat-select [formControlName]="'store_selection_type'" [(ngModel)]="storeSelectionTypeValue">
+                                        <mat-option [value]="0">All</mat-option>
+                                        <mat-option [value]="1">Selected</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <ng-container *ngIf="storeSelectionTypeValue === 1">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Store Selection</mat-label>
+                                        <mat-select [formControlName]="'store_codes'" multiple>
+                                            <ng-container *ngFor="let store of getStoreData">
+                                                <mat-option [value]="store.code">
+                                                    {{ store.name }}
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
+                            
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Status</mat-label>

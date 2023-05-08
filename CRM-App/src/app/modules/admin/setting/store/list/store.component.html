@@ -151,8 +151,8 @@
                     </button>
                 </div>
         
-                <!-- Edit Form -->
-                <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
+                <!-- Add Form -->
+                <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12" style="background-color: white;">
                     <div class="w-full max-w-3xl">
                         <form [formGroup]="StoreAddForm">
         
@@ -180,7 +180,20 @@
                                            [placeholder]="'name'">
                                 </mat-form-field>
                             </div>
-        
+                            
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Channel</mat-label>
+                                    <mat-select [formControlName]="'channel_code'">
+                                        <ng-container *ngFor="let channel of getChannelData">
+                                            <mat-option [value]="channel.code">
+                                                {{ channel.name }}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
                             <!--<div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Address Line 1</mat-label>

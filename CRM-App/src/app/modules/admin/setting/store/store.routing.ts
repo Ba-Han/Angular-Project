@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 import { StoreComponent } from 'app/modules/admin/setting/store/store.component';
 import { StoreListComponent } from 'app/modules/admin/setting/store/list/store.component';
-import { StoresResolver, StoreResolver } from 'app/modules/admin/setting/store/store.resolvers';
+import { StoresResolver, StoreResolver, ChannelsResolver } from 'app/modules/admin/setting/store/store.resolvers';
 import { StoreDetailComponent } from './detail/detail.component';
 
 export const ecommerceRoutes: Route[] = [
@@ -14,6 +14,7 @@ export const ecommerceRoutes: Route[] = [
                 component: StoreListComponent,
                 resolve: {
                     tasks: StoresResolver,
+                    channels: ChannelsResolver
                 }
 
             },
@@ -22,6 +23,7 @@ export const ecommerceRoutes: Route[] = [
                 component: StoreDetailComponent,
                 resolve: {
                     task: StoreResolver,
+                    channels: ChannelsResolver
                 }
             }
         ]

@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import { PointRuleService } from 'app/modules/admin/loyalty/pointrules/pointrules.service';
-import { MemberTier, MemberTierPagination } from 'app/modules/admin/loyalty/membertier/membertier.types';
-import { PointRule, PointRulePaginagion, PointBasketPagination, PointBasket } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
+import { PointRule, PointRulePaginagion, PointBasketPagination, PointBasket, MemberTier, MemberTierPagination, StorePagination, Store } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 import { PointSegmentPagination, PointSegment } from '../../memberpoint/memberpoint.types';
 
 @Injectable({
@@ -47,6 +46,18 @@ export class PointRuleResolver implements Resolve<any>
                     return throwError(error);
                 })
             );
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class StoresResolver implements Resolve<any>
+{
+    constructor(private _pointRuleService: PointRuleService) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ storePagination: StorePagination; stores: Store[] }> {
+        return this._pointRuleService.getStores();
     }
 }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
-import { Member, MemberPagination, Transaction, MemberInfo, MemberTier } from 'app/modules/admin/member/member.types';
+import { Member, MemberPagination, Transaction, MemberInfo, MemberTier, MemberDocument } from 'app/modules/admin/member/member.types';
 import { MemberPoint} from 'app/modules/admin/member/member.types';
 import { environment } from 'environments/environment';
 import { GeneralSetting } from 'app/modules/admin/setting/generalsetting/generalsetting.types';
@@ -23,6 +23,7 @@ export class MemberService
     private _transaction: BehaviorSubject<any> = new BehaviorSubject(null);
     private _membertransactions: BehaviorSubject<any> = new BehaviorSubject(null);
     private _points: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _memberDocuments: BehaviorSubject<MemberDocument[] | null> = new BehaviorSubject(null);
     private _memberPoint: BehaviorSubject<MemberPoint> = new BehaviorSubject(null);
     private _memberPoints: BehaviorSubject<MemberPoint[]> = new BehaviorSubject(null);
     private _setting: BehaviorSubject<GeneralSetting | null> = new BehaviorSubject(null);
@@ -66,6 +67,12 @@ export class MemberService
     {
         return this._points.asObservable();
     }
+
+    get memberDocuments(): Observable<MemberDocument[]>
+    {
+        return this._memberDocuments.asObservable();
+    }
+
     get setting$(): Observable<GeneralSetting> {
         return this._setting.asObservable();
     }
@@ -181,6 +188,17 @@ export class MemberService
             );
     }
 
+    getMemberDocuments(): Observable<MemberDocument[]> {
+        return this._httpClient.get<any>(`${this._apiurl}/items/member_document`, {
+            //params: { limit: 5 }
+        })
+        .pipe(
+            tap((response) => {
+                this._memberDocuments.next(response.data);
+            })
+        );
+    }
+
     getSetting(): Observable<GeneralSetting> {
         return this._httpClient.get<any>(`${this._apiurl}/items/general_settings`)
             .pipe(
@@ -252,4 +270,11 @@ export class MemberService
             map(updateMember => updateMember)
         );
     }
+
+    // Delete API method
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    getDeleteCRMDocuments(id: number){
+        return this._httpClient.delete(`${this._apiurl}/items/member_document/${id}`,
+        { observe: 'response' });
+    };
 }

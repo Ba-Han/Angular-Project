@@ -108,6 +108,20 @@
                                         <div class="ml-6 leading-6">{{store.code}}</div>
                                     </div>
                                 </ng-container>
+
+                                <ng-container *ngIf="store.name">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Name: </div>
+                                        <div class="ml-6 leading-6">{{store.name}}</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="store.channel_code">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Channel Code: </div>
+                                        <div class="ml-6 leading-6">{{store.channel_code}}</div>
+                                    </div>
+                                </ng-container>
         
                                 <!--<ng-container *ngIf="store.user_created">
                                     <div class="flex sm:items-center">
@@ -204,11 +218,9 @@
                                     </div>
                                 </ng-container>
                             </div>
-        
                         </div>
                     </div>
                 </div>
-        
             </ng-container>
         
             <ng-container *ngIf="editMode">
@@ -250,6 +262,19 @@
                                     <input matInput
                                            [formControlName]="'name'"
                                            [placeholder]="'name'">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Channel</mat-label>
+                                    <mat-select [formControlName]="'channel_code'">
+                                        <ng-container *ngFor="let channel of getChannelData">
+                                            <mat-option [value]="channel.code">
+                                                {{ channel.name }}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
                                 </mat-form-field>
                             </div>
         

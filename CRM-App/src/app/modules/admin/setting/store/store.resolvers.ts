@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import { StoreService } from 'app/modules/admin/setting/store/store.service';
-import { Store, StorePagination } from 'app/modules/admin/setting/store/store.types';
+import { Store, StorePagination, ChannelPagination, Channel } from 'app/modules/admin/setting/store/store.types';
 
 @Injectable({
     providedIn: 'root'
@@ -15,6 +15,19 @@ export class StoresResolver implements Resolve<any>
         return this._storeService.getStores();
     }
 }
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ChannelsResolver implements Resolve<any>
+{
+    constructor(private _storeService: StoreService) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ channelPagination: ChannelPagination; members: Channel[] }> {
+        return this._storeService.getChannels();
+    }
+}
+
 
 @Injectable({
     providedIn: 'root'
