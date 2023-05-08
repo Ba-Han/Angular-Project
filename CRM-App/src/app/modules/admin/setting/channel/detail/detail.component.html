@@ -102,6 +102,13 @@
                                     </div>
                                 </ng-container>
 
+                                <ng-container *ngIf="channel.name">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Name: </div>
+                                        <div class="ml-6 leading-6">{{channel.name}}</div>
+                                    </div>
+                                </ng-container>
+
                                 <ng-container *ngIf="channel.status === 'active'">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Status: </div>
@@ -140,7 +147,6 @@
                         </div>
                     </div>
                 </div>
-            
             </ng-container>
 
             <ng-container *ngIf="editMode">

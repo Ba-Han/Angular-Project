@@ -3,8 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError, delay, catchError } from 'rxjs';
-import { PointRule, PointRulePaginagion, PointBasket } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
-import { MemberTier, MemberTierPagination } from 'app/modules/admin/loyalty/membertier/membertier.types';
+import { PointRule, PointRulePaginagion, PointBasket, MemberTier, MemberTierPagination, StorePagination, Store } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 
 @Injectable({
     providedIn: 'root'
@@ -20,7 +19,9 @@ export class PointRuleService {
     private _pointBasket: BehaviorSubject<PointBasket | null> = new BehaviorSubject(null);
     private _memberTierpagination: BehaviorSubject<MemberTierPagination | null> = new BehaviorSubject(null);
     private _pointBasketPagination: BehaviorSubject<PointBasketPagination | null> = new BehaviorSubject(null);
- 
+    private _storePagination: BehaviorSubject<StorePagination | null> = new BehaviorSubject(null);
+    private _stores: BehaviorSubject<Store[] | null> = new BehaviorSubject(null);
+
     constructor(private _httpClient: HttpClient) {
         this._apiurl = environment.apiurl;
     }
@@ -56,11 +57,17 @@ export class PointRuleService {
     get memberTierpagination$(): Observable<PointRulePaginagion> {
         return this._memberTierpagination.asObservable();
     }
-     // -----------------------------------------------------------------------------------------------------
+
+    get storePagination$(): Observable<StorePagination> {
+        return this._storePagination.asObservable();
+    }
+
+    get stores$(): Observable<Store[]> {
+        return this._stores.asObservable();
+    }
+    // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
-
-
     getPointRules(page: number = 0, limit: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: PointRulePaginagion; pointrules: PointRule[] }> {
         return this._httpClient.get(`${this._apiurl}/items/point_rule`, {
@@ -92,6 +99,39 @@ export class PointRuleService {
                 this._pointRules.next(response.data);
             })
         );
+    }
+
+    getStores(page: number = 0, limit: number = 10, sort: string = 'date_created', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+        Observable<{ storePagination: StorePagination; stores: Store[] }> {
+        return this._httpClient.get(`${this._apiurl}/items/store`, {
+                params: {
+                    meta: 'filter_count',
+                    page: page + 1,
+                    limit: limit,
+                    sort: sort,
+                    order,
+                    search
+                }
+            }).pipe(
+                tap((response: any) => {
+                    const totalLength = response.meta.filter_count;
+                    const begin = page * limit;
+                    const end = Math.min((limit * (page + 1)), totalLength);
+                    const lastPage = Math.max(Math.ceil(totalLength / limit), 1);
+
+                    // Prepare the pagination object
+                    const pagination = {
+                        length: totalLength,
+                        limit: limit,
+                        page: page,
+                        lastPage: lastPage,
+                        startIndex: begin,
+                        endIndex: end - 1
+                    };
+                    this._storePagination.next(pagination);
+                    this._stores.next(response.data);
+                })
+            );
     }
 
     getPointBaskets(page: number = 0, limit: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
@@ -271,6 +311,7 @@ export class PointRuleService {
         const pointAmount = !pointrule.point_amount ? 0 : pointrule.point_amount;
         const minimumExpense = !pointrule.min_expense ? 0 : pointrule.min_expense;
         const pointRewardedAt = !pointrule.point_rewarded_at ? 0 : pointrule.point_rewarded_at;
+        const storeCodes = !pointrule.store_codes ? '' : pointrule.store_codes.toString();
 
         /* let startDate:any = new Date(pointrule.start_date);
 
@@ -306,6 +347,8 @@ export class PointRuleService {
                 "basket_id": pointrule.basket_id,
                 "point_basket": pointrule.point_basket,
                 "validity_type": pointrule.validity_type,
+                "store_selection_type": pointrule.store_selection_type,
+                "store_codes": storeCodes
             }).pipe(
                 map((newPointRule) => {
                     this._pointRules.next([newPointRule.data, ...pointrules]);
@@ -327,6 +370,7 @@ export class PointRuleService {
         const pointAmount = !pointrule.point_amount ? 0 : pointrule.point_amount;
         const minimumExpense = !pointrule.min_expense ? 0 : pointrule.min_expense;
         const pointRewardedAt = !pointrule.point_rewarded_at ? 0 : pointrule.point_rewarded_at;
+        const storeCodes = !pointrule.store_codes ? '' : pointrule.store_codes.toString();
 
         /* let startDate:any = new Date(pointrule.start_date);
             // startDate.setMinutes(800);
@@ -362,6 +406,8 @@ export class PointRuleService {
                 "basket_id": pointrule.basket_id,
                 "point_basket": pointrule.point_basket,
                 "validity_type": pointrule.validity_type,
+                "store_selection_type": pointrule.store_selection_type,
+                "store_codes": storeCodes
             }
         ).pipe(
             map(createPointRule => createPointRule)

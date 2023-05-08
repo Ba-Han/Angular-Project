@@ -9,9 +9,8 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { PointRule, PointRulePaginagion, PointBasket, PointBasketPagination } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
+import { PointRule, PointRulePaginagion, PointBasket, PointBasketPagination, MemberTier, MemberTierPagination, Store, StorePagination } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 import { PointRuleService } from 'app/modules/admin/loyalty/pointrules/pointrules.service';
-import { MemberTier, MemberTierPagination } from 'app/modules/admin/loyalty/membertier/membertier.types';
 import { UserService } from 'app/core/user/user.service';
 
 @Component({
@@ -104,6 +103,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     @ViewChild('drawerTwo', { static: true }) drawerTwo: MatDrawer;
 
     memberTiers$: Observable<MemberTier[]>;
+    stores$: Observable<Store[]>;
     pointBasketPagination: PointBasketPagination;
     memberTierPagination: MemberTierPagination;
     MemberTierListMode: boolean = false;
@@ -147,13 +147,15 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     minDate: string;
     timeoutId: any;
     timeOutUpId: any;
+    getStoreData: any;
     typeRuleValue: number;
-    pointRewardedAtValue = 0;
-    spendingtypeValue = 0;
-    totypeValue = 0;
-    toendTypeValue = 0;
-    fromtypeValue = 0;
-    fromstarttypeValue = 0;
+    pointRewardedAtValue: number = 0;
+    spendingtypeValue: number = 0;
+    totypeValue: number = 0;
+    toendTypeValue: number = 0;
+    fromtypeValue: number = 0;
+    fromstarttypeValue: number = 0;
+    storeSelectionTypeValue: number;
     isButtonDisabled: boolean = true;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -197,6 +199,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             basket_id: [''],
             point_basket: ['', [Validators.required]],
             point_basketName: ['', [Validators.required]],
+            store_selection_type: ['', [Validators.required]],
+            store_codes: [''],
         });
 
         this.PointBasketForm = this._formBuilder.group({
@@ -218,32 +222,40 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         this.pointBasket$ = this._pointRuleService.pointBasket$;
 
         this._pointRuleService.pointRule$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((pointrule: PointRule) => {
-                this.pointRule = pointrule;
-                this.typeRuleValue = pointrule.type;
-                this.pointRewardedAtValue = pointrule.point_rewarded_at;
-                this.validitytypeValue = pointrule.validity_type;
-                //this.pointRule.point_basket = pointrule.name;
-                this.pointRule.point_basketName = pointrule.point_basket?.name;
-                this.PointRuleEditForm.patchValue(pointrule);
-                this._changeDetectorRef.markForCheck();
-            });
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((pointrule: PointRule) => {
+            this.pointRule = pointrule;
+            this.typeRuleValue = pointrule.type;
+            this.pointRewardedAtValue = pointrule.point_rewarded_at;
+            this.validitytypeValue = pointrule.validity_type;
+            this.storeSelectionTypeValue = pointrule.store_selection_type;
+            //this.pointRule.point_basket = pointrule.name;
+            this.pointRule.point_basketName = pointrule.point_basket?.name;
+            this.PointRuleEditForm.patchValue(pointrule);
+            this._changeDetectorRef.markForCheck();
+        });
+
+        //Get the Stores []
+        this._pointRuleService.stores$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((store) => {
+            this.getStoreData = store;
+        });
 
         // search Point Rules
         this.searchInputControl.valueChanges
-            .pipe(
-                takeUntil(this._unsubscribeAll),
-                debounceTime(300),
-                switchMap((query) => {
-                    this.isLoading = true;
-                    return this._pointRuleService.getPointRules(0, 10, 'name', 'asc', query);
-                }),
-                map(() => {
-                    this.isLoading = false;
-                })
-            )
-            .subscribe();
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(300),
+            switchMap((query) => {
+                this.isLoading = true;
+                return this._pointRuleService.getPointRules(0, 10, 'name', 'asc', query);
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        )
+        .subscribe();
 
             //Drawer Mode
         this.drawerTwo.openedChange.subscribe((opened) => {
@@ -257,58 +269,58 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         });
 
         this._fuseMediaWatcherService.onMediaChange$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(({ matchingAliases }) => {
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(({ matchingAliases }) => {
 
-                // Set the drawerMode if the given breakpoint is active
-                if (matchingAliases.includes('lg')) {
-                    this.drawerMode = 'side';
-                }
-                else {
-                    this.drawerMode = 'over';
-                }
+            // Set the drawerMode if the given breakpoint is active
+            if (matchingAliases.includes('lg')) {
+                this.drawerMode = 'side';
+            }
+            else {
+                this.drawerMode = 'over';
+            }
 
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
+            // Mark for check
+            this._changeDetectorRef.markForCheck();
+        });
 
         //Member Tier Search
         this.memberTierSearchInputControl.valueChanges
-            .pipe(
-                takeUntil(this._unsubscribeAll),
-                debounceTime(300),
-                switchMap((query) => {
-                    this.isLoading = true;
-                    // Search
-                    return this._pointRuleService.getMemberTiers(0, 10, 'name', 'asc', query);
-                    this.drawerTwo.open();
-                }),
-                map(() => {
-                    this.isLoading = false;
-                    this.drawerTwo.open();
-                })
-            )
-            .subscribe();
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(300),
+            switchMap((query) => {
+                this.isLoading = true;
+                // Search
+                return this._pointRuleService.getMemberTiers(0, 10, 'name', 'asc', query);
+                this.drawerTwo.open();
+            }),
+            map(() => {
+                this.isLoading = false;
+                this.drawerTwo.open();
+            })
+        )
+        .subscribe();
 
         //Point Basket Search
         this.pointBasketSearchInputControl.valueChanges
-            .pipe(
-                takeUntil(this._unsubscribeAll),
-                debounceTime(300),
-                switchMap((query) => {
-                    this.isLoading = true;
-                    // Search
-                    return this._pointRuleService.getPointBaskets(0, 10, 'name', 'asc', query);
-                    this.drawerTwo.open();
-                }),
-                map(() => {
-                    this.isLoading = false;
-                    this.drawerTwo.open();
-                })
-            )
-            .subscribe();
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(300),
+            switchMap((query) => {
+                this.isLoading = true;
+                // Search
+                return this._pointRuleService.getPointBaskets(0, 10, 'name', 'asc', query);
+                this.drawerTwo.open();
+            }),
+            map(() => {
+                this.isLoading = false;
+                this.drawerTwo.open();
+            })
+        )
+        .subscribe();
 
-            this.canDelete = this._userService.getDeleteUserPermissionByNavId('point-rules');
+        this.canDelete = this._userService.getDeleteUserPermissionByNavId('point-rules');
     }
 
     ngAfterViewInit(): void {

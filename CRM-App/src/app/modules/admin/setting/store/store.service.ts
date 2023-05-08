@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
-import { Store, StorePagination } from 'app/modules/admin/setting/store/store.types';
+import { Store, StorePagination, Channel, ChannelPagination } from 'app/modules/admin/setting/store/store.types';
 import { environment } from 'environments/environment';
 
 @Injectable({
@@ -12,6 +12,8 @@ export class StoreService {
     private _pagination: BehaviorSubject<StorePagination | null> = new BehaviorSubject(null);
     private _stores: BehaviorSubject<Store[] | null> = new BehaviorSubject(null);
     private _store: BehaviorSubject<Store | null> = new BehaviorSubject(null);
+    private _channelPagination: BehaviorSubject<ChannelPagination | null> = new BehaviorSubject(null);
+    private _channels: BehaviorSubject<Channel[] | null> = new BehaviorSubject(null);
     private _apiurl: string = '';
 
     /**
@@ -30,7 +32,12 @@ export class StoreService {
     get store$(): Observable<Store> {
         return this._store.asObservable();
     }
-
+    get channels$(): Observable<Channel[]> {
+        return this._channels.asObservable();
+    }
+    get channelPagination$(): Observable<ChannelPagination> {
+        return this._channelPagination.asObservable();
+    }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
@@ -80,6 +87,39 @@ export class StoreService {
             );
     }
 
+    getChannels(page: number = 0, limit: number = 10, sort: string = 'date_created', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+        Observable<{ channelPagination: ChannelPagination; members: Channel[] }> {
+        return this._httpClient.get(`${this._apiurl}/items/channel`, {
+            params: {
+                meta: 'filter_count',
+                page: page + 1,
+                limit: limit,
+                sort: sort,
+                order,
+                search
+            }
+        }).pipe(
+            tap((response: any) => {
+                const totalLength = response.meta.filter_count;
+                const begin = page * limit;
+                const end = Math.min((limit * (page + 1)), totalLength);
+                const lastPage = Math.max(Math.ceil(totalLength / limit), 1);
+
+                // Prepare the pagination object
+                const pagination = {
+                    length: totalLength,
+                    limit: limit,
+                    page: page,
+                    lastPage: lastPage,
+                    startIndex: begin,
+                    endIndex: end - 1
+                };
+                this._channelPagination.next(pagination);
+                this._channels.next(response.data);
+            })
+        );
+    }
+
     /**
      * Get store by id
      */
@@ -106,7 +146,8 @@ export class StoreService {
                 "state": store.state,
                 "postal_code": store.postal_code,
                 "region": store.region,
-                "country": store.country
+                "country": store.country,
+                "channel_code": store.channel_code
             }).pipe(
                 map((newStore) => {
                     this._stores.next([newStore.data, ...stores]);
@@ -128,7 +169,8 @@ export class StoreService {
             'state': store.state,
             'postal_code': store.postal_code,
             'region': store.region,
-            'country': store.country
+            'country': store.country,
+            'channel_code': store.channel_code
         }).pipe(
             map(updateStore => updateStore)
         );

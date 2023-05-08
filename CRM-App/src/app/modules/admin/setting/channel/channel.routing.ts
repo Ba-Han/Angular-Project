@@ -15,7 +15,6 @@ export const ecommerceRoutes: Route[] = [
                 resolve: {
                     tasks: ChannelsResolver,
                 }
-                
             },
             {
                 path: ':code',

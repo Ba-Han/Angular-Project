@@ -7,6 +7,8 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'environments/environment';
 import { FuseAlertType } from '@fuse/components/alert';
 import { MatDrawer } from '@angular/material/sidenav';
 import { debounceTime, merge, map, switchMap, Subject, takeUntil, Observable, finalize } from 'rxjs';
@@ -37,6 +39,58 @@ import { MemberService } from 'app/modules/admin/member/member.service';
                     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
                 }
             }
+
+            .reset_popup {
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                width: 28% !important;
+                height: 34% !important;
+                border-radius: 8px;
+            }
+
+            .parent_popup {
+                position: fixed;
+                display: grid;
+                justify-content: center;
+                padding: 4rem;
+            }
+
+            .child_btn {
+                padding-left: 1.5rem;
+                position: fixed;
+                margin-top: 2rem !important;
+            }
+
+            .update_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(0, 128, 0);
+                padding: 4rem;
+                font-size: 16px;
+            }
+
+            .successMessage_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(0, 128, 0);
+                padding: 3rem;
+                font-size: 16px;
+            }
+
+            .errorMessage_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(255, 49, 49);
+                padding: 3rem;
+                font-size: 16px;
+            }
+
+            .delete-scss {
+                position: fixed;
+                padding-left: 2rem;
+            }
         `
     ],
     encapsulation  : ViewEncapsulation.None,
@@ -50,7 +104,11 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     @ViewChild('tagsPanelOrigin') private _tagsPanelOrigin: ElementRef;
     @ViewChild('recentTransactionsTable', {read: MatSort}) private _recentTransactionsTableMatSort: MatSort;
     @ViewChild('recentPointsTable', { read: MatSort }) private _recentPointsTableMatSort: MatSort;
+    @ViewChild(' memberDocumentsTable', { read: MatSort }) private _memberDocumentsTableTableMatSort: MatSort;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('fileInput') fileInput: ElementRef;
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
 
@@ -74,9 +132,20 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     members: Member[];
     transactions: any;
     points: any;
+    DeleteMode: boolean = false;
+    isSuccess: boolean = false;
+    selectedId: number | null = null;
+    successMessage: string | null = null;
+    errorMessage: string | null = null;
+    memberDocuments: any;
+    memberDocumentsForm: FormGroup;
+    fileToUpload: File;
+    uploadData: any;
+    uploadId: number;
+    _apiurl: string;
     isManagerRole: boolean = false;
-    phoneValidateError : boolean = true;
-    memberId: number;
+    phoneValidateError: boolean = true;
+    memberId: string;
     isAddressexit: boolean = true;
     recentTransactions: Transaction[];
     pointsTableColumns: string[] = ['id', 'point_type', 'reward_code', 'point', 'transaction_document_no', 'status', 'date_created'];
@@ -84,14 +153,18 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     recentTransactionsTableColumns: string[] = ['document_no', 'total_amount', 'channel_name', 'point', 'point_type', 'purchase_date'];
     recentPointsDataSource: MatTableDataSource<any> = new MatTableDataSource();
     recentPointsTableColumns: string[] = ['transaction_document_no', 'point_type', 'point', 'pointsInDoller'];
+    memberDocumentsDataSource: MatTableDataSource<any> = new MatTableDataSource();
+    memberDocumentsTableColumns: string[] = ['document_name', 'uploaded_on', 'comment', 'file_path', 'uploaded_by_name'];
     searchInputControl: FormControl = new FormControl();
     selectedTier: number;
     // private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     alert: { type: FuseAlertType; message: string } = {
         type: 'success',
         message: ''
     };
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     showAlert: boolean = false;
     constructor(
         private _activatedRoute: ActivatedRoute,
@@ -102,10 +175,12 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         private _renderer2: Renderer2,
         private _router: Router,
         private _overlay: Overlay,
+        private _httpClient: HttpClient,
         private _viewContainerRef: ViewContainerRef,
         private datePipe: DatePipe,
     )
     {
+        this._apiurl = environment.apiurl;
     }
     get userRole(): string {
         return localStorage.getItem('userRoleName') ?? null;
@@ -119,7 +194,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
      */
     ngOnInit(): void
     {
-        this.isManagerRole = this.userRole == "CRM APP Manager" ? true : false;
+        this.isManagerRole = this.userRole === 'CRM APP Manager' ? true : false;
 
         // Create the contact form
         this.memberForm = this._formBuilder.group({
@@ -134,6 +209,14 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             accept_mobile_sms : ['']
         });
 
+        // Create the memberDocumentsUploadForm form
+        this.memberDocumentsForm = this._formBuilder.group({
+            id: [''],
+            upload: [''],
+            comment: [''],
+            member_id: ['']
+        });
+
         // Get the contacts
         this._memberService.members$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -141,7 +224,6 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                 this.members = members;
                 this._changeDetectorRef.markForCheck();
             });
-
 
         //Member Tiers
         this._memberService.memberTiers
@@ -159,13 +241,14 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                 this.member.earning = member.earning;
                 this.member.spending = member.spending;
                 this.member.soonExpiredPoint = member.soonExpiredPoint;
-                if ((this.member.member[0].address_line_1 == '' || this.member.member[0].address_line_1 == null) && (this.member.member[0].address_line_2 == '' || this.member.member[0].address_line_2 == null)
-                    && (this.member.member[0].postal_code == "" || this.member.member[0].postal_code == null) && (this.member.member[0].city == "" || this.member.member[0].city == null)) {
+                // eslint-disable-next-line max-len
+                if ((this.member.member[0].address_line_1 === '' || this.member.member[0].address_line_1 == null) && (this.member.member[0].address_line_2 === '' || this.member.member[0].address_line_2 == null)
+                    // eslint-disable-next-line max-len
+                    && (this.member.member[0].postal_code === '' || this.member.member[0].postal_code == null) && (this.member.member[0].city === '' || this.member.member[0].city == null)) {
                     this.isAddressexit = false;
                 }
 
                 // Patch values to the form
-                
                 this.memberForm.patchValue(member.member[0]);
                 if (member.member[0].member_tier != null) {
                     const tierId = this.memberTiers.find(x => x.id === member.member[0].member_tier_id);
@@ -174,6 +257,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                     this._changeDetectorRef.markForCheck();
             });
 
+        //memberPoints
         this._memberService.points$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((memberpoints) => {
@@ -182,15 +266,22 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             this.recentPointsDataSource.data = memberpoints;
         });
 
-       //Transaction
+       //Transactions
         this._memberService.transactions$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((transactions) => {
-                this.transactions = transactions;
-                this.recentTransactionsDataSource.data = transactions;
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((transactions) => {
+            this.transactions = transactions;
+            this.recentTransactionsDataSource.data = transactions;
+        });
 
-            });
-
+        //memberDocuments
+        this._memberService.memberDocuments
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((memberdocuments) => {
+            this.memberDocuments = memberdocuments;
+            // Store the table data
+            this.memberDocumentsDataSource.data = memberdocuments;
+        });
     }
 
      ngAfterViewInit(): void
@@ -198,6 +289,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
          // Make the data source sortable
          this.recentTransactionsDataSource.sort = this._recentTransactionsTableMatSort;
          this.recentPointsDataSource.sort = this._recentPointsTableMatSort;
+         this.memberDocumentsDataSource.sort = this._memberDocumentsTableTableMatSort;
 
          if (this._sort && this._paginator) {
              // Set the initial sort
@@ -253,7 +345,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         }
         this._changeDetectorRef.markForCheck();
     }
-   
+
     toggleTagsEditMode(): void
     {
         this.tagsEditMode = !this.tagsEditMode;
@@ -262,6 +354,94 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     trackByFn(index: number, item: any): any
     {
         return item.id || index;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    downloadFile(fileUrl: string) {
+        const url = `${this._apiurl}/${fileUrl}`;
+        window.open(url, '_blank');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    toogleDeleteMode(DeleteMode: boolean | null = null): void {
+        if (DeleteMode === null) {
+            this.DeleteMode = !this.DeleteMode;
+        }
+        else {
+            this.DeleteMode = DeleteMode;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    cancelPopup(): void {
+        this.isSuccess = false;
+        this.toogleDeleteMode(false);
+        this.matDrawer.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    proceedPopup(): void {
+        this._memberService.getDeleteCRMDocuments(this.selectedId)
+        .subscribe(() => {
+            },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this.successMessage = 'Deleted Successfully.';
+                    this._router.navigate(['/member'], { relativeTo: this._activatedRoute });
+                    this.isSuccess = true;
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this.isSuccess = true;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    DeleteDrawer(id: number): void {
+        this.selectedId = id;
+        this.toogleDeleteMode(true);
+        this.matDrawer.open();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    onFileSelected(event) {
+        if (event.target.files.length > 0) {
+            this.fileToUpload = event.target.files[0];
+            this.memberDocumentsForm.get('upload').setValue(this.fileToUpload);
+            this._changeDetectorRef.markForCheck();
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    clearFileToUpload(): void {
+        this.fileInput.nativeElement.value = '';
+        this.fileToUpload = null;
+        this._changeDetectorRef.markForCheck();
+    }
+
+    uploadMemberDocumentsFile(): void {
+        const formData = new FormData();
+        formData.append('file', this.fileToUpload);
+
+        this._httpClient.post<any>(`${this._apiurl}/items/member_document`, formData).subscribe(
+            (response: any) => {
+                this.uploadId = response.id;
+                this.uploadData = response.data;
+                this._changeDetectorRef.markForCheck();
+            },
+            (error) => {
+                this.errorMessage = error.error.message;
+                this._changeDetectorRef.markForCheck();
+              }
+        );
+        this._changeDetectorRef.markForCheck();
     }
 
     updateMember(): void {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import { MemberService } from 'app/modules/admin/member/member.service';
-import { Member, MemberPagination, MemberPoint, Transaction, MemberTier } from 'app/modules/admin/member/member.types';
+import { Member, MemberPagination, MemberPoint, Transaction, MemberTier, MemberDocument } from 'app/modules/admin/member/member.types';
 
 @Injectable({
     providedIn: 'root'
@@ -30,9 +30,9 @@ export class MemberResolverByTier implements Resolve<any>
     }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ pagination: MemberPagination; members: Member[] }> {
-        let searchFilterTierId = route.paramMap.get('membertierid');
-        let searchFilter = '{"member_tier":{"_eq":"' + searchFilterTierId + '"}}';
-        
+        const searchFilterTierId = route.paramMap.get('membertierid');
+        const searchFilter = '{"member_tier":{"_eq":"' + searchFilterTierId + '"}}';
+
         return this._memberService.getMembers(0, 10, 'member_code', 'asc', '', searchFilter);
     }
 }
@@ -107,6 +107,20 @@ export class MemberPointsRecentResolver implements Resolve<any>
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         return this._memberService.getRecentPointsById(Number(route.paramMap.get('id')));
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class MemberDocumentsResolver implements Resolve<any>
+{
+    constructor(private _memberService: MemberService)
+    {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<MemberDocument[]>
+    {
+        return this._memberService.getMemberDocuments();
     }
 }
 
