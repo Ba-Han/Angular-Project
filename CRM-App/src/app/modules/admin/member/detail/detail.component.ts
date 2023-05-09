@@ -109,6 +109,8 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('fileInput') fileInput: ElementRef;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('comment') commentBoxRef!: ElementRef;
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
 
@@ -137,6 +139,8 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     selectedId: number | null = null;
     successMessage: string | null = null;
     errorMessage: string | null = null;
+    validFileMessage: string | null = null;
+    invalidFileMessage: string | null = null;
     memberDocuments: any;
     memberDocumentsForm: FormGroup;
     fileToUpload: File;
@@ -145,7 +149,8 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     _apiurl: string;
     isManagerRole: boolean = false;
     phoneValidateError: boolean = true;
-    memberId: string;
+    memberId: number;
+    comment: string | '' = '';
     isAddressexit: boolean = true;
     recentTransactions: Transaction[];
     pointsTableColumns: string[] = ['id', 'point_type', 'reward_code', 'point', 'transaction_document_no', 'status', 'date_created'];
@@ -196,6 +201,13 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     {
         this.isManagerRole = this.userRole === 'CRM APP Manager' ? true : false;
 
+        this._activatedRoute.url.subscribe((param) => {
+            if (param != null) {
+                this.memberId = Number(param[0].path);
+            }
+
+        });
+
         // Create the contact form
         this.memberForm = this._formBuilder.group({
             id              : [''],
@@ -214,7 +226,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             id: [''],
             upload: [''],
             comment: [''],
-            member_id: ['']
+            member_id: this.memberId
         });
 
         // Get the contacts
@@ -414,7 +426,17 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     onFileSelected(event) {
         if (event.target.files.length > 0) {
             this.fileToUpload = event.target.files[0];
-            this.memberDocumentsForm.get('upload').setValue(this.fileToUpload);
+            // eslint-disable-next-line max-len
+            const allowedTypes = ['application/pdf', 'text/csv', 'image/jpg', 'image/jpeg', 'image/png', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+            if (this.fileToUpload && allowedTypes.includes(this.fileToUpload.type)) {
+                // file is valid
+                //console.log('valid file');
+                this.memberDocumentsForm.get('upload').setValue(this.fileToUpload);
+              } else {
+                // file is invalid, display an error message
+                this.invalidFileMessage = 'Not valid file type.';
+                //console.log('Invalid file type');
+              }
             this._changeDetectorRef.markForCheck();
         }
         this._changeDetectorRef.markForCheck();
@@ -429,11 +451,16 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     uploadMemberDocumentsFile(): void {
         const formData = new FormData();
         formData.append('file', this.fileToUpload);
+        formData.append('member_id', this.memberId.toString());
+        formData.append('comment', this.comment);
+        //const upload = this.memberDocumentsForm.getRawValue();
 
-        this._httpClient.post<any>(`${this._apiurl}/items/member_document`, formData).subscribe(
+        this._httpClient.post(`${this._apiurl}/items/member_document`, formData).subscribe(
             (response: any) => {
-                this.uploadId = response.id;
                 this.uploadData = response.data;
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
                 this._changeDetectorRef.markForCheck();
             },
             (error) => {
