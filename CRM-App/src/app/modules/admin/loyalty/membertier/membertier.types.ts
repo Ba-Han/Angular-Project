@@ -22,7 +22,7 @@ export interface MemberTier
     code: string;
     name: string;
     description?: string;
-    level: string;
+    level: number;
     condition_type: number;
     condition_period: number;
     condition_period_value: number;

@@ -1265,56 +1265,38 @@
                 <div class="col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 mt-10 overflow-hidden" style="margin-bottom: 2.5rem !important;">
                     <div style="border-radius: 10px; border: 1px dashed black; margin: 1rem;">
                         <div class="mb-5"> <span class="text-lg font-medium justify-center" style="position: relative; top: 1rem; left: 1rem; border-bottom: 1px solid black;"> Select File And Upload </span></div>
-                        <div class="w-full h-50 flex items-center justify-center" style="cursor:pointer; border-radius: 3px;">
-                            <div style="border-bottom: 1px solid black;">
-                                <input class="ng-hide mr-9" #fileInput multiple type="file" (change)="onFileSelected($event)" style="margin-bottom: 9px;" />
-                                <button mat-icon-button [matTooltip]="'Clear'" *ngIf="fileToUpload" (click)="clearFileToUpload()" style="width: 35px; height: 35px; border-radius: 3px; border: 1px solid #4f46e5; top: 1px;">
-                                    <span>x</span>
-                                </button>
+                        
+                            <div class="w-full h-50 flex items-center justify-center" style="cursor:pointer; border-radius: 3px;">
+                                <div style="border-bottom: 1px solid black;">
+                                    <input class="ng-hide mr-9" #fileInput multiple type="file" (change)="onFileSelected($event)" accept=".csv,.xlsx,.pdf,.jpg,.jpeg,.png,.docx" style="margin-bottom: 9px;" />
+                                    <button mat-icon-button [matTooltip]="'Clear'" *ngIf="fileToUpload" (click)="clearFileToUpload()" style="width: 35px; height: 35px; border-radius: 3px; border: 1px solid #4f46e5; top: 1px;">
+                                        <span>x</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div *ngIf="uploadData" style="position: relative; bottom: 4.4rem; text-align: center; color: green;">
+                                Upload Successfully.
                             </div>
 
-                            <button class="h-10 md-button md-raised md-primary" (click)="uploadMemberDocumentsFile()" style="background: #4f46e5;color:#fff;width: 10% !important;margin-left: 10px; border-radius: 3px; font-weight: 700;">Upload</button>
-                        </div>
-                        <div *ngIf="uploadData" style="position: relative; bottom: 4.4rem; text-align: center; color: red;">
-                            Upload Successfully.
-                        </div>
-
-                        <div *ngIf="errorMessage" style="position: relative; bottom: 4.4rem; text-align: center; color: red;">
-                            {{ errorMessage }}
-                        </div>
-
-                        <form [formGroup]="memberDocumentsForm">
-                            <!-- hidden Id -->
-                            <div class="mt-8 hidden">
-                                <mat-form-field class="fuse-mat-no-subscript w-full">
-                                    <input matInput
-                                           [formControlName]="'id'">
-                                </mat-form-field>
+                            <div *ngIf="errorMessage" style="position: relative; bottom: 4.4rem; text-align: center; color: red;">
+                                {{ errorMessage }}
                             </div>
 
-                            <div class="mt-8">
-                                <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
-                                    <mat-label>Comment</mat-label>
-                                    <mat-icon matPrefix
-                                              class="hidden sm:flex icon-size-5"
-                                              [svgIcon]="'heroicons_solid:menu-alt-2'"></mat-icon>
-                                    <textarea matInput
-                                              [formControlName]="'comment'"
-                                              [placeholder]="'Comment'"
-                                              [rows]="5"
-                                              [spellcheck]="false"
-                                              matTextareaAutosize></textarea>
-                                </mat-form-field>
+                            <div *ngIf="invalidFileMessage" style="position: relative; bottom: 4.4rem; text-align: center; color: red;">
+                                {{invalidFileMessage}}
                             </div>
-                        </form>
-                        <!-- <div style="position: relative; bottom: 3rem; width: 50%; left: 16rem; border: 1px solid">
-                            <textarea matInput
-                                [formControlName]="comment"
-                                [placeholder]="'Write your comment'"
-                                [rows]="5"
-                                [spellcheck]="false"
-                                matTextareaAutosize></textarea>
-                        </div> -->
+
+                            <div style="position: relative; bottom: 3rem; margin-left: 21rem !important; margin-right: 21rem !important;">
+                                <label for="comment" style="display: flex; font-weight: 500;">Comment:</label>
+                                <textarea id="comment" [(ngModel)]="comment" required placeholder="Enter your comment" style="border: 1px dashed black; width: 20rem; height: 6rem;"></textarea>
+                            </div>
+
+                            <div style="position: relative; text-align: end; bottom: 2rem;right: 3rem;">
+                                <button
+                                    *ngIf="!invalidFileMessage"
+                                    class="h-10 md-button md-raised md-primary"
+                                    (click)="uploadMemberDocumentsFile()" style="background: #4f46e5;color:#fff;width: 10% !important;margin-left: 10px; border-radius: 3px; font-weight: 700;">Upload</button>
+                            </div>
                     </div>
                 </div>
             </ng-container>
