@@ -86,14 +86,14 @@ export class AnalyticsService
         );
     }
     getBeInformed(): Observable<any> {
-        return this._httpClient.get<any>(`${this._apiurl}/items/memberaggregate?level=0`).pipe(
+        return this._httpClient.get<any>(`${this._apiurl}/items/memberaggregate?level=1`).pipe(
             tap((response: any) => {
                 this._beInformedMembers.next(response);
             })
         );
     }
     getBeReward(): Observable<any> {
-        return this._httpClient.get<any>(`${this._apiurl}/items/memberaggregate?level=1`).pipe(
+        return this._httpClient.get<any>(`${this._apiurl}/items/memberaggregate?level=2`).pipe(
             tap((response: any) => {
                 this._beRewardMembers.next(response);
             })
@@ -101,7 +101,7 @@ export class AnalyticsService
     }
 
     getBeWow(): Observable<any> {
-        return this._httpClient.get<any>(`${this._apiurl}/items/memberaggregate?level=2`).pipe(
+        return this._httpClient.get<any>(`${this._apiurl}/items/memberaggregate?level=3`).pipe(
             tap((response: any) => {
                 this._beWowMembers.next(response);
             })

@@ -812,7 +812,7 @@
                                             *matHeaderCellDef style="background:#e2e8f0;">
                                             Document Name
                                         </th>
-                                        <td mat-cell
+                                        <td mat-cell (click)="toggleEditMode(true)" style="cursor:pointer;"
                                             *matCellDef="let crmdocument">
                                             <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
                                                 {{crmdocument.document_name}}
@@ -826,7 +826,7 @@
                                             *matHeaderCellDef style="background:#e2e8f0;">
                                             Uploaded Date
                                         </th>
-                                        <td mat-cell
+                                        <td mat-cell (click)="toggleEditMode(true)" style="cursor:pointer;"
                                             *matCellDef="let crmdocument">
                                             <span class="pr-6 whitespace-nowrap" style="text-transform:capitalize;">
                                                 {{crmdocument.uploaded_on | date:'MMM dd, y'}}
@@ -840,7 +840,7 @@
                                             *matHeaderCellDef style="background:#e2e8f0;">
                                             Comment
                                         </th>
-                                        <td mat-cell
+                                        <td mat-cell (click)="toggleEditMode(true)" style="cursor:pointer;"
                                             *matCellDef="let crmdocument">
                                             <span class="pr-6 font-medium whitespace-nowrap">
                                                 {{crmdocument.comment}}
@@ -862,7 +862,7 @@
                                         </td>
                                     </ng-container>
         
-                                    <!-- Delete Button -->
+                                    <!-- Hidden Delete Button -->
                                     <ng-container matColumnDef="uploaded_by_name" hidden="true">
                                         <th mat-header-cell hidden="true"
                                             *matHeaderCellDef style="background:#e2e8f0;">
@@ -1143,126 +1143,117 @@
                 </div>
         
                 <!-- Member Documents table -->
-                <div class="col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 mt-10 overflow-hidden">
-                    <div class="p-6">
-                        <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">Member Documents</div>
+                <div class="flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent" style="position: relative; margin-left: 6rem !important; margin-right: 6rem !important;">
+        
+                    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+                        <div class="absolute inset-x-0 bottom-0"
+                             *ngIf="isLoading">
+                            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+                        </div>
+        
+                        <div class="text-4xl font-extrabold tracking-tight">Member Documents</div>
+        
+                        <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+                            <!-- Search -->
+                            <!-- <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
+                                <mat-icon class="icon-size-5"
+                                          matPrefix
+                                          [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                <input matInput
+                                       [formControl]="searchInputControl"
+                                       [autocomplete]="'off'"
+                                       [placeholder]="'Search product'">
+                            </mat-form-field> -->
+
+                            <!--sorting dropdown-->
+                            <mat-form-field class="ml-4 fuse-mat-no-subscript memberdocument-2-sort">
+                                <mat-select [(ngModel)]="selectedCoulumn">
+                                    <mat-option value="documentname">Document Name</mat-option>
+                                    <mat-option value="uploadeddate">Uploaded Date</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <!--sorting button-->
+                            <button class="ml-2 sort-btn-01"
+                                (click)="sortingPageList()"
+                                [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
+                                mat-flat-button
+                                [color]="'primary'">
+                            </button> 
+                        </div>
                     </div>
-                    <div class="overflow-x-auto mx-6">
-                        <table class="w-full bg-transparent"
-                               mat-table
-                               matSort
-                               [dataSource]="memberDocumentsDataSource"
-                               [trackBy]="trackByFn"
-                               #memberDocumentsTable>
         
-                             <!-- Document Name -->
-                            <ng-container matColumnDef="document_name">
-                                <th mat-header-cell
-                                    *matHeaderCellDef style="background:#e2e8f0;">
-                                    Document Name
-                                </th>
-                                <td mat-cell
-                                    *matCellDef="let crmdocument">
-                                    <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                                        {{crmdocument.document_name}}
-                                    </span>
-                                </td>
-                            </ng-container>
-                             
-                            <!-- Uploaded Date -->
-                            <ng-container matColumnDef="uploaded_on">
-                                <th mat-header-cell
-                                    *matHeaderCellDef style="background:#e2e8f0;">
-                                    Uploaded Date
-                                </th>
-                                <td mat-cell
-                                    *matCellDef="let crmdocument">
-                                    <span class="pr-6 whitespace-nowrap" style="text-transform:capitalize;">
-                                        {{crmdocument.uploaded_on | date:'MMM dd, y'}}
-                                    </span>
-                                </td>
-                            </ng-container>
+                    <!-- Main -->
+                    <div class="flex flex-auto overflow-hidden">
         
-                            <!-- Comment -->
-                            <ng-container matColumnDef="comment">
-                                <th mat-header-cell
-                                    *matHeaderCellDef style="background:#e2e8f0;">
-                                    Comment
-                                </th>
-                                <td mat-cell
-                                    *matCellDef="let crmdocument">
-                                    <span class="pr-6 font-medium whitespace-nowrap">
-                                        {{crmdocument.comment}}
-                                    </span>
-                                </td>
-                            </ng-container>
-        
-                            <!-- Download Button -->
-                            <ng-container matColumnDef="file_path">
-                                <th mat-header-cell
-                                    *matHeaderCellDef style="background:#e2e8f0;">
-                                    Download
-                                </th>
-                                <td mat-cell style="cursor:pointer;"
-                                    *matCellDef="let crmdocument">
-                                    <button mat-icon-button [matTooltip]="'Download'" (click)="downloadFile(crmdocument.file_path)">
-                                        <mat-icon>cloud_download</mat-icon>
-                                    </button>
-                                </td>
-                            </ng-container>
-        
-                            <!-- Delete Button -->
-                            <ng-container matColumnDef="uploaded_by_name">
-                                <th mat-header-cell
-                                    *matHeaderCellDef style="background:#e2e8f0;">
-                                    Delete
-                                </th>
-                                <td mat-cell style="cursor:pointer;"
-                                    *matCellDef="let crmdocument">
-                                    <button mat-icon-button [matTooltip]="'Delete'" color="warn" (click)="DeleteDrawer(crmdocument.id)">
-                                        <mat-icon>delete</mat-icon>
-                                    </button>
-                                </td>
+                        <!-- Member Documents List -->
+                        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+                            <ng-container *ngIf="memberDocument.length > 0; else nomemberDocuments">
+                                <div class="grid">
+                                    <!-- Header -->
+                                    <div class="memberdocument-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                         matSort
+                                         matSortDisableClear>
+
+                                        <div> Document Name </div>
+                                        <div> Uploaded Date </div>
+                                        <div> Comment </div>
+                                        <div style="text-align: center;"> Download </div>
+                                        <div style="text-align: center;"> Delete </div>
+                                    </div>
+
+                                    <!-- Rows -->
+                                    <ng-container *ngFor="let document of memberDocument; trackBy: trackByFn">
+                                        <a class=" cursor-pointer hover:bg-gray-100 dark:hover:bg-hover">
+                                            <div class="memberdocument-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                                               
+                                                <div class="truncate">
+                                                    {{document.document_name}}
+                                                </div>
+
+                                                <div class="truncate">
+                                                    {{document.uploaded_on | date:'MMM dd, y'}}
+                                                </div>
+
+                                                <div class="truncate">
+                                                    {{document.comment}}
+                                                </div>
+
+                                                <div class="truncate" style="text-align: center;">
+                                                    <button mat-icon-button [matTooltip]="'Download'" (click)="downloadFile(document.file_path)">
+                                                        <mat-icon>cloud_download</mat-icon>
+                                                    </button>
+                                                </div>
+
+                                                <div class="truncate" style="text-align: center;">
+                                                    <button mat-icon-button [matTooltip]="'Delete'" color="warn" (click)="DeleteDrawer(document.id)">
+                                                        <mat-icon>delete</mat-icon>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </ng-container>
+                                </div>
+    
+                                <mat-paginator class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                                        [ngClass]="{'pointer-events-none': isLoading}"
+                                        [length]="memberDocumentPagination.length"
+                                        [pageIndex]="memberDocumentPagination.page"
+                                        [pageSize]="memberDocumentPagination.limit"
+                                        [pageSizeOptions]="[5, 10, 25, 50]"
+                                        (page)="onPageChange($event)"
+                                        [showFirstLastButtons]="true"></mat-paginator>
+    
                             </ng-container>
 
-                            <!--Member Documents Footer-->
-                            <ng-container *ngIf="memberDocuments.length > 0">
-                                <ng-container matColumnDef="memberDocumentsTableFooter">
-                                    <td class="py-6 px-0 border-0"
-                                        mat-footer-cell
-                                        *matFooterCellDef
-                                        colspan="6">
-                                        <!-- <button mat-stroked-button [routerLink]="['./transaction']">See All Transactions</button> -->
-                                    </td>
-                                </ng-container>
-                            </ng-container>
-
-                            <ng-container *ngIf="memberDocuments.length === 0">
-                                <ng-container matColumnDef="memberDocumentsTableFooter">
-                                    <td class="py-6 px-0 border-0"
-                                        mat-footer-cell
-                                        *matFooterCellDef
-                                        colspan="6"
-                                        style="color:grey;">
-                                        No Member Documents
-                                    </td>
-                                </ng-container>
-                            </ng-container>
-                            
-                            <tr mat-header-row
-                                *matHeaderRowDef="memberDocumentsTableColumns"></tr>
-                            <tr class="order-row h-16"
-                                mat-row
-                                *matRowDef="let row; columns: memberDocumentsTableColumns;"></tr>
-                            <tr class="border-0"
-                                mat-footer-row
-                                *matFooterRowDef="['memberDocumentsTableFooter']"></tr>
-                        </table>
+                            <ng-template #noMemberDocuments>
+                                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no member documents!</div>
+                            </ng-template>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Member Documents Upload Form -->
-                <div class="col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 mt-10 overflow-hidden" style="margin-bottom: 2.5rem !important;">
+                <div class="col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 mt-10 overflow-hidden" style="position: relative; margin-bottom: 3rem; margin-left: 6rem !important; margin-right: 6rem !important;">
                     <div style="border-radius: 10px; border: 1px dashed black; margin: 1rem;">
                         <div class="mb-5"> <span class="text-lg font-medium justify-center" style="position: relative; top: 1rem; left: 1rem; border-bottom: 1px solid black;"> Select File And Upload </span></div>
                         
@@ -1282,18 +1273,13 @@
                                 {{ errorMessage }}
                             </div>
 
-                            <div *ngIf="invalidFileMessage" style="position: relative; bottom: 4.4rem; text-align: center; color: red;">
-                                {{invalidFileMessage}}
-                            </div>
-
-                            <div style="position: relative; bottom: 3rem; margin-left: 21rem !important; margin-right: 21rem !important;">
+                            <div style="position: relative; bottom: 3rem; margin-left: 16rem !important; margin-right: 16rem !important;">
                                 <label for="comment" style="display: flex; font-weight: 500;">Comment:</label>
-                                <textarea id="comment" [(ngModel)]="comment" required placeholder="Enter your comment" style="border: 1px dashed black; width: 20rem; height: 6rem;"></textarea>
+                                <textarea id="comment" [(ngModel)]="comment" required placeholder="Enter your comment" style="border: 1px dashed black; width: 21rem; height: 6rem;"></textarea>
                             </div>
 
                             <div style="position: relative; text-align: end; bottom: 2rem;right: 3rem;">
                                 <button
-                                    *ngIf="!invalidFileMessage"
                                     class="h-10 md-button md-raised md-primary"
                                     (click)="uploadMemberDocumentsFile()" style="background: #4f46e5;color:#fff;width: 10% !important;margin-left: 10px; border-radius: 3px; font-weight: 700;">Upload</button>
                             </div>

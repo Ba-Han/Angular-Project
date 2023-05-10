@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
-import { Member, MemberPagination, Transaction, MemberInfo, MemberTier, MemberDocument } from 'app/modules/admin/member/member.types';
+import { Member, MemberPagination, Transaction, MemberInfo, MemberTier, MemberDocument, MemberDocumentPagination } from 'app/modules/admin/member/member.types';
 import { MemberPoint} from 'app/modules/admin/member/member.types';
 import { environment } from 'environments/environment';
 import { GeneralSetting } from 'app/modules/admin/setting/generalsetting/generalsetting.types';
@@ -24,6 +24,8 @@ export class MemberService
     private _membertransactions: BehaviorSubject<any> = new BehaviorSubject(null);
     private _points: BehaviorSubject<any> = new BehaviorSubject(null);
     private _memberDocuments: BehaviorSubject<MemberDocument[] | null> = new BehaviorSubject(null);
+    private _memberDocument: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _memberDocumentpagination: BehaviorSubject<MemberDocumentPagination | null> = new BehaviorSubject(null);
     private _memberPoint: BehaviorSubject<MemberPoint> = new BehaviorSubject(null);
     private _memberPoints: BehaviorSubject<MemberPoint[]> = new BehaviorSubject(null);
     private _setting: BehaviorSubject<GeneralSetting | null> = new BehaviorSubject(null);
@@ -68,9 +70,19 @@ export class MemberService
         return this._points.asObservable();
     }
 
-    get memberDocuments(): Observable<MemberDocument[]>
+    get memberDocuments$(): Observable<MemberDocument[]>
     {
         return this._memberDocuments.asObservable();
+    }
+
+    get memberDocument$(): Observable<any>
+    {
+        return this._memberDocument.asObservable();
+    }
+
+    get memberDocumentpagination$(): Observable<MemberDocumentPagination>
+    {
+         return this._memberDocumentpagination.asObservable();
     }
 
     get setting$(): Observable<GeneralSetting> {
@@ -188,12 +200,45 @@ export class MemberService
             );
     }
 
-    getMemberDocuments(): Observable<MemberDocument[]> {
+    getMemberDocumentsById(): Observable<Transaction> {
         return this._httpClient.get<any>(`${this._apiurl}/items/member_document`, {
-            //params: { limit: 5 }
+            params: { limit: 5, sort: 'document_name' }
         })
-        .pipe(
-            tap((response) => {
+            .pipe(
+                tap((response) => {
+                    this._memberDocument.next(response.data);
+                })
+            );
+    }
+
+    getMemberDocuments(page: number = 0, limit: number = 10, sort: string = 'document_name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+        Observable<{ memberDocumentpagination: MemberDocumentPagination; memberDocuments: MemberDocument[] }> {
+            return this._httpClient.get(`${this._apiurl}/items/member_document`, {
+            params: {
+                meta: 'filter_count',
+                page: page + 1,
+                limit: limit,
+                sort: sort,
+                order,
+                search
+            }
+        }).pipe(
+            tap((response: any) => {
+                const totalLength = response.meta.filter_count;
+                const begin = page * limit;
+                const end = Math.min((limit * (page + 1)), totalLength);
+                const lastPage = Math.max(Math.ceil(totalLength / limit), 1);
+
+                // Prepare the pagination object
+                const pagination = {
+                    length: totalLength,
+                    limit: limit,
+                    page: page,
+                    lastPage: lastPage,
+                    startIndex: begin,
+                    endIndex: end - 1
+                };
+                this._memberDocumentpagination.next(pagination);
                 this._memberDocuments.next(response.data);
             })
         );

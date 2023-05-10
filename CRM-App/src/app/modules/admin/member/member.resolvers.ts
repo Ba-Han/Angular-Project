@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import { MemberService } from 'app/modules/admin/member/member.service';
-import { Member, MemberPagination, MemberPoint, Transaction, MemberTier, MemberDocument } from 'app/modules/admin/member/member.types';
+import { Member, MemberPagination, MemberPoint, Transaction, MemberTier, MemberDocument, MemberDocumentPagination } from 'app/modules/admin/member/member.types';
 
 @Injectable({
     providedIn: 'root'
@@ -113,12 +113,24 @@ export class MemberPointsRecentResolver implements Resolve<any>
 @Injectable({
     providedIn: 'root'
 })
+export class MemberDocumentRecentResolver implements Resolve<any>
+{
+    constructor(private _memberService: MemberService) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+        return this._memberService.getMemberDocumentsById();
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
 export class MemberDocumentsResolver implements Resolve<any>
 {
     constructor(private _memberService: MemberService)
     {
     }
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<MemberDocument[]>
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ memberDocumentpagination: MemberDocumentPagination; memberDocuments: MemberDocument[] }>
     {
         return this._memberService.getMemberDocuments();
     }

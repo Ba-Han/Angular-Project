@@ -13,10 +13,10 @@ import { FuseAlertType } from '@fuse/components/alert';
 import { MatDrawer } from '@angular/material/sidenav';
 import { debounceTime, merge, map, switchMap, Subject, takeUntil, Observable, finalize } from 'rxjs';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { DatePipe } from '@angular/common';
 import { fuseAnimations } from '@fuse/animations';
-import { Member, MemberPoint, Transaction, MemberTier, MemberInfo } from 'app/modules/admin/member/member.types';
+import { Member, MemberPoint, Transaction, MemberTier, MemberInfo, MemberDocument, MemberDocumentPagination } from 'app/modules/admin/member/member.types';
 import { MemberService } from 'app/modules/admin/member/member.service';
 
 @Component({
@@ -38,6 +38,36 @@ import { MemberService } from 'app/modules/admin/member/member.service';
                 @screen lg {
                     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
                 }
+            }
+
+            .memberdocument-grid {
+                grid-template-columns: 200px 150px auto 100px 100px;
+
+                @screen sm {
+                    grid-template-columns: 200px 150px auto 100px 100px;
+                }
+
+                @screen md {
+                    grid-template-columns: 200px 150px auto 100px 100px;
+                }
+
+                @screen lg {
+                    grid-template-columns: 200px 150px auto 100px 100px;
+                }
+            }
+
+            .sort-asc::after {
+                content: '\u2191';
+              }
+
+            .sort-desc::after {
+                content: '\u2193';
+            }
+
+            .sort-btn-01 {
+                border-radius: 3px !important;
+                padding: 12px !important;
+                min-width: 5px !important;
             }
 
             .reset_popup {
@@ -91,6 +121,11 @@ import { MemberService } from 'app/modules/admin/member/member.service';
                 position: fixed;
                 padding-left: 2rem;
             }
+
+            .memberdocument-2-sort {
+                position: static;
+                width: 11rem !important;
+            }
         `
     ],
     encapsulation  : ViewEncapsulation.None,
@@ -104,7 +139,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     @ViewChild('tagsPanelOrigin') private _tagsPanelOrigin: ElementRef;
     @ViewChild('recentTransactionsTable', {read: MatSort}) private _recentTransactionsTableMatSort: MatSort;
     @ViewChild('recentPointsTable', { read: MatSort }) private _recentPointsTableMatSort: MatSort;
-    @ViewChild(' memberDocumentsTable', { read: MatSort }) private _memberDocumentsTableTableMatSort: MatSort;
+    @ViewChild(' memberDocumentsTable', { read: MatSort }) private _memberDocumentsTableMatSort: MatSort;
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -116,6 +151,9 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
 
     memberPoints$: Observable<MemberPoint[]>;
     transactions$: Observable<Transaction[]>;
+    memberDocument$: Observable<MemberDocument[]>;
+    memberDocuments$: Observable<MemberDocument[]>;
+    memberDocumentPagination: MemberDocumentPagination;
     memberPoint: MemberPoint;
     memberPointsCount: number = 0;
     editMode: boolean = false;
@@ -142,6 +180,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     validFileMessage: string | null = null;
     invalidFileMessage: string | null = null;
     memberDocuments: any;
+    memberDocument: any;
     memberDocumentsForm: FormGroup;
     fileToUpload: File;
     uploadData: any;
@@ -162,6 +201,8 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     memberDocumentsTableColumns: string[] = ['document_name', 'uploaded_on', 'comment', 'file_path', 'uploaded_by_name'];
     searchInputControl: FormControl = new FormControl();
     selectedTier: number;
+    isAscending: boolean = true;
+    selectedCoulumn = 'documentname';
     // private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -287,40 +328,84 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         });
 
         //memberDocuments
-        this._memberService.memberDocuments
+        this._memberService.memberDocument$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((memberdocuments) => {
             this.memberDocuments = memberdocuments;
             // Store the table data
             this.memberDocumentsDataSource.data = memberdocuments;
         });
+
+        //memberDocuments in Edit Mode
+        this._memberService.memberDocuments$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((memberdocument: MemberDocument[]) => {
+            this.memberDocument = memberdocument;
+            this._changeDetectorRef.markForCheck();
+        });
+
+         // Get the memberDocumentpagination
+         this._memberService.memberDocumentpagination$
+         .pipe(takeUntil(this._unsubscribeAll))
+         .subscribe((pagination: MemberDocumentPagination) => {
+             this.memberDocumentPagination = pagination;
+             // Mark for check
+             this._changeDetectorRef.markForCheck();
+         });
+
+         // search
+         this.searchInputControl.valueChanges
+         .pipe(
+             takeUntil(this._unsubscribeAll),
+             debounceTime(300),
+             switchMap((query) => {
+                 this.isLoading = true;
+                 return this._memberService.getMemberDocuments(0, 10, 'uploaded_on', 'asc', query);
+             }),
+             map(() => {
+                 this.isLoading = false;
+             })
+        ).subscribe();
     }
 
      ngAfterViewInit(): void
      {
          // Make the data source sortable
-         this.recentTransactionsDataSource.sort = this._recentTransactionsTableMatSort;
-         this.recentPointsDataSource.sort = this._recentPointsTableMatSort;
-         this.memberDocumentsDataSource.sort = this._memberDocumentsTableTableMatSort;
+        this.recentTransactionsDataSource.sort = this._recentTransactionsTableMatSort;
+        this.recentPointsDataSource.sort = this._recentPointsTableMatSort;
+        this.memberDocumentsDataSource.sort = this._memberDocumentsTableMatSort;
 
-         if (this._sort && this._paginator) {
-             // Set the initial sort
-             this._sort.sort({
-                 id: 'document_no',
-                 start: 'asc',
-                 disableClear: true
-             });
+        if (this._sort && this._paginator) {
+            // Set the initial sort
+            this._sort.sort({
+                id: 'document_name',
+                start: 'asc',
+                disableClear: true
+            });
 
-             // Mark for check
-             this._changeDetectorRef.markForCheck();
+            // Mark for check
+            this._changeDetectorRef.markForCheck();
 
-             // If the user changes the sort order...
-             this._sort.sortChange
-                 .pipe(takeUntil(this._unsubscribeAll))
-                 .subscribe(() => {
-                     this._paginator.pageIndex = 0;
-                 });
-         }
+            // If the user changes the sort order...
+            this._sort.sortChange
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(() => {
+                this._paginator.pageIndex = 0;
+            });
+
+            // Get memberDocuments if sort or page changes
+            merge(this._sort.sortChange, this._paginator.page).pipe(
+                switchMap(() => {
+                    this.isLoading = true;
+                    //const sort = this._sort.direction === 'desc' ? '-' + this._sort.active : this._sort.active;
+                    // eslint-disable-next-line max-len
+                    return this._memberService.getMemberDocuments(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                }),
+                map(() => {
+                    this.isLoading = false;
+                })
+            ).subscribe();
+        }
      }
 
     ngOnDestroy(): void
@@ -366,6 +451,34 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     trackByFn(index: number, item: any): any
     {
         return item.id || index;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    onPageChange(event: PageEvent) {
+        this._memberService.getMemberDocuments(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+            switchMap(() => {
+                this.isLoading = true;
+                // eslint-disable-next-line max-len
+                return this._memberService.getMemberDocuments(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        ).subscribe();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingPageList() {
+        this.isAscending = !this.isAscending;
+        if ( this.isAscending && this.selectedCoulumn === 'documentname' ) {
+            this._memberService.getMemberDocuments(0, 10, 'document_name', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'documentname' ) {
+            this._memberService.getMemberDocuments(0, 10, 'document_name', 'desc').subscribe();
+        } else if ( this.isAscending && this.selectedCoulumn === 'uploadeddate' ) {
+            this._memberService.getMemberDocuments(0, 10, 'uploaded_on', 'asc').subscribe();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'uploadeddate' ) {
+            this._memberService.getMemberDocuments(0, 10, 'uploaded_on', 'desc').subscribe();
+        }
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -426,17 +539,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     onFileSelected(event) {
         if (event.target.files.length > 0) {
             this.fileToUpload = event.target.files[0];
-            // eslint-disable-next-line max-len
-            const allowedTypes = ['application/pdf', 'text/csv', 'image/jpg', 'image/jpeg', 'image/png', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-            if (this.fileToUpload && allowedTypes.includes(this.fileToUpload.type)) {
-                // file is valid
-                //console.log('valid file');
-                this.memberDocumentsForm.get('upload').setValue(this.fileToUpload);
-              } else {
-                // file is invalid, display an error message
-                this.invalidFileMessage = 'Not valid file type.';
-                //console.log('Invalid file type');
-              }
+            this.memberDocumentsForm.get('upload').setValue(this.fileToUpload);
             this._changeDetectorRef.markForCheck();
         }
         this._changeDetectorRef.markForCheck();

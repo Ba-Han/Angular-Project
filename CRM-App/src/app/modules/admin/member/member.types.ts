@@ -135,6 +135,16 @@ export interface MemberDocument {
     uploaded_by_name: string;
 }
 
+export interface MemberDocumentPagination
+{
+    length: number;
+    limit: number;
+    page: number;
+    lastPage: number;
+    startIndex: number;
+    endIndex: number;
+}
+
 export interface MemberPoint {
     id: number;
     status: string;
