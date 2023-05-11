@@ -308,105 +308,103 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     ngAfterViewInit(): void {
-        setTimeout(() => {
-            if (this._sort && this._paginator) {
-                // Set the initial sort
-                if (this.isAscending && this.selectedCoulumn === 'name') {
-                    this._sort.sort({
-                        id: 'name',
-                        start: 'asc',
-                        disableClear: true
-                    });
-                } else if (!this.isAscending && this.selectedCoulumn === 'name') {
-                    this._sort.sort({
-                        id: 'name',
-                        start: 'desc',
-                        disableClear: true
-                    });
-                } else if (this.isAscending && this.selectedCoulumn === 'rewardcode') {
-                    this._sort.sort({
-                        id: 'reward_code',
-                        start: 'asc',
-                        disableClear: true
-                    });
-                } else if (!this.isAscending && this.selectedCoulumn === 'rewardcode') {
-                    this._sort.sort({
-                        id: 'reward_code',
-                        start: 'desc',
-                        disableClear: true
-                    });
-                } else if (this.isAscending && this.selectedCoulumn === 'pointvalue') {
-                    this._sort.sort({
-                        id: 'point_value',
-                        start: 'asc',
-                        disableClear: true
-                    });
-                } else if (!this.isAscending && this.selectedCoulumn === 'pointvalue') {
-                    this._sort.sort({
-                        id: 'point_value',
-                        start: 'desc',
-                        disableClear: true
-                    });
-                } else if (this.isAscending && this.selectedCoulumn === 'membertier') {
-                    this._sort.sort({
-                        id: 'member_tierFullName',
-                        start: 'asc',
-                        disableClear: true
-                    });
-                } else if (!this.isAscending && this.selectedCoulumn === 'membertier') {
-                    this._sort.sort({
-                        id: 'member_tierFullName',
-                        start: 'desc',
-                        disableClear: true
-                    });
-                } else if (this.isAscending && this.selectedCoulumn === 'startdate') {
-                    this._sort.sort({
-                        id: 'start_date',
-                        start: 'asc',
-                        disableClear: true
-                    });
-                } else if (!this.isAscending && this.selectedCoulumn === 'startdate') {
-                    this._sort.sort({
-                        id: 'start_date',
-                        start: 'desc',
-                        disableClear: true
-                    });
-                } else if (this.isAscending && this.selectedCoulumn === 'enddate') {
-                    this._sort.sort({
-                        id: 'end_date',
-                        start: 'asc',
-                        disableClear: true
-                    });
-                } else if (!this.isAscending && this.selectedCoulumn === 'enddate') {
-                    this._sort.sort({
-                        id: 'end_date',
-                        start: 'desc',
-                        disableClear: true
-                    });
-                }
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-
-                // If the user changes the sort order...
-                this._sort.sortChange
-                    .pipe(takeUntil(this._unsubscribeAll))
-                    .subscribe(() => {
-                        this._paginator.pageIndex = 0;
-                    });
-
-                merge(this._sort.sortChange, this._paginator.page).pipe(
-                    switchMap(() => {
-                        this.isLoading = true;
-                        //const sort = this._sort.direction == "desc" ? "-" + this._sort.active : this._sort.active;
-                        return this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
-                    }),
-                    map(() => {
-                        this.isLoading = false;
-                    })
-                ).subscribe();
+        if (this._sort && this._paginator) {
+            // Set the initial sort
+            if (this.isAscending && this.selectedCoulumn === 'name') {
+                this._sort.sort({
+                    id: 'name',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'name') {
+                this._sort.sort({
+                    id: 'name',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'rewardcode') {
+                this._sort.sort({
+                    id: 'reward_code',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'rewardcode') {
+                this._sort.sort({
+                    id: 'reward_code',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'pointvalue') {
+                this._sort.sort({
+                    id: 'point_value',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'pointvalue') {
+                this._sort.sort({
+                    id: 'point_value',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'membertier') {
+                this._sort.sort({
+                    id: 'member_tierFullName',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'membertier') {
+                this._sort.sort({
+                    id: 'member_tierFullName',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'startdate') {
+                this._sort.sort({
+                    id: 'start_date',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'startdate') {
+                this._sort.sort({
+                    id: 'start_date',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'enddate') {
+                this._sort.sort({
+                    id: 'end_date',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'enddate') {
+                this._sort.sort({
+                    id: 'end_date',
+                    start: 'desc',
+                    disableClear: true
+                });
             }
-        }, 2000);
+
+            // Mark for check
+            this._changeDetectorRef.markForCheck();
+
+            // If the user changes the sort order...
+            this._sort.sortChange
+                .pipe(takeUntil(this._unsubscribeAll))
+                .subscribe(() => {
+                    this._paginator.pageIndex = 0;
+                });
+
+            merge(this._sort.sortChange, this._paginator.page).pipe(
+                switchMap(() => {
+                    this.isLoading = true;
+                    //const sort = this._sort.direction == "desc" ? "-" + this._sort.active : this._sort.active;
+                    return this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                }),
+                map(() => {
+                    this.isLoading = false;
+                })
+            ).subscribe();
+        }
     }
 
     ngOnDestroy(): void {
