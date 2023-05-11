@@ -142,11 +142,43 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
     ngAfterViewInit(): void {
         if (this._sort && this._paginator) {
             // Set the initial sort
-            this._sort.sort({
-                id: 'name',
-                start: 'asc',
-                disableClear: true
-            });
+            if (this.isAscending && this.selectedCoulumn === 'channelcode') {
+                this._sort.sort({
+                    id: 'code',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'channelcode') {
+                this._sort.sort({
+                    id: 'code',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'channelname') {
+                this._sort.sort({
+                    id: 'name',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'channelname') {
+                this._sort.sort({
+                    id: 'name',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'status') {
+                this._sort.sort({
+                    id: 'status',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'status') {
+                this._sort.sort({
+                    id: 'status',
+                    start: 'desc',
+                    disableClear: true
+                });
+            }
 
             // Mark for check
             this._changeDetectorRef.markForCheck();
@@ -196,20 +228,31 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingColumnList() {
+        if ( this.selectedCoulumn === 'channelcode') {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'channelname' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'status' ) {
+            this.ngAfterViewInit();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingPageList() {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'channelcode' ) {
-            this._channelService.getChannels(0, 10, 'code', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'channelcode' ) {
-            this._channelService.getChannels(0, 10, 'code', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'channelname' ) {
-            this._channelService.getChannels(0, 10, 'name', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'channelname' ) {
-            this._channelService.getChannels(0, 10, 'name', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'status' ) {
-            this._channelService.getChannels(0, 10, 'status', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'status' ) {
-            this._channelService.getChannels(0, 10, 'status', 'desc').subscribe();
+            this.ngAfterViewInit();
         }
     }
 

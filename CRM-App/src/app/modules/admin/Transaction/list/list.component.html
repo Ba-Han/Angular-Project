@@ -92,7 +92,7 @@
 
                         <!--sorting dropdown-->
                         <mat-form-field class="ml-4 fuse-mat-no-subscript memberpoint-2-sort">
-                            <mat-select [(ngModel)]="selectedCoulumn">
+                            <mat-select [(ngModel)]="selectedCoulumn" (selectionChange)="sortingColumnList()">
                                 <mat-option value="orderno">Order No</mat-option>
                                 <mat-option value="amount">Amount</mat-option>
                                 <mat-option value="date">Date</mat-option>

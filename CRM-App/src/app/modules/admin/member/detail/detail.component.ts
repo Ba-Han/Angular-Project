@@ -377,11 +377,31 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
 
         if (this._sort && this._paginator) {
             // Set the initial sort
-            this._sort.sort({
-                id: 'document_name',
-                start: 'asc',
-                disableClear: true
-            });
+            if (this.isAscending && this.selectedCoulumn === 'documentname') {
+                this._sort.sort({
+                    id: 'document_name',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'documentname') {
+                this._sort.sort({
+                    id: 'document_name',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'uploadeddate') {
+                this._sort.sort({
+                    id: 'uploaded_on',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'uploadeddate') {
+                this._sort.sort({
+                    id: 'uploaded_on',
+                    start: 'desc',
+                    disableClear: true
+                });
+            }
 
             // Mark for check
             this._changeDetectorRef.markForCheck();
@@ -468,16 +488,29 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingColumnList() {
+        if ( this.selectedCoulumn === 'documentname') {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'uploadeddate' ) {
+            this.ngAfterViewInit();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingPageList() {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'documentname' ) {
-            this._memberService.getMemberDocuments(0, 10, 'document_name', 'asc').subscribe();
+            //this._memberService.getMemberDocuments(0, 10, 'document_name', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'documentname' ) {
-            this._memberService.getMemberDocuments(0, 10, 'document_name', 'desc').subscribe();
+            //this._memberService.getMemberDocuments(0, 10, 'document_name', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'uploadeddate' ) {
-            this._memberService.getMemberDocuments(0, 10, 'uploaded_on', 'asc').subscribe();
+            //this._memberService.getMemberDocuments(0, 10, 'uploaded_on', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'uploadeddate' ) {
-            this._memberService.getMemberDocuments(0, 10, 'uploaded_on', 'desc').subscribe();
+            //this._memberService.getMemberDocuments(0, 10, 'uploaded_on', 'desc').subscribe();
+            this.ngAfterViewInit();
         }
     }
 

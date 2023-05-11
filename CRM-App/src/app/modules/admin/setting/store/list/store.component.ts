@@ -147,11 +147,55 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
     ngAfterViewInit(): void {
         if (this._sort && this._paginator) {
             // Set the initial sort
-            this._sort.sort({
-                id: 'name',
-                start: 'asc',
-                disableClear: true
-            });
+            if (this.isAscending && this.selectedCoulumn === 'storename') {
+                this._sort.sort({
+                    id: 'name',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'storename') {
+                this._sort.sort({
+                    id: 'name',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'storecode') {
+                this._sort.sort({
+                    id: 'code',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'storecode') {
+                this._sort.sort({
+                    id: 'code',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'country') {
+                this._sort.sort({
+                    id: 'country',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'country') {
+                this._sort.sort({
+                    id: 'country',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'status') {
+                this._sort.sort({
+                    id: 'status',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'status') {
+                this._sort.sort({
+                    id: 'status',
+                    start: 'desc',
+                    disableClear: true
+                });
+            }
 
             // Mark for check
             this._changeDetectorRef.markForCheck();
@@ -201,24 +245,37 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingColumnList() {
+        if ( this.selectedCoulumn === 'storename') {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'storecode' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'country' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'status' ) {
+            this.ngAfterViewInit();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingPageList() {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'storename' ) {
-            this._storeService.getStores(0, 10, 'name', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'storename' ) {
-            this._storeService.getStores(0, 10, 'name', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'storecode' ) {
-            this._storeService.getStores(0, 10, 'code', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'storecode' ) {
-            this._storeService.getStores(0, 10, 'code', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'country' ) {
-            this._storeService.getStores(0, 10, 'country', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'country' ) {
-            this._storeService.getStores(0, 10, 'country', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'status' ) {
-            this._storeService.getStores(0, 10, 'status', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'status' ) {
-            this._storeService.getStores(0, 10, 'status', 'desc').subscribe();
+            this.ngAfterViewInit();
         }
     }
 

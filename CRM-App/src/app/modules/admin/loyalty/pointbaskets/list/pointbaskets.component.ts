@@ -216,12 +216,31 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
         setTimeout(() => {
             if (this._sort && this._paginator) {
                 // Set the initial sort
-                this._sort.sort({
-                    id: 'name',
-                    start: 'asc',
-                    disableClear: true
-                });
-
+                if (this.isAscending && this.selectedCoulumn === 'name') {
+                    this._sort.sort({
+                        id: 'name',
+                        start: 'asc',
+                        disableClear: true
+                    });
+                } else if (!this.isAscending && this.selectedCoulumn === 'name') {
+                    this._sort.sort({
+                        id: 'name',
+                        start: 'desc',
+                        disableClear: true
+                    });
+                } else if (this.isAscending && this.selectedCoulumn === 'redemptiontype') {
+                    this._sort.sort({
+                        id: 'spending_type',
+                        start: 'asc',
+                        disableClear: true
+                    });
+                } else if (!this.isAscending && this.selectedCoulumn === 'redemptiontype') {
+                    this._sort.sort({
+                        id: 'spending_type',
+                        start: 'desc',
+                        disableClear: true
+                    });
+                }
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
 
@@ -268,16 +287,25 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingColumnList() {
+        if ( this.selectedCoulumn === 'name') {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'redemptiontype' ) {
+            this.ngAfterViewInit();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingPageList() {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'name' ) {
-            this._pointBasketService.getPointBaskets(0, 10, 'name', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'name' ) {
-            this._pointBasketService.getPointBaskets(0, 10, 'name', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'redemptiontype' ) {
-            this._pointBasketService.getPointBaskets(0, 10, 'spending_type', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'redemptiontype' ) {
-            this._pointBasketService.getPointBaskets(0, 10, 'spending_type', 'desc').subscribe();
+            this.ngAfterViewInit();
         }
     }
 

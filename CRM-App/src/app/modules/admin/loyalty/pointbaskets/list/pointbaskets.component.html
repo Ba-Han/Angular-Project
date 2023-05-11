@@ -31,7 +31,7 @@
 
                             <!--sorting dropdown-->
                             <mat-form-field class="ml-4 fuse-mat-no-subscript pointbasket-2-sort">
-                                <mat-select [(ngModel)]="selectedCoulumn">
+                                <mat-select [(ngModel)]="selectedCoulumn" (selectionChange)="sortingColumnList()">
                                     <mat-option value="name">Name</mat-option>
                                     <mat-option value="redemptiontype">Redemption Type</mat-option>
                                 </mat-select>

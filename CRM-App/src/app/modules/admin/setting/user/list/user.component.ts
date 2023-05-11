@@ -164,12 +164,55 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngAfterViewInit(): void {
         if (this._sort && this._paginator) {
-            // Set the initial sort
-            this._sort.sort({
-                id: 'username',
-                start: 'asc',
-                disableClear: true
-            });
+            if (this.isAscending && this.selectedCoulumn === 'username') {
+                this._sort.sort({
+                    id: 'username',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'username') {
+                this._sort.sort({
+                    id: 'username',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'firstname') {
+                this._sort.sort({
+                    id: 'first_name',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'firstname') {
+                this._sort.sort({
+                    id: 'first_name',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'lastname') {
+                this._sort.sort({
+                    id: 'last_name',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'lastname') {
+                this._sort.sort({
+                    id: 'last_name',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'email') {
+                this._sort.sort({
+                    id: 'email',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'email') {
+                this._sort.sort({
+                    id: 'email',
+                    start: 'desc',
+                    disableClear: true
+                });
+            }
 
             // Mark for check
             this._changeDetectorRef.markForCheck();
@@ -229,24 +272,37 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingColumnList() {
+        if ( this.selectedCoulumn === 'username') {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'firstname' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'lastname' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'email' ) {
+            this.ngAfterViewInit();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingPageList() {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'username' ) {
-            this._crmUserService.getAppUsers(0, 10, 'username', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'username' ) {
-            this._crmUserService.getAppUsers(0, 10, 'username', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'firstname' ) {
-            this._crmUserService.getAppUsers(0, 10, 'first_name', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'firstname' ) {
-            this._crmUserService.getAppUsers(0, 10, 'first_name', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'lastname' ) {
-            this._crmUserService.getAppUsers(0, 10, 'last_name', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'lastname' ) {
-            this._crmUserService.getAppUsers(0, 10, 'last_name', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'email' ) {
-            this._crmUserService.getAppUsers(0, 10, 'email', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'email' ) {
-            this._crmUserService.getAppUsers(0, 10, 'email', 'desc').subscribe();
+            this.ngAfterViewInit();
         }
     }
 

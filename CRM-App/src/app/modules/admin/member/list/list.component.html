@@ -20,7 +20,7 @@
 
                 <!--sorting dropdown-->
                 <mat-form-field class="ml-4 fuse-mat-no-subscript member-2-sort">
-                    <mat-select [(ngModel)]="selectedCoulumn">
+                    <mat-select [(ngModel)]="selectedCoulumn" (selectionChange)="sortingColumnList()">
                         <mat-option value="membercode">Member Code</mat-option>
                         <!-- <mat-option value="rewardcode">Member Tier</mat-option> -->
                         <mat-option value="firstname">First Name</mat-option>

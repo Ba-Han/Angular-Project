@@ -1167,7 +1167,7 @@
 
                             <!--sorting dropdown-->
                             <mat-form-field class="ml-4 fuse-mat-no-subscript memberdocument-2-sort">
-                                <mat-select [(ngModel)]="selectedCoulumn">
+                                <mat-select [(ngModel)]="selectedCoulumn" (selectionChange)="sortingColumnList()">
                                     <mat-option value="documentname">Document Name</mat-option>
                                     <mat-option value="uploadeddate">Uploaded Date</mat-option>
                                 </mat-select>
