@@ -133,7 +133,8 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
     dwMemberGroups: any;
     pointruleId: number;
     isAscending: boolean = true;
-    selectedCoulumn = 'name';
+    selectedCoulumn = 'level';
+    errorMessage: string | null = null;
     conditionPeriodValue: number = 0;
     downgradeConditionPeriodTypeValue: number = 0;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -642,9 +643,21 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
         const memberTier = this.memberTierAddForm.getRawValue();
         memberTier.tier_upgrade_items = this.selectedUpgradeItem;
         this._memberTierService.createMemberTier(memberTier)
-        .subscribe((tier: any) => {
+        .subscribe(() => {
             this.tooglepointAddFormMode(false);
-        });
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
     }
 
     openTierUpgradeForm(): void {

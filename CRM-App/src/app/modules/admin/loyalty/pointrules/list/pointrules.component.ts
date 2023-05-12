@@ -151,6 +151,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     isButtonDisabled: boolean = true;
     isAscending: boolean = true;
     selectedCoulumn = 'name';
+    errorMessage: string | null = null;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -530,7 +531,19 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         const pointrule = this.PointRuleAddForm.getRawValue();
         this._pointRuleService.createPointRule(pointrule).subscribe(() => {
             this.toogleStoreAddFormMode(false);
-        });
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
     }
 
     setMemberTierDrawer(): void {

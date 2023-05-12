@@ -79,6 +79,7 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
     selectedChannel: Channel | null = null;
     isAscending: boolean = true;
     selectedCoulumn = 'channelname';
+    errorMessage: string | null = null;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -262,6 +263,18 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
         this._channelService.createChnnel(channel)
             .subscribe(() => {
                 this.tooglepointAddFormMode(false);
-            });
+            },
+                (response) => {
+                    if (response.status === 200) {
+                        // Successful response
+                        this._changeDetectorRef.markForCheck();
+                    } else {
+                        // Error response
+                        this.errorMessage = response.error.message;
+                        this._changeDetectorRef.markForCheck();
+                    }
+                }
+            );
+            this._changeDetectorRef.markForCheck();
     }
 }

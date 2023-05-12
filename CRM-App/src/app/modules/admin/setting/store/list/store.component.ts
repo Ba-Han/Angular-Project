@@ -78,6 +78,7 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
     channels$: Observable<Channel[]>;
     getChannelData: any;
     selectedCoulumn = 'storename';
+    errorMessage: string | null = null;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -283,7 +284,18 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
         const store = this.StoreAddForm.getRawValue();
         this._storeService.createStore(store).subscribe(() => {
             this.toogleStoreAddFormMode(false);
-        });
-
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
     }
 }

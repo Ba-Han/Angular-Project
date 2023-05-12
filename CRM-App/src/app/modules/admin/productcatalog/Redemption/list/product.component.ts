@@ -74,6 +74,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     selectedChannel: Product | null = null;
     isAscending: boolean = true;
     selectedCoulumn = 'sku';
+    errorMessage: string | null = null;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -252,7 +253,18 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         const product = this.ProductAddForm.getRawValue();
         this._productService.createProduct(product).subscribe(() => {
             this.tooglepointAddFormMode(false);
-        });
-
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
     }
 }

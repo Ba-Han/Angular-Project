@@ -1046,8 +1046,11 @@
                                         (click)="createMemberTier()">
                                     Save
                                 </button>
-                            </div>
 
+                                <div *ngIf="errorMessage" style="position: relative; left: 1rem; color: red;">
+                                    {{ errorMessage }}
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>

@@ -1182,7 +1182,7 @@
                                 </ng-container>
                                 <ng-container *ngIf="selectedUpgradeItem.length > 0">
                                     <ng-container *ngFor="let item of selectedUpgradeItem; trackBy: trackByFn">
-                                        <div [matTooltip]="'Edit Item'" (click)="setTierUpgradeEditForm(item.id)" class="customPoint mt-3 h-12" style="border: 1px solid #ccc;border-radius: 10px;padding: 0px;cursor: pointer;">
+                                        <div (click)="setTierUpgradeEditForm(item.id)" class="customPoint mt-3 h-12" style="border: 1px solid #ccc;border-radius: 10px;padding: 0px;cursor: pointer;">
                                             <span style="position: relative;left: 15px;bottom: 4px;">
                                                 {{item.item_number}}
                                             </span>

@@ -213,6 +213,10 @@
                                         (click)="createProduct()">
                                     Save
                                 </button>
+
+                                <div *ngIf="errorMessage" style="position: relative; left: 1rem; color: red;">
+                                    {{ errorMessage }}
+                                </div>
                             </div>
         
                         </form>
