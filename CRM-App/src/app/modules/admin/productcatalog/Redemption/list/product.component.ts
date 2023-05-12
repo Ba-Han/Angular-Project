@@ -74,6 +74,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     selectedChannel: Product | null = null;
     isAscending: boolean = true;
     selectedCoulumn = 'sku';
+    errorMessage: string | null = null;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -134,11 +135,43 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     ngAfterViewInit(): void {
         if (this._sort && this._paginator) {
             // Set the initial sort
-            this._sort.sort({
-                id: 'item_no',
-                start: 'asc',
-                disableClear: true
-            });
+            if (this.isAscending && this.selectedCoulumn === 'sku') {
+                this._sort.sort({
+                    id: 'item_no',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'sku') {
+                this._sort.sort({
+                    id: 'item_no',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'name') {
+                this._sort.sort({
+                    id: 'item_name',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'name') {
+                this._sort.sort({
+                    id: 'item_name',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'status') {
+                this._sort.sort({
+                    id: 'status',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'status') {
+                this._sort.sort({
+                    id: 'status',
+                    start: 'desc',
+                    disableClear: true
+                });
+            }
 
             // Mark for check
             this._changeDetectorRef.markForCheck();
@@ -188,20 +221,31 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingColumnList() {
+        if ( this.selectedCoulumn === 'sku') {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'name' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'status' ) {
+            this.ngAfterViewInit();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingPageList() {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'sku' ) {
-            this._productService.getProducts(0, 10, 'item_no', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'sku' ) {
-            this._productService.getProducts(0, 10, 'item_no', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'name' ) {
-            this._productService.getProducts(0, 10, 'item_name', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'name' ) {
-            this._productService.getProducts(0, 10, 'item_name', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'status' ) {
-            this._productService.getProducts(0, 10, 'status', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'status' ) {
-            this._productService.getProducts(0, 10, 'status', 'desc').subscribe();
+            this.ngAfterViewInit();
         }
     }
 
@@ -209,7 +253,18 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         const product = this.ProductAddForm.getRawValue();
         this._productService.createProduct(product).subscribe(() => {
             this.tooglepointAddFormMode(false);
-        });
-
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
     }
 }

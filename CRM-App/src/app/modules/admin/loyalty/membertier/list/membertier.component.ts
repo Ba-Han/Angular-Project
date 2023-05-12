@@ -133,7 +133,8 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
     dwMemberGroups: any;
     pointruleId: number;
     isAscending: boolean = true;
-    selectedCoulumn = 'name';
+    selectedCoulumn = 'level';
+    errorMessage: string | null = null;
     conditionPeriodValue: number = 0;
     downgradeConditionPeriodTypeValue: number = 0;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -294,11 +295,43 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
     ngAfterViewInit(): void {
         if (this._sort && this._paginator) {
             // Set the initial sort
-            this._sort.sort({
-                id: 'name',
-                start: 'asc',
-                disableClear: true
-            });
+            if (this.isAscending && this.selectedCoulumn === 'name') {
+                this._sort.sort({
+                    id: 'name',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'name') {
+                this._sort.sort({
+                    id: 'name',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'code') {
+                this._sort.sort({
+                    id: 'code',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'code') {
+                this._sort.sort({
+                    id: 'code',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'level') {
+                this._sort.sort({
+                    id: 'level',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'level') {
+                this._sort.sort({
+                    id: 'level',
+                    start: 'desc',
+                    disableClear: true
+                });
+            }
 
             // Mark for check
             this._changeDetectorRef.markForCheck();
@@ -578,20 +611,31 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
     } */
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingColumnList() {
+        if ( this.selectedCoulumn === 'name') {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'code' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'level' ) {
+            this.ngAfterViewInit();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingPageList() {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'name' ) {
-            this._memberTierService.getMemberTiers(0, 10, 'name', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'name' ) {
-            this._memberTierService.getMemberTiers(0, 10, 'name', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'code' ) {
-            this._memberTierService.getMemberTiers(0, 10, 'code', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'code' ) {
-            this._memberTierService.getMemberTiers(0, 10, 'code', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'level' ) {
-            this._memberTierService.getMemberTiers(0, 10, 'level', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'level' ) {
-            this._memberTierService.getMemberTiers(0, 10, 'level', 'desc').subscribe();
+            this.ngAfterViewInit();
         }
     }
 
@@ -599,9 +643,21 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
         const memberTier = this.memberTierAddForm.getRawValue();
         memberTier.tier_upgrade_items = this.selectedUpgradeItem;
         this._memberTierService.createMemberTier(memberTier)
-        .subscribe((tier: any) => {
+        .subscribe(() => {
             this.tooglepointAddFormMode(false);
-        });
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
     }
 
     openTierUpgradeForm(): void {

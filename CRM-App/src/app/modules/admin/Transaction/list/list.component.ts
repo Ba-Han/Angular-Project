@@ -195,11 +195,43 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
     ngAfterViewInit(): void {
         if (this._sort && this._paginator) {
             // Set the initial sort
-            this._sort.sort({
-                id: 'date_created',
-                start: 'desc',
-                disableClear: true
-            });
+            if (this.isAscending && this.selectedCoulumn === 'orderno') {
+                this._sort.sort({
+                    id: 'document_no',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'orderno') {
+                this._sort.sort({
+                    id: 'document_no',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'amount') {
+                this._sort.sort({
+                    id: 'total_amount',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'amount') {
+                this._sort.sort({
+                    id: 'total_amount',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'date') {
+                this._sort.sort({
+                    id: 'transaction_date',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'date') {
+                this._sort.sort({
+                    id: 'transaction_date',
+                    start: 'desc',
+                    disableClear: true
+                });
+            }
 
             // Mark for check
             this._changeDetectorRef.markForCheck();
@@ -309,20 +341,31 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingColumnList() {
+        if ( this.selectedCoulumn === 'orderno') {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'amount' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'date' ) {
+            this.ngAfterViewInit();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingPageList() {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'orderno' ) {
-            this._transactionService.getData(Number(this.memberId), 0, 10, 'document_no', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'orderno' ) {
-            this._transactionService.getData(Number(this.memberId),0, 10, 'document_no', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'amount' ) {
-            this._transactionService.getData(Number(this.memberId),0, 10, 'total_amount', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'amount' ) {
-            this._transactionService.getData(Number(this.memberId),0, 10, 'total_amount', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'date' ) {
-            this._transactionService.getData(Number(this.memberId),0, 10, 'transaction_date', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'date' ) {
-            this._transactionService.getData(Number(this.memberId),0, 10, 'transaction_date', 'desc').subscribe();
+            this.ngAfterViewInit();
         }
     }
 

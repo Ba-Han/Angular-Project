@@ -74,7 +74,7 @@ export class MemberTierService {
      * @param order
      * @param search
      */
-    getMemberTiers(page: number = 0, limit: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+    getMemberTiers(page: number = 0, limit: number = 10, sort: string = 'level', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: MemberTierPagination; memberTiers: MemberTier[] }> {
         return this._httpClient.get<any>(`${this._apiurl}/items/member_tier?fields=*,point_rule.*`, {
             params: {

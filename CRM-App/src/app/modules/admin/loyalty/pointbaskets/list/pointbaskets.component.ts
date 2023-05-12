@@ -213,37 +213,54 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     ngAfterViewInit(): void {
-        setTimeout(() => {
-            if (this._sort && this._paginator) {
-                // Set the initial sort
+        if (this._sort && this._paginator) {
+            // Set the initial sort
+            if (this.isAscending && this.selectedCoulumn === 'name') {
                 this._sort.sort({
                     id: 'name',
                     start: 'asc',
                     disableClear: true
                 });
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-
-                // If the user changes the sort order...
-                this._sort.sortChange
-                    .pipe(takeUntil(this._unsubscribeAll))
-                    .subscribe(() => {
-                        this._paginator.pageIndex = 0;
-                    });
-
-                merge(this._sort.sortChange, this._paginator.page).pipe(
-                    switchMap(() => {
-                        this.isLoading = true;
-                        //const sort = this._sort.direction == "desc" ? "-" + this._sort.active : this._sort.active;
-                        return this._pointBasketService.getPointBaskets(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
-                    }),
-                    map(() => {
-                        this.isLoading = false;
-                    })
-                ).subscribe();
+            } else if (!this.isAscending && this.selectedCoulumn === 'name') {
+                this._sort.sort({
+                    id: 'name',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'redemptiontype') {
+                this._sort.sort({
+                    id: 'spending_type',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'redemptiontype') {
+                this._sort.sort({
+                    id: 'spending_type',
+                    start: 'desc',
+                    disableClear: true
+                });
             }
-        }, 2000);
+            // Mark for check
+            this._changeDetectorRef.markForCheck();
+
+            // If the user changes the sort order...
+            this._sort.sortChange
+                .pipe(takeUntil(this._unsubscribeAll))
+                .subscribe(() => {
+                    this._paginator.pageIndex = 0;
+                });
+
+            merge(this._sort.sortChange, this._paginator.page).pipe(
+                switchMap(() => {
+                    this.isLoading = true;
+                    //const sort = this._sort.direction == "desc" ? "-" + this._sort.active : this._sort.active;
+                    return this._pointBasketService.getPointBaskets(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                }),
+                map(() => {
+                    this.isLoading = false;
+                })
+            ).subscribe();
+        }
     }
 
     ngOnDestroy(): void {
@@ -268,16 +285,25 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingColumnList() {
+        if ( this.selectedCoulumn === 'name') {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'redemptiontype' ) {
+            this.ngAfterViewInit();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingPageList() {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'name' ) {
-            this._pointBasketService.getPointBaskets(0, 10, 'name', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'name' ) {
-            this._pointBasketService.getPointBaskets(0, 10, 'name', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'redemptiontype' ) {
-            this._pointBasketService.getPointBaskets(0, 10, 'spending_type', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'redemptiontype' ) {
-            this._pointBasketService.getPointBaskets(0, 10, 'spending_type', 'desc').subscribe();
+            this.ngAfterViewInit();
         }
     }
 

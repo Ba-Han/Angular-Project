@@ -35,7 +35,7 @@
 
                             <!--sorting dropdown-->
                             <mat-form-field class="ml-4 fuse-mat-no-subscript">
-                                <mat-select [(ngModel)]="selectedCoulumn">
+                                <mat-select [(ngModel)]="selectedCoulumn" (selectionChange)="sortingColumnList()">
                                     <mat-option value="sku">SKU</mat-option>
                                     <mat-option value="name">Name</mat-option>
                                     <mat-option value="status">Status</mat-option>
@@ -213,6 +213,10 @@
                                         (click)="createProduct()">
                                     Save
                                 </button>
+
+                                <div *ngIf="errorMessage" style="position: relative; left: 1rem; color: red;">
+                                    {{ errorMessage }}
+                                </div>
                             </div>
         
                         </form>

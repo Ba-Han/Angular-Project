@@ -238,7 +238,7 @@
 
                             <!--sorting dropdown-->
                             <mat-form-field class="ml-4 fuse-mat-no-subscript pointrule-2-sort">
-                                <mat-select [(ngModel)]="selectedCoulumn">
+                                <mat-select [(ngModel)]="selectedCoulumn" (selectionChange)="sortingColumnList()">
                                     <mat-option value="name">Name</mat-option>
                                     <mat-option value="rewardcode">Reward Code</mat-option>
                                     <mat-option value="pointvalue">Point Value</mat-option>
@@ -602,6 +602,10 @@
                             </ng-container>
 
                             <div class="flex justify-end items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                                <div *ngIf="errorMessage" style="position: relative; color: red;">
+                                    {{ errorMessage }}
+                                </div>
+
                                 <button class="ml-2" style="width: 6rem;"
                                         mat-flat-button
                                         [disabled]="PointRuleAddForm.invalid"

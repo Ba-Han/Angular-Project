@@ -174,11 +174,79 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
     ngAfterViewInit(): void {
         if (this._sort && this._paginator) {
             // Set the initial sort
-            this._sort.sort({
-                id: 'member_code',
-                start: 'asc',
-                disableClear: true,
-            });
+            if (this.isAscending && this.selectedCoulumn === 'membercode') {
+                this._sort.sort({
+                    id: 'member_code',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'membercode') {
+                this._sort.sort({
+                    id: 'member_code',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'firstname') {
+                this._sort.sort({
+                    id: 'first_name',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'firstname') {
+                this._sort.sort({
+                    id: 'first_name',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'lastname') {
+                this._sort.sort({
+                    id: 'last_name',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'lastname') {
+                this._sort.sort({
+                    id: 'last_name',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'email') {
+                this._sort.sort({
+                    id: 'email',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'email') {
+                this._sort.sort({
+                    id: 'email',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'mobile') {
+                this._sort.sort({
+                    id: 'mobile_phone',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'mobile') {
+                this._sort.sort({
+                    id: 'mobile_phone',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'availablepoints') {
+                this._sort.sort({
+                    id: 'available_points',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'availablepoints') {
+                this._sort.sort({
+                    id: 'available_points',
+                    start: 'desc',
+                    disableClear: true
+                });
+            }
 
             // Mark for check
             this._changeDetectorRef.markForCheck();
@@ -241,32 +309,49 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingColumnList() {
+        if ( this.selectedCoulumn === 'membercode') {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'firstname' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'lastname' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'email' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'mobile' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'availablepoints' ) {
+            this.ngAfterViewInit();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingPageList() {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'membercode' ) {
-            this._memberService.getMembers(0, 10, 'member_code', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'membercode' ) {
-            this._memberService.getMembers(0, 10, 'member_code', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'firstname' ) {
-            this._memberService.getMembers(0, 10, 'first_name', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'firstname' ) {
-            this._memberService.getMembers(0, 10, 'first_name', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'lastname' ) {
-            this._memberService.getMembers(0, 10, 'last_name', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'lastname' ) {
-            this._memberService.getMembers(0, 10, 'last_name', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'email' ) {
-            this._memberService.getMembers(0, 10, 'email', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'email' ) {
-            this._memberService.getMembers(0, 10, 'email', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'mobile' ) {
-            this._memberService.getMembers(0, 10, 'mobile_phone', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'mobile' ) {
-            this._memberService.getMembers(0, 10, 'mobile_phone', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'availablepoints' ) {
-            this._memberService.getMembers(0, 10, 'available_points', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'availablepoints' ) {
-            this._memberService.getMembers(0, 10, 'available_points', 'desc').subscribe();
+            this.ngAfterViewInit();
         }
     }
 

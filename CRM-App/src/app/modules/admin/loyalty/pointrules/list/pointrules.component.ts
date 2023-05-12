@@ -151,6 +151,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     isButtonDisabled: boolean = true;
     isAscending: boolean = true;
     selectedCoulumn = 'name';
+    errorMessage: string | null = null;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -308,37 +309,103 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     ngAfterViewInit(): void {
-        setTimeout(() => {
-            if (this._sort && this._paginator) {
-                // Set the initial sort
+        if (this._sort && this._paginator) {
+            // Set the initial sort
+            if (this.isAscending && this.selectedCoulumn === 'name') {
                 this._sort.sort({
                     id: 'name',
                     start: 'asc',
                     disableClear: true
                 });
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-
-                // If the user changes the sort order...
-                this._sort.sortChange
-                    .pipe(takeUntil(this._unsubscribeAll))
-                    .subscribe(() => {
-                        this._paginator.pageIndex = 0;
-                    });
-
-                merge(this._sort.sortChange, this._paginator.page).pipe(
-                    switchMap(() => {
-                        this.isLoading = true;
-                        //const sort = this._sort.direction == "desc" ? "-" + this._sort.active : this._sort.active;
-                        return this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
-                    }),
-                    map(() => {
-                        this.isLoading = false;
-                    })
-                ).subscribe();
+            } else if (!this.isAscending && this.selectedCoulumn === 'name') {
+                this._sort.sort({
+                    id: 'name',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'rewardcode') {
+                this._sort.sort({
+                    id: 'reward_code',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'rewardcode') {
+                this._sort.sort({
+                    id: 'reward_code',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'pointvalue') {
+                this._sort.sort({
+                    id: 'point_value',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'pointvalue') {
+                this._sort.sort({
+                    id: 'point_value',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'membertier') {
+                this._sort.sort({
+                    id: 'member_tierFullName',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'membertier') {
+                this._sort.sort({
+                    id: 'member_tierFullName',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'startdate') {
+                this._sort.sort({
+                    id: 'start_date',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'startdate') {
+                this._sort.sort({
+                    id: 'start_date',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'enddate') {
+                this._sort.sort({
+                    id: 'end_date',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'enddate') {
+                this._sort.sort({
+                    id: 'end_date',
+                    start: 'desc',
+                    disableClear: true
+                });
             }
-        }, 2000);
+
+            // Mark for check
+            this._changeDetectorRef.markForCheck();
+
+            // If the user changes the sort order...
+            this._sort.sortChange
+                .pipe(takeUntil(this._unsubscribeAll))
+                .subscribe(() => {
+                    this._paginator.pageIndex = 0;
+                });
+
+            merge(this._sort.sortChange, this._paginator.page).pipe(
+                switchMap(() => {
+                    this.isLoading = true;
+                    //const sort = this._sort.direction == "desc" ? "-" + this._sort.active : this._sort.active;
+                    return this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                }),
+                map(() => {
+                    this.isLoading = false;
+                })
+            ).subscribe();
+        }
     }
 
     ngOnDestroy(): void {
@@ -414,32 +481,49 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingColumnList() {
+        if ( this.selectedCoulumn === 'name') {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'rewardcode' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'pointvalue' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'membertier' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'startdate' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'enddate' ) {
+            this.ngAfterViewInit();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingPageList() {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'name' ) {
-            this._pointRuleService.getPointRules(0, 10, 'name', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'name' ) {
-            this._pointRuleService.getPointRules(0, 10, 'name', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'rewardcode' ) {
-            this._pointRuleService.getPointRules(0, 10, 'reward_code', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'rewardcode' ) {
-            this._pointRuleService.getPointRules(0, 10, 'reward_code', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'pointvalue' ) {
-            this._pointRuleService.getPointRules(0, 10, 'point_value', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'pointvalue' ) {
-            this._pointRuleService.getPointRules(0, 10, 'point_value', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'membertier' ) {
-            this._pointRuleService.getPointRules(0, 10, 'member_tierFullName', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'membertier' ) {
-            this._pointRuleService.getPointRules(0, 10, 'member_tierFullName', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'startdate' ) {
-            this._pointRuleService.getPointRules(0, 10, 'start_date', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'startdate' ) {
-            this._pointRuleService.getPointRules(0, 10, 'start_date', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'enddate' ) {
-            this._pointRuleService.getPointRules(0, 10, 'end_date', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'enddate' ) {
-            this._pointRuleService.getPointRules(0, 10, 'end_date', 'desc').subscribe();
+            this.ngAfterViewInit();
         }
     }
 
@@ -447,7 +531,19 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         const pointrule = this.PointRuleAddForm.getRawValue();
         this._pointRuleService.createPointRule(pointrule).subscribe(() => {
             this.toogleStoreAddFormMode(false);
-        });
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
     }
 
     setMemberTierDrawer(): void {

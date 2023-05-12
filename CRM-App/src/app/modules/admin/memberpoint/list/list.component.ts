@@ -223,11 +223,55 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
         if ( this._sort && this._paginator )
         {
             // Set the initial sort
-            this._sort.sort({
-                id          : 'date_created',
-                start       : 'desc',
-                disableClear: true
-            });
+            if (this.isAscending && this.selectedCoulumn === 'documentno') {
+                this._sort.sort({
+                    id: 'transaction_document_no',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'documentno') {
+                this._sort.sort({
+                    id: 'transaction_document_no',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'pointtype') {
+                this._sort.sort({
+                    id: 'point_type',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'pointtype') {
+                this._sort.sort({
+                    id: 'point_type',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'points') {
+                this._sort.sort({
+                    id: 'point',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'points') {
+                this._sort.sort({
+                    id: 'point',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'date') {
+                this._sort.sort({
+                    id: 'date_created',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'date') {
+                this._sort.sort({
+                    id: 'date_created',
+                    start: 'desc',
+                    disableClear: true
+                });
+            }
 
             // Mark for check
             this._changeDetectorRef.markForCheck();
@@ -310,20 +354,37 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingColumnList() {
+        if ( this.selectedCoulumn === 'documentno') {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'pointtype' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'points' ) {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'date' ) {
+            this.ngAfterViewInit();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingPageList() {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'documentno' ) {
-            this._memberPointService.getData(Number(this.memberId),0, 10, 'transaction_document_no', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'documentno' ) {
-            this._memberPointService.getData(Number(this.memberId),0, 10, 'transaction_document_no', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'pointtype' ) {
-            this._memberPointService.getData(Number(this.memberId),0, 10, 'point_type', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'pointtype' ) {
-            this._memberPointService.getData(Number(this.memberId),0, 10, 'point_type', 'desc').subscribe();
+            this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'points' ) {
-            this._memberPointService.getData(Number(this.memberId),0, 10, 'point', 'asc').subscribe();
+            this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'points' ) {
-            this._memberPointService.getData(Number(this.memberId),0, 10, 'point', 'desc').subscribe();
+            this.ngAfterViewInit();
+        } else if ( this.isAscending && this.selectedCoulumn === 'date' ) {
+            this.ngAfterViewInit();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'date' ) {
+            this.ngAfterViewInit();
         }
     }
 
