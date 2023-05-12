@@ -29,8 +29,8 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     startDate = new Date();
     startYear = new Date();
     registerMember: number;
-    stores$ : Stores;
-    tiers$ : Tiers;
+    stores$: Stores;
+    tiers$: Tiers;
     filterDate: string;
     isLoading: boolean = false;
     filterStartDate: string;
@@ -40,8 +40,8 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     transactionCount: number;
     transactionCountByStore: number;
     selectedValue: string;
-    activePointSelectedValue : string;
-    expiredSelectedValue : string;
+    activePointSelectedValue: string;
+    expiredSelectedValue: string;
     totalAmount: number;
     transactionAmountByStore: number;
     informedId: number;
@@ -50,68 +50,68 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     totalActivePoint: number;
     totalActiveDollar: number;
     totalExpiredPoint: number;
-    totalExpiredDollar : number;
-    activePointFilterType : string;
-    expiredPointFilterType : string;
+    totalExpiredDollar: number;
+    activePointFilterType: string;
+    expiredPointFilterType: string;
     activefilterDate: string;
     expiredFilterDate: string;
-    activefilterStartDate : string;
-    activefilterEndDate : string;
-    expiredfilterStartDate : string;
-    expiredfilterEndDate : string;
+    activefilterStartDate: string;
+    activefilterEndDate: string;
+    expiredfilterStartDate: string;
+    expiredfilterEndDate: string;
     todayDate = moment();
-    transactionObject : any;
-    filterRegister : RegisteredMember = {
-        type: "all",
+    transactionObject: any;
+    filterRegister: RegisteredMember = {
+        type: 'all',
         day: 0,
         month: 0,
         year: 0,
-        startdate: "",
-        enddate: "",
+        startdate: '',
+        enddate: '',
     };
-    filterActivePoint : ActivePoint = {
-        tier : "alltier",
-        type: "all",
+    filterActivePoint: ActivePoint = {
+        tier : 'alltier',
+        type: 'all',
         day: 0,
         month: 0,
         year: 0,
-        startdate: "",
-        enddate: "",
+        startdate: '',
+        enddate: '',
     };
-    filterExpiredPoint : ExpiredPoint = {
-        tier : "alltier",
-        type: "all",
+    filterExpiredPoint: ExpiredPoint = {
+        tier : 'alltier',
+        type: 'all',
         day: 0,
         month: 0,
         year: 0,
-        startdate: "",
-        enddate: "",
+        startdate: '',
+        enddate: '',
     };
-    filterTrans : DateParameter = {
-        store : "allstore",
-        type: "all",
-        tier : "alltier",
+    filterTrans: DateParameter = {
+        store : 'allstore',
+        type: 'all',
+        tier : 'alltier',
         day: 0,
         month: 0,
         year: 0,
-        startdate: "",
-        enddate: "",
+        startdate: '',
+        enddate: '',
     };
-    earnPoint : EarnPoint = {
-        totalEarnPoint : 0,
-        totalEarnDolarValue : 0,
-        filterShowDate  : "",
-        filterShowStartDate  : "",
-        filterShowEndDate : "",
-        channel : "all",
-        store : "all",
-        type: "all",
+    earnPoint: EarnPoint = {
+        totalEarnPoint: 0,
+        totalEarnDolarValue: 0,
+        filterShowDate: '',
+        filterShowStartDate: '',
+        filterShowEndDate: '',
+        channel: 'all',
+        store: 'all',
+        type:'all',
         day: 0,
         month: 0,
         year: 0,
-        startdate: "",
-        enddate: "",
-        tier: "all"
+        startdate: '',
+        enddate: '',
+        tier: 'all'
     };
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -121,13 +121,11 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         private _analyticsService: AnalyticsService,
         private _router: Router,
         private _changeDetectorRef: ChangeDetectorRef,
-        
     )
     {
     }
 
     ngOnInit(): void {
-       
         // Get the data
         this._analyticsService.memberTiers$
             .subscribe((response: any) => {
@@ -138,7 +136,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
             });
          this._analyticsService.stores$
             .subscribe((response: any) => {
-                this.stores$ = response.data ? response.data : "";
+                this.stores$ = response.data ? response.data : '';
             });
         this._analyticsService.totalMembers$
             .subscribe((response: any) => {
@@ -200,11 +198,12 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * 
-     * @param pickmonth 
-     * @param datepicker 
+     *
+     * @param pickmonth
+     * @param datepicker
      */
 
+     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
      registeredMemberByDate(type: string, filterDate: Moment, datepicker: MatDatepicker<Moment>){
         this.isLoading = true;
         this.filterRegister.type = type;
@@ -214,9 +213,9 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
 
         this._analyticsService.getTotalRegistrationMemberCount(this.filterRegister)
         .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((response : any) => {
+        .subscribe((response: any) => {
             this.registerMember = response ? response.totalRegisterMember ? response.totalRegisterMember : 0 : 0;
-            this.filterDate = this.filterRegister.year + "-" + this.filterRegister.month + "-" + this.filterRegister.day;
+            this.filterDate = this.filterRegister.year + '-' + this.filterRegister.month + '-' + this.filterRegister.day;
             this.selectedButton = type;
             this.isLoading = false;
             datepicker.close();
@@ -224,22 +223,23 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         });
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     registeredMemberByDateRange(rangestart: string, rangeend: string, datepicker: MatDateRangePicker<Moment>) {
         this.isLoading = true;
-        let startdate = moment(rangestart);
-        let enddate = moment(rangeend);
-        this.filterRegister.type = "range";
-        this.filterRegister.startdate = startdate.format("YYYY-MM-DD");
-        this.filterRegister.enddate = enddate.add(1, "days").format("YYYY-MM-DD");
-        
+        const startdate = moment(rangestart);
+        const enddate = moment(rangeend);
+        this.filterRegister.type = 'range';
+        this.filterRegister.startdate = startdate.format('YYYY-MM-DD');
+        this.filterRegister.enddate = enddate.add(1, 'days').format('YYYY-MM-DD');
+
         this._analyticsService.getTotalRegistrationMemberCount(this.filterRegister)
         .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((response : any) => {
+        .subscribe((response: any) => {
             this.registerMember = response ? response.totalRegisterMember ? response.totalRegisterMember : 0 : 0;
             //this.filterDate = this.filterRegister.year + "-" + this.filterRegister.month + "-" + this.filterActivePoint.day;
-            this.selectedButton = "daterange";
-            this.filterStartDate = moment(rangestart).format("YYYY-MM-DD");
-            this.filterEndDate = moment(rangeend).format("YYYY-MM-DD");
+            this.selectedButton = 'daterange';
+            this.filterStartDate = moment(rangestart).format('YYYY-MM-DD');
+            this.filterEndDate = moment(rangeend).format('YYYY-MM-DD');
             this.isLoading = false;
             datepicker.close();
             this._changeDetectorRef.markForCheck();
@@ -253,26 +253,28 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     detailTierList(id: any): void {
         this._router.navigate(['/member/membertier', id]);
     }
-  
+
     /**
-     * Transaction 
+     * Transaction
      */
 
-     fieldChange(e : any) {
+     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+     fieldChange(e: any) {
         this.filterTrans.store = e.value;
           this._analyticsService.getAllTransactoinCount(this.filterTrans)
              .pipe(
                  takeUntil(this._unsubscribeAll),
                  finalize(() => {
-                     this._prepareChartData()
+                     this._prepareChartData();
                   })
              )
-             .subscribe(response => {
+             .subscribe((response) => {
                  this.transactionObject = response ? response : 0;
                  this._changeDetectorRef.markForCheck();
            });
      }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     transactionByDate(type: string, filterDate: Moment, datepicker: MatDatepicker<Moment>){
         this.isLoading = true;
         this.filterTrans.type = type;
@@ -287,20 +289,21 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
                 this._prepareChartData();
              })
         )
-        .subscribe((response : any) => {
+        .subscribe((response: any) => {
             this.transactionObject = response ? response : 0;
             datepicker.close();
             this._changeDetectorRef.markForCheck();
         });
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     transactionByRange(rangestart: string, rangeend: string, datepicker: MatDateRangePicker<Moment>){
         this.isLoading = true;
-        let startdate = moment(rangestart);
-        let enddate = moment(rangeend);
-        this.filterTrans.type = "range";
-        this.filterTrans.startdate = startdate.format("YYYY-MM-DD");
-        this.filterTrans.enddate = enddate.add(1, "days").format("YYYY-MM-DD");
+        const startdate = moment(rangestart);
+        const enddate = moment(rangeend);
+        this.filterTrans.type = 'range';
+        this.filterTrans.startdate = startdate.format('YYYY-MM-DD');
+        this.filterTrans.enddate = enddate.add(1, 'days').format('YYYY-MM-DD');
 
         this._analyticsService.getAllTransactoinCount(this.filterTrans)
         .pipe(
@@ -309,7 +312,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
                 this._prepareChartData();
              })
         )
-        .subscribe((response : any) => {
+        .subscribe((response: any) => {
             this.transactionObject = response ? response : 0;
             datepicker.close();
             this._changeDetectorRef.markForCheck();
@@ -318,7 +321,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     private _prepareChartData(): void {
         const multicolor = ['#1CB7D6','#E4B031', '#569DD2','#569D79', '#E57438','#3B36B9', '#CAD93F','#D61CAE','#00CC99'];
         const twocolor = ['#DD6B20', '#F6AD55'];
-        const colorseries = this.filterTrans.store == "allstore" ? multicolor : twocolor;
+        const colorseries = this.filterTrans.store === 'allstore' ? multicolor : twocolor;
         this.chartAge = {
             chart: {
                 animations: {
@@ -368,43 +371,45 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
                     seriesIndex,
                     w
                 }): string => `<div class="flex items-center h-8 min-h-8 max-h-8 px-3">
-                                                    <div class="w-3 h-3 rounded-full" style="background-color: ${w.config.colors[seriesIndex]};"></div>
-                                                    <div class="ml-2 text-md leading-none">${w.config.labels[seriesIndex]}:</div>
-                                                    <div class="ml-2 text-md font-bold leading-none">${w.config.series[seriesIndex]}%</div>
-                                                </div>
-                                                <div class="flex items-center h-8 min-h-8 max-h-8 px-3">
-                                                    <div class="ml-2 text-md leading-none">Transactions : ${this.transactionObject.TransactionCountSeries[seriesIndex]}</div>
-                                                </div>
-                                                <div class="flex items-center h-8 min-h-8 max-h-8 px-3">
-                                                <div class="ml-2 text-md leading-none">Total Purchase Amount : $ ${(Math.round((this.transactionObject.TransactionAmountSeries[seriesIndex]) * 100) / 100).toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</div>
-                                                </div>
-                                                <div class="flex items-center h-8 min-h-8 max-h-8 px-3">
-                                                    <div class="ml-2 text-md leading-none">Average Transactions : ${(Math.round((this.transactionObject.TransactionAmountSeries[seriesIndex]/this.transactionObject.TransactionCountSeries[seriesIndex]) * 100) / 100).toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</div>
-                                                </div>`
+                                    <div class="w-3 h-3 rounded-full" style="background-color: ${w.config.colors[seriesIndex]};"></div>
+                                    <div class="ml-2 text-md leading-none">${w.config.labels[seriesIndex]}:</div>
+                                    <div class="ml-2 text-md font-bold leading-none">${w.config.series[seriesIndex]}%</div>
+                                </div>
+                                <div class="flex items-center h-8 min-h-8 max-h-8 px-3">
+                                    <div class="ml-2 text-md leading-none">Transactions : ${this.transactionObject.TransactionCountSeries[seriesIndex]}</div>
+                                </div>
+                                <div class="flex items-center h-8 min-h-8 max-h-8 px-3">
+                                <div class="ml-2 text-md leading-none">Total Purchase Amount : $ ${(Math.round((this.transactionObject.TransactionAmountSeries[seriesIndex]) * 100) / 100).toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</div>
+                                </div>
+                                <div class="flex items-center h-8 min-h-8 max-h-8 px-3">
+                                    <div class="ml-2 text-md leading-none">Average Transactions : ${(Math.round((this.transactionObject.TransactionAmountSeries[seriesIndex]/this.transactionObject.TransactionCountSeries[seriesIndex]) * 100) / 100).toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</div>
+                                </div>`
             }
-        }
+        };
 
     };
 
 
 
     /*
-    * Total Active Point 
-    */ 
+    * Total Active Point
+    */
 
-    activePointfieldChange(e : any) {
+    // eslint-disable-next-line @typescript-eslint/member-ordering, @typescript-eslint/explicit-function-return-type
+    activePointfieldChange(e: any) {
         this.filterActivePoint.tier = e.value;
         this._analyticsService.getTotalActivePoint(this.filterActivePoint)
         .pipe(
             takeUntil(this._unsubscribeAll)
         )
-        .subscribe((response : any) => {
+        .subscribe((response: any) => {
             this.totalActivePoint = response ? response.totalActivePoint ? response.totalActivePoint : 0 : 0;
             this.totalActiveDollar = response ? response.totalActiveDollar ? response.totalActiveDollar : 0 : 0;
             this._changeDetectorRef.markForCheck();
       });
     }
 
+    // eslint-disable-next-line @typescript-eslint/member-ordering, @typescript-eslint/explicit-function-return-type
     totalActivePointByDate(type: string, filterDate: Moment, datepicker: MatDatepicker<Moment>) {
         this.isLoading = true;
         this.filterActivePoint.type = type;
@@ -414,31 +419,32 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
 
         this._analyticsService.getTotalActivePoint(this.filterActivePoint)
         .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((response : any) => {
+        .subscribe((response: any) => {
             this.totalActivePoint = response ? response.totalActivePoint ? response.totalActivePoint : 0 : 0;
             this.totalActiveDollar = response ? response.totalActiveDollar ? response.totalActiveDollar : 0 : 0;
             this.activePointSelectedValue = type;
-            this.activefilterDate = this.filterActivePoint.year + "-" + this.filterActivePoint.month + "-" + this.filterActivePoint.day;
+            this.activefilterDate = this.filterActivePoint.year + '-' + this.filterActivePoint.month + '-' + this.filterActivePoint.day;
             datepicker.close();
             this._changeDetectorRef.markForCheck();
         });
     }
 
+    // eslint-disable-next-line @typescript-eslint/member-ordering, @typescript-eslint/explicit-function-return-type
     totalActivePointByDateRange(rangestart: string, rangeend: string, datepicker: MatDateRangePicker<Moment>) {
         this.isLoading = true;
-        let startdate = moment(rangestart);
-        let enddate = moment(rangeend);
-        this.filterActivePoint.type = "range";
-        this.filterActivePoint.startdate = startdate.format("YYYY-MM-DD");
-        this.filterActivePoint.enddate = enddate.add(1, "days").format("YYYY-MM-DD");
-        
+        const startdate = moment(rangestart);
+        const enddate = moment(rangeend);
+        this.filterActivePoint.type = 'range';
+        this.filterActivePoint.startdate = startdate.format('YYYY-MM-DD');
+        this.filterActivePoint.enddate = enddate.add(1, 'days').format('YYYY-MM-DD');
+
         this._analyticsService.getTotalActivePoint(this.filterActivePoint)
         .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((response : any) => {
+        .subscribe((response: any) => {
             this.totalActivePoint = response ? response.totalActivePoint ? response.totalActivePoint : 0 : 0;
             this.totalActiveDollar = response ? response.totalActiveDollar ? response.totalActiveDollar : 0 : 0;
-            this.activefilterStartDate = moment(rangestart).format("YYYY-MM-DD");
-            this.activefilterEndDate = moment(rangeend).format("YYYY-MM-DD");
+            this.activefilterStartDate = moment(rangestart).format('YYYY-MM-DD');
+            this.activefilterEndDate = moment(rangeend).format('YYYY-MM-DD');
             datepicker.close();
             this._changeDetectorRef.markForCheck();
         });
@@ -448,19 +454,21 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     /*
     * Total Expired Point
     */
-    expiredPointfieldChange(e : any) {
+    // eslint-disable-next-line @typescript-eslint/member-ordering, @typescript-eslint/explicit-function-return-type
+    expiredPointfieldChange(e: any) {
         this.filterExpiredPoint.tier = e.value;
         this._analyticsService.getTotalExpeiredPoint(this.filterExpiredPoint)
         .pipe(
             takeUntil(this._unsubscribeAll)
         )
-        .subscribe((response : any) => {
+        .subscribe((response: any) => {
             this.totalExpiredPoint = response ? response.totalExpiredPoint ? response.totalExpiredPoint : 0 : 0;
             this.totalExpiredDollar = response ? response.totalExpiredDollar ? response.totalExpiredDollar : 0 : 0;
             this._changeDetectorRef.markForCheck();
       });
     }
 
+    // eslint-disable-next-line @typescript-eslint/member-ordering, @typescript-eslint/explicit-function-return-type
     totalExpiredPointByDate(type: string, filterDate: Moment, datepicker: MatDatepicker<Moment>) {
         this.isLoading = true;
         this.filterExpiredPoint.type = type;
@@ -470,32 +478,33 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
 
         this._analyticsService.getTotalExpeiredPoint(this.filterExpiredPoint)
         .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((response : any) => {
+        .subscribe((response: any) => {
             this.totalExpiredPoint = response ? response.totalExpiredPoint ? response.totalExpiredPoint : 0 : 0;
             this.totalExpiredDollar = response ? response.totalExpiredDollar ? response.totalExpiredDollar : 0 : 0;
             this.expiredSelectedValue = type;
-            this.expiredFilterDate =  this.filterExpiredPoint.year + "-" +  this.filterExpiredPoint.month + "-" +  this.filterExpiredPoint.day;
+            this.expiredFilterDate =  this.filterExpiredPoint.year + '-' +  this.filterExpiredPoint.month + '-' +  this.filterExpiredPoint.day;
             datepicker.close();
             this._changeDetectorRef.markForCheck();
         });
     }
 
+    // eslint-disable-next-line @typescript-eslint/member-ordering, @typescript-eslint/explicit-function-return-type
     totalExpiredPointByDateRange(rangestart: string, rangeend: string, datepicker: MatDateRangePicker<Moment>) {
         this.isLoading = true;
-        let startdate = moment(rangestart);
-        let enddate = moment(rangeend);
-        this.filterExpiredPoint.type = "range";
-        this.filterExpiredPoint.startdate = startdate.format("YYYY-MM-DD");
-        this.filterExpiredPoint.enddate = enddate.add(1, "days").format("YYYY-MM-DD");
+        const startdate = moment(rangestart);
+        const enddate = moment(rangeend);
+        this.filterExpiredPoint.type = 'range';
+        this.filterExpiredPoint.startdate = startdate.format('YYYY-MM-DD');
+        this.filterExpiredPoint.enddate = enddate.add(1, 'days').format('YYYY-MM-DD');
 
         this._analyticsService.getTotalExpeiredPoint(this.filterExpiredPoint)
         .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((response : any) => {
+        .subscribe((response: any) => {
             this.totalExpiredPoint = response ? response.totalExpiredPoint ? response.totalExpiredPoint : 0 : 0;
             this.totalExpiredDollar = response ? response.totalExpiredDollar ? response.totalExpiredDollar : 0 : 0;
-            this.expiredSelectedValue = "range";
-            this.expiredfilterStartDate = moment(rangestart).format("YYYY-MM-DD");
-            this.expiredfilterEndDate = moment(rangeend).format("YYYY-MM-DD");
+            this.expiredSelectedValue = 'range';
+            this.expiredfilterStartDate = moment(rangestart).format('YYYY-MM-DD');
+            this.expiredfilterEndDate = moment(rangeend).format('YYYY-MM-DD');
             datepicker.close();
             this._changeDetectorRef.markForCheck();
         });
@@ -504,33 +513,36 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     /**
      * Total Earn Point by Channel
      */
-     earnPointTierfieldChange(e : any) {
+     // eslint-disable-next-line @typescript-eslint/member-ordering, @typescript-eslint/explicit-function-return-type
+     earnPointTierfieldChange(e: any) {
         this.earnPoint.tier = e.value;
           this._analyticsService.getAllEarnPoint(this.earnPoint)
              .pipe(
                  takeUntil(this._unsubscribeAll)
              )
-             .subscribe(response => {
-                 this.earnPoint.totalEarnPoint = response ? response.TotalEarnPoint ? response.TotalEarnPoint : 0 : 0;
-                 this.earnPoint.totalEarnDolarValue = response ? response.TotalEarnDolarValue ? response.TotalEarnDolarValue : 0 : 0;
+             .subscribe((response) => {
+                 this.earnPoint.totalEarnPoint = response ? response.totalEarnPoint ? response.totalEarnPoint : 0 : 0;
+                 this.earnPoint.totalEarnDolarValue = response ? response.totalEarnDolarValue ? response.totalEarnDolarValue : 0 : 0;
                  this._changeDetectorRef.markForCheck();
            });
      }
 
-     earnPointfieldChange(store : string, channel : string) {
+     // eslint-disable-next-line @typescript-eslint/member-ordering, @typescript-eslint/explicit-function-return-type
+     earnPointfieldChange(store: string, channel: string) {
        this.earnPoint.store = store;
        this.earnPoint.channel = channel;
          this._analyticsService.getAllEarnPoint(this.earnPoint)
             .pipe(
                 takeUntil(this._unsubscribeAll)
             )
-            .subscribe(response => {
-                this.earnPoint.totalEarnPoint = response ? response.TotalEarnPoint ? response.TotalEarnPoint : 0 : 0;
-                this.earnPoint.totalEarnDolarValue = response ? response.TotalEarnDolarValue ? response.TotalEarnDolarValue : 0 : 0;
+            .subscribe((response) => {
+                this.earnPoint.totalEarnPoint = response ? response.totalEarnPoint ? response.totalEarnPoint : 0 : 0;
+                this.earnPoint.totalEarnDolarValue = response ? response.totalEarnDolarValue ? response.totalEarnDolarValue : 0 : 0;
                 this._changeDetectorRef.markForCheck();
           });
     }
 
+     // eslint-disable-next-line @typescript-eslint/member-ordering, @typescript-eslint/explicit-function-return-type
      totalEarnedPointByDate(type: string, filterDate: Moment, datepicker: MatDatepicker<Moment>) {
         this.isLoading = true;
         this.earnPoint.type = type;
@@ -538,33 +550,33 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         this.earnPoint.month = filterDate.month() + 1;
         this.earnPoint.year = filterDate.year();
 
-        
         this._analyticsService.getAllEarnPoint(this.earnPoint)
         .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((response : any) => {
-            this.earnPoint.totalEarnPoint = response ? response.TotalEarnPoint ? response.TotalEarnPoint : 0 : 0;
-            this.earnPoint.totalEarnDolarValue = response ? response.TotalEarnDolarValue ? response.TotalEarnDolarValue : 0 : 0;
-            this.earnPoint.filterShowDate = this.earnPoint.year + "-" + this.earnPoint.month + "-" + this.earnPoint.day;
+        .subscribe((response: any) => {
+            this.earnPoint.totalEarnPoint = response ? response.totalEarnPoint ? response.totalEarnPoint : 0 : 0;
+            this.earnPoint.totalEarnDolarValue = response ? response.totalEarnDolarValue ? response.totalEarnDolarValue : 0 : 0;
+            this.earnPoint.filterShowDate = this.earnPoint.year + '-' + this.earnPoint.month + '-' + this.earnPoint.day;
             datepicker.close();
             this._changeDetectorRef.markForCheck();
         });
     }
 
+    // eslint-disable-next-line @typescript-eslint/member-ordering, @typescript-eslint/explicit-function-return-type
     totalEarnedPointByDateRange(rangestart: string, rangeend: string, datepicker: MatDateRangePicker<Moment>) {
         this.isLoading = true;
-        let startdate = moment(rangestart);
-        let enddate = moment(rangeend);
-        this.earnPoint.type = "range";
-        this.earnPoint.startdate = startdate.format("YYYY-MM-DD");
-        this.earnPoint.enddate = enddate.add(1, "days").format("YYYY-MM-DD");
+        const startdate = moment(rangestart);
+        const enddate = moment(rangeend);
+        this.earnPoint.type = 'range';
+        this.earnPoint.startdate = startdate.format('YYYY-MM-DD');
+        this.earnPoint.enddate = enddate.add(1, 'days').format('YYYY-MM-DD');
 
         this._analyticsService.getAllEarnPoint(this.earnPoint)
         .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((response : any) => {
-            this.earnPoint.totalEarnPoint = response ? response.TotalEarnPoint ? response.TotalEarnPoint : 0 : 0;
-            this.earnPoint.totalEarnDolarValue = response ? response.TotalEarnDolarValue ? response.TotalEarnDolarValue : 0 : 0;
-            this.earnPoint.filterShowStartDate = moment(rangestart).format("YYYY-MM-DD");
-            this.earnPoint.filterShowEndDate = moment(rangeend).format("YYYY-MM-DD");
+        .subscribe((response: any) => {
+            this.earnPoint.totalEarnPoint = response ? response.totalEarnPoint ? response.totalEarnPoint : 0 : 0;
+            this.earnPoint.totalEarnDolarValue = response ? response.totalEarnDolarValue ? response.totalEarnDolarValue : 0 : 0;
+            this.earnPoint.filterShowStartDate = moment(rangestart).format('YYYY-MM-DD');
+            this.earnPoint.filterShowEndDate = moment(rangeend).format('YYYY-MM-DD');
             datepicker.close();
             this._changeDetectorRef.markForCheck();
         });
