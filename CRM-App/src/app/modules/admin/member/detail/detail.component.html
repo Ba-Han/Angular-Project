@@ -1260,28 +1260,33 @@
                             <div class="w-full h-50 flex items-center justify-center" style="cursor:pointer; border-radius: 3px;">
                                 <div style="border-bottom: 1px solid black;">
                                     <input class="ng-hide mr-9" #fileInput multiple type="file" (change)="onFileSelected($event)" accept=".csv,.xlsx,.pdf,.jpg,.jpeg,.png,.docx" style="margin-bottom: 9px;" />
-                                    <button mat-icon-button [matTooltip]="'Clear'" *ngIf="fileToUpload" (click)="clearFileToUpload()" style="width: 35px; height: 35px; border-radius: 3px; border: 1px solid #4f46e5; top: 1px;">
+                                    <button mat-icon-button [matTooltip]="'Clear'" *ngIf="fileToUpload" (click)="clearFileToUpload()" style="width: 35px; height: 35px; border-radius: 5px; border: 1px solid #4f46e5; top: 1px;">
                                         <span>x</span>
                                     </button>
                                 </div>
                             </div>
-                            <div *ngIf="uploadData" style="position: relative; bottom: 4.4rem; text-align: center; color: green;">
+                            <div *ngIf="uploadData" style="position: relative; bottom: 4.3rem; text-align: center; color: green;">
                                 Upload Successfully.
                             </div>
 
-                            <div *ngIf="errorMessage" style="position: relative; bottom: 4.4rem; text-align: center; color: red;">
+                            <div *ngIf="errorMessage" style="position: relative; bottom: 4.3rem; text-align: center; color: red;">
                                 {{ errorMessage }}
                             </div>
 
-                            <div style="position: relative; bottom: 3rem; margin-left: 16rem !important; margin-right: 16rem !important;">
-                                <label for="comment" style="display: flex; font-weight: 500;">Comment:</label>
-                                <textarea id="comment" [(ngModel)]="comment" required placeholder="Enter your comment" style="border-radius: 4px; padding: 5px; padding-left: 6px; border: 1px dashed black; width: 21rem; height: 6rem;"></textarea>
+                            <div style="position: relative; bottom: 3.4rem; text-align: justify; display: grid; line-height: 1; justify-content: center;">
+                                <span>Accepting File Types!</span> <br/>
+                                <span>* excel, docx, pdf, csv, images (jpg,png and jpeg).</span>
+                            </div>
+
+                            <label for="comment" style="display: flex; font-weight: 500; position: relative; bottom: 2rem; padding-right: 17rem; justify-content: center;">Comment:</label>
+                            <div class="w-full h-50 flex items-center justify-center" style="position: relative; bottom: 5rem;">
+                                <textarea id="comment" [(ngModel)]="comment" required placeholder="Enter your comment" style="border-radius: 5px; padding: 5px; padding-left: 6px; border: 1px dashed black; width: 21rem; height: 6rem;"></textarea>
                             </div>
 
                             <div style="position: relative; text-align: end; bottom: 2rem;right: 3rem;">
                                 <button
                                     class="h-10 md-button md-raised md-primary"
-                                    (click)="uploadMemberDocumentsFile()" style="background: #4f46e5;color:#fff;width: 10% !important;margin-left: 10px; border-radius: 3px; font-weight: 700;">Upload</button>
+                                    (click)="uploadMemberDocumentsFile()" style="background: #4f46e5; color:#fff;width: 10% !important;margin-left: 10px; border-radius: 5px; font-weight: 700;">Upload</button>
                             </div>
                     </div>
                 </div>
