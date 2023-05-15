@@ -200,9 +200,9 @@ export class MemberService
             );
     }
 
-    getMemberDocumentsById(): Observable<Transaction> {
+    getMemberDocumentsById(): Observable<MemberDocument> {
         return this._httpClient.get<any>(`${this._apiurl}/items/member_document`, {
-            params: { limit: 5, sort: 'document_name' }
+            params: { limit: 5, sort: 'uploaded_on', order: 'desc' }
         })
             .pipe(
                 tap((response) => {
@@ -211,7 +211,7 @@ export class MemberService
             );
     }
 
-    getMemberDocuments(page: number = 0, limit: number = 10, sort: string = 'document_name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+    getMemberDocuments(page: number = 0, limit: number = 10, sort: string = 'uploaded_on', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ memberDocumentpagination: MemberDocumentPagination; memberDocuments: MemberDocument[] }> {
             return this._httpClient.get(`${this._apiurl}/items/member_document`, {
             params: {

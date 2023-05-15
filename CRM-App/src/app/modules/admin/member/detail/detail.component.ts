@@ -202,7 +202,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     searchInputControl: FormControl = new FormControl();
     selectedTier: number;
     isAscending: boolean = true;
-    selectedCoulumn = 'documentname';
+    selectedCoulumn = 'uploadeddate';
     // private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -474,7 +474,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    onPageChange(event: PageEvent) {
+    onPageChange() {
         this._memberService.getMemberDocuments(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
             switchMap(() => {
                 this.isLoading = true;
@@ -491,6 +491,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     sortingColumnList() {
         if ( this.selectedCoulumn === 'documentname') {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'uploadeddate' ) {
             this.ngAfterViewInit();
         }
@@ -500,17 +501,14 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     sortingPageList() {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'documentname' ) {
-            //this._memberService.getMemberDocuments(0, 10, 'document_name', 'asc').subscribe();
             this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'documentname' ) {
-            //this._memberService.getMemberDocuments(0, 10, 'document_name', 'desc').subscribe();
             this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'uploadeddate' ) {
-            //this._memberService.getMemberDocuments(0, 10, 'uploaded_on', 'asc').subscribe();
             this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'uploadeddate' ) {
-            //this._memberService.getMemberDocuments(0, 10, 'uploaded_on', 'desc').subscribe();
             this.ngAfterViewInit();
+            this.onPageChange();
         }
     }
 
