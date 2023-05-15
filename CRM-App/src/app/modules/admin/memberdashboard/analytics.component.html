@@ -246,19 +246,19 @@
                     </div>
                     <div class="mx-6 mt-3 mb-3" style="border: 1px solid #ccc;"></div>
                     <div class="mx-6 mb-2">
-                        <ng-container *ngIf="filterActivePoint.type == 'all'">
+                        <ng-container *ngIf="filterActivePoint.type === 'all'">
                             <div style="color: gray !important;">Total Active Points - For All</div>
                         </ng-container>
-                        <ng-container *ngIf="filterActivePoint.type == 'month'">
+                        <ng-container *ngIf="filterActivePoint.type === 'month'">
                             <div style="color: gray !important;">Total Active Points For - {{activefilterDate | date:'MMM, y'}}</div>
                         </ng-container>
-                        <ng-container *ngIf="filterActivePoint.type == 'year'">
+                        <ng-container *ngIf="filterActivePoint.type === 'year'">
                             <div style="color: gray !important;">Total Active Points For - {{activefilterDate | date:'y'}}</div>
                         </ng-container>
-                        <ng-container *ngIf="filterActivePoint.type == 'day'">
+                        <ng-container *ngIf="filterActivePoint.type === 'day'">
                             <div style="color: gray !important;">Total Active Points For - {{activefilterDate | date:'MMM dd, y'}}</div>
                         </ng-container>
-                        <ng-container *ngIf="filterActivePoint.type == 'range'">
+                        <ng-container *ngIf="filterActivePoint.type === 'range'">
                             <div style="color: gray !important;">Total Active Points between {{activefilterStartDate | date:'MMM dd, y'}} - {{activefilterEndDate | date:'MMM dd, y'}}</div>
                         </ng-container>
                     </div>
@@ -311,26 +311,26 @@
 
                     <div class="mx-6 mt-3 mb-3" style="border: 1px solid #ccc;"></div>
                     <div class="mx-6 mb-2">
-                        <ng-container *ngIf="filterExpiredPoint.type == 'all'">
+                        <ng-container *ngIf="filterExpiredPoint.type === 'all'">
                             <div style="color: gray !important;">Total Expired Points - For All</div>
                         </ng-container>
-                        <ng-container *ngIf="filterExpiredPoint.type == 'month'">
+                        <ng-container *ngIf="filterExpiredPoint.type === 'month'">
                             <div style="color: gray !important;">Total Expired Points - {{expiredFilterDate | date:'MMM, y'}}</div>
                         </ng-container>
-                        <ng-container *ngIf="filterExpiredPoint.type == 'year'">
+                        <ng-container *ngIf="filterExpiredPoint.type === 'year'">
                             <div style="color: gray !important;">Total Expired Points For - {{expiredFilterDate | date:'y'}}</div>
                         </ng-container>
-                        <ng-container *ngIf="filterExpiredPoint.type == 'day'">
+                        <ng-container *ngIf="filterExpiredPoint.type === 'day'">
                             <div style="color: gray !important;">Total Expired Points For - {{expiredFilterDate | date:'MMM dd, y'}}</div>
                         </ng-container>
-                        <ng-container *ngIf="filterExpiredPoint.type == 'range'">
+                        <ng-container *ngIf="filterExpiredPoint.type === 'range'">
                             <div style="color: gray !important;">Total Expired Points between {{expiredfilterStartDate | date:'MMM dd, y'}} - {{expiredfilterEndDate | date:'MMM dd, y'}}</div>
                         </ng-container>
                     </div>
                 </div>
 
 
-                <!-- Total Earn Points-->
+                <!-- Total Generated Points-->
                 <div class="card h-65" style="margin-top: -2px;">
                     <div class="">
                         <div style="background: #DCD6D6;">
@@ -406,19 +406,19 @@
 
                     <div class="mx-6 mt-3 mb-3" style="border: 1px solid #ccc;"></div>
                     <div class="mx-6 mb-2">
-                        <ng-container *ngIf="earnPoint.type == 'all'">
+                        <ng-container *ngIf="earnPoint.type === 'all'">
                             <div style="color: gray !important;">Total Generated Points - For All</div>
                         </ng-container>
-                        <ng-container *ngIf="earnPoint.type == 'month'">
+                        <ng-container *ngIf="earnPoint.type === 'month'">
                             <div style="color: gray !important;">Total Generated Points - {{earnPoint.filterShowDate | date:'MMM, y'}}</div>
                         </ng-container>
-                        <ng-container *ngIf="earnPoint.type == 'year'">
+                        <ng-container *ngIf="earnPoint.type === 'year'">
                             <div style="color: gray !important;">Total Generated Points For - {{earnPoint.filterShowDate | date:'y'}}</div>
                         </ng-container>
-                        <ng-container *ngIf="earnPoint.type == 'day'">
+                        <ng-container *ngIf="earnPoint.type === 'day'">
                             <div style="color: gray !important;">Total Generated Points For - {{earnPoint.filterShowDate | date:'MMM dd, y'}}</div>
                         </ng-container>
-                        <ng-container *ngIf="earnPoint.type == 'range'">
+                        <ng-container *ngIf="earnPoint.type === 'range'">
                             <div style="color: gray !important;">Total Generated Points between {{earnPoint.filterShowStartDate | date:'MMM dd, y'}} - {{earnPoint.filterShowEndDate | date:'MMM dd, y'}}</div>
                         </ng-container>
                     </div>
