@@ -63,11 +63,11 @@ export class TotalRegisterMember implements Resolve<any>
     constructor(private _analyticsService: AnalyticsService) {
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        let date = new Date();
+        const date = new Date();
         const currentMonth = date.getMonth() + 1;
         const currentYear = date.getFullYear();
-        let filter : any = {
-            type: "month",
+        const filter: any = {
+            type: 'month',
             month: currentMonth,
             year: currentYear,
         } ;
@@ -83,16 +83,16 @@ export class TotalTransactionCount implements Resolve<any>
     constructor(private _analyticsService: AnalyticsService) {
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        let dateParameter = {
-            store : "allstore",
-            type: "all",
-            tier: "",
+        const dateParameter = {
+            store : 'allstore',
+            type: 'all',
+            tier: '',
             day: 0,
             month: 0,
             year: 0,
-            startdate: "",
-            enddate: "",
-        }
+            startdate: '',
+            enddate: '',
+        };
         return this._analyticsService.getAllTransactoinCount(dateParameter);
     }
 }
@@ -121,6 +121,17 @@ export class Stores implements Resolve<any>
     }
 }
 
+@Injectable({
+    providedIn: 'root'
+})
+export class Channel implements Resolve<any>
+{
+    constructor(private _analyticsService: AnalyticsService) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+        return this._analyticsService.getAllChannel();
+    }
+}
 
 @Injectable({
     providedIn: 'root'
@@ -130,19 +141,19 @@ export class TotalActivePoints implements Resolve<any>
     constructor(private _analyticsService: AnalyticsService) {
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        let date = new Date();
+        const date = new Date();
         const currentday = date.getDate();
         const currentMonth = date.getMonth() + 1;
         const currentYear = date.getFullYear();
-        let dateParameter = {
-            type: "all",
-            tier: "alltier",
+        const dateParameter = {
+            type: 'all',
+            tier: 'alltier',
             day: currentday,
             month: currentMonth,
             year: currentYear,
-            startdate: "",
-            enddate: "",
-        }
+            startdate: '',
+            enddate: '',
+        };
         return this._analyticsService.getTotalActivePoint(dateParameter);
     }
 }
@@ -157,19 +168,19 @@ export class TotalExpiredPoints implements Resolve<any>
     constructor(private _analyticsService: AnalyticsService) {
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        let date = new Date();
+        const date = new Date();
         const currentday = date.getDate();
         const currentMonth = date.getMonth() + 1;
         const currentYear = date.getFullYear();
-        let dateParameter = {
-            type: "all",
-            tier: "alltier",
+        const dateParameter = {
+            type: 'all',
+            tier: 'alltier',
             day: currentday,
             month: currentMonth,
             year: currentYear,
-            startdate: "",
-            enddate: "",
-        }
+            startdate: '',
+            enddate: '',
+        };
         return this._analyticsService.getTotalExpeiredPoint(dateParameter);
     }
 }
@@ -184,14 +195,12 @@ export class TotalEarnPoint implements Resolve<any>
     constructor(private _analyticsService: AnalyticsService) {
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        let filter : any = {
-            channel : "all",
-            store : "allstore",
-            type : "all",
-            tier : "all"
-        } ;
-       
-
+        const filter: any = {
+            channel : 'all',
+            store : 'allstore',
+            type : 'all',
+            tier : 'all'
+        };
         return this._analyticsService.getAllEarnPoint(filter);
     }
 }

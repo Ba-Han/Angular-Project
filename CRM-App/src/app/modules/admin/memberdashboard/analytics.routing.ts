@@ -11,6 +11,7 @@ import {
     TotalActivePoints,
     TotalExpiredPoints,
     Stores,
+    Channel,
     TotalEarnPoint
 } from 'app/modules/admin/memberdashboard/analytics.resolvers';
 
@@ -27,6 +28,7 @@ export const analyticsRoutes: Route[] = [
             totalTransaction: TotalTransactionCount,
             tiers: MemberTiers,
             stores: Stores,
+            channel: Channel,
             totalActivePoints:TotalActivePoints,
             totalExpiredPoints:TotalExpiredPoints,
             totalearnPoint : TotalEarnPoint

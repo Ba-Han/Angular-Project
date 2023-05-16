@@ -353,22 +353,16 @@
                                 <mat-form-field appearance="fill">
                                     <mat-select [(ngModel)]="earnPoint.store">
                                       <mat-option value="all" (click)="earnPointfieldChange('all','all')">All</mat-option>
-                                      <mat-optgroup [label]="'POS'">
-                                        <mat-option value="allstore" (click)="earnPointfieldChange('allstore','pos')">All Store</mat-option>
-                                        <ng-container *ngFor="let store of stores$">
-                                            <ng-container *ngIf="store.code !== 'BHG_ONLINE'">
-                                                <mat-option [value]="store.code" (click)="earnPointfieldChange(store.code,'pos')"> {{store.name}}</mat-option>
+                                        <div *ngFor="let channel of channel$">
+                                            <mat-option disabled> {{channel.name}} </mat-option>
+                                            <mat-option value="allstore" (click)="earnPointfieldChange('allstore', channel.code)">All</mat-option>
+
+                                            <ng-container *ngFor="let store of stores$">
+                                                <ng-container *ngIf="channel.code === store.channel_code">
+                                                    <mat-option [value]="store.code" (click)="earnPointfieldChange(store.code, store.channel_code)"> {{store.name}}</mat-option>
+                                                </ng-container>
                                             </ng-container>
-                                        </ng-container>
-                                      </mat-optgroup>
-                                      <mat-optgroup [label]="'Ecommerce'">
-                                        <mat-option value="allstore" (click)="earnPointfieldChange('allstore','m_portal')">All Store</mat-option>
-                                        <ng-container *ngFor="let store of stores$">
-                                            <ng-container *ngIf="store.code === 'BHG_ONLINE'">
-                                                <mat-option [value]="store.code" (click)="earnPointfieldChange(store.code,'m_portal')"> {{store.name}}</mat-option>
-                                            </ng-container>
-                                        </ng-container>
-                                      </mat-optgroup>
+                                        </div>
                                     </mat-select>
                                   </mat-form-field>
                             </div>

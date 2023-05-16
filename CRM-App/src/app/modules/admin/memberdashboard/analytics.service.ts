@@ -19,6 +19,7 @@ export class AnalyticsService
     private _totalExpiredPoints: BehaviorSubject<any> = new BehaviorSubject(null);
     private _tiers: BehaviorSubject<any> = new BehaviorSubject(null);
     private _stores: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _channel: BehaviorSubject<any> = new BehaviorSubject(null);
     private _totalEarnPoints: BehaviorSubject<any> = new BehaviorSubject(null);
     private _apiurl: string = '';
     /**
@@ -59,6 +60,9 @@ export class AnalyticsService
     }
     get stores$(): Observable<any> {
         return this._stores.asObservable();
+    }
+    get channel$(): Observable<any> {
+        return this._channel.asObservable();
     }
     get earnPoints$(): Observable<any> {
         return this._totalEarnPoints.asObservable();
@@ -106,6 +110,16 @@ export class AnalyticsService
                 this._beWowMembers.next(response);
             })
         );
+    }
+
+    getAllChannel(): Observable<any> {
+        return this._httpClient.get<any>(`${this._apiurl}/items/channel`, {
+        })
+            .pipe(
+                tap((response) => {
+                    this._channel.next(response);
+                })
+            );
     }
 
     getAllStore(): Observable<any> {

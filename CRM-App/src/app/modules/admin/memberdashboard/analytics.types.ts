@@ -1,6 +1,11 @@
 export interface Stores {
   code: string;
   name: string;
+  channel_code: string;
+}
+export interface Channel {
+  code: string;
+  name: string;
 }
 export interface Tiers {
   id: string;
