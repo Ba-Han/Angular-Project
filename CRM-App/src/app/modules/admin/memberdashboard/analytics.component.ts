@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { Moment } from 'moment';
 import moment from 'moment';
-import { Stores,Tiers, ActivePoint, ExpiredPoint, DateParameter, EarnPoint , RegisteredMember} from 'app/modules/admin/memberdashboard/analytics.types';
+import { Stores, Channel, Tiers, ActivePoint, ExpiredPoint, DateParameter, EarnPoint , RegisteredMember} from 'app/modules/admin/memberdashboard/analytics.types';
 import { AnalyticsService } from 'app/modules/admin/memberdashboard/analytics.service';
 
 @Component({
@@ -30,6 +30,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     startYear = new Date();
     registerMember: number;
     stores$: Stores;
+    channel$: Channel;
     tiers$: Tiers;
     filterDate: string;
     isLoading: boolean = false;
@@ -134,7 +135,12 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
                 this.rewardedId = response.data ? response.data[1].id : 0;
                 this.wowId = response.data ? response.data[2].id : 0;
             });
-         this._analyticsService.stores$
+
+        this._analyticsService.channel$
+        .subscribe((response: any) => {
+            this.channel$ = response.data ? response.data : '';
+        });
+        this._analyticsService.stores$
             .subscribe((response: any) => {
                 this.stores$ = response.data ? response.data : '';
             });

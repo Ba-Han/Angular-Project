@@ -704,9 +704,27 @@
                                                         Level {{memberTier.level}}
                                                     </div>
 
-                                                    <div class="truncate">
+                                                    <ng-container *ngIf="memberTier.condition_type === 0">
+                                                        <div class="truncate">
+                                                            Min Order Value (per order)
+                                                        </div>
+                                                    </ng-container>
+
+                                                    <ng-container *ngIf="memberTier.condition_type === 1">
+                                                        <div class="truncate">
+                                                            Total Order Amount (period)
+                                                        </div>
+                                                    </ng-container>
+
+                                                    <ng-container *ngIf="memberTier.condition_type === 2">
+                                                        <div class="truncate">
+                                                            Point Range
+                                                        </div>
+                                                    </ng-container>
+                                                    
+                                                    <!-- <div class="truncate">
                                                         within {{memberTier.condition_period_value}} {{memberTier.condition_period}} spent min ${{memberTier.min_condition_amount}} to ${{memberTier.max_condition_amount}}
-                                                    </div>
+                                                    </div> -->
 
                                                 </div>
                                             </a>

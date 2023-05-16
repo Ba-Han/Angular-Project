@@ -1,4 +1,4 @@
-export interface Product
+export interface Redemption
 {
     id: number;
     status: string;
@@ -11,7 +11,7 @@ export interface Product
     price: number;
 }
 
-export interface ProductPagination {
+export interface RedemptionPagination {
     length: number;
     limit: number;
     page: number;

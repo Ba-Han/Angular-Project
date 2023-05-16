@@ -27,10 +27,10 @@
             </div>
 
 
-            <!-- Total Be Informed Members-->
+            <!-- Total Silver Members-->
             <div class="card h-40">
                 <div class="card-header card-header-warning">
-                    <h4 class="card-title">Be Informed</h4>
+                    <h4 class="card-title">Silver</h4>
                     <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalBeInformed | number:'1.0-0'}}</p>
                 </div>
                 <div class="card-body">
@@ -43,11 +43,10 @@
             </div>
 
 
-            <!-- Total Be Reward Members -->
-
+            <!-- Total Gold Members -->
             <div class="card h-40">
                 <div class="card-header card-header-twittercolor">
-                    <h4 class="card-title">Be Rewarded</h4>
+                    <h4 class="card-title">Gold</h4>
                     <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalBeReward | number:'1.0-0'}}</p>
                 </div>
                 <div class="card-body">
@@ -59,10 +58,10 @@
                 </div>
             </div>
 
-            <!-- Total Be Wowed Members -->
+            <!-- Total Platinum Members -->
             <div class="card h-40">
                 <div class="card-header card-header-success">
-                    <h4 class="card-title">Be Wowed</h4>
+                    <h4 class="card-title">Platinum</h4>
                     <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalBeWow | number:'1.0-0'}}</p>
                 </div>
                 <div class="card-body">
@@ -353,22 +352,16 @@
                                 <mat-form-field appearance="fill">
                                     <mat-select [(ngModel)]="earnPoint.store">
                                       <mat-option value="all" (click)="earnPointfieldChange('all','all')">All</mat-option>
-                                      <mat-optgroup [label]="'POS'">
-                                        <mat-option value="allstore" (click)="earnPointfieldChange('allstore','pos')">All Store</mat-option>
-                                        <ng-container *ngFor="let store of stores$">
-                                            <ng-container *ngIf="store.code !== 'BHG_ONLINE'">
-                                                <mat-option [value]="store.code" (click)="earnPointfieldChange(store.code,'pos')"> {{store.name}}</mat-option>
+                                        <div *ngFor="let channel of channel$">
+                                            <mat-option disabled> {{channel.name}} </mat-option>
+                                            <mat-option value="allstore" (click)="earnPointfieldChange('allstore', channel.code)">All</mat-option>
+
+                                            <ng-container *ngFor="let store of stores$">
+                                                <ng-container *ngIf="channel.code === store.channel_code">
+                                                    <mat-option [value]="store.code" (click)="earnPointfieldChange(store.code, store.channel_code)"> {{store.name}}</mat-option>
+                                                </ng-container>
                                             </ng-container>
-                                        </ng-container>
-                                      </mat-optgroup>
-                                      <mat-optgroup [label]="'Ecommerce'">
-                                        <mat-option value="allstore" (click)="earnPointfieldChange('allstore','m_portal')">All Store</mat-option>
-                                        <ng-container *ngFor="let store of stores$">
-                                            <ng-container *ngIf="store.code === 'BHG_ONLINE'">
-                                                <mat-option [value]="store.code" (click)="earnPointfieldChange(store.code,'m_portal')"> {{store.name}}</mat-option>
-                                            </ng-container>
-                                        </ng-container>
-                                      </mat-optgroup>
+                                        </div>
                                     </mat-select>
                                   </mat-form-field>
                             </div>
