@@ -90,7 +90,7 @@ export const appRoutes: Route[] = [
             { path: 'generalsetting', loadChildren: () => import('app/modules/admin/setting/generalsetting/generalsetting.module').then(m => m.GeneralSettingModule) },
             { path: 'users', loadChildren: () => import('app/modules/admin/setting/user/user.module').then(m => m.AppUserModule) },
             { path: 'pointrangesetting', loadChildren: () => import('app/modules/admin/setting/point range setting/pointrange.module').then(m => m.PointRagneModule) },
-            //{ path: 'pointrangesetting', loadChildren: () => import('app/modules/admin/setting/redemption setting/redemption.module').then(m => m.RedemptionModule) },
+            { path: 'redemptionsetting', loadChildren: () => import('app/modules/admin/setting/redemption setting/redemption.module').then(m => m.RedemptionModule) },
             { path: 'change-password', loadChildren: () => import('app/modules/auth/profile/change-password.module').then(m => m.AuthChangePasswordModule) },
             { path: 'profile', loadChildren: () => import('app/modules/admin/setting/profile/profile.module').then(m => m.ProfileModule) },
             { path: 'redemption', loadChildren: () => import('app/modules/admin/productcatalog/Redemption/product.module').then(m => m.ProductModule) }

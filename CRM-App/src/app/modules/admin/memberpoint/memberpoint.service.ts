@@ -6,7 +6,6 @@ import { MemberPoint, MemberPointPagination, PointSegment, PointSegmentPaginatio
 import { environment } from 'environments/environment';
 import { Member } from '../member/member.types';
 import { Transaction, TransactionPagination } from 'app/modules/admin/transaction/transaction.types';
-import { Dictionary } from 'lodash';
 
 @Injectable({
     providedIn: 'root'
@@ -201,7 +200,7 @@ export class MemberPointService
         );
     }
 
-    createMemberPoint(memberPoint: MemberPoint, pointconversion: number): Observable<MemberPoint>
+    createMemberPoint(memberPoint: MemberPoint): Observable<MemberPoint>
     {
         return this.memberPoints$.pipe(
             take(1),
@@ -217,7 +216,7 @@ export class MemberPointService
                 'comment': memberPoint.comment,
             }).pipe(
                 map((newMemberPoint) => {
-                    newMemberPoint.data.pointsInDoller = Math.round(newMemberPoint.data.point / pointconversion);
+                    //newMemberPoint.data.pointsInDoller = Math.round(newMemberPoint.data.point / pointconversion);
                     // Update the contacts with the new contact
                     this._memberPoints.next([newMemberPoint.data, ...memberPoints]);
 

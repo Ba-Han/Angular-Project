@@ -50,8 +50,8 @@ export class CRMUserService {
      */
     getAppUsers(page: number = 0, limit: number = 10, sort: string = 'username', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: UserPagination; users: User[] }> {
-        const role = localStorage.getItem("userRoleName");
-        const filterUserListByRole = role == "Admin" ? '?fields=*,role.*&filter[role][name][_contains]=CRM APP' : '?fields=*,role.*&filter[role][name][_eq]=CRM APP User';
+        const role = localStorage.getItem('userRoleName');
+        const filterUserListByRole = role === 'Admin' ? '?fields=*,role.*&filter[role][name][_contains]=CRM APP' : '?fields=*,role.*&filter[role][name][_eq]=CRM APP User';
         return this._httpClient.get(`${this._apiurl}/users${filterUserListByRole}`, {
                 params: {
                     meta: 'filter_count',
@@ -128,7 +128,7 @@ export class CRMUserService {
 
     updatePermission(id: string, updatedPagePermission: any): Observable<any> {
         return this._httpClient.patch(`${this._apiurl}/users/updatepermission/${id}`, {
-            "page_roles": updatedPagePermission
+            'page_roles': updatedPagePermission
         }, {responseType: 'text'})
         .pipe(
             map(() => true),
@@ -136,15 +136,5 @@ export class CRMUserService {
                 console.error(error);
                 return of(false);
             }));
-    }
-
-     getUserRoles(): Observable<any> {
-        return this._httpClient.get<any>(`${this._apiurl}/roles`)
-            .pipe(
-                tap((response) => {
-                    const roles = response.data;
-                    return roles;
-                })
-            );
     }
 }

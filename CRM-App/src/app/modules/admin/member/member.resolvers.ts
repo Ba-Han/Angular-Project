@@ -136,14 +136,3 @@ export class MemberDocumentsResolver implements Resolve<any>
     }
 }
 
-@Injectable({
-    providedIn: 'root'
-})
-export class SettingResolver implements Resolve<any>
-{
-    constructor(private _memberService: MemberService) {
-    }
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        return this._memberService.getSetting();
-    }
-}

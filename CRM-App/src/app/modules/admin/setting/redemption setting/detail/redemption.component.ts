@@ -6,7 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDrawer } from '@angular/material/sidenav';
 import { debounceTime, map, merge, Observable, Subject, switchMap, takeUntil } from 'rxjs';
-import { Redemption, RedemptionPagination } from 'app/modules/admin/setting/redemption setting/redemption.types';
+import { Redemption, RedemptionPagination,  MemberTier} from 'app/modules/admin/setting/redemption setting/redemption.types';
 import { RedemptionService } from 'app/modules/admin/setting/redemption setting/redemption.service';
 import { UserService } from 'app/core/user/user.service';
 
@@ -20,18 +20,18 @@ import { UserService } from 'app/core/user/user.service';
             }
 
             .redemptionsetting-grid {
-                grid-template-columns: 200px 150px auto 100px 100px;
+                grid-template-columns: 100px 100px 100px 100px 100px 100px 100px;
 
                 @screen sm {
-                    grid-template-columns: 200px 150px auto 100px 100px;
+                    grid-template-columns: 100px 100px 100px 100px 100px 100px 100px;
                 }
 
                 @screen md {
-                    grid-template-columns: 200px 150px auto 100px 100px;
+                    grid-template-columns: 100px 100px 100px 100px 100px 100px 100px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 200px 150px auto 100px 100px;
+                    grid-template-columns: 100px 100px 100px 100px 100px 100px 100px;
                 }
             }
 
@@ -107,10 +107,14 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('drawerOne', { static: true }) drawerOne: MatDrawer;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('drawerTwo', { static: true }) drawerTwo: MatDrawer;
 
     isLoading: boolean = false;
     RedemptionEditForm: FormGroup;
+    RedemptionSettingEditMode: boolean = false;
     searchInputControl: FormControl = new FormControl();
     editMode: boolean = false;
     canEdit: boolean = false;
@@ -118,16 +122,20 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
     selectedId: number | null = null;
+    editFormData: any;
     successMessage: string | null = null;
     errorMessage: string | null = null;
-    redemptions$: Observable<Redemption>;
+    redemptions$: Observable<Redemption[]>;
+    memberTiers$: Observable<MemberTier[]>;
     pagination: RedemptionPagination;
     minDate: string;
-    redemption: any;
-    startTypeValue: number = 0;
-    isUpdateSuccess: boolean = false;
+    redemption: Redemption;
+    redem: any;
+    typeValue: number;
+    updateSuccess: string | null = null;
+    showButtonIsEdit: boolean = false;
     isAscending: boolean = true;
-    selectedCoulumn = 'channelname';
+    selectedCoulumn = 'type';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -149,22 +157,18 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
     ngOnInit(): void {
         this.RedemptionEditForm = this._formBuilder.group({
             id: [''],
-            start_type: ['', [Validators.required]],
-            start_day_type: [''],
-            end_type: ['', [Validators.required]],
-            end_day_type: ['', [Validators.required]],
-            end_day_value: ['', [Validators.required]]
+            type: ['', [Validators.required]],
+            date_from: [''],
+            date_to: [''],
+            member_tier: ['', [Validators.required]],
+            member_tierFullName: [''],
+            point_conversion: ['', [Validators.required]]
         });
 
-        this._redemptionService.redemptions$
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((redemption: Redemption) => {
-            this.redemption = redemption;
-            this.RedemptionEditForm.patchValue(redemption);
-            this._changeDetectorRef.markForCheck();
-        });
+        this.redemptions$ = this._redemptionService.redemptions$;
+        this.memberTiers$ = this._redemptionService.memberTiers$;
 
-        // Get the redemptionpagination
+        // Get the redemption pagination
         this._redemptionService.pagination$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((pagination: RedemptionPagination) => {
@@ -172,50 +176,34 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
             this._changeDetectorRef.markForCheck();
         });
 
-        // search
-        /* this.searchInputControl.valueChanges
-        .pipe(
-            takeUntil(this._unsubscribeAll),
-            debounceTime(300),
-            switchMap((query) => {
-                this.isLoading = true;
-                return this._redemptionService.getRedemptions(0, 10,'name','asc', query);
-            }),
-            map(() => {
-                this.isLoading = false;
-            })
-        )
-        .subscribe(); */
-
-        this.canEdit = this._userService.getEditUserPermissionByNavId('pointrangesetting');
-        this.canDelete = this._userService.getDeleteUserPermissionByNavId('pointrangesetting');
+        this.canEdit = this._userService.getEditUserPermissionByNavId('redemptionsetting');
     }
 
     ngAfterViewInit(): void
      {
         if (this._sort && this._paginator) {
             // Set the initial sort
-            if (this.isAscending && this.selectedCoulumn === 'documentname') {
+            if (this.isAscending && this.selectedCoulumn === 'type') {
                 this._sort.sort({
-                    id: 'document_name',
+                    id: 'type',
                     start: 'asc',
                     disableClear: true
                 });
-            } else if (!this.isAscending && this.selectedCoulumn === 'documentname') {
+            } else if (!this.isAscending && this.selectedCoulumn === 'type') {
                 this._sort.sort({
-                    id: 'document_name',
+                    id: 'type',
                     start: 'desc',
                     disableClear: true
                 });
-            } else if (this.isAscending && this.selectedCoulumn === 'uploadeddate') {
+            } else if (this.isAscending && this.selectedCoulumn === 'pointconversion') {
                 this._sort.sort({
-                    id: 'uploaded_on',
+                    id: 'point_conversion',
                     start: 'asc',
                     disableClear: true
                 });
-            } else if (!this.isAscending && this.selectedCoulumn === 'uploadeddate') {
+            } else if (!this.isAscending && this.selectedCoulumn === 'pointconversion') {
                 this._sort.sort({
-                    id: 'uploaded_on',
+                    id: 'point_conversion',
                     start: 'desc',
                     disableClear: true
                 });
@@ -270,7 +258,7 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
     cancelPopup(): void {
         this.isSuccess = false;
         this.toogleDeleteMode(false);
-        this.matDrawer.close();
+        this.drawerOne.close();
         this._changeDetectorRef.markForCheck();
     }
 
@@ -298,23 +286,67 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
         this._changeDetectorRef.markForCheck();
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingColumnList() {
+        if ( this.selectedCoulumn === 'type') {
+            this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'pointconversion') {
+            this.ngAfterViewInit();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    sortingPageList() {
+        this.isAscending = !this.isAscending;
+        if ( this.isAscending && this.selectedCoulumn === 'type' ) {
+            this.ngAfterViewInit();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'type' ) {
+            this.ngAfterViewInit();
+        } else if ( this.isAscending && this.selectedCoulumn === 'pointconversion' ) {
+            this.ngAfterViewInit();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'pointconversion' ) {
+            this.ngAfterViewInit();
+        }
+    }
+
     // eslint-disable-next-line @typescript-eslint/naming-convention
     DeleteDrawer(id: number): void {
         this.selectedId = id;
         this.toogleDeleteMode(true);
-        this.matDrawer.open();
+        this.drawerOne.open();
         this._changeDetectorRef.markForCheck();
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    eidtRedemption(redem) {
+        this.showButtonIsEdit = true;
+        this.editFormData = redem;
+        this.RedemptionEditForm.patchValue(this.editFormData);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    cancelRedemption() {
+        this.RedemptionEditForm.reset();
+        this.RedemptionEditForm.markAsPristine();
+        this.RedemptionEditForm.markAsUntouched();
+    }
+
     updateRedemption(): void {
-        this.isUpdateSuccess = true;
         const redemption = this.RedemptionEditForm.getRawValue();
-        this._redemptionService.updateRedemption(redemption.id, redemption).pipe(
-            map(() => {
-                this.isLoading = false;
-                //this.isSuccess = true;
-            })
-        ).subscribe();
-        this.isSuccess = true;
+        this._redemptionService.updateRedemption(redemption.id, redemption).subscribe(() => {
+            window.location.reload();
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
     }
 }
