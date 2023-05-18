@@ -72,6 +72,14 @@ import { UserService } from 'app/core/user/user.service';
                 font-size: 16px;
             }
 
+            .errorMessage_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(255, 49, 49);
+                padding: 3rem;
+                font-size: 16px;
+            }
+
             .updaeuser_scss {
                 font-size: 16px;
                 color: rgb(0, 128, 0);
@@ -108,6 +116,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     isSuccess: boolean = false;
     isUpadteUserSuccess: boolean = false;
     checkboxChecked: boolean = true;
+    errorMessage: string | null = null;
+    successMessage: string | null = null;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     private passwordStrength: 0;
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -126,7 +136,6 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         private _userService: UserService
 
     ) {
-        this.getUserRoles();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -234,14 +243,27 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     }
 
     proceedPopup(): void {
-        // Update QR Code Function
-        this._crmUserService.updateQRCode().subscribe();
-        this.isSuccess = true;
+        this._crmUserService.updateQRCode().subscribe(() => {
+            this.successMessage = 'Update Successfully!';
+            this.isSuccess = true;
+            this._changeDetectorRef.markForCheck();
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this.isSuccess = true;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
     }
 
     updateUser(): void {
         // Get the contact object
-        this.toogleUpdateUserDetailMode(true);
         this.matDrawer.open();
         this.isUpadteUserSuccess = true;
         const user = this.UserEditForm.getRawValue();
@@ -273,41 +295,25 @@ export class UserDetailComponent implements OnInit, OnDestroy {
             });
 
         // Update the contact on the server
-        this._crmUserService.updatePermission(user.id, this.updatedPagePermission).subscribe((res) => {
-            //console.log(res);
-            /* if(res){
-                this._router.navigate(['/users'], { relativeTo: this._activatedRoute });
-            } else {
-                console.log(res);
-            } */
-        });
+        this._crmUserService.updatePermission(user.id, this.updatedPagePermission).subscribe(() => {
+            this.successMessage = 'Update Successfully!';
+            this.toogleUpdateUserDetailMode(true);
+            this._changeDetectorRef.markForCheck();
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
     }
 
     onStrengthChanged(value): void {
         this.passwordStrength = value;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    getUserRoles() {
-        this._crmUserService.getUserRoles()
-            .pipe(
-                finalize(() => {
-                })
-        ).subscribe(
-            (response) => {
-                const roles: any = ((response.data) ? response.data : []);
-                const availableRoles: any = [];
-                // eslint-disable-next-line @typescript-eslint/prefer-for-of
-                for (let i: number = 0; i < roles.length; i++) {
-                    if (roles[i].name === 'CRM APP User' ||
-                    roles[i].name === 'CRM APP Manager' ||
-                    roles[i].name === 'CRM Admin') {
-                        availableRoles.push(roles[i]);
-                    }
-                }
-                this.roles = availableRoles;
-                this.ngOnInit();
-            }
-        );
     }
 }

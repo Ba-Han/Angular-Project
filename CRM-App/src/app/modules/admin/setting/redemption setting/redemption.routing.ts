@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 import { RedemptionComponent } from 'app/modules/admin/setting/redemption setting/redemption.component';
-import { RedemptionsResolver } from 'app/modules/admin/setting/redemption setting/redemption.resolvers';
-import { RedemptionDetailComponent } from './detail/redemption.component';
+import { RedemptionsResolver, MemberTierResolver } from 'app/modules/admin/setting/redemption setting/redemption.resolvers';
+import { RedemptionDetailComponent } from 'app/modules/admin/setting/redemption setting/detail/redemption.component';
 
 export const ecommerceRoutes: Route[] = [
     {
@@ -13,6 +13,7 @@ export const ecommerceRoutes: Route[] = [
                 component: RedemptionDetailComponent,
                 resolve: {
                     tasks: RedemptionsResolver,
+                    memberTier: MemberTierResolver
                 }
 
             }

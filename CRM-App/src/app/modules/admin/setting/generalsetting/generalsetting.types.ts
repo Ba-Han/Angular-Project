@@ -2,7 +2,6 @@ export interface GeneralSetting
 {
     id: number;
     transaction_rounding: string;
-    point_conversion: string;
     member_groups: string;
     //member_groupsName: string;
     user_groups: string;

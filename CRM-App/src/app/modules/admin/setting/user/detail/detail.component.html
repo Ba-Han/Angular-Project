@@ -19,15 +19,12 @@
                     </div>
                 </div>
                 <div class="mt-8">
-                    <fuse-alert [appearance]="'soft'"
-                                [dismissible]="false"
-                                [dismissed]="false"
-                                [name]="'alertBox1'"
-                                [type]="'success'">
-                        <div class="update_scss">
-                            Update Successfully.
-                        </div>
-                    </fuse-alert>
+                    <div *ngIf="successMessage" class="update_scss">
+                        {{successMessage}}
+                    </div>
+                    <div *ngIf="errorMessage" class="errorMessage_scss">
+                        {{errorMessage}}
+                    </div>
                 </div>
             </ng-container>
             <ng-container *ngIf="!isSuccess">
@@ -72,15 +69,12 @@
                     </div>
                 </div>
                 <div class="mt-8">
-                    <fuse-alert [appearance]="'soft'"
-                                [dismissible]="false"
-                                [dismissed]="false"
-                                [name]="'alertBox1'"
-                                [type]="'success'">
-                        <div class="update_scss">
-                            Update Successfully.
-                        </div>
-                    </fuse-alert>
+                    <div *ngIf="successMessage" class="update_scss">
+                        {{successMessage}}
+                    </div>
+                    <div *ngIf="errorMessage" class="errorMessage_scss">
+                        {{errorMessage}}
+                    </div>
                 </div>
             </ng-container>
         </ng-container>

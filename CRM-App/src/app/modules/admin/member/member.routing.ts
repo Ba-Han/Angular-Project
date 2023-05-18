@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { MembersMemberResolver, MemberResolver, MemberTierResolver, TransactionsRecentResolver, MemberPointsRecentResolver, SettingResolver, MemberResolverByTier, MemberDocumentsResolver, MemberDocumentRecentResolver } from 'app/modules/admin/member/member.resolvers';
+import { MembersMemberResolver, MemberResolver, MemberTierResolver, TransactionsRecentResolver, MemberPointsRecentResolver, MemberResolverByTier, MemberDocumentsResolver, MemberDocumentRecentResolver } from 'app/modules/admin/member/member.resolvers';
 import { MemberComponent } from 'app/modules/admin/member/member.component';
 import { MemberListComponent } from './list/list.component';
 import { MemberDetailComponent } from './detail/detail.component';
@@ -48,7 +48,6 @@ export const memberRoutes: Route[] = [
                 resolve: {
                     task: MemberPointResolver,
                     pointsegment: PointSegmentResolver,
-                    setting: SettingResolver,
                 }
             },
             {

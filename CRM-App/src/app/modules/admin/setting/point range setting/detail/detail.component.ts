@@ -119,6 +119,7 @@ export class PointRangeDetailComponent implements OnInit, OnDestroy {
             end_day_type: ['', [Validators.required]],
             end_day_value: ['', [Validators.required]]
         });
+
         this._pointRangeService.pointranges$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((pointrange: PointRange) => {
@@ -194,14 +195,20 @@ export class PointRangeDetailComponent implements OnInit, OnDestroy {
     }
 
     updatePointRange(): void {
-        this.isUpdateSuccess = true;
         const pointrange = this.PointRangeEditForm.getRawValue();
-        this._pointRangeService.updatePointRange(pointrange.id, pointrange).pipe(
-            map(() => {
-                this.isLoading = false;
-                //this.isSuccess = true;
-            })
-        ).subscribe();
-        this.isSuccess = true;
+        this._pointRangeService.updatePointRange(pointrange.id, pointrange).subscribe(() => {
+            window.location.reload();
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
     }
 }
