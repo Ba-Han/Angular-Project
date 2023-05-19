@@ -861,7 +861,7 @@
                 </div>
             </ng-container>
         
-            <!-- Edit mode -->
+            <!-- Edit mode (click)="toggleEditMode(false)" -->
             <ng-container *ngIf="editMode">
                 <!-- Header -->
                 <div class="relative w-full h-20 sm:h-20 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700" style="position: sticky !important;top: 0;z-index: 99;">
@@ -870,7 +870,7 @@
                         <div class="mt-3 text-4xl w-full font-bold truncate">Edit Member Information</div>
                         <button mat-icon-button style="background: #ccc;"
                                 [matTooltip]="'Close'"
-                                (click)="toggleEditMode(false)">
+                                [routerLink]="['../']">
                             <mat-icon class="text-white"
                                       [svgIcon]="'heroicons_outline:x'"></mat-icon>
                         </button>
@@ -1180,7 +1180,7 @@
     
                             </ng-container>
 
-                            <ng-template #noMemberDocuments>
+                            <ng-template #nomemberDocuments>
                                 <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no member documents!</div>
                             </ng-template>
                         </div>

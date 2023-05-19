@@ -278,6 +278,20 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
         ).subscribe();
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    firstSaveDataToTable() {
+        this._redemptionService.getRedemptions().pipe(
+            switchMap(() => {
+                this.isLoading = true;
+                // eslint-disable-next-line max-len
+                return this._redemptionService.getRedemptions();
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        ).subscribe();
+    }
+
     proceedPopup(): void {
         this._redemptionService.getDeleteRedemptionSetting(this.selectedId)
         .subscribe(() => {
@@ -352,7 +366,7 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
             this.updateSuccess = '';
             this.errorMessage = '';
             this.cancelRedemption();
-            this.onPageChange();
+            this.firstSaveDataToTable();
             this._changeDetectorRef.markForCheck();
         },
             (response) => {
