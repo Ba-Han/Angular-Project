@@ -10,19 +10,21 @@
             <ng-container *ngIf="isSuccess">
                 <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
                     <div>
-                        <!-- <button
-                                *ngIf="errorMessage"      
+                        <button   
                                 mat-icon-button style="background-color:#ccc; position: fixed; right: 1rem;"
                                 [matTooltip]="'Close'"
                                 (click)="cancelPopup()">
                             <mat-icon class="text-white"
                                         [svgIcon]="'heroicons_outline:x'"></mat-icon>
-                        </button> -->
+                        </button>
                     </div>
                 </div>
                 <div class="mt-8">
                     <div class="successMessage_scss" *ngIf="successMessage">
                         {{ successMessage }} 
+                    </div>
+                    <div class="errorMessage_scss" *ngIf="deleteErrorMessage">
+                        {{ deleteErrorMessage }} 
                     </div>
                 </div>
             </ng-container>
@@ -233,8 +235,8 @@
                                         <div> Date To </div>
                                         <div> Member Tier </div>
                                         <div style="text-align: center;"> Point Conversion </div>
-                                        <div> </div>
-                                        <div> </div>
+                                        <div style="text-align: center;"> Edit </div>
+                                        <div style="text-align: center;"> Delete </div>
                                     </div>
     
                                     <!-- Rows -->

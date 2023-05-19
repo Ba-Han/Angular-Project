@@ -177,6 +177,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     selectedId: number | null = null;
     successMessage: string | null = null;
     errorMessage: string | null = null;
+    deleteErrorMessage: string | null = null;
     validFileMessage: string | null = null;
     invalidFileMessage: string | null = null;
     memberDocuments: any;
@@ -544,12 +545,12 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                 if (response.status === 200) {
                     // Successful response
                     this.successMessage = 'Deleted Successfully.';
-                    this._router.navigate(['/member'], { relativeTo: this._activatedRoute });
+                    this.onPageChange();
                     this.isSuccess = true;
                     this._changeDetectorRef.markForCheck();
                 } else {
                     // Error response
-                    this.errorMessage = response.error.message;
+                    this.deleteErrorMessage = response.error.message;
                     this.isSuccess = true;
                     this._changeDetectorRef.markForCheck();
                 }
@@ -592,9 +593,8 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         this._httpClient.post(`${this._apiurl}/items/member_document`, formData).subscribe(
             (response: any) => {
                 this.uploadData = response.data;
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
+                this.comment = '';
+                this.onPageChange();
                 this._changeDetectorRef.markForCheck();
             },
             (error) => {
