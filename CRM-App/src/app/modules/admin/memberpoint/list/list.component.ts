@@ -125,7 +125,7 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
     isSuccess: boolean = false;
     selectedId: number | null = null;
     memberPointAddForm: FormGroup;
-    pointsTableColumns: string[] = ['id', 'point_type', 'reward_code', 'point', 'transaction_document_no', 'status', 'date_created', 'pointsInDoller', 'real_amount', 'vat_amount', 'total_amount'];
+    pointsTableColumns: string[] = ['id', 'point_type', 'reward_code', 'point', 'transaction_document_no', 'status', 'date_created', 'real_amount', 'vat_amount', 'total_amount'];
     searchInputControl: FormControl = new FormControl();
     transactionSearchInputControl: FormControl = new FormControl();
     selectedMemberPoint: MemberPoint | null = null;

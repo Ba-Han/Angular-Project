@@ -403,11 +403,6 @@
         
                                     <!-- Document No. -->
                                     <ng-container matColumnDef="transaction_document_no">
-                                        <!-- <th mat-header-cell
-                                            mat-sort-header
-                                            *matHeaderCellDef style="background:#e2e8f0;">
-                                            Document No
-                                        </th> -->
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0;">
                                             Document No
@@ -417,18 +412,11 @@
                                             <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
                                                 {{point.transaction_document_no}}
                                             </span>
-        
                                         </td>
-        
                                     </ng-container>
                                      
                                     <!-- Type -->
                                     <ng-container matColumnDef="point_type">
-                                        <!-- <th mat-header-cell
-                                            mat-sort-header
-                                            *matHeaderCellDef style="background:#e2e8f0;">
-                                            Point Type
-                                        </th> -->
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0;">
                                             Point Type
@@ -443,11 +431,6 @@
         
                                     <!-- Point -->
                                     <ng-container matColumnDef="point">
-                                        <!-- <th mat-header-cell
-                                            mat-sort-header
-                                            *matHeaderCellDef style="background:#e2e8f0;">
-                                            Points
-                                        </th> -->
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0;">
                                             Points
@@ -461,12 +444,7 @@
                                     </ng-container>
         
                                     <!-- Dollar Value -->
-                                    <ng-container matColumnDef="pointsInDoller">
-                                        <!-- <th mat-header-cell
-                                            mat-sort-header
-                                            *matHeaderCellDef style="background:#e2e8f0;">
-                                            $ Value
-                                        </th> -->
+                                    <!-- <ng-container matColumnDef="pointsInDoller">
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0;">
                                             $ Value
@@ -477,7 +455,7 @@
                                                 ${{point.pointsInDollar | number : '1.2-2'}}
                                             </span>
                                         </td>
-                                    </ng-container>
+                                    </ng-container> -->
         
                                     <!-- Footer -->
                                     <ng-container *ngIf="points.length > 0">
@@ -538,11 +516,6 @@
         
                                     <!-- Transaction ID -->
                                     <ng-container matColumnDef="document_no">
-                                        <!-- <th mat-header-cell
-                                            mat-sort-header
-                                            *matHeaderCellDef style="background:#e2e8f0;">
-                                            Order No.
-                                        </th> -->
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0;">
                                             Order No
@@ -568,11 +541,6 @@
         
                                     <!-- Amount -->
                                     <ng-container matColumnDef="total_amount">
-                                        <!-- <th mat-header-cell
-                                            mat-sort-header
-                                            *matHeaderCellDef style="background:#e2e8f0;">
-                                            Amount
-                                        </th> -->
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0;">
                                             Amount
@@ -598,11 +566,6 @@
         
                                     <!-- Name -->
                                     <ng-container matColumnDef="channel_name">
-                                        <!-- <th mat-header-cell
-                                            mat-sort-header
-                                            *matHeaderCellDef style="background:#e2e8f0;">
-                                            Channel
-                                        </th> -->
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0;">
                                             Channel
@@ -642,11 +605,6 @@
         
                                     <!-- Points -->
                                     <ng-container matColumnDef="point">
-                                        <!-- <th mat-header-cell
-                                            mat-sort-header
-                                            *matHeaderCellDef style="background:#e2e8f0;">
-                                            Points
-                                        </th> -->
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0;">
                                             Earned Points
@@ -698,11 +656,6 @@
         
                                     <!-- Point Type -->
                                     <ng-container matColumnDef="point_type">
-                                        <!-- <th mat-header-cell
-                                            mat-sort-header
-                                            *matHeaderCellDef style="background:#e2e8f0;">
-                                            Point Type
-                                        </th> -->
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0;">
                                             Point Type
@@ -727,11 +680,6 @@
         
                                     <!-- Date -->
                                     <ng-container matColumnDef="purchase_date">
-                                        <!-- <th mat-header-cell
-                                            mat-sort-header
-                                            *matHeaderCellDef style="background:#e2e8f0;">
-                                            Date
-                                        </th> -->
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0;">
                                             Date
@@ -756,7 +704,6 @@
                                     </ng-container>
         
                                     <!-- Footer -->
-        
                                     <ng-container *ngIf="transactions.length > 0">
                                         <ng-container matColumnDef="recentTransactionsTableFooter">
                                             <td class="py-6 px-0 border-0"
