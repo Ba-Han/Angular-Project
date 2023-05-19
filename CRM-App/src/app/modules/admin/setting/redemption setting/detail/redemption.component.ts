@@ -122,9 +122,11 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
     isSuccess: boolean = false;
     selectedId: number | null = null;
     editFormData: any;
-    successMessage: string | null = null;
-    errorMessage: string | null = null;
-    deleteErrorMessage: string | null = null;
+    successMessage: string | '' = '';
+    errorMessage: string | '' = '';
+    deleteErrorMessage: string | '' = '';
+    createSuccess: string | '' = '';
+    updateSuccess: string | '' = '';
     redemptions$: Observable<Redemption[]>;
     memberTiers$: Observable<MemberTier[]>;
     pagination: RedemptionPagination;
@@ -132,7 +134,6 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
     redemption: Redemption;
     redem: any;
     typeValue: number;
-    updateSuccess: string | null = null;
     showButtonIsEdit: boolean = false;
     isAscending: boolean = true;
     selectedCoulumn = 'type';
@@ -344,9 +345,12 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
         this.RedemptionEditForm.markAsUntouched();
     }
 
-    updateRedemption(): void {
+    createRedemption(): void {
         const redemption = this.RedemptionEditForm.getRawValue();
-        this._redemptionService.updateRedemption(redemption.id, redemption).subscribe(() => {
+        this._redemptionService.createRedemption(redemption.id, redemption).subscribe(() => {
+            this.createSuccess = 'Create Successfully!';
+            this.updateSuccess = '';
+            this.errorMessage = '';
             this.cancelRedemption();
             this.onPageChange();
             this._changeDetectorRef.markForCheck();
@@ -358,6 +362,34 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
                 } else {
                     // Error response
                     this.errorMessage = response.error.message;
+                    this.createSuccess = '';
+                    this.updateSuccess = '';
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
+    }
+
+    updateRedemption(): void {
+        const redemption = this.RedemptionEditForm.getRawValue();
+        this._redemptionService.updateRedemption(redemption.id, redemption).subscribe(() => {
+            this.updateSuccess = 'Update Successfully!';
+            this.createSuccess = '';
+            this.errorMessage = '';
+            this.cancelRedemption();
+            this.onPageChange();
+            this._changeDetectorRef.markForCheck();
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this.createSuccess = '';
+                    this.updateSuccess = '';
                     this._changeDetectorRef.markForCheck();
                 }
             }

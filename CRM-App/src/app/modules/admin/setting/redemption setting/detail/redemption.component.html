@@ -151,26 +151,32 @@
                         </div>
                         
                         <div class="flex items-center justify-end mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                            <div *ngIf="createSuccess" style="color: green">
+                                {{ createSuccess }} 
+                            </div>
+                            <div *ngIf="updateSuccess" style="color: green">
+                                {{ updateSuccess }} 
+                            </div>
                             <div *ngIf="errorMessage" style="color: red">
                                 {{errorMessage}}
                             </div>
-                            <div *ngIf="showButtonIsEdit">
+                            <div *ngIf="showButtonIsEdit" style="display: flex;">
                                 <button class="ml-2" style="width: 6rem;"
-                                    mat-flat-button
-                                    [disabled]="RedemptionEditForm.invalid"
-                                    [color]="'primary'"
-                                    [matTooltip]="'Cancel'"
-                                    (click)="cancelRedemption()">
-                                    Cancel
-                                </button>
-                                <button class="ml-2" style="width: 6rem;"
-                                    mat-flat-button
-                                    [disabled]="RedemptionEditForm.invalid"
-                                    [color]="'primary'"
-                                    [matTooltip]="'Update'"
-                                    (click)="updateRedemption()">
-                                    Update
-                                </button>
+                                        mat-flat-button
+                                        [disabled]="RedemptionEditForm.invalid"
+                                        [color]="'primary'"
+                                        [matTooltip]="'Cancel'"
+                                        (click)="cancelRedemption()">
+                                        Cancel
+                                    </button>
+                                    <button class="ml-2" style="width: 6rem;"
+                                        mat-flat-button
+                                        [disabled]="RedemptionEditForm.invalid"
+                                        [color]="'primary'"
+                                        [matTooltip]="'Update'"
+                                        (click)="updateRedemption()">
+                                        Update
+                                    </button>
                             </div>
                             <div *ngIf="!showButtonIsEdit && canEdit">
                                 <button class="ml-2" style="width: 6rem;"
@@ -178,7 +184,7 @@
                                     [disabled]="RedemptionEditForm.invalid"
                                     [color]="'primary'"
                                     [matTooltip]="'Save'"
-                                    (click)="updateRedemption()">
+                                    (click)="createRedemption()">
                                     Save
                                 </button>
                             </div>
@@ -270,12 +276,6 @@
                                                             All
                                                         </div>
                                                     </ng-container>
-
-                                                    <!-- <ng-container *ngIf="redem.member_tier">
-                                                        <div class="truncate" style="text-align: center;">
-                                                            {{redem.member_tier?.name}}
-                                                        </div>
-                                                    </ng-container> -->
 
                                                     <ng-container *ngIf="redem.member_tier === 35">
                                                         <div class="truncate" style="text-align: center;">
