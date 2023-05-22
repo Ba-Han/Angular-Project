@@ -102,6 +102,23 @@ export class RedemptionService {
         );
     }
 
+    createRedemption(id: number, redemption: Redemption): Observable<Redemption> {
+        const redemptionId = !redemption.id ? 0 : redemption.id;
+        const dateFrom = !redemption.date_from ? null : redemption.date_from;
+        const dateTo = !redemption.date_to ? null : redemption.date_to;
+
+        return this._httpClient.patch<any>(`${this._apiurl}/items/redemption_settings`, {
+            'id': redemptionId,
+            'type': redemption.type,
+            'date_from': dateFrom,
+            'date_to': dateTo,
+            'member_tier': redemption.member_tier,
+            'point_conversion': redemption.point_conversion
+        }).pipe(
+            map(updateRedemption => updateRedemption)
+        );
+    }
+
     updateRedemption(id: number, redemption: Redemption): Observable<Redemption> {
         const redemptionId = !redemption.id ? 0 : redemption.id;
         const dateFrom = !redemption.date_from ? null : redemption.date_from;

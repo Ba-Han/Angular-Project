@@ -177,6 +177,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     selectedId: number | null = null;
     successMessage: string | null = null;
     errorMessage: string | null = null;
+    deleteErrorMessage: string | null = null;
     validFileMessage: string | null = null;
     invalidFileMessage: string | null = null;
     memberDocuments: any;
@@ -196,7 +197,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     recentTransactionsDataSource: MatTableDataSource<any> = new MatTableDataSource();
     recentTransactionsTableColumns: string[] = ['document_no', 'total_amount', 'channel_name', 'point', 'point_type', 'purchase_date'];
     recentPointsDataSource: MatTableDataSource<any> = new MatTableDataSource();
-    recentPointsTableColumns: string[] = ['transaction_document_no', 'point_type', 'point', 'pointsInDoller'];
+    recentPointsTableColumns: string[] = ['transaction_document_no', 'point_type', 'point'];
     memberDocumentsDataSource: MatTableDataSource<any> = new MatTableDataSource();
     memberDocumentsTableColumns: string[] = ['document_name', 'uploaded_on', 'comment', 'file_path', 'uploaded_by_name'];
     searchInputControl: FormControl = new FormControl();
@@ -488,6 +489,20 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    fistUploadFileToTable() {
+        this._memberService.getMemberDocuments().pipe(
+            switchMap(() => {
+                this.isLoading = true;
+                // eslint-disable-next-line max-len
+                return this._memberService.getMemberDocuments();
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        ).subscribe();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingColumnList() {
         if ( this.selectedCoulumn === 'documentname') {
             this.ngAfterViewInit();
@@ -544,12 +559,12 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                 if (response.status === 200) {
                     // Successful response
                     this.successMessage = 'Deleted Successfully.';
-                    this._router.navigate(['/member'], { relativeTo: this._activatedRoute });
+                    this.onPageChange();
                     this.isSuccess = true;
                     this._changeDetectorRef.markForCheck();
                 } else {
                     // Error response
-                    this.errorMessage = response.error.message;
+                    this.deleteErrorMessage = response.error.message;
                     this.isSuccess = true;
                     this._changeDetectorRef.markForCheck();
                 }
@@ -578,6 +593,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
 
     clearFileToUpload(): void {
         this.fileInput.nativeElement.value = '';
+        this.uploadData = '';
         this.fileToUpload = null;
         this._changeDetectorRef.markForCheck();
     }
@@ -592,9 +608,8 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         this._httpClient.post(`${this._apiurl}/items/member_document`, formData).subscribe(
             (response: any) => {
                 this.uploadData = response.data;
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
+                this.fistUploadFileToTable();
+                this.comment = '';
                 this._changeDetectorRef.markForCheck();
             },
             (error) => {

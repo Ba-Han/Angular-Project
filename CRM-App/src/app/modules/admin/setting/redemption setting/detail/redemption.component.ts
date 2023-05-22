@@ -114,7 +114,6 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
 
     isLoading: boolean = false;
     RedemptionEditForm: FormGroup;
-    RedemptionSettingEditMode: boolean = false;
     searchInputControl: FormControl = new FormControl();
     editMode: boolean = false;
     canEdit: boolean = false;
@@ -123,8 +122,11 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
     isSuccess: boolean = false;
     selectedId: number | null = null;
     editFormData: any;
-    successMessage: string | null = null;
-    errorMessage: string | null = null;
+    successMessage: string | '' = '';
+    errorMessage: string | '' = '';
+    deleteErrorMessage: string | '' = '';
+    createSuccess: string | '' = '';
+    updateSuccess: string | '' = '';
     redemptions$: Observable<Redemption[]>;
     memberTiers$: Observable<MemberTier[]>;
     pagination: RedemptionPagination;
@@ -132,10 +134,10 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
     redemption: Redemption;
     redem: any;
     typeValue: number;
-    updateSuccess: string | null = null;
     showButtonIsEdit: boolean = false;
     isAscending: boolean = true;
     selectedCoulumn = 'type';
+    pageIndex: number = 0;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -262,6 +264,34 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
         this._changeDetectorRef.markForCheck();
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    onPageChange() {
+        this._redemptionService.getRedemptions(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+            switchMap(() => {
+                this.isLoading = true;
+                // eslint-disable-next-line max-len
+                return this._redemptionService.getRedemptions(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        ).subscribe();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    firstSaveDataToTable() {
+        this._redemptionService.getRedemptions().pipe(
+            switchMap(() => {
+                this.isLoading = true;
+                // eslint-disable-next-line max-len
+                return this._redemptionService.getRedemptions();
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        ).subscribe();
+    }
+
     proceedPopup(): void {
         this._redemptionService.getDeleteRedemptionSetting(this.selectedId)
         .subscribe(() => {
@@ -270,14 +300,12 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
                 if (response.status === 200) {
                     // Successful response
                     this.successMessage = 'Deleted Successfully.';
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
+                    this.onPageChange();
                     this.isSuccess = true;
                     this._changeDetectorRef.markForCheck();
                 } else {
                     // Error response
-                    this.errorMessage = response.error.message;
+                    this.deleteErrorMessage = response.error.message;
                     this.isSuccess = true;
                     this._changeDetectorRef.markForCheck();
                 }
@@ -331,10 +359,15 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
         this.RedemptionEditForm.markAsUntouched();
     }
 
-    updateRedemption(): void {
+    createRedemption(): void {
         const redemption = this.RedemptionEditForm.getRawValue();
-        this._redemptionService.updateRedemption(redemption.id, redemption).subscribe(() => {
-            window.location.reload();
+        this._redemptionService.createRedemption(redemption.id, redemption).subscribe(() => {
+            this.createSuccess = 'Create Successfully!';
+            this.updateSuccess = '';
+            this.errorMessage = '';
+            this.cancelRedemption();
+            this.firstSaveDataToTable();
+            this._changeDetectorRef.markForCheck();
         },
             (response) => {
                 if (response.status === 200) {
@@ -343,6 +376,34 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
                 } else {
                     // Error response
                     this.errorMessage = response.error.message;
+                    this.createSuccess = '';
+                    this.updateSuccess = '';
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
+        this._changeDetectorRef.markForCheck();
+    }
+
+    updateRedemption(): void {
+        const redemption = this.RedemptionEditForm.getRawValue();
+        this._redemptionService.updateRedemption(redemption.id, redemption).subscribe(() => {
+            this.updateSuccess = 'Update Successfully!';
+            this.createSuccess = '';
+            this.errorMessage = '';
+            this.cancelRedemption();
+            this.onPageChange();
+            this._changeDetectorRef.markForCheck();
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this.createSuccess = '';
+                    this.updateSuccess = '';
                     this._changeDetectorRef.markForCheck();
                 }
             }

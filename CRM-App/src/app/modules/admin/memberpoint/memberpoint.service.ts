@@ -141,7 +141,7 @@ export class MemberPointService
                 meta: 'filter_count',
                 page: page + 1,
                 limit: limit,
-                sort: "name",
+                sort: 'name',
                 order,
                 search
             }
@@ -216,7 +216,6 @@ export class MemberPointService
                 'comment': memberPoint.comment,
             }).pipe(
                 map((newMemberPoint) => {
-                    //newMemberPoint.data.pointsInDoller = Math.round(newMemberPoint.data.point / pointconversion);
                     // Update the contacts with the new contact
                     this._memberPoints.next([newMemberPoint.data, ...memberPoints]);
 
