@@ -130,13 +130,14 @@
         
                                 </ng-container>
                             </ng-container>
+
+                            <ng-template #noProducts>
+                                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no redemption exclusion!</div>
+                            </ng-template>
                         </div>
-        
                     </div>
-        
                 </div>
             </ng-container>
-        
         
             <ng-continer *ngIf="AddMode">
                 <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
