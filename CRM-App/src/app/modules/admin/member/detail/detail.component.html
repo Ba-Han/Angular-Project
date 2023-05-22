@@ -116,10 +116,10 @@
                             <!-- Name -->
                             <div class="text-4xl font-bold" style="word-break: break-word;white-space: normal;">
                                 {{member.member[0].first_name}} {{member.member[0].last_name}}
-                                <ng-container *ngIf="member.member[0].gender === 'Male'">
+                                <ng-container *ngIf="member.member[0].gender.toLowerCase() === 'male'">
                                     <mat-icon svgIcon="mat_outline:male"></mat-icon>
                                 </ng-container>
-                                <ng-container *ngIf="member.member[0].gender === 'Female'">
+                                <ng-container *ngIf="member.member[0].gender.toLowerCase() === 'female'">
                                     <mat-icon svgIcon="mat_outline:female"></mat-icon>
                                 </ng-container>
                             </div>
