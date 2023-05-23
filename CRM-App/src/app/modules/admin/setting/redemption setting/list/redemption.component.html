@@ -1,0 +1,281 @@
+<mat-drawer-container class="flex flex-col w-full">
+    <mat-drawer class="w-2/4 dark:bg-gray-900"
+                [mode]="'over'"
+                [opened]="false"
+                [position]="'end'"
+                [disableClose]="true"
+                #matDrawer>
+    </mat-drawer>
+
+    <mat-drawer-content>
+        <!-- Redemption Setting List-->
+        <ng-container *ngIf="!AddMode">
+            <div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+                <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+                    <div class="absolute inset-x-0 bottom-0"
+                         *ngIf="isLoading">
+                        <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+                    </div>
+                  
+                    <div class="text-4xl font-extrabold tracking-tight">Redemption Setting</div>
+                    
+                    <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+                        <!-- Search -->
+                        <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
+                            <mat-icon class="icon-size-5"
+                                matPrefix
+                                [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                            <input matInput
+                                   [formControl]="searchInputControl"
+                                   [autocomplete]="'off'"
+                                   [placeholder]="'Search Redemption Setting'">
+                        </mat-form-field>
+
+                        <!--sorting dropdown-->
+                        <mat-form-field class="ml-4 fuse-mat-no-subscript" style="position: static; width: 11rem !important;">
+                            <mat-select [(ngModel)]="selectedCoulumn" (selectionChange)="sortingColumnList()">
+                                <mat-option value="type">Type</mat-option>
+                                <mat-option value="pointconversion">Point Conversion</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <!--sorting button-->
+                        <button class="ml-2 sort-btn-01"
+                            (click)="sortingPageList()"
+                            [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
+                            mat-flat-button
+                            [color]="'primary'">
+                        </button>
+
+                        <button class="ml-4"
+                                mat-flat-button
+                                [color]="'primary'"
+                                (click)="toogleRedemptionSettingAddFormMode(true)">
+                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                            <span class="ml-2 mr-1">Add</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main -->
+                <div class="flex flex-auto overflow-hidden">
+
+                    <!-- Redemption List -->
+                    <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+                        <ng-container *ngIf="(redemptions$ | async) as redemptions">
+                            <ng-container *ngIf="redemptions.length > 0; else noredemptions">
+                                <div class="grid">
+                                    <!-- Header -->
+                                    <div class="redemptionsetting-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                         matSort
+                                         matSortDisableClear>
+    
+                                        <div> Type </div>
+                                        <div> Date From </div>
+                                        <div> Date To </div>
+                                        <div> Member Tier </div>
+                                        <div style="text-align: center;"> Point Conversion </div>
+                                    </div>
+    
+                                    <!-- Rows -->
+                                    <ng-container *ngIf="(redemptions$ | async) as redemptions">
+                                        <ng-container *ngFor="let redem of redemptions; trackBy: trackByFn">
+                                            <a class=" cursor-pointer hover:bg-gray-100 dark:hover:bg-hover"
+                                                [routerLink]="canEdit ? ['./', redem.id] : null">
+
+                                                <div class="redemptionsetting-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                                                    <ng-container *ngIf="redem.type === 0">
+                                                        <div class="truncate">
+                                                            Base
+                                                        </div>
+                                                    </ng-container>
+        
+                                                    <ng-container *ngIf="redem.type === 1">
+                                                        <div class="truncate">
+                                                            Special
+                                                        </div>
+                                                    </ng-container>
+        
+                                                    <!-- <div class="truncate">
+                                                        {{redem.date_from | date:'MMM dd, y, HH:mm a'}}
+                                                    </div>
+        
+                                                    <div class="truncate">
+                                                        {{redem.date_to | date:'MMM dd, y, HH:mm a'}}
+                                                    </div> -->
+
+                                                    <div class="truncate">
+                                                        {{redem.date_from | date:'MMM dd, y'}}
+                                                    </div>
+        
+                                                    <div class="truncate">
+                                                        {{redem.date_to | date:'MMM dd, y'}}
+                                                    </div>
+
+                                                    <ng-container *ngIf="redem.member_tier === 0">
+                                                        <div class="truncate">
+                                                            All
+                                                        </div>
+                                                    </ng-container>
+
+                                                    <ng-container *ngIf="redem.member_tier === 35">
+                                                        <div class="truncate">
+                                                            Be Informed
+                                                        </div>
+                                                    </ng-container>
+
+                                                    <ng-container *ngIf="redem.member_tier === 27">
+                                                        <div class="truncate">
+                                                            Be Rewarded
+                                                        </div>
+                                                    </ng-container>
+
+                                                    <ng-container *ngIf="redem.member_tier === 28">
+                                                        <div class="truncate">
+                                                            Be Wowed
+                                                        </div>
+                                                    </ng-container>
+        
+                                                    <div class="truncate" style="text-align: center;">
+                                                        {{redem.point_conversion}}
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </ng-container>
+                                    </ng-container>
+                                </div>
+    
+                                <mat-paginator class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                                        [ngClass]="{'pointer-events-none': isLoading}"
+                                        [length]="pagination.length"
+                                        [pageIndex]="pagination.page"
+                                        [pageSize]="pagination.limit"
+                                        [pageSizeOptions]="[5, 10, 25, 50]"
+                                        [showFirstLastButtons]="true"></mat-paginator>
+    
+                            </ng-container>
+                        </ng-container>
+
+                        <ng-template #noredemptions>
+                            <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no redemption setting!</div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- Add Form-->
+        <ng-container *ngIf="AddMode">
+            <div class="flex flex-col w-full">
+                <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
+                    <div class="mt-3 text-4xl w-full font-bold truncate">Add Redemption Setting</div>
+                    <button mat-icon-button
+                            [matTooltip]="'Close'"
+                            (click)="toogleRedemptionSettingAddFormMode(false)" style="background:#ccc;">
+                        <mat-icon class="text-white"
+                                  [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+
+                <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12" style="background:#FFF;">
+                    <div class="w-full max-w-3xl">
+                        <form [formGroup]="RedemptionSettingAddForm">
+                            <div class="mt-8 hidden">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>id</mat-label>
+                                    <mat-icon matPrefix
+                                            class="hidden sm:flex icon-size-5"
+                                            [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                    <input matInput
+                                        [formControlName]="'id'"
+                                        [placeholder]="'id'">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Type</mat-label>
+                                    <mat-select [formControlName]="'type'" [(ngModel)]="typeValue">
+                                        <mat-option [value]="0">Base</mat-option>
+                                        <mat-option [value]="1">Special</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <ng-container *ngIf="typeValue === 1">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
+                                        <mat-label>Date From</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                        <input matInput type="datetime-local"
+                                            [min]="minDate"
+                                            [formControlName]="'date_from'"
+                                            [placeholder]="'Date From'">
+                                        <!-- <mat-datepicker-toggle matSuffix
+                                                            [for]="startDatepicker">
+                                        </mat-datepicker-toggle> -->
+                                        <mat-datepicker #startDatepicker></mat-datepicker>
+                                    </mat-form-field>
+        
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/3">
+                                        <mat-label>Date To</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                        <input matInput type="datetime-local"
+                                            [min]="minDate"
+                                            [formControlName]="'date_to'"
+                                            [placeholder]="'Date To'">
+                                        <!-- <mat-datepicker-toggle matSuffix
+                                                            [for]="endDatepicker">
+                                        </mat-datepicker-toggle> -->
+                                        <mat-datepicker #endDatepicker></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
+                            
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Tier</mat-label>
+                                    <mat-select [formControlName]="'member_tier'">
+                                        <mat-option [value]="0">All</mat-option>
+                                        <ng-container *ngFor="let tier of memberTiers">
+                                            <mat-option [value]="tier.id">
+                                                {{ tier.name }}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Redemption Conversion Point 1$ =</mat-label>
+                                    <input matInput type="number"
+                                        [formControlName]="'point_conversion'"
+                                        [placeholder]="'Point Conversion'">
+                                </mat-form-field>
+                            </div>
+                            
+                            <div class="flex items-center justify-end mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                                <div *ngIf="errorMessage" style="color: red">
+                                    {{errorMessage}}
+                                </div>
+                                
+                                <button class="ml-2" style="width: 6rem;"
+                                    mat-flat-button
+                                    [disabled]="RedemptionSettingAddForm.invalid"
+                                    [color]="'primary'"
+                                    [matTooltip]="'Save'"
+                                    (click)="createRedemption()">
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </mat-drawer-content>
+</mat-drawer-container>

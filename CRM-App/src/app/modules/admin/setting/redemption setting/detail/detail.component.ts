@@ -1,22 +1,39 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { ActivatedRoute, Router } from '@angular/router';
+/* eslint-disable @typescript-eslint/naming-convention */
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDrawer } from '@angular/material/sidenav';
+import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, map, merge, Observable, Subject, switchMap, takeUntil } from 'rxjs';
-import { PointRange, PointRangePagination } from 'app/modules/admin/setting/point range setting/pointrange.types';
-import { PointRangeService } from 'app/modules/admin/setting/point range setting/pointrange.service';
+import { fuseAnimations } from '@fuse/animations';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
+import { Redemption, RedemptionPagination,  MemberTier} from 'app/modules/admin/setting/redemption setting/redemption.types';
+import { RedemptionService } from 'app/modules/admin/setting/redemption setting/redemption.service';
 import { UserService } from 'app/core/user/user.service';
 
 @Component({
-    selector: 'point range setting-detail',
+    selector: 'redemption setting-detail',
     templateUrl: './detail.component.html',
     styles: [
+        /* language=SCSS */
         `
-           .custom-layout {
-               background-color:#FFF;
+            .redemptionsetting-grid {
+                grid-template-columns: 150px 150px 150px 150px 150px;
+
+                @screen sm {
+                    grid-template-columns: 150px 150px 150px 150px 150px;
+                }
+
+                @screen md {
+                    grid-template-columns: 150px 150px 150px 150px 150px;
+                }
+
+                @screen lg {
+                    grid-template-columns: 150px 150px 150px 150px 150px;
+                }
             }
 
             .reset_popup {
@@ -70,38 +87,49 @@ import { UserService } from 'app/core/user/user.service';
                 position: fixed;
                 padding-left: 2rem;
             }
+
         `
-    ]
+    ],
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: fuseAnimations
 })
-export class PointRangeDetailComponent implements OnInit, OnDestroy {
+export class RedemptionSettingDetailComponent implements OnInit, OnDestroy {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+    @ViewChild('drawerOne', { static: true }) drawerOne: MatDrawer;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('drawerTwo', { static: true }) drawerTwo: MatDrawer;
 
-    pointrange: PointRange;
+    drawerMode: 'side' | 'over';
     isLoading: boolean = false;
-    PointRangeEditForm: FormGroup;
+    redemption: Redemption;
     editMode: boolean = false;
-    canEdit: boolean = false;
+    RedemptionSettingEditForm: FormGroup;
     canDelete: boolean = false;
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
     selectedId: number | null = null;
     successMessage: string | null = null;
     errorMessage: string | null = null;
-    pointranges$: Observable<PointRange>;
-    startTypeValue: number;
-    startDayTypeValue: number = 0;
-    isUpdateSuccess: boolean = false;
+    popupErrorMessage: string | null = null;
+    minDate: string;
+    typeValue: number;
+    memberTiers: any;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
+    /**
+     * Constructor
+     */
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
-        private _pointRangeService: PointRangeService,
+        private _fuseConfirmationService: FuseConfirmationService,
         private _formBuilder: FormBuilder,
-        private _router: Router,
+        private _redemptionService: RedemptionService,
+        private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _activatedRoute: ActivatedRoute,
+        private _router: Router,
         private _userService: UserService
     ) {
     }
@@ -110,28 +138,37 @@ export class PointRangeDetailComponent implements OnInit, OnDestroy {
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
 
+    /**
+     * On init
+     */
     ngOnInit(): void {
-        this.PointRangeEditForm = this._formBuilder.group({
+        //Member Tier Edit Form
+        this.RedemptionSettingEditForm = this._formBuilder.group({
             id: [''],
-            start_type: ['', [Validators.required]],
-            start_day_type: [''],
-            end_type: ['', [Validators.required]],
-            end_day_type: ['', [Validators.required]],
-            end_day_value: ['', [Validators.required]]
+            type: ['', [Validators.required]],
+            date_from: [''],
+            date_to: [''],
+            member_tier: ['', [Validators.required]],
+            point_conversion: ['', [Validators.required]]
         });
 
-        this._pointRangeService.pointranges$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((pointrange: PointRange) => {
-                this.pointrange = pointrange;
-                this.startTypeValue = pointrange.start_type;
-                this.startDayTypeValue = pointrange.start_day_type;
-                this.PointRangeEditForm.patchValue(pointrange);
-                this._changeDetectorRef.markForCheck();
-            });
+        this._redemptionService.redemption$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((redemption: Redemption) => {
+            this.redemption = redemption;
+            this.typeValue = redemption.type;
+            this.RedemptionSettingEditForm.patchValue(redemption);
+            this._changeDetectorRef.markForCheck();
+        });
 
-        this.canEdit = this._userService.getEditUserPermissionByNavId('pointrangesetting');
-        this.canDelete = this._userService.getDeleteUserPermissionByNavId('pointrangesetting');
+        //Member Tiers Groups
+        this._redemptionService.memberTiers$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((tier) => {
+            this.memberTiers = tier;
+        });
+
+        this.canDelete = this._userService.getDeleteUserPermissionByNavId('redemptionsetting');
     }
 
     ngOnDestroy(): void {
@@ -142,6 +179,17 @@ export class PointRangeDetailComponent implements OnInit, OnDestroy {
 
     trackByFn(index: number, item: any): any {
         return item.id || index;
+    }
+
+    toggleEditMode(editMode: boolean | null = null): void {
+        if (editMode === null) {
+            this.editMode = !this.editMode;
+        }
+        else {
+            this.editMode = editMode;
+        }
+        // Mark for check
+        this._changeDetectorRef.markForCheck();
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -158,26 +206,24 @@ export class PointRangeDetailComponent implements OnInit, OnDestroy {
     cancelPopup(): void {
         this.isSuccess = false;
         this.toogleDeleteMode(false);
-        this.matDrawer.close();
+        this.drawerOne.close();
         this._changeDetectorRef.markForCheck();
     }
 
     proceedPopup(): void {
-        this._pointRangeService.getDeletePointRange(this.selectedId)
+        this._redemptionService.getDeleteRedemptionSetting(this.selectedId)
         .subscribe(() => {
             },
             (response) => {
                 if (response.status === 200) {
                     // Successful response
                     this.successMessage = 'Deleted Successfully.';
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
+                    this._router.navigate(['/redemptionsetting'], { relativeTo: this._activatedRoute });
                     this.isSuccess = true;
                     this._changeDetectorRef.markForCheck();
                 } else {
                     // Error response
-                    this.errorMessage = response.error.message;
+                    this.popupErrorMessage = response.error.message;
                     this.isSuccess = true;
                     this._changeDetectorRef.markForCheck();
                 }
@@ -190,14 +236,15 @@ export class PointRangeDetailComponent implements OnInit, OnDestroy {
     DeleteDrawer(id: number): void {
         this.selectedId = id;
         this.toogleDeleteMode(true);
-        this.matDrawer.open();
+        this.drawerOne.open();
         this._changeDetectorRef.markForCheck();
     }
 
-    updatePointRange(): void {
-        const pointrange = this.PointRangeEditForm.getRawValue();
-        this._pointRangeService.updatePointRange(pointrange.id, pointrange).subscribe(() => {
-            window.location.reload();
+    updateRedemption(): void {
+        const redemption = this.RedemptionSettingEditForm.getRawValue();
+        this._redemptionService.updateRedemption(redemption.id, redemption).subscribe(() => {
+            this._router.navigate(['/redemptionsetting'], { relativeTo: this._activatedRoute });
+            this._changeDetectorRef.markForCheck();
         },
             (response) => {
                 if (response.status === 200) {
@@ -210,5 +257,6 @@ export class PointRangeDetailComponent implements OnInit, OnDestroy {
                 }
             }
         );
+        this._changeDetectorRef.markForCheck();
     }
 }

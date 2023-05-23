@@ -100,14 +100,13 @@
                                 <!--<div class="flex sm:items-center">
                                     <div class="w-full text-3xl font-bold">Basic Information </div>
                                 </div>-->
-        
-        
-                                <ng-container *ngIf="store.code">
+
+                                <!-- <ng-container *ngIf="store.code">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Store Code: </div>
                                         <div class="ml-6 leading-6">{{store.code}}</div>
                                     </div>
-                                </ng-container>
+                                </ng-container> -->
 
                                 <ng-container *ngIf="store.name">
                                     <div class="flex sm:items-center">
@@ -116,10 +115,10 @@
                                     </div>
                                 </ng-container>
 
-                                <ng-container *ngIf="store.channel_code">
+                                <ng-container *ngIf="store.channel.name">
                                     <div class="flex sm:items-center">
-                                        <div class="w-1/4">Channel Code: </div>
-                                        <div class="ml-6 leading-6">{{store.channel_code}}</div>
+                                        <div class="w-1/4">Channel: </div>
+                                        <div class="ml-6 leading-6">{{store.channel.name}}</div>
                                     </div>
                                 </ng-container>
         

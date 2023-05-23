@@ -157,8 +157,6 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
                 })
             )
             .subscribe();
-
-        this.getUserRoles();
         this.canEdit = this._userService.getEditUserPermissionByNavId('loginuser');
     }
 
@@ -317,26 +315,5 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     onStrengthChanged(value): void {
         this.passwordStrength = value;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    getUserRoles() {
-        this._crmUserService
-            .getUserRoles()
-            .pipe(finalize(() => {}))
-            .subscribe((response) => {
-                const roles: any = response.data ? response.data : [];
-                const availableRoles: any = [];
-                // eslint-disable-next-line @typescript-eslint/prefer-for-of
-                for (let i: number = 0; i < roles.length; i++) {
-                    if (
-                        roles[i].name === 'CRM APP User' ||
-                        roles[i].name === 'CRM APP Manager'
-                    ) {
-                        availableRoles.push(roles[i]);
-                    }
-                }
-                this.roles = availableRoles;
-            });
     }
 }

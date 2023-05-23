@@ -222,18 +222,14 @@ export class PointRuleService {
     getPointBasketById(id: number): Observable<PointBasket> {
         return this._httpClient.get(`${this._apiurl}/items/point_basket/${id}`
         ).pipe(
-            tap((response: any) => {
-                return response.data;
-            })
+            tap((response: any) => response.data)
         );
     }
 
     getBasketDetailById(id: number): Observable<PointBasket> {
         return this._httpClient.get(`${this._apiurl}/items/point_basket/${id}`
         ).pipe(
-            tap((response: any) => {
-                return response.data;
-            })
+            tap((response: any) => response.data)
         );
     }
 

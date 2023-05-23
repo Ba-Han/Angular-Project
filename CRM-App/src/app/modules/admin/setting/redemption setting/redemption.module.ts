@@ -29,13 +29,15 @@ import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { SharedModule } from 'app/shared/shared.module';
 import { FuseAlertModule } from '@fuse/components/alert';
 import { RedemptionComponent } from 'app/modules/admin/setting/redemption setting/redemption.component';
-import { RedemptionDetailComponent } from 'app/modules/admin/setting/redemption setting/detail/redemption.component';
+import { RedemptionSettingListComponent } from 'app/modules/admin/setting/redemption setting/list/redemption.component';
+import { RedemptionSettingDetailComponent } from 'app/modules/admin/setting/redemption setting/detail/detail.component';
 import { ecommerceRoutes } from 'app/modules/admin/setting/redemption setting/redemption.routing';
 
 @NgModule({
     declarations: [
         RedemptionComponent,
-        RedemptionDetailComponent
+        RedemptionSettingListComponent,
+        RedemptionSettingDetailComponent
     ],
     imports: [
         RouterModule.forChild(ecommerceRoutes),

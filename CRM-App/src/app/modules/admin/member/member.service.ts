@@ -4,8 +4,6 @@ import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, thr
 import { Member, MemberPagination, Transaction, MemberInfo, MemberTier, MemberDocument, MemberDocumentPagination } from 'app/modules/admin/member/member.types';
 import { MemberPoint} from 'app/modules/admin/member/member.types';
 import { environment } from 'environments/environment';
-import { GeneralSetting } from 'app/modules/admin/setting/generalsetting/generalsetting.types';
-import moment from 'moment';
 
 @Injectable({
     providedIn: 'root'
@@ -28,7 +26,6 @@ export class MemberService
     private _memberDocumentpagination: BehaviorSubject<MemberDocumentPagination | null> = new BehaviorSubject(null);
     private _memberPoint: BehaviorSubject<MemberPoint> = new BehaviorSubject(null);
     private _memberPoints: BehaviorSubject<MemberPoint[]> = new BehaviorSubject(null);
-    private _setting: BehaviorSubject<GeneralSetting | null> = new BehaviorSubject(null);
 
     private _isAddressexit: boolean = true;
 
@@ -83,10 +80,6 @@ export class MemberService
     get memberDocumentpagination$(): Observable<MemberDocumentPagination>
     {
          return this._memberDocumentpagination.asObservable();
-    }
-
-    get setting$(): Observable<GeneralSetting> {
-        return this._setting.asObservable();
     }
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
@@ -242,16 +235,6 @@ export class MemberService
                 this._memberDocuments.next(response.data);
             })
         );
-    }
-
-    getSetting(): Observable<GeneralSetting> {
-        return this._httpClient.get<any>(`${this._apiurl}/items/general_settings`)
-            .pipe(
-                tap((response) => {
-                    const setting = response.data;
-                    this._setting.next(setting);
-                })
-            );
     }
 
     getMemberTiers(): Observable<MemberTier[]>

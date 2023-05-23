@@ -12,7 +12,6 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MemberPointService } from 'app/modules/admin/memberpoint/memberpoint.service';
 import { MemberService } from 'app/modules/admin/member/member.service';
 import { MemberPoint, MemberPointPagination } from 'app/modules/admin/memberpoint/memberpoint.types';
-import { GeneralSetting } from 'app/modules/admin/setting/generalsetting/generalsetting.types';
 import { UserService } from 'app/core/user/user.service';
 
 @Component({
@@ -117,7 +116,6 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
     memberPointsCount: number = 0;
     isLoading: boolean = false;
     pagination: MemberPointPagination;
-    setting: GeneralSetting;
     minDate: string;
     memberId: number;
     pointAddFormMode: boolean = false;
@@ -127,7 +125,7 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
     isSuccess: boolean = false;
     selectedId: number | null = null;
     memberPointAddForm: FormGroup;
-    pointsTableColumns: string[] = ['id', 'point_type', 'reward_code', 'point', 'transaction_document_no', 'status', 'date_created', 'pointsInDoller', 'real_amount', 'vat_amount', 'total_amount'];
+    pointsTableColumns: string[] = ['id', 'point_type', 'reward_code', 'point', 'transaction_document_no', 'status', 'date_created', 'real_amount', 'vat_amount', 'total_amount'];
     searchInputControl: FormControl = new FormControl();
     transactionSearchInputControl: FormControl = new FormControl();
     selectedMemberPoint: MemberPoint | null = null;
@@ -184,12 +182,6 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
                 this.memberPointsCount = memberPoints.length;
                  this._changeDetectorRef.markForCheck();
 
-            });
-        this._memberservice.setting$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((setting: GeneralSetting) => {
-                this.setting = setting;
-                this._changeDetectorRef.markForCheck();
             });
 
         // Get the pagination
@@ -391,7 +383,7 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
     createMemberPoint(): void
     {
         const newmemberPoint = this.memberPointAddForm.getRawValue();
-        this._memberPointService.createMemberPoint(newmemberPoint, Number(this.setting.point_conversion)).subscribe(() => {
+        this._memberPointService.createMemberPoint(newmemberPoint).subscribe(() => {
             this.tooglepointAddFormMode(false);
             this._changeDetectorRef.markForCheck();
         });

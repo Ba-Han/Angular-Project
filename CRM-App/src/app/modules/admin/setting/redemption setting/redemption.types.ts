@@ -1,17 +1,56 @@
 export interface Redemption
 {
     id: number;
-    status: string;
     user_created: string;
-    date_created: string;
     user_updated: string;
+    date_created: string;
     date_updated: string;
-    item_no: string;
-    item_name: string;
-    price: number;
+    type: number;
+    date_from: string;
+    date_to: string;
+    member_tier: number;
+    point_conversion: number;
 }
 
 export interface RedemptionPagination {
+    length: number;
+    limit: number;
+    page: number;
+    lastPage: number;
+    startIndex: number;
+    endIndex: number;
+}
+
+export interface MemberTier
+{
+    id: number;
+    status: string;
+    code: string;
+    name: string;
+    description?: string;
+    level: string;
+    condition_type: number;
+    condition_period: number;
+    condition_period_value: number;
+    min_condition_amount: number;
+    max_condition_amount: number;
+    /* point_rule: []; */
+    min_point: number;
+    max_point: number;
+    downgrade_condition_type: number;
+    downgrade_condition_period: number;
+    downgrade_condition_period_value: number;
+    date_created: string;
+    date_updated: string;
+    /* point_ruleFullname: string, */
+    dw_member_group: number;
+    dw_member_groupName: string;
+    tier_upgrade_items: [];
+    tier_upgrade_Fullname: string;
+}
+
+export interface MemberTierPagination
+{
     length: number;
     limit: number;
     page: number;

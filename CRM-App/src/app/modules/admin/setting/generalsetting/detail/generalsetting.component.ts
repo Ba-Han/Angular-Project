@@ -143,7 +143,6 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
         this.SettingEditForm = this._formBuilder.group({
             id: [''],
             transaction_rounding: ['', [Validators.required]],
-            point_conversion: [''],
             member_groups: [''],
             user_groups: [''],
             default_member_tier: [''],

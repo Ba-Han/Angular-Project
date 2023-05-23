@@ -80,8 +80,7 @@
                                             <div [mat-sort-header]="'name'"> Channel Name </div>
                                             <div [mat-sort-header]="'status'"> Status </div> -->
                                         </div>
-        
-        
+
                                         <!-- Rows -->
                                         <ng-container *ngIf="(channels$ | async) as channels">
                                             <ng-container *ngFor="let channel of channels; trackBy: trackByFn">
@@ -138,13 +137,14 @@
         
                                 </ng-container>
                             </ng-container>
+                            
+                            <ng-template #noChannels>
+                                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no channels!</div>
+                            </ng-template>
                         </div>
-        
                     </div>
-        
                 </div>
             </ng-container>
-        
         
             <ng-continer *ngIf="AddMode">
                 <div class="flex items-center w-full max-w-3xl mx-auto pt-2">

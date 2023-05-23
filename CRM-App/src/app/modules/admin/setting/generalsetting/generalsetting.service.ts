@@ -202,7 +202,6 @@ export class GeneralSettingService {
             return this._httpClient.patch<any>(`${this._apiurl}/items/general_settings`, {
                 'id': setting.id,
                 'transaction_rounding': setting.transaction_rounding,
-                'point_conversion': setting.point_conversion,
                 'member_groups': strMemberGroup,
                 'user_groups': strUserGroup,
                 'default_member_tier': setting.default_member_tier,
