@@ -10,6 +10,7 @@ import { Redemption, RedemptionPagination, MemberTier, MemberTierPagination } fr
 export class RedemptionService {
     // Private
     private _redemptions: BehaviorSubject<Redemption[] | null> = new BehaviorSubject(null);
+    private _redemption: BehaviorSubject<Redemption | null> = new BehaviorSubject(null);
     private _memberTiers: BehaviorSubject<MemberTier[] | null> = new BehaviorSubject(null);
     private _memberTierpagination: BehaviorSubject<MemberTierPagination | null> = new BehaviorSubject(null);
     private _pagination: BehaviorSubject<RedemptionPagination | null> = new BehaviorSubject(null);
@@ -24,6 +25,9 @@ export class RedemptionService {
     }
     get redemptions$(): Observable<Redemption[]> {
         return this._redemptions.asObservable();
+    }
+    get redemption$(): Observable<Redemption> {
+        return this._redemption.asObservable();
     }
     get memberTiers$(): Observable<MemberTier[]> {
         return this._memberTiers.asObservable();
@@ -69,6 +73,13 @@ export class RedemptionService {
         );
     }
 
+    getRedemptionSettingById(id: number): Observable<Redemption> {
+        return this._httpClient.get(`${this._apiurl}/items/redemption_settings/${id}`
+        ).pipe(
+            tap((response: any) => this._redemption.next(response.data))
+        );
+    }
+
     getMemberTiers(page: number = 0, limit: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: MemberTierPagination; memberTiers: MemberTier[] }> {
         return this._httpClient.get<any>(`${this._apiurl}/items/member_tier`, {
@@ -107,15 +118,21 @@ export class RedemptionService {
         const dateFrom = !redemption.date_from ? null : redemption.date_from;
         const dateTo = !redemption.date_to ? null : redemption.date_to;
 
-        return this._httpClient.patch<any>(`${this._apiurl}/items/redemption_settings`, {
-            'id': redemptionId,
-            'type': redemption.type,
-            'date_from': dateFrom,
-            'date_to': dateTo,
-            'member_tier': redemption.member_tier,
-            'point_conversion': redemption.point_conversion
-        }).pipe(
-            map(updateRedemption => updateRedemption)
+        return this.redemptions$.pipe(
+            take(1),
+            switchMap(stores => this._httpClient.patch<any>(`${this._apiurl}/items/redemption_settings`, {
+                'id': redemptionId,
+                'type': redemption.type,
+                'date_from': dateFrom,
+                'date_to': dateTo,
+                'member_tier': redemption.member_tier,
+                'point_conversion': redemption.point_conversion
+            }).pipe(
+                map((newRedemptionSetting) => {
+                    this._redemptions.next([newRedemptionSetting.data, ...stores]);
+                    return newRedemptionSetting;
+                })
+            ))
         );
     }
 

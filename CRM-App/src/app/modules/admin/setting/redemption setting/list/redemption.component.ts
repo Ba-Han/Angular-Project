@@ -1,17 +1,19 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDrawer } from '@angular/material/sidenav';
 import { debounceTime, map, merge, Observable, Subject, switchMap, takeUntil } from 'rxjs';
+import { fuseAnimations } from '@fuse/animations';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { Redemption, RedemptionPagination,  MemberTier} from 'app/modules/admin/setting/redemption setting/redemption.types';
 import { RedemptionService } from 'app/modules/admin/setting/redemption setting/redemption.service';
 import { UserService } from 'app/core/user/user.service';
 
 @Component({
-    selector: 'redemption setting',
+    selector: 'redemption setting-list',
     templateUrl: './redemption.component.html',
     styles: [
         `
@@ -20,18 +22,18 @@ import { UserService } from 'app/core/user/user.service';
             }
 
             .redemptionsetting-grid {
-                grid-template-columns: 100px 100px 100px 100px 100px 100px 100px;
+                grid-template-columns: 150px 150px 150px 150px 150px;
 
                 @screen sm {
-                    grid-template-columns: 100px 100px 100px 100px 100px 100px 100px;
+                    grid-template-columns: 150px 150px 150px 150px 150px;
                 }
 
                 @screen md {
-                    grid-template-columns: 100px 100px 100px 100px 100px 100px 100px;
+                    grid-template-columns: 150px 150px 150px 150px 150px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 100px 100px 100px 100px 100px 100px 100px;
+                    grid-template-columns: 150px 150px 150px 150px 150px;
                 }
             }
 
@@ -80,14 +82,6 @@ import { UserService } from 'app/core/user/user.service';
                 font-size: 16px;
             }
 
-            .successMessage_scss {
-                position: unset;
-                text-align: center;
-                color: rgb(0, 128, 0);
-                padding: 3rem;
-                font-size: 16px;
-            }
-
             .errorMessage_scss {
                 position: unset;
                 text-align: center;
@@ -101,9 +95,12 @@ import { UserService } from 'app/core/user/user.service';
                 padding-left: 2rem;
             }
         `
-    ]
+    ],
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: fuseAnimations
 })
-export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDestroy {
+export class RedemptionSettingListComponent implements OnInit, AfterViewInit,  OnDestroy {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -113,39 +110,26 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
     @ViewChild('drawerTwo', { static: true }) drawerTwo: MatDrawer;
 
     isLoading: boolean = false;
-    RedemptionEditForm: FormGroup;
+    RedemptionSettingAddForm: FormGroup;
     searchInputControl: FormControl = new FormControl();
-    editMode: boolean = false;
+    AddMode: boolean = false;
     canEdit: boolean = false;
-    canDelete: boolean = false;
-    DeleteMode: boolean = false;
-    isSuccess: boolean = false;
-    selectedId: number | null = null;
-    editFormData: any;
-    successMessage: string | '' = '';
     errorMessage: string | '' = '';
-    deleteErrorMessage: string | '' = '';
-    createSuccess: string | '' = '';
-    updateSuccess: string | '' = '';
     redemptions$: Observable<Redemption[]>;
-    memberTiers$: Observable<MemberTier[]>;
+    memberTiers: any;
     pagination: RedemptionPagination;
     minDate: string;
-    redemption: Redemption;
-    redem: any;
     typeValue: number;
-    showButtonIsEdit: boolean = false;
     isAscending: boolean = true;
     selectedCoulumn = 'type';
-    pageIndex: number = 0;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
-        private _redemptionService: RedemptionService,
+        private _fuseConfirmationService: FuseConfirmationService,
         private _formBuilder: FormBuilder,
-        private _router: Router,
-        private _activatedRoute: ActivatedRoute,
+        private _redemptionService: RedemptionService,
+        private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _userService: UserService
     ) {
         const today = new Date();
@@ -157,18 +141,23 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
     // -----------------------------------------------------------------------------------------------------
 
     ngOnInit(): void {
-        this.RedemptionEditForm = this._formBuilder.group({
+        this.RedemptionSettingAddForm = this._formBuilder.group({
             id: [''],
             type: ['', [Validators.required]],
             date_from: [''],
             date_to: [''],
             member_tier: ['', [Validators.required]],
-            member_tierFullName: [''],
             point_conversion: ['', [Validators.required]]
         });
 
         this.redemptions$ = this._redemptionService.redemptions$;
-        this.memberTiers$ = this._redemptionService.memberTiers$;
+
+        //Member Tiers Groups
+        this._redemptionService.memberTiers$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((tier) => {
+            this.memberTiers = tier;
+        });
 
         // Get the redemption pagination
         this._redemptionService.pagination$
@@ -177,6 +166,21 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
             this.pagination = pagination;
             this._changeDetectorRef.markForCheck();
         });
+
+        // Subscribe to search input field value changes
+        this.searchInputControl.valueChanges
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(300),
+            switchMap((query) => {
+                this.isLoading = true;
+                return this._redemptionService.getRedemptions(0, 10, 'type', 'asc', query);
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        )
+        .subscribe();
 
         this.canEdit = this._userService.getEditUserPermissionByNavId('redemptionsetting');
     }
@@ -247,70 +251,15 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    toogleDeleteMode(DeleteMode: boolean | null = null): void {
-        if (DeleteMode === null) {
-            this.DeleteMode = !this.DeleteMode;
+    toogleRedemptionSettingAddFormMode(AddMode: boolean | null = null): void {
+        if (AddMode === null) {
+            this.AddMode = !this.AddMode;
         }
         else {
-            this.DeleteMode = DeleteMode;
+            this.AddMode = AddMode;
         }
-        this._changeDetectorRef.markForCheck();
-    }
 
-    cancelPopup(): void {
-        this.isSuccess = false;
-        this.toogleDeleteMode(false);
-        this.drawerOne.close();
-        this._changeDetectorRef.markForCheck();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    onPageChange() {
-        this._redemptionService.getRedemptions(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
-            switchMap(() => {
-                this.isLoading = true;
-                // eslint-disable-next-line max-len
-                return this._redemptionService.getRedemptions(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
-            }),
-            map(() => {
-                this.isLoading = false;
-            })
-        ).subscribe();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    firstSaveDataToTable() {
-        this._redemptionService.getRedemptions().pipe(
-            switchMap(() => {
-                this.isLoading = true;
-                // eslint-disable-next-line max-len
-                return this._redemptionService.getRedemptions();
-            }),
-            map(() => {
-                this.isLoading = false;
-            })
-        ).subscribe();
-    }
-
-    proceedPopup(): void {
-        this._redemptionService.getDeleteRedemptionSetting(this.selectedId)
-        .subscribe(() => {
-            },
-            (response) => {
-                if (response.status === 200) {
-                    // Successful response
-                    this.successMessage = 'Deleted Successfully.';
-                    this.onPageChange();
-                    this.isSuccess = true;
-                    this._changeDetectorRef.markForCheck();
-                } else {
-                    // Error response
-                    this.deleteErrorMessage = response.error.message;
-                    this.isSuccess = true;
-                    this._changeDetectorRef.markForCheck();
-                }
-            }
-        );
+        // Mark for check
         this._changeDetectorRef.markForCheck();
     }
 
@@ -337,36 +286,10 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    DeleteDrawer(id: number): void {
-        this.selectedId = id;
-        this.toogleDeleteMode(true);
-        this.drawerOne.open();
-        this._changeDetectorRef.markForCheck();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    eidtRedemption(redem) {
-        this.showButtonIsEdit = true;
-        this.editFormData = redem;
-        this.RedemptionEditForm.patchValue(this.editFormData);
-    }
-
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    cancelRedemption() {
-        this.RedemptionEditForm.reset();
-        this.RedemptionEditForm.markAsPristine();
-        this.RedemptionEditForm.markAsUntouched();
-    }
-
     createRedemption(): void {
-        const redemption = this.RedemptionEditForm.getRawValue();
+        const redemption = this.RedemptionSettingAddForm.getRawValue();
         this._redemptionService.createRedemption(redemption.id, redemption).subscribe(() => {
-            this.createSuccess = 'Create Successfully!';
-            this.updateSuccess = '';
-            this.errorMessage = '';
-            this.cancelRedemption();
-            this.firstSaveDataToTable();
+            this.toogleRedemptionSettingAddFormMode(false);
             this._changeDetectorRef.markForCheck();
         },
             (response) => {
@@ -376,34 +299,6 @@ export class RedemptionDetailComponent implements OnInit, AfterViewInit,  OnDest
                 } else {
                     // Error response
                     this.errorMessage = response.error.message;
-                    this.createSuccess = '';
-                    this.updateSuccess = '';
-                    this._changeDetectorRef.markForCheck();
-                }
-            }
-        );
-        this._changeDetectorRef.markForCheck();
-    }
-
-    updateRedemption(): void {
-        const redemption = this.RedemptionEditForm.getRawValue();
-        this._redemptionService.updateRedemption(redemption.id, redemption).subscribe(() => {
-            this.updateSuccess = 'Update Successfully!';
-            this.createSuccess = '';
-            this.errorMessage = '';
-            this.cancelRedemption();
-            this.onPageChange();
-            this._changeDetectorRef.markForCheck();
-        },
-            (response) => {
-                if (response.status === 200) {
-                    // Successful response
-                    this._changeDetectorRef.markForCheck();
-                } else {
-                    // Error response
-                    this.errorMessage = response.error.message;
-                    this.createSuccess = '';
-                    this.updateSuccess = '';
                     this._changeDetectorRef.markForCheck();
                 }
             }
