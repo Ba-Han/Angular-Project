@@ -73,424 +73,6 @@
                 [disableClose]="true"
                 #matDrawer>
 
-
-        <!-- Point Rule Edit Form -->
-        <ng-container *ngIf="!pointsegmentMode && !tierUpgradeFormMode && !MemberListMode">
-            <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
-                <div class="">
-                    <button mat-icon-button style="background-color:#ccc;"
-                            [matTooltip]="'Close'"
-                            (click)="matDrawer.close()">
-                        <mat-icon class="text-white"
-                                  [svgIcon]="'heroicons_outline:x'"></mat-icon>
-                    </button>
-                </div>
-                <div class="w-full text-3xl font-bold" style="text-align:center;">Edit Point Rule</div>
-              
-            </div>
-
-            <div class="flex-auto p-5">
-                <form [formGroup]="PointRuleForm">
-                    <div class="mt-8 hidden">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <input matInput [formControlName]="'id'">
-                        </mat-form-field>
-                    </div>
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Name</mat-label>
-                            <mat-icon matPrefix
-                                      class="hidden sm:flex icon-size-5"
-                                      [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
-                            <input matInput
-                                   [formControlName]="'name'"
-                                   [placeholder]="'name'"
-                                   [spellcheck]="false">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Description</mat-label>
-                            <mat-icon matPrefix
-                                      class="hidden sm:flex icon-size-5"
-                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                            <input matInput
-                                   [formControlName]="'description'"
-                                   [placeholder]="'description'">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Reward Code</mat-label>
-                            <mat-icon matPrefix
-                                      class="hidden sm:flex icon-size-5"
-                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                            <input matInput
-                                   [formControlName]="'reward_code'"
-                                   [placeholder]="'reward_code'">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Type</mat-label>
-                            <mat-select [formControlName]="'type'">
-                                <mat-option value="tier_rule">Tier Rule</mat-option>
-                                <mat-option value="event_rule">Event Rule</mat-option>
-                                <!--<mat-option value="referral_rule">Customer Referral</mat-option>-->
-                                <mat-option value="birthday_rule">Birthday Event</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Point Value</mat-label>
-                            <mat-icon matPrefix
-                                      class="hidden sm:flex icon-size-5"
-                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                            <input matInput type="number"
-                                   [formControlName]="'point_value'"
-                                   [placeholder]="'Point Value'">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Status</mat-label>
-                            <mat-select [formControlName]="'status'">
-                                <mat-option value="active">Active</mat-option>
-                                <mat-option value="inactive">Inactive</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <!-- Point Basket -->
-                    <ng-container *ngIf="addedPointSegment.length === 0">
-                        <div class="mt-8">
-                            <mat-label>Point Basket</mat-label>
-                            <div class="customPoint mt-3 h-12" style="cursor: pointer; border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
-                                <span style="color:#ccc;">Create Point Basket</span>
-                            </div>
-                        </div>
-                    </ng-container>
-
-
-                    <ng-container *ngIf="addedPointSegment.length > 0">
-                        <div class="mt-8">
-                            <label>Point Basket</label>
-                            <mat-form-field class="fuse-mat-no-subscript w-full hidden">
-                                <input matInput readonly style="cursor:pointer;"
-                                       [formControlName]="'point_basket'"
-                                       [value]="addedPointSegmentId">
-                            </mat-form-field>
-                            <ng-container *ngFor="let add of addedPointSegment; trackBy: trackByFn">
-                                <div [matTooltip]="'Edit Basket'" (click)="editForm(add)" class="customPoint mt-3 h-12" style="border: 1px solid #ccc;border-radius: 10px;padding: 12px;cursor: pointer;">
-                                    {{add.name}} : {{add.description}}
-                                </div>
-                            </ng-container>
-                        </div>
-                    </ng-container>
-                    <div class="mt-4">
-                        <div class="flex w-full ">
-                            <button class="w-1/8 bg-green-500 text-white" mat-flat-button
-                                    [matTooltip]="'Basket'"
-                                    (click)="createNewPointSegment()">
-                                Add New
-                            </button>
-                        </div>
-                    </div>
-
-
-                    <div class="flex justify-end items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
-                        <button class="ml-2" style="width:16%;"
-                                mat-flat-button
-                                [disabled]="PointRuleForm.invalid"
-                                [color]="'primary'"
-                                [matTooltip]="'Save'"
-                                (click)="updatePointRule()">
-                            Save
-                        </button>
-                    </div>
-
-                </form>
-            </div>
-        </ng-container>
-
-        <!-- Point Segment Add and Edit Form -->
-        <ng-container *ngIf="pointsegmentMode">
-            <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
-                <div class="">
-                    <button mat-icon-button style="background-color:#ccc;"
-                            [matTooltip]="'Close'"
-                            (click)="closeSegmentForm()">
-                        <mat-icon class="text-white"
-                                  [svgIcon]="'heroicons_outline:x'"></mat-icon>
-                    </button>
-                </div>
-                <div class="w-full text-3xl font-bold" style="text-align:center;">Point Segment</div>
-            </div>
-
-            <div class="flex-auto p-5">
-                <form [formGroup]="PointSegmentForm">
-
-                    <div class="mt-8 hidden">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>id</mat-label>
-                            <input matInput
-                                   [formControlName]="'id'"
-                                   [placeholder]="'id'">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Status</mat-label>
-                            <mat-select [formControlName]="'status'">
-                                <mat-option value="published">Published</mat-option>
-                                <mat-option value="draft">Draft</mat-option>
-                                <mat-option value="archived">Archived</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Name</mat-label>
-                            <mat-icon matPrefix
-                                      class="hidden sm:flex icon-size-5"
-                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                            <input matInput
-                                   [formControlName]="'name'"
-                                   [placeholder]="'name'">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Description</mat-label>
-                            <mat-icon matPrefix
-                                      class="hidden sm:flex icon-size-5"
-                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                            <input matInput
-                                   [formControlName]="'description'"
-                                   [placeholder]="'description'">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="flex sm:items-center mt-8">
-                        <div class="w-full text-3xl font-bold">Earning Period</div>
-                    </div>
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Earning From</mat-label>
-                            <mat-select [formControlName]="'earning_from'" [(ngModel)]="selectedValue" [disabled]="true">
-                                <mat-option value="date">Date</mat-option>
-                                <mat-option value="day_month">Day/Month</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <ng-container *ngIf="selectedValue == 'day_month'">
-                        <div class=" flex mt-8" style="column-gap:15px;">
-                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
-                                <mat-label>Earning From Day</mat-label>
-                                <input [readonly]="true" type="number"
-                                       matInput
-                                       [formControlName]="'earning_from_day'">
-                            </mat-form-field>
-
-                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
-                                <mat-label>Earning From Month</mat-label>
-                                <input [readonly]="true" type="number"
-                                       matInput
-                                       [formControlName]="'earning_from_month'">
-                            </mat-form-field>
-                        </div>
-                    </ng-container>
-
-                    <ng-container *ngIf="selectedValue == 'date'">
-                        <div class="mt-8">
-                            <mat-form-field class="fuse-mat-no-subscript w-full">
-                                <mat-label>Earning From Date</mat-label>
-                                <mat-icon matPrefix
-                                          class="hidden sm:flex icon-size-5"
-                                          [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
-                                <input matInput
-                                       [matDatepicker]="earningfromDatepicker"
-                                       [formControlName]="'earning_from_date'"
-                                       [placeholder]="'Earning Valid To'">
-                                <mat-datepicker-toggle matSuffix
-                                                       [for]="earningfromDatepicker">
-                                </mat-datepicker-toggle>
-                                <mat-datepicker #earningfromDatepicker></mat-datepicker>
-                            </mat-form-field>
-                        </div>
-                    </ng-container>
-
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Earning To</mat-label>
-                            <mat-select [formControlName]="'earning_to'" [(ngModel)]="earningToValue" [disabled]="true">
-                                <mat-option value="date">Date</mat-option>
-                                <mat-option value="day_month">Day/Month</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <ng-container *ngIf="earningToValue == 'day_month'">
-                        <div class=" flex mt-8" style="column-gap:15px;">
-                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
-                                <mat-label>Earning To Day</mat-label>
-                                <input [readonly]="true" type="number"
-                                       matInput
-                                       [formControlName]="'earning_to_day'">
-                            </mat-form-field>
-
-                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
-                                <mat-label>Earning To Month</mat-label>
-                                <input [readonly]="true" type="number"
-                                       matInput
-                                       [formControlName]="'earning_to_month'">
-                            </mat-form-field>
-                        </div>
-                    </ng-container>
-
-                    <ng-container *ngIf="earningToValue == 'date'">
-                        <div class="mt-8">
-                            <mat-form-field class="fuse-mat-no-subscript w-full">
-                                <mat-label>Earning To Date</mat-label>
-                                <mat-icon matPrefix
-                                          class="hidden sm:flex icon-size-5"
-                                          [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
-                                <input matInput
-                                       [matDatepicker]="earningtoDatepicker"
-                                       [formControlName]="'earning_to_date'"
-                                       [placeholder]="'Earning To Date'">
-                                <mat-datepicker-toggle matSuffix
-                                                       [for]="earningtoDatepicker">
-                                </mat-datepicker-toggle>
-                                <mat-datepicker #earningtoDatepicker></mat-datepicker>
-                            </mat-form-field>
-                        </div>
-                    </ng-container>
-
-                    <div class="flex sm:items-center mt-8">
-                        <div class="w-full text-3xl font-bold">Spending Period</div>
-                    </div>
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Spending From</mat-label>
-                            <mat-select [formControlName]="'spending_from'" [(ngModel)]="spendingFromValue">
-                                <mat-option value="date">Date</mat-option>
-                                <mat-option value="day_month">Day/Month</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <ng-container *ngIf="spendingFromValue == 'day_month'">
-                        <div class=" flex mt-8" style="column-gap:15px;">
-                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
-                                <mat-label>Spending From Day</mat-label>
-                                <input type="number"
-                                       matInput
-                                       [formControlName]="'spending_from_day'">
-                            </mat-form-field>
-
-                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
-                                <mat-label>Spending From Month</mat-label>
-                                <input type="number"
-                                       matInput
-                                       [formControlName]="'spending_from_month'">
-                            </mat-form-field>
-                        </div>
-                    </ng-container>
-
-                    <ng-container *ngIf="spendingFromValue == 'date'">
-                        <div class="mt-8">
-                            <mat-form-field class="fuse-mat-no-subscript w-full">
-                                <mat-label>Spending From Date</mat-label>
-                                <mat-icon matPrefix
-                                          class="hidden sm:flex icon-size-5"
-                                          [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
-                                <input matInput
-                                       [matDatepicker]="spendingfromDatepicker"
-                                       [formControlName]="'spending_from_date'"
-                                       [placeholder]="'Spending From Date'">
-                                <mat-datepicker-toggle matSuffix
-                                                       [for]="spendingfromDatepicker">
-                                </mat-datepicker-toggle>
-                                <mat-datepicker #spendingfromDatepicker></mat-datepicker>
-                            </mat-form-field>
-                        </div>
-                    </ng-container>
-
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Spending To</mat-label>
-                            <mat-select [formControlName]="'spending_to'" [(ngModel)]="spendingToValue">
-                                <mat-option value="date">Date</mat-option>
-                                <mat-option value="day_month">Day/Month</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <ng-container *ngIf="spendingToValue == 'day_month'">
-                        <div class=" flex mt-8" style="column-gap:15px;">
-                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
-                                <mat-label>Spending To Day</mat-label>
-                                <input type="number"
-                                       matInput
-                                       [formControlName]="'spending_to_day'">
-                            </mat-form-field>
-
-                            <mat-form-field class="fuse-mat-no-subscript w-2/4">
-                                <mat-label>Spending To Month</mat-label>
-                                <input type="number"
-                                       matInput
-                                       [formControlName]="'spending_to_month'">
-                            </mat-form-field>
-                        </div>
-                    </ng-container>
-
-                    <ng-container *ngIf="spendingToValue == 'date'">
-                        <div class="mt-8">
-                            <mat-form-field class="fuse-mat-no-subscript w-full">
-                                <mat-label>Spending To Date</mat-label>
-                                <mat-icon matPrefix
-                                          class="hidden sm:flex icon-size-5"
-                                          [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
-                                <input matInput
-                                       [matDatepicker]="spendingtoDatepicker"
-                                       [formControlName]="'spending_to_date'"
-                                       [placeholder]="'Spending To Date'">
-                                <mat-datepicker-toggle matSuffix
-                                                       [for]="spendingtoDatepicker">
-                                </mat-datepicker-toggle>
-                                <mat-datepicker #spendingtoDatepicker></mat-datepicker>
-                            </mat-form-field>
-                        </div>
-                    </ng-container>
-                    <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
-                        <button class="ml-2"
-                                mat-flat-button
-                                [disabled]="PointSegmentForm.invalid"
-                                [color]="'primary'"
-                                [matTooltip]="'Save'"
-                                (click)="createUpdateSegmentPoint()">
-                            Save
-                        </button>
-                    </div>
-
-                </form>
-            </div>
-        </ng-container>
-
         <!-- Tier Upgrade Form-->
         <ng-container *ngIf="tierUpgradeFormMode">
             <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
@@ -516,16 +98,6 @@
                                    [placeholder]="'id'">
                         </mat-form-field>
                     </div>
-
-                    <!-- <div class="mt-8">
-                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Status</mat-label>
-                            <mat-select [formControlName]="'status'">
-                                <mat-option value="active">Active</mat-option>
-                                <mat-option value="inactive">Inactive</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div> -->
 
                     <div class="mt-8">
                         <mat-form-field class="fuse-mat-no-subscript w-full">
@@ -717,6 +289,13 @@
                                 </div>
                             </ng-container>
 
+                            <ng-container *ngIf="memberTier.level">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Level: </div>
+                                    <div class="ml-6 leading-6">Level {{memberTier.level}}</div>
+                                </div>
+                            </ng-container>
+
                             <ng-container *ngIf="memberTier.date_created">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Created Date: </div>
@@ -767,34 +346,17 @@
                             </ng-container> -->
 
                             <div class="flex sm:items-center mt-3">
-                                <div class="w-full text-3xl font-bold">Condition</div>
+                                <div class="w-full text-2xl font-bold">Condition</div>
                             </div>
 
                             <ng-container *ngIf="memberTier.condition_type === 0">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Condition Type: </div>
-                                    <div class="ml-6 leading-6">Min Order Value (per order)</div>
+                                    <div class="ml-6 leading-6">Amount</div>
                                 </div>
 
-                                <ng-container *ngIf="memberTier.min_condition_amount">
-                                    <div class="flex sm:items-center">
-                                        <div class="w-1/4">Min Amount: </div>
-                                        <div class="ml-6 leading-6">{{memberTier.min_condition_amount}}</div>
-                                    </div>
-                                </ng-container>
-                                
-                                <ng-container *ngIf="memberTier.max_condition_amount">
-                                    <div class="flex sm:items-center">
-                                        <div class="w-1/4">Max Amount: </div>
-                                        <div class="ml-6 leading-6">{{memberTier.max_condition_amount}}</div>
-                                    </div>
-                                </ng-container>
-                            </ng-container>
-
-                            <ng-container *ngIf="memberTier.condition_type === 1">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Condition Type: </div>
-                                    <div class="ml-6 leading-6">Total Order Amount (period)</div>
+                                <div class="flex sm:items-center mt-3">
+                                    <div class="w-full text-2xl font-bold">Upgrade</div>
                                 </div>
 
                                 <ng-container *ngIf="memberTier.condition_period === 1">
@@ -825,6 +387,10 @@
                                     </div>
                                 </ng-container>
 
+                                <div class="flex sm:items-center mt-3">
+                                    <div class="w-full text-2xl font-bold">Order Value</div>
+                                </div>
+
                                 <ng-container *ngIf="memberTier.min_condition_amount">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Min Amount: </div>
@@ -838,12 +404,48 @@
                                         <div class="ml-6 leading-6">{{memberTier.max_condition_amount}}</div>
                                     </div>
                                 </ng-container>
+
+                                <ng-container *ngIf="memberTier.calculation_type === 0">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Calculation Type: </div>
+                                        <div class="ml-6 leading-6">And</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="memberTier.calculation_type === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Calculation Type: </div>
+                                        <div class="ml-6 leading-6">Or</div>
+                                    </div>
+                                </ng-container>
+
+                                <div class="flex sm:items-center mt-3">
+                                    <div class="w-full text-2xl font-bold">Total Order Value for Period</div>
+                                </div>
+
+                                <ng-container *ngIf="memberTier.total_min_amount">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Min Amount: </div>
+                                        <div class="ml-6 leading-6">{{memberTier.total_min_amount}}</div>
+                                    </div>
+                                </ng-container>
+                                
+                                <ng-container *ngIf="memberTier.total_max_amount">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Max Amount: </div>
+                                        <div class="ml-6 leading-6">{{memberTier.total_max_amount}}</div>
+                                    </div>
+                                </ng-container>
                             </ng-container>
 
-                            <ng-container *ngIf="memberTier.condition_type === 2">
+                            <ng-container *ngIf="memberTier.condition_type === 1">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Condition Type: </div>
                                     <div class="ml-6 leading-6">Point Range</div>
+                                </div>
+                                
+                                <div class="flex sm:items-center mt-3">
+                                    <div class="w-full text-2xl font-bold">Upgrade</div>
                                 </div>
 
                                 <ng-container *ngIf="memberTier.min_point">
@@ -862,7 +464,7 @@
                             </ng-container>
 
                             <div class="flex sm:items-center mt-3">
-                                <div class="w-full text-3xl font-bold">Downgrade</div>
+                                <div class="w-full text-2xl font-bold">Downgrade</div>
                             </div>
 
                             <ng-container *ngIf="memberTier.downgrade_condition_type === 0">
@@ -953,7 +555,6 @@
                                 </mat-form-field>
                             </div>
 
-
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Code</mat-label>
@@ -965,7 +566,6 @@
                                            [placeholder]="'Code'">
                                 </mat-form-field>
                             </div>
-
 
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
@@ -979,12 +579,10 @@
                                 </mat-form-field>
                             </div>
 
-
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full" disabled>
                                     <mat-label>Level</mat-label>
                                     <mat-select [formControlName]="'level'" [disabled]="true">
-                                        <!-- <mat-option value="0">Level 0</mat-option> -->
                                         <mat-option [value]="1">Level 1</mat-option>
                                         <mat-option [value]="2">Level 2</mat-option>
                                         <mat-option [value]="3">Level 3</mat-option>
@@ -1019,49 +617,22 @@
                             </div>
 
                             <div class="flex sm:items-center mt-4">
-                                <div class="w-full text-3xl font-bold">Condition</div>
+                                <div class="w-full text-3xl font-bold" style="position: relative; top: 12px !important;">Condition</div>
                             </div>
 
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Condition Type</mat-label>
                                     <mat-select [formControlName]="'condition_type'" [(ngModel)]="conditionTypeValue">
-                                        <mat-option [value]="0">Min Order Value (per order)</mat-option>
-                                        <mat-option [value]="1">Total Order Amount (period)</mat-option>
-                                        <mat-option [value]="2">Point Range</mat-option>
+                                        <mat-option [value]="0">Amount</mat-option>
+                                        <mat-option [value]="1">Point Range</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
 
                             <ng-container *ngIf="conditionTypeValue === 0">
                                 <div class="mt-8">
-                                    <div class="mt-3 text-3xl w-full font-bold truncate" style="position: relative; bottom: 15px !important;">Upgrade</div>
-                                    <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
-                                        <mat-label>Min Amount</mat-label>
-                                        <mat-icon matPrefix
-                                                  class="hidden sm:flex icon-size-5"
-                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                        <input matInput type="number"
-                                               [formControlName]="'min_condition_amount'"
-                                               [placeholder]="'Min Condition Amount'">
-                                    </mat-form-field>
-    
-                                    <mat-form-field class="fuse-mat-no-subscript w-1/4">
-                                        <mat-label>Max Amount</mat-label>
-                                        <mat-icon matPrefix
-                                                  class="hidden sm:flex icon-size-5"
-                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                        <input matInput type="number"
-                                               [formControlName]="'max_condition_amount'"
-                                               [placeholder]="'Max Condition Amount'">
-                                    </mat-form-field>
-                                </div>
-                            </ng-container>
-
-
-                            <ng-container *ngIf="conditionTypeValue === 1">
-                                <div class="mt-8">
-                                    <div class="mt-3 text-3xl w-full font-bold truncate" style="position: relative; bottom: 15px !important;">Upgrade</div>
+                                    <div class="mt-3 text-3xl w-full font-bold truncate" style="position: relative; bottom: 13px !important;">Upgrade</div>
                                     <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
                                         <mat-label>Condition Period</mat-label>
                                         <mat-select [formControlName]="'condition_period'" [(ngModel)]="conditionPeriodValue">
@@ -1072,7 +643,7 @@
                                         </mat-select>
                                     </mat-form-field>
 
-                                    <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4" style="position: relative; top: 4px;">
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/3" style="position: relative; top: 4px;">
                                         <mat-label>Condition Period Value</mat-label>
                                         <mat-icon matPrefix
                                                   class="hidden sm:flex icon-size-5"
@@ -1081,15 +652,19 @@
                                                [formControlName]="'condition_period_value'"
                                                [placeholder]="'Condition Period Value'">
                                     </mat-form-field>
+                                </div>
 
-                                    <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4" style="margin-top: 1rem;">
+                                <div class="mt-3 text-2xl w-full font-bold truncate" style="position: relative; top: 15px;">Order Value</div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
                                         <mat-label>Min Amount</mat-label>
                                         <mat-icon matPrefix
                                                   class="hidden sm:flex icon-size-5"
                                                   [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
                                         <input matInput type="number"
                                                [formControlName]="'min_condition_amount'"
-                                               [placeholder]="'Min Condition Amount'">
+                                               [placeholder]="'Min Amount'">
                                     </mat-form-field>
     
                                     <mat-form-field class="fuse-mat-no-subscript w-1/3">
@@ -1099,14 +674,48 @@
                                                   [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
                                         <input matInput type="number"
                                                [formControlName]="'max_condition_amount'"
-                                               [placeholder]="'Max Condition Amount'">
+                                               [placeholder]="'Max Amount'">
+                                    </mat-form-field>
+                                </div>
+                                
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Calculation Type</mat-label>
+                                        <mat-select [formControlName]="'calculation_type'">
+                                            <mat-option [value]="0">And</mat-option>
+                                            <mat-option [value]="1">Or</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="mt-3 text-2xl w-full font-bold truncate" style="position: relative; top: 15px;">Total Order Value for Period</div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
+                                        <mat-label>Min Amount</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'total_min_amount'"
+                                               [placeholder]="'Min Amount'">
+                                    </mat-form-field>
+    
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/3">
+                                        <mat-label>Max Amount</mat-label>
+                                        <mat-icon matPrefix
+                                                  class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                               [formControlName]="'total_max_amount'"
+                                               [placeholder]="'Max Amount'">
                                     </mat-form-field>
                                 </div>
                             </ng-container>
 
-                            <ng-container *ngIf="conditionTypeValue === 2">
+                            <ng-container *ngIf="conditionTypeValue === 1">
                                 <div class="mt-8">
-                                    <div class="mt-3 text-3xl w-full font-bold truncate" style="position: relative; bottom: 15px !important;">Upgrade</div>
+                                    <div class="mt-3 text-3xl w-full font-bold truncate" style="position: relative; bottom: 13px !important;">Upgrade</div>
                                     <mat-form-field class="fuse-mat-no-subscript w-1/4 mr-4">
                                         <mat-label>Min Point</mat-label>
                                         <!-- <mat-icon matPrefix
@@ -1130,7 +739,7 @@
                             </ng-container>
 
                             <div class="flex sm:items-center mt-3">
-                                <div class="w-full text-3xl font-bold">Downgrade</div>
+                                <div class="w-full text-3xl font-bold" style="position: relative; top: 12px !important;">Downgrade</div>
                             </div>
 
                             <div class="mt-8">
@@ -1210,27 +819,6 @@
                                 </div>
                             </div>
 
-                            <!-- <div class="flex sm:items-center mt-4">
-                                <div class="w-full text-3xl font-bold">Reward Detail</div>
-                            </div>
-
-                            <mat-form-field class="fuse-mat-no-subscript w-full hidden">
-                                <input matInput [formControlName]="'point_rule'" />
-                            </mat-form-field>
-
-                            <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-full">
-                                    <mat-label>Point Rule</mat-label>
-                                    <mat-icon matPrefix
-                                              class="hidden sm:flex icon-size-5"
-                                              [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
-                                    <input matInput (click)="openPointRuleForm(memberTier.point_rule.id)" style="cursor:pointer" readonly
-                                           [formControlName]="'point_ruleFullname'"
-                                           [value]="point_ruleFullname"
-                                           [placeholder]="'Point Rule'">
-                                </mat-form-field>
-                            </div> -->
-
                             <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                                 <button class="ml-2" style="width: 6rem;"
                                         mat-flat-button
@@ -1256,8 +844,11 @@
                                     <ng-container *ngIf="!canDelete">
                                     </ng-container>
                                 </div>
-                            </div>
 
+                                <div *ngIf="catchErrorMessage" style="position: relative; left: 1rem; color: red;">
+                                    {{ catchErrorMessage }}
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>

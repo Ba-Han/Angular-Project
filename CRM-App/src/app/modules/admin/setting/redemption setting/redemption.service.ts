@@ -120,7 +120,7 @@ export class RedemptionService {
 
         return this.redemptions$.pipe(
             take(1),
-            switchMap(stores => this._httpClient.patch<any>(`${this._apiurl}/items/redemption_settings`, {
+            switchMap(redemptionsettings => this._httpClient.patch<any>(`${this._apiurl}/items/redemption_settings`, {
                 'id': redemptionId,
                 'type': redemption.type,
                 'date_from': dateFrom,
@@ -129,7 +129,7 @@ export class RedemptionService {
                 'point_conversion': redemption.point_conversion
             }).pipe(
                 map((newRedemptionSetting) => {
-                    this._redemptions.next([newRedemptionSetting.data, ...stores]);
+                    this._redemptions.next([newRedemptionSetting.data, ...redemptionsettings]);
                     return newRedemptionSetting;
                 })
             ))

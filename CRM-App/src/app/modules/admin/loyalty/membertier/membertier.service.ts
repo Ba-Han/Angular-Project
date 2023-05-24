@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
-import { MemberTier, MemberTierPagination, PointRule, PointRulePagination, PointSegment, MemberTierUpgrade, DWMemberGroup, DWMemberGroupPagination } from 'app/modules/admin/loyalty/membertier/membertier.types';
+import { MemberTier, MemberTierPagination, MemberTierUpgrade, DWMemberGroup, DWMemberGroupPagination } from 'app/modules/admin/loyalty/membertier/membertier.types';
 import { environment } from 'environments/environment';
 
 @Injectable({
@@ -12,8 +12,6 @@ export class MemberTierService {
     private _pagination: BehaviorSubject<MemberTierPagination | null> = new BehaviorSubject(null);
     private _memberTier: BehaviorSubject<MemberTier | null> = new BehaviorSubject(null);
     private _memberTiers: BehaviorSubject<MemberTier[] | null> = new BehaviorSubject(null);
-    private _pointRules: BehaviorSubject<PointRule[] | null> = new BehaviorSubject(null);
-    private _pointRulePagination: BehaviorSubject<PointRulePagination | null> = new BehaviorSubject(null);
     private _tiers: BehaviorSubject<MemberTier[] | null> = new BehaviorSubject(null);
     private _dwMemberGroups: BehaviorSubject<DWMemberGroup[] | null> = new BehaviorSubject(null);
     private _dwMemberGroupspagination: BehaviorSubject<DWMemberGroupPagination | null> = new BehaviorSubject(null);
@@ -39,14 +37,6 @@ export class MemberTierService {
 
     get pagination$(): Observable<MemberTierPagination> {
         return this._pagination.asObservable();
-    }
-
-    get pointRules$(): Observable<PointRule[]> {
-        return this._pointRules.asObservable();
-    }
-
-    get pointrulepagination$(): Observable<PointRulePagination> {
-        return this._pointRulePagination.asObservable();
     }
 
     get memberTierlevels(): Observable<MemberTier[]> {
@@ -102,19 +92,7 @@ export class MemberTierService {
                     startIndex: begin,
                     endIndex  : end - 1
                 };
-                //const memberTier = response.data;
 
-                /* for (var i = 0; i < response.data.length; i++) {
-                    if (response.data != null) {
-                        response.data[i]["point_ruleFullname"] = response.data[i].point_rule.name;
-                        response.data[i].point_rule = response.data[i].point_rule.id;
-                    }
-                    else {
-                        response.data[i]["point_ruleFullname"] = "";
-                        response.data[i].point_rule = "";
-                    }
-
-                } */
                 this._pagination.next(pagination);
                 this._memberTiers.next(response.data);
             })
@@ -161,35 +139,6 @@ export class MemberTierService {
                 this._dwMemberGroupspagination.next(pagination);
                 this._dwMemberGroups.next(response.data);
             })
-        );
-    }
-
-    getPointRuleById(id: number, isdetail: boolean): Observable<PointRule> {
-        if (isdetail) {
-            return this._httpClient.get(`${this._apiurl}/items/point_rule/${id}?fields=*,point_basket.*`
-            ).pipe(
-                tap((response: any) => response.data)
-            );
-        }
-        else {
-            return this._httpClient.get(`${this._apiurl}/items/point_rule/${id}`
-            ).pipe(
-                tap((response: any) => response.data)
-            );
-        }
-    }
-
-    getPointSegmentById(id: number): Observable<PointSegment> {
-        return this._httpClient.get(`${this._apiurl}/items/point_segment/${id}`
-        ).pipe(
-            tap((response: any) => response.data)
-        );
-    }
-
-    getSegmentDetailById(id: number): Observable<PointSegment> {
-        return this._httpClient.get(`${this._apiurl}/items/point_segment/${id}`
-        ).pipe(
-            tap((response: any) => response.data)
         );
     }
 
@@ -240,6 +189,10 @@ export class MemberTierService {
         const maxPoint = !memberTier.max_point ? 0 : memberTier.max_point;
         const downgradeConditionPeriod = !memberTier.downgrade_condition_period ? 0 : memberTier.downgrade_condition_period;
         const downgradeConditionPeriodValue = !memberTier.downgrade_condition_period_value ? 0 : memberTier.downgrade_condition_period_value;
+        const totalMinPoint = !memberTier.total_min_amount ? 0 : memberTier.total_min_amount;
+        const totalMaxPoint = !memberTier.total_max_amount ? 0 : memberTier.total_max_amount;
+        const calculationType = !memberTier.calculation_type ? 0 : memberTier.calculation_type;
+
         return this.memberTiers$.pipe(
             take(1),
             switchMap(tiers => this._httpClient.post<any>(`${this._apiurl}/items/member_tier`, {
@@ -254,13 +207,15 @@ export class MemberTierService {
                 "code": memberTier.code,
                 "min_condition_amount": minAmount,
                 "max_condition_amount": maxAmount,
+                "min_point": minPoint,
+                "max_point": maxPoint,
+                "calculation_type": calculationType,
+                "total_min_amount": totalMinPoint,
+                "total_max_amount": totalMaxPoint,
                 "downgrade_condition_type": memberTier.downgrade_condition_type,
                 "downgrade_condition_period": downgradeConditionPeriod,
                 "downgrade_condition_period_value": downgradeConditionPeriodValue,
-                "min_point": minPoint,
-                "max_point": maxPoint,
                 "dw_member_group": memberTier.dw_member_group,
-                /* "point_rule": memberTier.point_rule, */
                 "tier_upgrade_items": memberTier.tier_upgrade_items
             }).pipe(
                 map((newTier) => {
@@ -282,6 +237,10 @@ export class MemberTierService {
         const maxPoint = !memberTier.max_point ? 0 : memberTier.max_point;
         const downgradeConditionPeriod = !memberTier.downgrade_condition_period ? 0 : memberTier.downgrade_condition_period;
         const downgradeConditionPeriodValue = !memberTier.downgrade_condition_period_value ? 0 : memberTier.downgrade_condition_period_value;
+        const totalMinPoint = !memberTier.total_min_amount ? 0 : memberTier.total_min_amount;
+        const totalMaxPoint = !memberTier.total_max_amount ? 0 : memberTier.total_max_amount;
+        const calculationType = !memberTier.calculation_type ? 0 : memberTier.calculation_type;
+
         return this._httpClient.patch<MemberTier>(`${this._apiurl}/items/member_tier/${id}`, {
             "id": id,
             "status": memberTier.status,
@@ -295,13 +254,15 @@ export class MemberTierService {
             "code": memberTier.code,
             "min_condition_amount": minAmount,
             "max_condition_amount": maxAmount,
+            "min_point": minPoint,
+            "max_point": maxPoint,
+            "calculation_type": calculationType,
+            "total_min_amount": totalMinPoint,
+            "total_max_amount": totalMaxPoint,
             "downgrade_condition_type": memberTier.downgrade_condition_type,
             "downgrade_condition_period": downgradeConditionPeriod,
             "downgrade_condition_period_value": downgradeConditionPeriodValue,
-            "min_point": minPoint,
-            "max_point": maxPoint,
             "dw_member_group": memberTier.dw_member_group,
-            /* "point_rule": memberTier.point_rule, */
             "tier_upgrade_items": memberTier.tier_upgrade_items
 
         }).pipe(
@@ -309,112 +270,8 @@ export class MemberTierService {
         );
     }
 
-    createPointSegment(pointsegment: PointSegment): Observable<PointSegment> {
-        return this._httpClient.post<PointSegment>(`${this._apiurl}/items/point_segment`, {
-            "status": pointsegment.status,
-            "user_created": null,
-            "date_created": null,
-            "user_updated": null,
-            "date_updated": null,
-            "name": pointsegment.name,
-            "description": pointsegment.description,
-            "earning_from": pointsegment.earning_from,
-            "earning_from_date": pointsegment.earning_from_date,
-            "earning_from_day": pointsegment.earning_from_day,
-            "earning_from_month": pointsegment.earning_from_month,
-            "earning_to": pointsegment.earning_to,
-            "earning_to_date": pointsegment.earning_to_date,
-            "earning_to_day": pointsegment.earning_to_day,
-            "earning_to_month": pointsegment.earning_to_month,
-            "spending_from": pointsegment.spending_from,
-            "spending_from_date": pointsegment.spending_from_date,
-            "spending_from_day": pointsegment.spending_from_day,
-            "spending_from_month": pointsegment.spending_from_month,
-            "spending_to": pointsegment.spending_to,
-            "spending_to_date": pointsegment.spending_to_date,
-            "spending_to_day": pointsegment.spending_to_day,
-            "spending_to_month": pointsegment.spending_to_month
-        }).pipe(
-            tap((response: any) => response.data)
-        );
-    }
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    UpdatePointSegment(id: number, pointsegment: PointSegment): Observable<PointSegment> {
-        return this._httpClient.patch<PointSegment>(`${this._apiurl}/items/point_segment/${id}`, {
-            "id": id,
-            "status": pointsegment.status,
-            "user_created": null,
-            "date_created": null,
-            "user_updated": null,
-            "date_updated": null,
-            "name": pointsegment.name,
-            "description": pointsegment.description,
-            "earning_from": pointsegment.earning_from,
-            "earning_from_date": pointsegment.earning_from_date,
-            "earning_from_day": pointsegment.earning_from_day,
-            "earning_from_month": pointsegment.earning_from_month,
-            "earning_to": pointsegment.earning_to,
-            "earning_to_date": pointsegment.earning_to_date,
-            "earning_to_day": pointsegment.earning_to_day,
-            "earning_to_month": pointsegment.earning_to_month,
-            "spending_from": pointsegment.spending_from,
-            "spending_from_date": pointsegment.spending_from_date,
-            "spending_from_day": pointsegment.spending_from_day,
-            "spending_from_month": pointsegment.spending_from_month,
-            "spending_to": pointsegment.spending_to,
-            "spending_to_date": pointsegment.spending_to_date,
-            "spending_to_day": pointsegment.spending_to_day,
-            "spending_to_month": pointsegment.spending_to_month
-        }).pipe(
-            tap((response: any) => response.data)
-        );
-    }
-
-    createPointRule(pointrule: PointRule): Observable<PointRule> {
-        return this._httpClient.post<PointRule>(`${this._apiurl}/items/point_rule`, {
-            "status": pointrule.status,
-            "user_created": pointrule.user_created,
-            "date_created": pointrule.date_created,
-            "user_updated": pointrule.user_updated,
-            "date_updated": pointrule.date_updated,
-            "name": pointrule.name,
-            "description": pointrule.description,
-            "type": pointrule.type,
-            "start_date": pointrule.start_date,
-            "end_date": pointrule.end_date,
-            "point_value": pointrule.point_value,
-            "reward_code": pointrule.reward_code,
-            "point_basket": pointrule.point_basket
-        }).pipe(
-            tap((response: any) => response.data)
-        );
-    }
-
-    updatePointRule(id: number,pointrule: PointRule): Observable<PointRule> {
-        return this._httpClient.patch<PointRule>(`${this._apiurl}/items/point_rule/${id}`, {
-            "id": id,
-            "status": pointrule.status,
-            "user_created": pointrule.user_created,
-            "date_created": pointrule.date_created,
-            "user_updated": pointrule.user_updated,
-            "date_updated": pointrule.date_updated,
-            "name": pointrule.name,
-            "description": pointrule.description,
-            "type": pointrule.type,
-            "start_date": pointrule.start_date,
-            "end_date": pointrule.end_date,
-            "point_value": pointrule.point_value,
-            "reward_code": pointrule.reward_code,
-            "point_basket": pointrule.point_basket
-        }).pipe(
-            tap((response: any) => response.data)
-        )
-    }
-
     createTierUpgrade(tierupgrade: MemberTierUpgrade): Observable<MemberTierUpgrade> {
         return this._httpClient.post<MemberTierUpgrade>(`${this._apiurl}/items/member_tier_upgrade`, {
-            "status": tierupgrade.status,
             "member_tier": tierupgrade.member_tier,
             "item_number": tierupgrade.item_number,
             "price": tierupgrade.price,
@@ -427,7 +284,6 @@ export class MemberTierService {
     updateTierUpgrade(id: number,tierupgrade: MemberTierUpgrade): Observable<MemberTierUpgrade> {
         return this._httpClient.patch<MemberTierUpgrade>(`${this._apiurl}/items/member_tier_upgrade/${id}`, {
             "id": tierupgrade.id,
-            "status": tierupgrade.status,
             "member_tier": tierupgrade.member_tier,
             "item_number": tierupgrade.item_number,
             "price": tierupgrade.price,
