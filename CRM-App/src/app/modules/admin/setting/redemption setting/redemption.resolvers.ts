@@ -30,7 +30,7 @@ export class RedemptionsDetailResolver implements Resolve<any>
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Redemption> {
         return this._redemptionService.getRedemptionSettingById(Number(route.paramMap.get('id')))
             .pipe(
-                // Error here means the requested product is not available
+                // Error here means the requested redemption setting is not available
                 catchError((error) => {
 
                     // Log the error

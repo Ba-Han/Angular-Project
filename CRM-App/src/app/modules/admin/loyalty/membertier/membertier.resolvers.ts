@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import { MemberTierService } from 'app/modules/admin/loyalty/membertier/membertier.service';
-import { MemberTier, MemberTierPagination, PointRulePagination, PointRule, DWMemberGroupPagination, DWMemberGroup } from 'app/modules/admin/loyalty/membertier/membertier.types';
+import { MemberTier, MemberTierPagination, DWMemberGroupPagination, DWMemberGroup } from 'app/modules/admin/loyalty/membertier/membertier.types';
 
 @Injectable({
     providedIn: 'root'

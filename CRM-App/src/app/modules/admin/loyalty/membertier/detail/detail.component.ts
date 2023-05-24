@@ -10,7 +10,7 @@ import { debounceTime, map, merge, Observable, Subject, switchMap, takeUntil } f
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { MemberTier, MemberTierPagination, PointRule, PointRulePagination, PointSegment, point_segment_id, MemberTierUpgrade } from 'app/modules/admin/loyalty/membertier/membertier.types';
+import { MemberTier, MemberTierPagination, MemberTierUpgrade } from 'app/modules/admin/loyalty/membertier/membertier.types';
 import { MemberTierService } from 'app/modules/admin/loyalty/membertier/membertier.service';
 import { UserService } from 'app/core/user/user.service';
 
@@ -134,8 +134,6 @@ import { UserService } from 'app/core/user/user.service';
 export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
-    //@ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
-    //@ViewChild('matDrawer', { static: true }) matDrawer2: MatDrawer;
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('drawerOne', { static: true }) drawerOne: MatDrawer;
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -148,26 +146,17 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
     selectedId: number | null = null;
-    successMessage: string | null = null;
-    errorMessage: string | null = null;
-    flashMessage: 'success' | 'error' | null = null;
+    successMessage: string | '' = '';
+    errorMessage: string | '' = '';
+    catchErrorMessage: string | '' = '';
     isLoading: boolean = false;
-    pointsegmentMode: boolean = false;
     pagination: MemberTierPagination;
-    pointrulepagination: PointRulePagination;
     searchInputControl: FormControl = new FormControl();
     selectedMemberTier: MemberTier | null = null;
     memberTierAddForm: FormGroup;
-    PointSegmentForm: FormGroup;
-    newSegmentModel: PointSegment;
-    addedPointSegment: Array<PointSegment> = [];
-    addedPointSegmentId: Array<point_segment_id> = [];
     drawerMode: 'side' | 'over';
-    PointRuleForm: FormGroup;
     TierUpgradeForm: FormGroup;
-    pointRules$: Observable<PointRule[]>;
     pointAddFormMode: boolean = false;
-    pointsegmentEditMode: boolean = false;
     tierUpgradeFormMode: boolean = false;
     MemberListMode: boolean = false;
     downgradeconditionValue: number;
@@ -222,6 +211,9 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
             condition_period_value: [''],
             min_condition_amount: [''],
             max_condition_amount: [''],
+            calculation_type: [''],
+            total_min_amount: [''],
+            total_max_amount: [''],
             min_point: [''],
             max_point: [''],
             downgrade_condition_type: ['', [Validators.required]],
@@ -232,43 +224,8 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
             tier_upgrade_items: new FormControl(this.selectedUpgradeItem)
         });
 
-        this.PointRuleForm = this._formBuilder.group({
-            id: [''],
-            name: ['', [Validators.required]],
-            description: [''],
-            reward_code: ['', [Validators.required]],
-            type: ['', [Validators.required]],
-            point_value: ['', [Validators.required]],
-            status: ['', [Validators.required]],
-            point_basket: new FormControl(this.addedPointSegmentId),
-        });
-
-        this.PointSegmentForm = this._formBuilder.group({
-            id: [''],
-            status: ['', [Validators.required]],
-            name: ['', [Validators.required]],
-            description: [''],
-            earning_from: ['', [Validators.required]],
-            earning_from_date: [''],
-            earning_from_day: [''],
-            earning_from_month: [''],
-            earning_to: ['', [Validators.required]],
-            earning_to_date: [''],
-            earning_to_day: [''],
-            earning_to_month: [''],
-            spending_from: ['', [Validators.required]],
-            spending_from_date: [''],
-            spending_from_day: [''],
-            spending_from_month: [''],
-            spending_to: ['', [Validators.required]],
-            spending_to_date: [''],
-            spending_to_day: [''],
-            spending_to_month: ['']
-        });
-
         this.TierUpgradeForm = this._formBuilder.group({
             id: [''],
-            /* status: ['', [Validators.required]], */
             item_number: ['', [Validators.required]],
             price: ['', [Validators.required]],
             upgrade_tier: ['', [Validators.required]],
@@ -283,16 +240,12 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
                 this.conditionTypeValue = tier.condition_type;
                 this.downgradeConditionPeriodTypeValue = tier.downgrade_condition_period;
                 this.conditionPeriodValue = tier.condition_period;
-                //this.memberTier.point_ruleFullname = tier.point_rule.name;
-                //this.memberTier.tier_upgrade_Fullname =
-                //this.tierUpgradeId =;
                 this.downgradeconditionValue = tier.downgrade_condition_type;
                 this.memberTierAddForm.patchValue(this.memberTier);
                 this._changeDetectorRef.markForCheck();
             });
 
         // Subscribe to search input field value changes
-
         this.drawerTwo.openedChange.subscribe((opened) => {
             if (!opened) {
                 this._changeDetectorRef.markForCheck();
@@ -382,28 +335,6 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
         this._changeDetectorRef.markForCheck();
     }
 
-    tooglepointSegmentAddFormMode(pointsegmentMode: boolean | null = null): void {
-        if (pointsegmentMode === null) {
-            this.pointsegmentMode = !this.pointsegmentMode;
-        }
-        else {
-            this.pointsegmentMode = pointsegmentMode;
-        }
-
-        this._changeDetectorRef.markForCheck();
-    }
-
-    tooglepointSegmentEditFormMode(pointsegmentEditMode: boolean | null = null): void {
-        if (pointsegmentEditMode === null) {
-            this.pointsegmentEditMode = !this.pointsegmentEditMode;
-        }
-        else {
-            this.pointsegmentEditMode = pointsegmentEditMode;
-        }
-
-        this._changeDetectorRef.markForCheck();
-    }
-
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     toogleTierUpgradeFormMode(tierUpgradeFormMode: boolean | null = null) {
         if (tierUpgradeFormMode === null) {
@@ -431,173 +362,6 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
     AddFormclose(): void {
         this.tooglepointAddFormMode(false);
     }
-
-    selectPointRule(id, name): void {
-        const memberTier = this.memberTierAddForm.getRawValue();
-        memberTier.point_rule = id;
-        memberTier.point_ruleFullname = name;
-        this.memberTierAddForm.patchValue(memberTier);
-        this.isLoading = false;
-        this.drawerOne.close();
-    }
-
-    /* openPointRuleForm(id): void {
-        this.addedPointSegment = [];
-        this.addedPointSegmentId = [];
-        this.isLoading = true;
-        this._memberTierService.getPointRuleById(id, true)
-            .pipe(
-                takeUntil(this._unsubscribeAll),
-                
-                map((pointrules: any) => {
-                    const baskets = pointrules.data.point_basket;
-                    //take segement
-                    for (var i = 0; i < baskets.length; i++) {
-                        this._memberTierService.getPointSegmentById(baskets[i].point_segment_id)
-                            .pipe(takeUntil(this._unsubscribeAll))
-                            .subscribe((pointsegment: any) => {
-                                let index = this.addedPointSegment.findIndex(x => x.id === pointsegment.data.id || x.name === pointsegment.data.name);
-                                if (index > -1) {
-                                    this.addedPointSegment[(index)] = pointsegment.data;
-                                }
-                                else {
-                                    this.addedPointSegment.push(pointsegment.data);
-                                }
-
-                            });
-                        let index1 = this.addedPointSegmentId.findIndex(x => x === baskets[i].point_segment_id);
-                        if (index1 > -1) {
-                            this.addedPointSegmentId[(index1)] = baskets[i].id;
-                        }
-                        else {
-                            this.addedPointSegmentId.push(baskets[i].id);
-                        }
-                    }
-                    this.PointRuleForm.patchValue(pointrules.data);
-                    this.isLoading = false;
-                    this.toogleTierUpgradeFormMode(false);
-                    this.tooglepointAddFormMode(true);
-                    this.matDrawer.open();
-                })
-            )
-            .subscribe();
-        
-    } */
-
-    /* updatePointRule(): void {
-        const pointrule = this.PointRuleForm.getRawValue();
-        pointrule.point_basket = this.addedPointSegmentId;
-        this._memberTierService.updatePointRule(pointrule.id,pointrule)
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((tier: any) => {
-                const membertier = this.memberTierAddForm.getRawValue();
-                membertier.point_rule = tier.data.id;
-                membertier.point_ruleFullname = tier.data.name;
-                this.memberTierAddForm.patchValue(membertier);
-                this.matDrawer.close();
-                this.addedPointSegment = [];
-                this.addedPointSegmentId = [];
-            });
-    } */
-
-    /* createNewPointSegment(): void {
-        this.PointSegmentForm.reset();
-        this.tooglepointSegmentAddFormMode(true);
-    } */
-
-    /* closeSegmentForm(): void {
-        this.tooglepointSegmentAddFormMode(false);
-    } */
-
-    /* createUpdateSegmentPoint(): void {
-        this.isLoading = true;
-        const segment = this.PointSegmentForm.getRawValue();
-        if (Number(segment.id) > 0) {
-            this.isLoading = true;
-            this._memberTierService.UpdatePointSegment(segment.id, segment)
-                .pipe(takeUntil(this._unsubscribeAll))
-                .subscribe((pointsegment: any) => {
-                    let index = this.addedPointSegment.findIndex(x => x.id === pointsegment.data.id);
-                    this.addedPointSegment[(index)] = segment;
-                    this.isLoading = false;
-                    this.tooglepointSegmentAddFormMode(false);
-                });
-        }
-        else {
-            //this._memberTierService.createPointSegment(segment)
-            //    .pipe(takeUntil(this._unsubscribeAll))
-            //    .subscribe((pointsegment: any) => {
-                   
-            //    });
-
-            var point_segment_id = this.convertToPointSegmentIdObject(segment);
-            let index1 = this.addedPointSegment.findIndex(x => x.id === null);
-            if (index1 > -1) {
-                this.addedPointSegment[(index1)] = segment;
-            }
-            else {
-                this.addedPointSegment.push(segment);
-            }
-            let index = this.addedPointSegmentId.findIndex(x => typeof x === 'object');
-            if (index > -1) {
-                this.addedPointSegmentId[(index1)] = point_segment_id;
-            }
-            else {
-                this.addedPointSegmentId.push(point_segment_id);
-            }
-            this.isLoading = false;
-            this.tooglepointSegmentAddFormMode(false);
-        }
-
-
-    } */
-
-    /* convertToPointSegmentIdObject(pointsegment: PointSegment): any {
-        var point_segment_id = {
-            "point_segment_id": {
-                "status": pointsegment.status,
-                "name": pointsegment.name,
-                "description": pointsegment.description,
-                "earning_from": pointsegment.earning_from,
-                "earning_from_date": pointsegment.earning_from_date,
-                "earning_from_day": pointsegment.earning_from_day,
-                "earning_from_month": pointsegment.earning_from_month,
-                "earning_to": pointsegment.earning_to,
-                "earning_to_date": pointsegment.earning_to_date,
-                "earning_to_day": pointsegment.earning_to_day,
-                "earning_to_month": pointsegment.earning_to_month,
-                "spending_from": pointsegment.spending_from,
-                "spending_from_date": pointsegment.spending_from_date,
-                "spending_from_day": pointsegment.spending_from_day,
-                "spending_from_month": pointsegment.spending_from_month,
-                "spending_to": pointsegment.spending_to,
-                "spending_to_date": pointsegment.spending_to_date,
-                "spending_to_day": pointsegment.spending_to_day,
-                "spending_to_month": pointsegment.spending_to_month
-            }
-        }
-        return point_segment_id;
-    } */
-
-    /* editForm(pointsegment: PointSegment): void {
-        this.tooglepointSegmentAddFormMode(false);
-        this.isLoading = true;
-        //this._memberTierService.getPointSegmentById(id)
-        //    .pipe(takeUntil(this._unsubscribeAll))
-        //    .subscribe((pointsegment: any) => {
-
-        //    });
-        //const editsegment = pointsegment;
-        //pointsegment = PointSegment;
-        //pointsegment = this.addedPointSegment.filter(x => x.id != null ? x.id === id : x.name === name);
-        this.selectedValue = pointsegment.earning_from;
-        this.earningToValue = pointsegment.earning_to;
-        this.spendingFromValue = pointsegment.spending_from;
-        this.spendingToValue = pointsegment.spending_to;
-        this.PointSegmentForm.patchValue(pointsegment);
-        this.isLoading = false;
-        this.tooglepointSegmentAddFormMode(true);
-    } */
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     toogleDeleteMode(DeleteMode: boolean | null = null): void {
@@ -651,9 +415,20 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
         const memberTier = this.memberTierAddForm.getRawValue();
         memberTier.tier_upgrade_items = this.selectedUpgradeItem;
         this._memberTierService.UpdateMemberTier(memberTier.id, memberTier)
-            .subscribe((tier: any) => {
+            .subscribe(() => {
                 this._router.navigate(['/member-tier'], { relativeTo: this._activatedRoute });
-            });
+            },
+                (response) => {
+                    if (response.status === 200) {
+                        // Successful response
+                        this._changeDetectorRef.markForCheck();
+                    } else {
+                        // Error response
+                        this.catchErrorMessage = response.error.message;
+                        this._changeDetectorRef.markForCheck();
+                    }
+                }
+            );
     }
 
     openTierUpgradeForm(): void {
