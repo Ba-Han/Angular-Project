@@ -305,4 +305,28 @@ export class MemberService
         return this._httpClient.delete(`${this._apiurl}/items/member_document/${id}`,
         { observe: 'response' });
     };
+
+    getBase64BarCodeImageData(id: number): Observable<any>
+    {
+        return this._httpClient.get<any>(`${this._apiurl}/api/barcodebyid?memberid=${id}`, {
+        })
+        .pipe(
+            map((response) => {
+                const res = response.data;
+                return res;
+            })
+        );
+    }
+
+    getBase64QRCodeImageData(id: number): Observable<any>
+    {
+        return this._httpClient.get<any>(`${this._apiurl}/api/qrcodebyid?memberid=${id}`, {
+        })
+        .pipe(
+            map((response) => {
+                const res = response.data;
+                return res;
+            })
+        );
+    }
 }
