@@ -115,10 +115,10 @@ export class UserService {
                 map(updateUser => updateUser)
             );
     }
-    changeNewPassword(email: string, currentPassord: string, newPassword: string ): Observable<any> {
+    changeNewPassword(username: string, currentPassord: string, newPassword: string ): Observable<any> {
         return this._httpClient
             .patch<boolean>(`${this._apiurl}/users/changepassword`, {
-                email: email,
+                email: username,
                 current_password: currentPassord,
                 new_password: newPassword
             })

@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     selectedUser: User | null = null;
     editProfile: boolean = false;
     changePassword: boolean = false;
-    loginEmail: string;
+    loginUserName: string;
     UserEditForm: FormGroup;
     ChangePasswordForm: FormGroup;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -75,7 +75,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((user: User) => {
                 this.loginUser = user;
-                this.loginEmail = user.email;
+                this.loginUserName = user.email;
                 this.UserEditForm.patchValue(user);
                 this._changeDetectorRef.markForCheck();
             });
@@ -138,7 +138,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.showAlert = false;
         const currentpass = this.ChangePasswordForm.get('currentPassword').value;
 
-        this._userService.checkCurrentPass(currentpass, this.loginEmail)
+        this._userService.checkCurrentPass(currentpass, this.loginUserName)
             .pipe(
                 finalize(() => {
                     if (this.alert.type === 'error') {
