@@ -86,9 +86,7 @@
                         <div class="flex flex-auto items-end py-5 -mt-16">
                             <!-- Avatar -->
                             <div class="flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card">
-        
-                                <div class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                                     >
+                                <div class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
                                     {{member.member[0].first_name.charAt(0)}}
                                 </div>
                             </div>
@@ -101,14 +99,6 @@
                                               [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
                                     <span class="ml-2">Edit</span>
                                 </button>
-        
-                                <!--<button mat-stroked-button
-                                        (click)="toggleEditMode(true)">
-                                    <mat-icon class="icon-size-5"
-                                              [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
-                                    <span class="ml-2">Edit Address</span>
-                                </button>-->
-        
                             </div>
                         </div>
         
@@ -127,6 +117,10 @@
                                 <!--<div class="text-2xl font-bold bg-blue-100 text-left rounded-full py-3 px-6"> <mat-icon [svgIcon]="'heroicons_outline:sparkles'"></mat-icon> Repeat Purchasers </div>-->
                                 <div class="text-2xl font-bold bg-blue-100 text-left rounded-full py-3 px-6"> <mat-icon [svgIcon]="'heroicons_outline:academic-cap'"></mat-icon> {{member.member[0].member_tier.name}} </div>
                             </div>
+                        </div>
+                        <div class="grid grid-cols-2" style="align-items: center;">
+                            <img class="base64BarCodeImageData" *ngIf="barCodeImageData" [src]="barCodeImageData" alt="BarCode Base64 Image">
+                            <img class="base64QrCodeImageData" *ngIf="qrCodeImageData" [src]="qrCodeImageData" alt="QRCode Base64 Image">
                         </div>
                     </div>
         

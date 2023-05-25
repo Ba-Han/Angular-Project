@@ -126,6 +126,16 @@ import { MemberService } from 'app/modules/admin/member/member.service';
                 position: static;
                 width: 11rem !important;
             }
+
+            .base64BarCodeImageData {
+                width: 50% !important;
+                height: 60% !important;
+            }
+
+            .base64QrCodeImageData {
+                width: 40% !important;
+                height: 80% !important;
+            }
         `
     ],
     encapsulation  : ViewEncapsulation.None,
@@ -204,6 +214,8 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     selectedTier: number;
     isAscending: boolean = true;
     selectedCoulumn = 'uploadeddate';
+    qrCodeImageData: string | '' = '';
+    barCodeImageData: string | '' = '';
     // private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -249,6 +261,28 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             }
 
         });
+
+        //Barcode base64 image
+        this._memberService.getBase64BarCodeImageData(this.memberId).subscribe(
+            (res: any) => {
+              this.barCodeImageData = res;
+              this._changeDetectorRef.markForCheck();
+            },
+            (error) => {
+              console.error('Failed to retrieve image data:', error);
+            }
+        );
+
+        //Qrcode base64 image
+        this._memberService.getBase64QRCodeImageData(this.memberId).subscribe(
+            (res: any) => {
+              this.qrCodeImageData = res;
+              this._changeDetectorRef.markForCheck();
+            },
+            (error) => {
+              console.error('Failed to retrieve image data:', error);
+            }
+        );
 
         // Create the contact form
         this.memberForm = this._formBuilder.group({
@@ -695,7 +729,6 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                 }
             );
     }
-
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     updateMemberDw(id: Number, member: any): void {
