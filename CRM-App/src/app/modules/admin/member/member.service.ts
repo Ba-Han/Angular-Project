@@ -89,13 +89,8 @@ export class MemberService
     getMembers(page: number = 0, limit: number = 10, sort: string = 'member_code', order: 'asc' | 'desc' | '' = 'asc', search: string = '', filter: string = '', fields: string = ''):
         Observable<{ pagination: MemberPagination; members: Member[] }>
     {
-        const fullurl = fields === '' ?  'items/member' : 'member/0/memberLists';
-        return this._httpClient.get<any>(`${this._apiurl}/${fullurl}`, {
+        return this._httpClient.get<any>(`${this._apiurl}/items/member`, {
             params: {
-                meta: 'filter_count',
-                // eslint-disable-next-line max-len
-                fields: fields === '' ?'id,member_code,first_name,last_name,email,mobile_phone,registration_date, member_tier.name, accept_email,accept_mobile_sms, available_points, referral_code ,total_points, total_redeemed_points,expiredTotalPoints,dollerValueEarningExpired'
-                :'m.id,mt.name as member_tier, member_code,first_name,last_name,email,mobile_phone,registration_date,accept_email,accept_mobile_sms',
                 filter:filter,
                 page: page+1,
                 limit: limit,
@@ -127,12 +122,7 @@ export class MemberService
                 const memberIds = [];
                 for(const member of members){
                     memberIds.push(member.id);
-                    if(fields === 'custom'){
-                        member.member_tier = member ? member.member_tier : '';
-                    }
-                    else{
-                        member.member_tier = (member.member_tier && member.member_tier.name) ? member.member_tier.name : '';
-                    }
+                    member.member_tier = (member.member_tier && member.member_tier.name) ? member.member_tier.name : '';
                     member.totalPoint = 0;
                     member.redeemTotalPoint = 0;
                 }

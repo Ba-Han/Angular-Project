@@ -125,6 +125,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
                         type: 'success',
                         message: 'Update Successfully.'
                     };
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
                 },
                 (response) => {
                     this.alert = {

@@ -127,14 +127,19 @@ import { MemberService } from 'app/modules/admin/member/member.service';
                 width: 11rem !important;
             }
 
-            .base64BarCodeImageData {
-                width: 50% !important;
-                height: 60% !important;
+            .base64QrCodeImageData {
+                width: auto !important;
+                height: 8rem !important;
             }
 
-            .base64QrCodeImageData {
-                width: 40% !important;
-                height: 80% !important;
+            .base64BarCodeImageData {
+                width: auto !important;
+                height: 7rem !important;
+            }
+
+            .imageCode {
+                gap: 3rem;
+                margin-left: 7rem;
             }
         `
     ],
@@ -151,7 +156,9 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     @ViewChild('recentPointsTable', { read: MatSort }) private _recentPointsTableMatSort: MatSort;
     @ViewChild(' memberDocumentsTable', { read: MatSort }) private _memberDocumentsTableMatSort: MatSort;
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+    @ViewChild('drawerOne', { static: true }) drawerOne: MatDrawer;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('drawerTwo', { static: true }) drawerTwo: MatDrawer;
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('fileInput') fileInput: ElementRef;
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -193,6 +200,8 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     memberDocuments: any;
     memberDocument: any;
     memberDocumentsForm: FormGroup;
+    GenerateVoucherForm: FormGroup;
+    generateVoucherFormMode: boolean = false;
     fileToUpload: File;
     uploadData: any;
     uploadId: number;
@@ -216,6 +225,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     selectedCoulumn = 'uploadeddate';
     qrCodeImageData: string | '' = '';
     barCodeImageData: string | '' = '';
+    getAvailablePoints: number;
     // private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -581,7 +591,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     cancelPopup(): void {
         this.isSuccess = false;
         this.toogleDeleteMode(false);
-        this.matDrawer.close();
+        this.drawerOne.close();
         this._changeDetectorRef.markForCheck();
     }
 
@@ -611,7 +621,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     DeleteDrawer(id: number): void {
         this.selectedId = id;
         this.toogleDeleteMode(true);
-        this.matDrawer.open();
+        this.drawerOne.open();
         this._changeDetectorRef.markForCheck();
     }
 
@@ -744,6 +754,35 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             };
             return response;
         });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    toogleTierUpgradeFormMode(generateVoucherFormMode: boolean | null = null) {
+        if (generateVoucherFormMode === null) {
+            this.generateVoucherFormMode = !this.generateVoucherFormMode;
+        }
+        else {
+            this.generateVoucherFormMode = generateVoucherFormMode;
+        }
+
+        this._changeDetectorRef.markForCheck();
+    }
+
+    openGernerateVoucherForm(): void {
+        this.getAvailablePoints = this.member.spending.totalPoint;
+
+         // Create the generate voucher form
+         this.GenerateVoucherForm = this._formBuilder.group({
+            id: [''],
+            available_points: [this.getAvailablePoints],
+            points_to_convert: ['', [Validators.required]],
+            points_value: ['', [Validators.required]],
+            voucher_amount: ['', [Validators.required]],
+        });
+
+        this.toogleTierUpgradeFormMode(true);
+        this.drawerTwo.open();
+        //this.GenerateVoucherForm.reset();
     }
 
 }

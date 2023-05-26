@@ -246,6 +246,18 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
                     start: 'desc',
                     disableClear: true
                 });
+            } else if (this.isAscending && this.selectedCoulumn === 'createddate') {
+                this._sort.sort({
+                    id: 'date_created',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'createddate') {
+                this._sort.sort({
+                    id: 'date_created',
+                    start: 'desc',
+                    disableClear: true
+                });
             }
 
             // Mark for check
@@ -322,6 +334,8 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
             this.ngAfterViewInit();
         } else if ( this.selectedCoulumn === 'availablepoints' ) {
             this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'createddate' ) {
+            this.ngAfterViewInit();
         }
     }
 
@@ -351,6 +365,10 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
         } else if ( this.isAscending && this.selectedCoulumn === 'availablepoints' ) {
             this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'availablepoints' ) {
+            this.ngAfterViewInit();
+        } else if ( this.isAscending && this.selectedCoulumn === 'createddate' ) {
+            this.ngAfterViewInit();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'createddate' ) {
             this.ngAfterViewInit();
         }
     }
