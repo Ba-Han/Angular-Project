@@ -23,7 +23,7 @@ export class AuthChangePasswordComponent implements OnInit
     };
     changePasswordForm: FormGroup;
     showAlert: boolean = false;
-    loginEmail: string;
+    loginUserName: string;
     private passwordStrength: 0;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -60,7 +60,7 @@ export class AuthChangePasswordComponent implements OnInit
         this._userService.user$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((user: User) => {
-            this.loginEmail = user.email;
+            this.loginUserName = user.username;
         });
     }
 
@@ -86,10 +86,10 @@ export class AuthChangePasswordComponent implements OnInit
             this.showAlert = false;
             const currentpass = this.changePasswordForm.get('currentPassword').value;
             const newpass = this.changePasswordForm.get('passwordConfirm').value;
-            this._userService.changeNewPassword(this.loginEmail, currentpass, newpass)
+            this._userService.changeNewPassword(this.loginUserName, currentpass, newpass)
                 .pipe(
                     finalize(() => {
-                        if (this.alert.type != "error") {
+                        if (this.alert.type !== 'error') {
                             this.changePasswordForm.enable();
                             this.changePasswordNgForm.resetForm();
                         }
@@ -103,8 +103,8 @@ export class AuthChangePasswordComponent implements OnInit
                     this.showAlert = true;
                 },
                 (response) => {
-                    let errorCode:string =  ((response.error.errors && response.error.errors[0].extensions) ? response.error.errors[0].extensions.code : "");
-                    if (errorCode == "INVALID_CREDENTIALS") {
+                    const errorCode: string =  ((response.error.errors && response.error.errors[0].extensions) ? response.error.errors[0].extensions.code : '');
+                    if (errorCode === 'INVALID_CREDENTIALS') {
                         this.changePasswordForm.enable();
                         this.alert = {
                             type: 'error',
@@ -119,13 +119,12 @@ export class AuthChangePasswordComponent implements OnInit
                         };
                         this.showAlert = true;
                     }
-
                 }
             );
         }
     }
 
-    onStrengthChanged(value):void {
+    onStrengthChanged(value): void {
         this.passwordStrength = value;
     }
 }
