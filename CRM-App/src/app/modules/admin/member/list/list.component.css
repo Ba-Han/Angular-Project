@@ -1,5 +1,5 @@
 .member-grid {
-    grid-template-columns: 150px 100px 120px 120px auto 120px 130px;
+    grid-template-columns: 150px 100px 120px 120px auto 120px 130px 120px;
     /* grid-template-columns: 150px 100px 120px 150px 100px 80px 100px 100px 70px auto; */
 }
 

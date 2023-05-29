@@ -3,7 +3,7 @@
                 [mode]="'over'"
                 [opened]="false"
                 [disableClose]="true"
-                #matDrawer>
+                #drawerOne>
 
         <!-- Delete single crm document popup -->
         <ng-container *ngIf="DeleteMode">
@@ -56,7 +56,101 @@
                 </div>
             </ng-container>
         </ng-container>
-        
+    </mat-drawer>
+
+    <mat-drawer class="w-2/4 dark:bg-gray-900"
+                [mode]="'over'"
+                [opened]="false"
+                [position]="'end'"
+                [disableClose]="true"
+                #drawerTwo>
+
+        <!-- Generate Voucher Form-->
+        <ng-container *ngIf="generateVoucherFormMode">
+            <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
+                <div class="">
+                    <button mat-icon-button style="background-color:#ccc;"
+                            [matTooltip]="'Close'"
+                            (click)="drawerTwo.close()">
+                        <mat-icon class="text-white"
+                                  [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+                <div class="w-full text-3xl font-bold" style="text-align:center;">Generate Voucher</div>
+            </div>
+
+            <div class="flex-auto p-5">
+                <form [formGroup]="GenerateVoucherForm">
+
+                    <div class="mt-8 hidden">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>id</mat-label>
+                            <input matInput
+                                   [formControlName]="'id'"
+                                   [placeholder]="'id'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Available Points</mat-label>
+                            <input matInput type="number"
+                                   [readonly]="true"
+                                   [formControlName]="'available_points'"
+                                   [placeholder]="'available_points'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Points to Convert</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput type="number"
+                                   [formControlName]="'points_to_convert'"
+                                   [placeholder]="'points to convert'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Points Value</mat-label>
+                            <!-- <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon> -->
+                            <input matInput type="number"
+                                   [formControlName]="'points_value'"
+                                   [placeholder]="'points value'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Voucher Amount</mat-label>
+                            <!-- <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon> -->
+                            <input matInput type="number"
+                                   [formControlName]="'voucher_amount'"
+                                   [placeholder]="'voucher_amount'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                        <button class="ml-2"
+                                mat-flat-button
+                                [disabled]="GenerateVoucherForm.invalid"
+                                [color]="'primary'"
+                                [matTooltip]="'Generate'"
+                                (click)="generateVoucher()">
+                            Generate
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </ng-container>
     </mat-drawer>
 
     <mat-drawer-content>
@@ -67,7 +161,7 @@
                 <!-- Header -->
                 <div class="relative w-full px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
                     <!-- Close button -->
-                    <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6">
+                    <div class="flex items-center justify-end w-full max-w-5xl mx-auto pt-6">
                         <button mat-icon-button
                                 [matTooltip]="'Close'"
                                 [routerLink]="['../']"
@@ -81,7 +175,6 @@
                 <!-- member -->
                 <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
                     <div class="w-full max-w-4xl">
-        
                         <!-- Avatar and actions -->
                         <div class="flex flex-auto items-end py-5 -mt-16">
                             <!-- Avatar -->
@@ -100,8 +193,13 @@
                                     <span class="ml-2">Edit</span>
                                 </button>
                             </div>
+
+                            <div class="flex imageCode">
+                                <img class="base64QrCodeImageData" *ngIf="qrCodeImageData" [src]="qrCodeImageData" alt="QRCode Base64 Image">
+                                <img class="base64BarCodeImageData" *ngIf="barCodeImageData" [src]="barCodeImageData" alt="BarCode Base64 Image">
+                            </div>
                         </div>
-        
+
                         <div class="grid grid-cols-2">
                             <!-- Name -->
                             <div class="text-4xl font-bold" style="word-break: break-word;white-space: normal;">
@@ -118,14 +216,9 @@
                                 <div class="text-2xl font-bold bg-blue-100 text-left rounded-full py-3 px-6"> <mat-icon [svgIcon]="'heroicons_outline:academic-cap'"></mat-icon> {{member.member[0].member_tier.name}} </div>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2" style="align-items: center;">
-                            <img class="base64BarCodeImageData" *ngIf="barCodeImageData" [src]="barCodeImageData" alt="BarCode Base64 Image">
-                            <img class="base64QrCodeImageData" *ngIf="qrCodeImageData" [src]="qrCodeImageData" alt="QRCode Base64 Image">
-                        </div>
                     </div>
         
                     <div class="w-full grid memberdetail-grid gap-6 mt-4 pt-5 border-t">
-        
                         <div class="bg-card shadow rounded-2xl">
                             <div class="flex p-2">
                                 <mat-icon svgIcon="heroicons_solid:information-circle"></mat-icon>
@@ -244,10 +337,9 @@
                         </div>
         
                         <div class="flex flex-col flex-auto ">
-        
                             <!-- Earning Row -->
                             <div class="fpx-5 bg-card overflow-hidden" style="margin-bottom:10px; margin-bottom:10px;padding:1px;">
-                                <div class="fpx-5 bg-card shadow rounded-2xl overflow-hidden" style="margin-bottom:10px;width:48%;float:left">
+                                <div class="fpx-5 bg-card shadow rounded-2xl overflow-hidden" style="margin-bottom:10px;width:48%;height:100%;float:left">
                                     <div class="flex items-start justify-between">
                                         <div class="text-lg font-medium tracking-tight leading-6 truncate"></div>
                                         <div class="ml-2 -mt-2 -mr-3">
@@ -270,18 +362,28 @@
                                                 </ng-container>
                                             </div>
                                             <div class="flex items-baseline justify-center w-full text-secondary">
-                                            <div class="text-md font-medium truncate" style="font-size: 12px;">Expire Date:</div>
-                                            <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints > 0">
-                                                <div class="ml-1.5 font-semibold" style="font-size: 12px;">{{member.soonExpiredPoint.soonExpiredDate | date:'MMM dd, yyyy'}}</div>
-                                            </ng-container>
-                                            <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints === 0">
-                                                <div class="ml-1.5 font-semibold">-</div>
-                                            </ng-container>
-                                        </div>
+                                                <div class="text-md font-medium truncate" style="font-size: 12px;">Expire Date:</div>
+                                                <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints > 0">
+                                                    <div class="ml-1.5 font-semibold" style="font-size: 12px;">{{member.soonExpiredPoint.soonExpiredDate | date:'MMM dd, yyyy'}}</div>
+                                                </ng-container>
+                                                <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints === 0">
+                                                    <div class="ml-1.5 font-semibold">-</div>
+                                                </ng-container>
+                                            </div>
                                         </ng-container>
+                                        
+                                        <div style="margin-top: 0 !important;" >
+                                            <div class="flex w-full ">
+                                                <button class="w-1/8 bg-green-500 text-white" mat-flat-button
+                                                        [matTooltip]="'Generate Voucher'"
+                                                        (click)="openGernerateVoucherForm()">
+                                                    Generate Voucher
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="fpx-5 bg-card shadow rounded-2xl overflow-hidden" style="margin-bottom:10px;width:50%;float:right">
+                                <div class="fpx-5 bg-card shadow rounded-2xl overflow-hidden" style="margin-bottom:10px;width:50%;height:100%;float:right">
                                     <div class="flex items-start justify-between">
                                         <div class="text-lg font-medium tracking-tight leading-6 truncate"></div>
                                         <div class="ml-2 -mt-2 -mr-3">
@@ -318,7 +420,7 @@
         
                             <!-- Dollar Row -->
                             <div class="bg-card overflow-hidden" style="margin-bottom:10px; margin-bottom:10px;padding:1px;">
-                                <div class="bg-card shadow rounded-2xl overflow-hidden" style="margin-bottom:10px;width:48%;float:left">
+                                <div class="bg-card shadow rounded-2xl overflow-hidden" style="margin-bottom:10px;width:48%;height:100%;float:left">
                                     <div class="flex items-start justify-between">
                                         <div class="text-lg font-medium tracking-tight leading-6 truncate"></div>
                                         <div class="ml-2 -mt-2 -mr-3">
@@ -331,7 +433,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="bg-card shadow rounded-2xl overflow-hidden" style="margin-bottom:10px;width:50%;float:right">
+                                <div class="bg-card shadow rounded-2xl overflow-hidden" style="margin-bottom:10px;width:50%;height:100%;float:right">
                                     <div class="flex items-start justify-between">
                                         <div class="text-lg font-medium tracking-tight leading-6 truncate"></div>
                                         <div class="ml-2 -mt-2 -mr-3">
@@ -378,7 +480,6 @@
                                     </div>
                                 </div>
                             </div>
-        
                         </div>
         
                         <!-- Recent member points table -->
@@ -1215,7 +1316,7 @@
                             <div style="position: relative; text-align: end; bottom: 2rem;right: 3rem;">
                                 <button
                                     class="h-10 md-button md-raised md-primary"
-                                    (click)="uploadMemberDocumentsFile()" style="background: #4f46e5; color:#fff;width: 10% !important;margin-left: 10px; border-radius: 5px; font-weight: 700;">Upload</button>
+                                    (click)="uploadMemberDocumentsFile()" style="background: #4f46e5; color:#fff;width: 6rem !important;margin-left: 10px; border-radius: 5px; font-weight: 700;">Upload</button>
                             </div>
                     </div>
                 </div>
