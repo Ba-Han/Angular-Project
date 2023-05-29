@@ -84,7 +84,6 @@ export class ProductService {
             switchMap(products => this._httpClient.post<any>(`${this._apiurl}/items/product_exclusion`, {
                 'status': product.status,
                 'item_name': product.item_name,
-                /* 'price': product.price, */
                 'item_number': product.item_number
             }).pipe(
                 map((newProduct) => {
@@ -100,7 +99,6 @@ export class ProductService {
             'id': product.id,
             'status': product.status,
             'item_name': product.item_name,
-            /* 'price': product.price, */
             'item_number': product.item_number
         }).pipe(
             map(updateProduct => updateProduct)

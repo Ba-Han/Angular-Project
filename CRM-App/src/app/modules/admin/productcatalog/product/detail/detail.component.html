@@ -101,13 +101,6 @@
                                     </div>
                                 </ng-container>
         
-                                <!-- <ng-container *ngIf="product.price">
-                                    <div class="flex sm:items-center">
-                                        <div class="w-1/4">Price: </div>
-                                        <div class="ml-6 leading-6">{{product.price}}</div>
-                                    </div>
-                                </ng-container> -->
-        
                                 <ng-container *ngIf="product.status === 'active'">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Status: </div>
@@ -123,7 +116,6 @@
                                 </ng-container>
         
                             </div>
-        
                         </div>
                     </div>
                 </div>
@@ -180,18 +172,6 @@
                                            [placeholder]="'Name'">
                                 </mat-form-field>
                             </div>
-        
-                            <!-- <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-full">
-                                    <mat-label>Price</mat-label>
-                                    <mat-icon matPrefix
-                                              class="hidden sm:flex icon-size-5"
-                                              [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                    <input matInput
-                                           [formControlName]="'price'"
-                                           [placeholder]="'Price'">
-                                </mat-form-field>
-                            </div> -->
         
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">

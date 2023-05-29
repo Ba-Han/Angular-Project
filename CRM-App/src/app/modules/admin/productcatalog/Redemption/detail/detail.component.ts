@@ -113,7 +113,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             id: [''],
             status: ['', [Validators.required]],
             item_name: ['', [Validators.required]],
-            /* price: [''], */
             item_no: ['', [Validators.required]]
         });
         this._productService.product$

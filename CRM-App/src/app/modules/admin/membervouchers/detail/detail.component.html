@@ -1,0 +1,189 @@
+<div class="flex flex-col w-full">
+    <!-- Member Voucher Detail-->
+    <ng-container *ngIf="!editMode">
+
+        <div class="relative w-full h-40 sm:h-48 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
+            <!-- Close button -->
+            <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
+                <div class="mt-3 text-4xl w-full font-bold truncate">
+                    <span class="mr-2" style="text-transform: capitalize;">{{memberVoucher.voucher_code}}</span>
+                    <button mat-stroked-button
+                            (click)="toggleEditMode(true)">
+                        <mat-icon class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                        <span class="ml-2">Edit</span>
+                    </button>
+                </div>
+
+                <button mat-icon-button
+                        [matTooltip]="'Close'"
+                        [routerLink]="['/member/', memberId , 'voucher']"
+                        style="background:#ccc;">
+                    <mat-icon class="text-white"
+                              [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0" style="background:#fff;">
+            <div class="w-full max-w-3xl">
+                <div class="flex flex-col mt-4 pt-6 space-y-3">
+                    <ng-container *ngIf="memberVoucher.voucher_code">
+                        <div class="flex sm:items-center">
+                            <div class="w-1/4">Voucher Code: </div>
+                            <div class="ml-6 leading-6">{{memberVoucher.voucher_code}}</div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="memberVoucher.points_used">
+                        <div class="flex sm:items-center">
+                            <div class="w-1/4">Points Used: </div>
+                            <div class="ml-6 leading-6">{{memberVoucher.points_used}}</div>
+                        </div>
+                    </ng-container> 
+
+                    <ng-container *ngIf="memberVoucher.conversion_rate">
+                        <div class="flex sm:items-center">
+                            <div class="w-1/4">Conversion Rate: </div>
+                            <div class="ml-6 leading-6">{{memberVoucher.conversion_rate}}</div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="memberVoucher.amount">
+                        <div class="flex sm:items-center">
+                            <div class="w-1/4">Amount: </div>
+                            <div class="ml-6 leading-6">{{memberVoucher.amount}}</div>
+                        </div>
+                    </ng-container> 
+
+                    <ng-container *ngIf="memberVoucher.status">
+                        <div class="flex sm:items-center">
+                            <div class="w-1/4">Status: </div>
+                            <div class="ml-6 leading-6">{{memberVoucher.status}}</div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="memberVoucher.redeemed_order">
+                        <div class="flex sm:items-center">
+                            <div class="w-1/4">Redeemed Order: </div>
+                            <div class="ml-6 leading-6">{{memberVoucher.redeemed_order}}</div>
+                        </div>
+                    </ng-container> 
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <!-- Member Voucher Edit Form-->
+    <ng-container *ngIf="editMode">
+        <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
+            <div class="mt-3 text-4xl w-full font-bold truncate">Edit Member Voucher</div>
+            <button mat-icon-button
+                    [matTooltip]="'Close'"
+                    (click)="EditFormclose()" style="background:#ccc;">
+                <mat-icon class="text-white"
+                          [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            </button>
+        </div>
+
+        <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
+            <div class="w-full max-w-3xl">
+                <form [formGroup]="memberVoucherEditForm">
+                    
+                    <div class="mt-8 hidden">
+                        <input matInput
+                            [formControlName]="'id'"
+                            [placeholder]="'id'"
+                            [spellcheck]="false">
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Voucher Code</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'voucher_code'"
+                                   [placeholder]="'Voucher Code'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Points Used</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'points_used'"
+                                   [placeholder]="'Points Used'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Conversion Rate</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'conversion_rate'"
+                                   [placeholder]="'Conversion Rate'">
+                        </mat-form-field>
+                    </div>
+
+                    <mat-form-field class="fuse-mat-no-subscript w-full hidden">
+                        <input matInput [formControlName]="'member'" />
+                    </mat-form-field>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Amount</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'amount'"
+                                   [placeholder]="'Amount'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Status</mat-label>
+                            <mat-select [formControlName]="'status'">
+                                <mat-option value="active">Active</mat-option>
+                                <mat-option value="inactive">Inactive</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Redeemed Order</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput
+                                   [formControlName]="'redeemed_order'"
+                                   [placeholder]="'Redeemed Order'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="flex items-center justify-end mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                        <button class="ml-2" style="width:16%;"
+                                mat-flat-button
+                                [disabled]="memberVoucherEditForm.invalid"
+                                [color]="'primary'"
+                                [matTooltip]="'Save'"
+                                (click)="updateMemberVoucher()">
+                            Save
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </ng-container>
+</div>

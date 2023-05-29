@@ -78,6 +78,7 @@ export const appRoutes: Route[] = [
             { path: 'memberdashboard', loadChildren: () => import('app/modules/admin/memberdashboard/analytics.module').then(m => m.AnalyticsModule) },
             { path: 'member', loadChildren: () => import('app/modules/admin/member/member.module').then(m => m.MemberModule) },
             { path: 'memberpoint', loadChildren: () => import('app/modules/admin/memberpoint/memberpoint.module').then(m => m.MemberPointModule) },
+            { path: 'voucher', loadChildren: () => import('app/modules/admin/membervouchers/membervouchers.module').then(m => m.MemberVoucherModule) },
             { path: 'country', loadChildren: () => import('app/modules/admin/setting/country/country.module').then(m => m.CountryModule) },
             { path: 'channel', loadChildren: () => import('app/modules/admin/setting/channel/channel.module').then(m => m.ChannelModule) },
             { path: 'store', loadChildren: () => import('app/modules/admin/setting/store/store.module').then(m => m.StoreModule) },

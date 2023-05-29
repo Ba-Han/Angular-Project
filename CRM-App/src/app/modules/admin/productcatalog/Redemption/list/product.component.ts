@@ -100,7 +100,6 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
             id: [''],
             status: ['', [Validators.required]],
             item_name: ['', [Validators.required]],
-            /* price: [''], */
             item_no: ['', [Validators.required]]
         });
 

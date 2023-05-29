@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { MemberPointResolver, MemberPointDetailResolver, PointSegmentResolver } from 'app/modules/admin/memberpoint/memberpoint.resolvers';
+import { MemberPointResolver, MemberPointDetailResolver } from 'app/modules/admin/memberpoint/memberpoint.resolvers';
 import { MemberPointComponent } from 'app/modules/admin/memberpoint/memberpoint.component';
 import { MemberPointListComponent } from './list/list.component';
 import { MemberPointDetailComponent } from './detail/detail.component';
@@ -23,7 +23,6 @@ export const memberPointRoutes: Route[] = [
                 component: MemberPointDetailComponent,
                 resolve: {
                     task: MemberPointDetailResolver,
-                    pointsegment: PointSegmentResolver,
                 }
             }
         ]

@@ -25,19 +25,19 @@ import * as moment from 'moment';
 import { FuseDrawerModule, FuseDrawerService } from '@fuse/components/drawer';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { SharedModule } from 'app/shared/shared.module';
-import { MemberPointComponent } from 'app/modules/admin/memberpoint/memberpoint.component';
-import { memberPointRoutes } from 'app/modules/admin/memberpoint/memberpoint.routing';
-import { MemberPointListComponent } from './list/list.component';
-import { MemberPointDetailComponent } from './detail/detail.component';
+import { MemberVoucherComponent } from 'app/modules/admin/membervouchers/membervouchers.component';
+import { memberVoucherRoutes } from 'app/modules/admin/membervouchers/membervouchers.routing';
+import { MemberVoucherListComponent } from 'app/modules/admin/membervouchers/list/list.component';
+import { MemberVoucherDetailComponent } from 'app/modules/admin/membervouchers/detail/detail.component';
 
 @NgModule({
     declarations: [
-        MemberPointComponent,
-        MemberPointListComponent,
-        MemberPointDetailComponent
+        MemberVoucherComponent,
+        MemberVoucherListComponent,
+        MemberVoucherDetailComponent
     ],
     imports     : [
-        RouterModule.forChild(memberPointRoutes),
+        RouterModule.forChild(memberVoucherRoutes),
         MatButtonModule,
         MatButtonToggleModule,
         MatCheckboxModule,
@@ -79,6 +79,6 @@ import { MemberPointDetailComponent } from './detail/detail.component';
         }
     ]
 })
-export class MemberPointModule
+export class MemberVoucherModule
 {
 }

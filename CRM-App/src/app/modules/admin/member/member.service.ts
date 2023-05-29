@@ -20,6 +20,7 @@ export class MemberService
     private _transactions: BehaviorSubject<any> = new BehaviorSubject(null);
     private _transaction: BehaviorSubject<any> = new BehaviorSubject(null);
     private _membertransactions: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _memberVouchers: BehaviorSubject<any> = new BehaviorSubject(null);
     private _points: BehaviorSubject<any> = new BehaviorSubject(null);
     private _memberDocuments: BehaviorSubject<MemberDocument[] | null> = new BehaviorSubject(null);
     private _memberDocument: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -60,6 +61,11 @@ export class MemberService
     get transactions$(): Observable<any>
     {
         return this._transactions.asObservable();
+    }
+
+    get memberVouchers$(): Observable<any>
+    {
+        return this._memberVouchers.asObservable();
     }
 
     get points$(): Observable<any>
@@ -159,6 +165,17 @@ export class MemberService
                 this._member.next(response);
             })
         );
+    }
+
+    getRecentMemberVouchersById(id: number): Observable<Transaction> {
+        return this._httpClient.get<any>(`${this._apiurl}/member/${id}/transactions`, {
+            params: { limit: 5, sort: 'date_created' }
+        })
+            .pipe(
+                tap((response) => {
+                    this._memberVouchers.next(response.data);
+                })
+            );
     }
 
     getRecentTransactionsById(id: number): Observable<Transaction> {

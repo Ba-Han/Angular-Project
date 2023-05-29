@@ -1,16 +1,19 @@
-export interface Product
-{
+export interface MemberVoucher {
     id: number;
-    status: string;
     user_created: string;
     date_created: string;
     user_updated: string;
     date_updated: string;
-    item_name: string;
-    item_number: string;
+    voucher_code: string;
+    points_used: string;
+    conversion_rate: number;
+    amount: number;
+    status: string;
+    redeemed_order: string;
+    member: number;
 }
 
-export interface ProductPagination {
+export interface MemberVoucherPagination {
     length: number;
     limit: number;
     page: number;

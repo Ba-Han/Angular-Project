@@ -75,14 +75,8 @@
                                             <div> SKU </div>
                                             <div> Name </div>
                                             <div> Status </div>
-
-                                            <!-- <div [mat-sort-header]="'item_no'"> SKU </div> -->
-                                            <!-- <div [mat-sort-header]="'item_name'"> Name </div> -->
-                                            <!-- <div [mat-sort-header]="'price'"> Price </div> -->
-                                            <!-- <div [mat-sort-header]="'status'"> Status </div> -->
                                         </div>
-        
-        
+
                                         <!-- Rows -->
                                         <ng-container *ngIf="(products$ | async) as products">
                                             <ng-container *ngFor="let product of products; trackBy: trackByFn">
@@ -98,10 +92,6 @@
                                                         <div class="truncate">
                                                             {{product.item_name}}
                                                         </div>
-        
-                                                        <!-- <div class="truncate">
-                                                            {{product.price}}
-                                                        </div> -->
         
                                                         <ng-container *ngIf="product.status === 'active'">
                                                             <div class="truncate">
@@ -181,18 +171,6 @@
                                 </mat-form-field>
                             </div>
         
-                            <!-- <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-full">
-                                    <mat-label>Price</mat-label>
-                                    <mat-icon matPrefix
-                                              class="hidden sm:flex icon-size-5"
-                                              [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                    <input matInput
-                                           [formControlName]="'price'"
-                                           [placeholder]="'Price'">
-                                </mat-form-field>
-                            </div> -->
-        
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Status</mat-label>
@@ -202,9 +180,7 @@
                                     </mat-select>
                                 </mat-form-field>
                             </div>
-        
-        
-        
+
                             <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                                 <button class="ml-2"
                                         mat-flat-button style="width: 6rem;"

@@ -82,18 +82,4 @@ export class TransactionService
               })
           );
       }
-
-    // Delete API method
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    getDeleteTransaction(id: number){
-        return this._httpClient.delete(`${this._apiurl}/transaction/${id}`,
-        { responseType: 'text' })
-        .pipe(
-            map(() => true),
-            catchError((error) => {
-                console.error(error);
-                return of(false);
-            }));
-    };
-
 }

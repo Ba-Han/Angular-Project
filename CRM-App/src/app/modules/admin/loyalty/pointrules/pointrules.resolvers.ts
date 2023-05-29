@@ -3,7 +3,6 @@ import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@a
 import { catchError, Observable, throwError } from 'rxjs';
 import { PointRuleService } from 'app/modules/admin/loyalty/pointrules/pointrules.service';
 import { PointRule, PointRulePaginagion, PointBasketPagination, PointBasket, MemberTier, MemberTierPagination, StorePagination, Store } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
-import { PointSegmentPagination, PointSegment } from '../../memberpoint/memberpoint.types';
 
 @Injectable({
     providedIn: 'root'

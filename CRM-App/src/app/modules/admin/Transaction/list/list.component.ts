@@ -41,48 +41,6 @@ import { UserService } from 'app/core/user/user.service';
                 margin-left: 281px;
             }
 
-            .reset_popup {
-                position: fixed !important;
-                top: 50% !important;
-                left: 50% !important;
-                transform: translate(-50%, -50%) !important;
-                width: 28% !important;
-                height: 34% !important;
-            }
-
-            .parent_popup {
-                position: fixed;
-                display: grid;
-                justify-content: center;
-                padding: 4rem;
-            }
-
-            .child_btn {
-                padding-left: 1.5rem;
-                position: fixed;
-                margin-top: 2rem !important;
-            }
-
-            .update_scss {
-                position: unset;
-                text-align: center;
-                color: rgb(0, 128, 0);
-                padding: 4rem;
-                font-size: 16px;
-            }
-
-            .delete-scss {
-                position: fixed;
-                padding-left: 2rem;
-            }
-
-            .deleteTransactionscss {
-                position: relative;
-                bottom: 0.6rem;
-                left: 60rem;
-                margin: -2rem;
-            }
-
             .sort-asc::after {
                 content: '\u2191';
               }
@@ -113,11 +71,6 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
 
-    canEdit: boolean = false;
-    canDelete: boolean = false;
-    DeleteMode: boolean = false;
-    isSuccess: boolean = false;
-    selectedId: number | null = null;
     transactions$: Observable<Transaction[]>;
     transaction: Transaction;
     memberPointsCount: number = 0;
@@ -187,9 +140,6 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
                 })
             )
             .subscribe();
-        this.canEdit = this._userService.getEditUserPermissionByNavId('member');
-        this.canDelete = this._userService.getDeleteUserPermissionByNavId('member');
-
     }
 
     ngAfterViewInit(): void {
@@ -294,49 +244,6 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
             this.TransactionDetail = transactiondetailMode;
         }
 
-        this._changeDetectorRef.markForCheck();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    toogleDeleteMode(DeleteMode: boolean | null = null): void {
-        if (DeleteMode === null) {
-            this.DeleteMode = !this.DeleteMode;
-        }
-        else {
-            this.DeleteMode = DeleteMode;
-        }
-        this._changeDetectorRef.markForCheck();
-    }
-
-    cancelPopup(): void {
-        this.isSuccess = false;
-        this.toogleDeleteMode(false);
-        this.matDrawer.close();
-        this._changeDetectorRef.markForCheck();
-    }
-
-    proceedPopup(): void {
-        this._transactionService.getDeleteTransaction(this.selectedId)
-        .pipe(
-            takeUntil(this._unsubscribeAll),
-            debounceTime(300),
-            switchMap((query) => {
-                this.isLoading = true;
-                return this._transactionService.getData(Number(this.memberId), 0, 10, 'date_created', '');
-            }),
-            map(() => {
-                this.isLoading = false;
-            })
-        )
-        .subscribe();
-        this.isSuccess = true;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    DeleteDrawer(id: number): void {
-        this.selectedId = id;
-        this.toogleDeleteMode(true);
-        this.matDrawer.open();
         this._changeDetectorRef.markForCheck();
     }
 

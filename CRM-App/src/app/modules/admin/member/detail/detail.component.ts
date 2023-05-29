@@ -155,6 +155,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     @ViewChild('recentTransactionsTable', {read: MatSort}) private _recentTransactionsTableMatSort: MatSort;
     @ViewChild('recentPointsTable', { read: MatSort }) private _recentPointsTableMatSort: MatSort;
     @ViewChild(' memberDocumentsTable', { read: MatSort }) private _memberDocumentsTableMatSort: MatSort;
+    @ViewChild(' recentMemberVouchersTable', { read: MatSort }) private _memberVouchersTableMatSort: MatSort;
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('drawerOne', { static: true }) drawerOne: MatDrawer;
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -188,6 +189,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     memberForm: FormGroup;
     members: Member[];
     transactions: any;
+    memberVouchers: any;
     points: any;
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
@@ -219,6 +221,8 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     recentPointsTableColumns: string[] = ['transaction_document_no', 'point_type', 'point'];
     memberDocumentsDataSource: MatTableDataSource<any> = new MatTableDataSource();
     memberDocumentsTableColumns: string[] = ['document_name', 'uploaded_on', 'comment', 'file_path', 'uploaded_by_name'];
+    recentMemberVouchersDataSource: MatTableDataSource<any> = new MatTableDataSource();
+    recentMemberVouchersTableColumns: string[] = ['document_no', 'total_amount', 'channel_name', 'point', 'point_amount', 'point_type', 'purchase_date'];
     searchInputControl: FormControl = new FormControl();
     selectedTier: number;
     isAscending: boolean = true;
@@ -372,6 +376,14 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             this.recentTransactionsDataSource.data = transactions;
         });
 
+        //Member Vouchers
+        this._memberService.memberVouchers$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((membervouchers) => {
+            this.memberVouchers = membervouchers;
+            this.recentMemberVouchersDataSource.data = membervouchers;
+        });
+
         //memberDocuments
         this._memberService.memberDocument$
         .pipe(takeUntil(this._unsubscribeAll))
@@ -419,6 +431,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         this.recentTransactionsDataSource.sort = this._recentTransactionsTableMatSort;
         this.recentPointsDataSource.sort = this._recentPointsTableMatSort;
         this.memberDocumentsDataSource.sort = this._memberDocumentsTableMatSort;
+        this.recentMemberVouchersDataSource.sort = this._memberVouchersTableMatSort;
 
         if (this._sort && this._paginator) {
             // Set the initial sort
