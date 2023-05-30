@@ -4,13 +4,13 @@ export interface MemberVoucher {
     date_created: string;
     user_updated: string;
     date_updated: string;
+    member_id: number;
     voucher_code: string;
-    points_used: string;
+    points_used: number;
     conversion_rate: number;
     amount: number;
     status: string;
     redeemed_order: string;
-    member: number;
 }
 
 export interface MemberVoucherPagination {

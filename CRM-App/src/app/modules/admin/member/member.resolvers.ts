@@ -93,7 +93,7 @@ export class MemberVouchersRecentResolver implements Resolve<any>
     constructor(private _memberService: MemberService) {
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        return this._memberService.getRecentMemberVouchersById(Number(route.paramMap.get('id')));
+        return this._memberService.getRecentMemberVouchersById();
     }
 }
 

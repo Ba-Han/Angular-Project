@@ -19,18 +19,18 @@ import { MemberVoucherService } from 'app/modules/admin/membervouchers/membervou
     templateUrl: './detail.component.html',
     styles:[ `
                 membervoucher-grid {
-                    grid-template-columns: 150px 150px 100px 100px 150px 150px 100px;
+                    grid-template-columns: 150px 150px 150px 100px 100px;
 
                     @screen sm {
-                        grid-template-columns: 150px 150px 100px 100px 150px 150px 100px;
+                        grid-template-columns: 150px 150px 150px 100px 100px;
                     }
 
                     @screen md {
-                        grid-template-columns: 150px 150px 100px 100px 150px 150px 100px;
+                        grid-template-columns: 150px 150px 150px 100px 100px;
                     }
 
                     @screen lg {
-                        grid-template-columns: 150px 150px 100px 100px 150px 150px 100px;
+                        grid-template-columns: 150px 150px 150px 100px 100px;
                     }
                 }
                 .membercustom-paging {
@@ -81,13 +81,11 @@ export class MemberVoucherDetailComponent implements OnInit, AfterViewInit, OnDe
         //MemberVoucherEditForm
         this.memberVoucherEditForm = this._formBuilder.group({
             id: [''],
-            member: this.memberId,
+            member_id: this.memberId,
             voucher_code: ['', [Validators.required]],
             points_used: ['', [Validators.required]],
             conversion_rate: ['', [Validators.required]],
-            amount: ['', [Validators.required]],
-            status: ['', [Validators.required]],
-            redeemed_order: ['', [Validators.required]],
+            amount: ['', [Validators.required]]
         });
 
         this._memberVoucherService.memberVoucher$
@@ -124,7 +122,7 @@ export class MemberVoucherDetailComponent implements OnInit, AfterViewInit, OnDe
     {
         const memberVoucher = this.memberVoucherEditForm.getRawValue();
         this._memberVoucherService.updateMemberVoucher(memberVoucher.id, memberVoucher).subscribe(() => {
-            this._router.navigate(['/member/', this.memberId, 'memberpoint'], { relativeTo: this._activatedRoute });
+            this._router.navigate(['/member/', this.memberId, 'voucher'], { relativeTo: this._activatedRoute });
         });
     }
 

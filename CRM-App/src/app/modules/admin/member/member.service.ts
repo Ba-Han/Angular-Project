@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
-import { Member, MemberPagination, Transaction, MemberInfo, MemberTier, MemberDocument, MemberDocumentPagination } from 'app/modules/admin/member/member.types';
+import { Member, MemberPagination, Transaction, MemberInfo, MemberTier, MemberDocument, MemberDocumentPagination, MemberVoucher } from 'app/modules/admin/member/member.types';
 import { MemberPoint} from 'app/modules/admin/member/member.types';
 import { environment } from 'environments/environment';
 
@@ -167,8 +167,8 @@ export class MemberService
         );
     }
 
-    getRecentMemberVouchersById(id: number): Observable<Transaction> {
-        return this._httpClient.get<any>(`${this._apiurl}/member/${id}/transactions`, {
+    getRecentMemberVouchersById(): Observable<MemberVoucher> {
+        return this._httpClient.get<any>(`${this._apiurl}/items/voucher`, {
             params: { limit: 5, sort: 'date_created' }
         })
             .pipe(
@@ -334,6 +334,30 @@ export class MemberService
                 const res = response.data;
                 return res;
             })
+        );
+    }
+
+    createGenerateVoucher(memberVoucher: MemberVoucher): Observable<MemberVoucher>
+    {
+        const voucherCode = !memberVoucher.voucher_code ? '' : memberVoucher.voucher_code;
+
+        return this.memberVouchers$.pipe(
+            take(1),
+            switchMap(memberVouchers => this._httpClient.post<any>(`${this._apiurl}/items/voucher`, {
+                'voucher_code': voucherCode,
+                'points_used': memberVoucher.points_used,
+                'conversion_rate': memberVoucher.conversion_rate,
+                'amount': memberVoucher.amount,
+                'member_id': memberVoucher.member_id
+            }).pipe(
+                map((newMemberVoucher) => {
+                    // Update the contacts with the new contact
+                    this._memberVouchers.next([newMemberVoucher.data, ...memberVouchers]);
+
+                    // Return the new contact
+                    return newMemberVoucher;
+                })
+            ))
         );
     }
 }

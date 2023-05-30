@@ -52,7 +52,7 @@ export class MemberVoucherService
     getMemberVoucher(id: number = 0, page: number = 0, limit: number = 10, sort: string = 'date_created', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: MemberVoucherPagination; membervouchers: MemberVoucher[] }>
     {
-        return this._httpClient.get(`${this._apiurl}/member/${id}/points`, {
+        return this._httpClient.get(`${this._apiurl}/items/voucher`, {
             params: {
                 meta: 'filter_count',
                 page: page+1,
@@ -85,7 +85,7 @@ export class MemberVoucherService
 
     getMemberVoucherById(id: number): Observable<MemberVoucher>
     {
-    return this._httpClient.get<any>(`${this._apiurl}/items/member_point/${id}?fields=*,member.*,point_basket.*`)
+    return this._httpClient.get<any>(`${this._apiurl}/items/voucher/${id}`)
         .pipe(
             tap((response) => {
                 const memberVoucher = response.data;
@@ -98,14 +98,12 @@ export class MemberVoucherService
     {
         return this.memberVouchers$.pipe(
             take(1),
-            switchMap(memberVouchers => this._httpClient.post<any>(`${this._apiurl}/items/member_point`, {
+            switchMap(memberVouchers => this._httpClient.post<any>(`${this._apiurl}/items/voucher`, {
                 'voucher_code': memberVoucher.voucher_code,
                 'points_used': memberVoucher.points_used,
                 'conversion_rate': memberVoucher.conversion_rate,
                 'amount': memberVoucher.amount,
-                'status': memberVoucher.status,
-                'redeemed_order': memberVoucher.redeemed_order,
-                'member': memberVoucher.member
+                'member_id': memberVoucher.member_id
             }).pipe(
                 map((newMemberVoucher) => {
                     // Update the contacts with the new contact
@@ -119,15 +117,13 @@ export class MemberVoucherService
     }
 
     updateMemberVoucher(id: number, memberVoucher: MemberVoucher): Observable<MemberVoucher> {
-        return this._httpClient.patch<MemberVoucher>(`${this._apiurl}/items/member_point/${id}`, {
+        return this._httpClient.post<MemberVoucher>(`${this._apiurl}/items/voucher/${id}`, {
             'id': memberVoucher.id,
             'voucher_code': memberVoucher.voucher_code,
             'points_used': memberVoucher.points_used,
             'conversion_rate': memberVoucher.conversion_rate,
             'amount': memberVoucher.amount,
-            'status': memberVoucher.status,
-            'redeemed_order': memberVoucher.redeemed_order,
-            'member': memberVoucher.member
+            'member_id': memberVoucher.member_id
         }).pipe(
             map(updateMemberVoucher => updateMemberVoucher)
         );

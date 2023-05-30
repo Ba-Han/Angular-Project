@@ -18,18 +18,18 @@ import { MemberVoucher, MemberVoucherPagination } from 'app/modules/admin/member
     styles         : [
         `
             .membervoucher-grid {
-                grid-template-columns: 150px 150px 100px 100px 150px 150px 100px;
+                grid-template-columns: 150px 150px 150px 100px 100px;
 
                 @screen sm {
-                    grid-template-columns: 150px 150px 100px 100px 150px 150px 100px;
+                    grid-template-columns: 150px 150px 150px 100px 100px;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 150px 100px 100px 150px 150px 100px;
+                    grid-template-columns: 150px 150px 150px 100px 100px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 150px 100px 100px 150px 150px 100px;
+                    grid-template-columns: 150px 150px 150px 100px 100px;
                 }
             }
             .membercustom-paging {
@@ -107,13 +107,11 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
 
         this.memberVoucherAddForm = this._formBuilder.group({
             id: 0,
-            member: this.memberId,
+            member_id: this.memberId,
             voucher_code: ['', [Validators.required]],
             points_used: ['', [Validators.required]],
             conversion_rate: ['', [Validators.required]],
-            amount: ['', [Validators.required]],
-            status: ['', [Validators.required]],
-            redeemed_order: ['', [Validators.required]],
+            amount: ['', [Validators.required]]
         });
 
         // Get the data

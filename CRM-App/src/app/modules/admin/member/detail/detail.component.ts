@@ -16,7 +16,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { DatePipe } from '@angular/common';
 import { fuseAnimations } from '@fuse/animations';
-import { Member, MemberPoint, Transaction, MemberTier, MemberInfo, MemberDocument, MemberDocumentPagination } from 'app/modules/admin/member/member.types';
+import { Member, MemberPoint, Transaction, MemberTier, MemberInfo, MemberDocument, MemberDocumentPagination, MemberVoucher } from 'app/modules/admin/member/member.types';
 import { MemberService } from 'app/modules/admin/member/member.service';
 
 @Component({
@@ -129,17 +129,20 @@ import { MemberService } from 'app/modules/admin/member/member.service';
 
             .base64QrCodeImageData {
                 width: auto !important;
-                height: 8rem !important;
+                height: 5rem !important;
             }
 
             .base64BarCodeImageData {
-                width: auto !important;
-                height: 7rem !important;
+                width: 10rem !important;
+                height: 4rem !important;
             }
 
             .imageCode {
-                gap: 3rem;
-                margin-left: 7rem;
+                gap: 1rem;
+                margin-left: 12rem;
+                margin-bottom: 0rem;
+                justify-content: center;
+                align-items: center;
             }
         `
     ],
@@ -222,14 +225,19 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     memberDocumentsDataSource: MatTableDataSource<any> = new MatTableDataSource();
     memberDocumentsTableColumns: string[] = ['document_name', 'uploaded_on', 'comment', 'file_path', 'uploaded_by_name'];
     recentMemberVouchersDataSource: MatTableDataSource<any> = new MatTableDataSource();
-    recentMemberVouchersTableColumns: string[] = ['document_no', 'total_amount', 'channel_name', 'point', 'point_amount', 'point_type', 'purchase_date'];
+    recentMemberVouchersTableColumns: string[] = ['voucher_code', 'points_used', 'conversion_rate', 'amount'];
     searchInputControl: FormControl = new FormControl();
     selectedTier: number;
     isAscending: boolean = true;
     selectedCoulumn = 'uploadeddate';
     qrCodeImageData: string | '' = '';
     barCodeImageData: string | '' = '';
+    generateVoucher: MemberVoucher;
     getAvailablePoints: number;
+    getPointValue: number;
+    getPointToConvert: any;
+    getVoucherAmount: any;
+    inputPointValue: number = 0;
     // private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -770,7 +778,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    toogleTierUpgradeFormMode(generateVoucherFormMode: boolean | null = null) {
+    toogleGenerateVoucherFormMode(generateVoucherFormMode: boolean | null = null) {
         if (generateVoucherFormMode === null) {
             this.generateVoucherFormMode = !this.generateVoucherFormMode;
         }
@@ -782,20 +790,37 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     openGernerateVoucherForm(): void {
+        this._activatedRoute.url.subscribe((param) => {
+            if (param != null) {
+                this.memberId = Number(param[0].path);
+            }
+
+        });
         this.getAvailablePoints = this.member.spending.totalPoint;
+        this.getPointValue = this.member.member[0].point_conversion;
+        this.getPointToConvert = this.inputPointValue === undefined ? 0 : this.inputPointValue;
+        this.getVoucherAmount = this.getPointToConvert / this.getPointValue;
 
          // Create the generate voucher form
          this.GenerateVoucherForm = this._formBuilder.group({
             id: [''],
             available_points: [this.getAvailablePoints],
-            points_to_convert: ['', [Validators.required]],
-            points_value: ['', [Validators.required]],
-            voucher_amount: ['', [Validators.required]],
+            member_id: this.memberId,
+            points_used: [this.getPointToConvert],
+            conversion_rate: [this.getPointValue],
+            amount: [this.getVoucherAmount],
         });
 
-        this.toogleTierUpgradeFormMode(true);
+        this.toogleGenerateVoucherFormMode(true);
         this.drawerTwo.open();
-        //this.GenerateVoucherForm.reset();
     }
 
+    createGenerateVoucher(): void
+    {
+        const generateVoucher = this.GenerateVoucherForm.getRawValue();
+        this._memberService.createGenerateVoucher(generateVoucher).subscribe(() => {
+            this.toogleGenerateVoucherFormMode(false);
+            this._changeDetectorRef.markForCheck();
+        });
+    }
 }
