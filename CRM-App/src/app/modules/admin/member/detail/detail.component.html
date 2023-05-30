@@ -107,9 +107,11 @@
                             <mat-icon matPrefix
                                       class="hidden sm:flex icon-size-5"
                                       [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                            <input matInput type="number"
-                                   [formControlName]="'points_to_convert'"
-                                   [placeholder]="'points to convert'">
+                            <input matInput
+                                   [(ngModel)]="inputPointValue"
+                                   [formControlName]="'points_used'"
+                                   [placeholder]="'points to convert'"
+                                   (input)="openGernerateVoucherForm()">
                         </mat-form-field>
                     </div>
 
@@ -119,9 +121,11 @@
                             <!-- <mat-icon matPrefix
                                       class="hidden sm:flex icon-size-5"
                                       [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon> -->
-                            <input matInput type="number"
-                                   [formControlName]="'points_value'"
-                                   [placeholder]="'points value'">
+                            <input matInput
+                                   [(ngModel)]="member.member[0].point_conversion"
+                                   [formControlName]="'conversion_rate'"
+                                   [placeholder]="'points value'"
+                                   (input)="openGernerateVoucherForm()">
                         </mat-form-field>
                     </div>
 
@@ -132,8 +136,9 @@
                                       class="hidden sm:flex icon-size-5"
                                       [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon> -->
                             <input matInput type="number"
-                                   [formControlName]="'voucher_amount'"
-                                   [placeholder]="'voucher_amount'">
+                                   [readonly]="true"
+                                   [formControlName]="'amount'"
+                                   [placeholder]="'voucher amount'">
                         </mat-form-field>
                     </div>
 
@@ -143,11 +148,14 @@
                                 [disabled]="GenerateVoucherForm.invalid"
                                 [color]="'primary'"
                                 [matTooltip]="'Generate'"
-                                (click)="generateVoucher()">
+                                (click)="createGenerateVoucher()">
                             Generate
                         </button>
-                    </div>
 
+                        <div *ngIf="voucherErrorMessage" style="position: relative; color: red;">
+                            {{ voucherErrorMessage }}
+                        </div>
+                    </div>
                 </form>
             </div>
         </ng-container>
@@ -161,7 +169,7 @@
                 <!-- Header -->
                 <div class="relative w-full px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
                     <!-- Close button -->
-                    <div class="flex items-center justify-end w-full max-w-5xl mx-auto pt-6">
+                    <div class="flex items-center justify-end w-full max-w-4xl mx-auto pt-6">
                         <button mat-icon-button
                                 [matTooltip]="'Close'"
                                 [routerLink]="['../']"
@@ -483,7 +491,7 @@
                         </div>
         
                         <!-- Recent member points table -->
-                        <div class="col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
+                        <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                             <div class="p-6">
                                 <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">Recent Member Points</div>
                             </div>
@@ -537,20 +545,6 @@
                                         </td>
                                     </ng-container>
         
-                                    <!-- Dollar Value -->
-                                    <!-- <ng-container matColumnDef="pointsInDoller">
-                                        <th mat-header-cell
-                                            *matHeaderCellDef style="background:#e2e8f0;">
-                                            $ Value
-                                        </th>
-                                        <td mat-cell [routerLink]="['./memberpoint', point.id]" style="cursor:pointer;"
-                                            *matCellDef="let point">
-                                            <span class="pr-6 font-medium whitespace-nowrap">
-                                                ${{point.pointsInDollar | number : '1.2-2'}}
-                                            </span>
-                                        </td>
-                                    </ng-container> -->
-        
                                     <!-- Footer -->
                                     <ng-container *ngIf="points.length > 0">
                                         <ng-container matColumnDef="recentPointsTableFooter">
@@ -590,6 +584,159 @@
                                     <tr class="h-16 border-0"
                                         mat-footer-row
                                         *matFooterRowDef="['recentPointsTableFooter']"></tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Recent member vouchers table -->
+                        <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
+                            <div class="p-6">
+                                <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">Member Vouchers</div>
+                            </div>
+                            <div class="overflow-x-auto mx-6">
+                                <table class="w-full bg-transparent"
+                                       mat-table
+                                       matSort
+                                       [dataSource]="recentMemberVouchersDataSource"
+                                       [trackBy]="trackByFn"
+                                       #recentMemberVouchersTable>
+        
+                                    <!-- Voucher Code -->
+                                    <ng-container matColumnDef="voucher_code">
+                                        <th mat-header-cell
+                                            *matHeaderCellDef style="background:#e2e8f0;">
+                                            Voucher Code
+                                        </th>
+                                        <ng-container mat-cell *matCellDef="let memberVouchers">
+                                            <td mat-cell [routerLink]="['./voucher', memberVouchers.id]" style="cursor:pointer;">
+                                                <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
+                                                    {{memberVouchers.voucher_code}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+        
+                                    <!-- Points Used -->
+                                    <ng-container matColumnDef="points_used">
+                                        <th mat-header-cell
+                                            *matHeaderCellDef style="background:#e2e8f0;">
+                                            Points Used
+                                        </th>
+                                        <ng-container mat-cell *matCellDef="let memberVouchers">
+                                            <td mat-cell [routerLink]="['./voucher', memberVouchers.id]" style="cursor:pointer;">
+                                                <span class="pr-6 font-medium whitespace-nowrap">
+                                                    {{memberVouchers.points_used| number : '1.2-2'}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+        
+                                    <!-- Conversion Rate -->
+                                    <ng-container matColumnDef="conversion_rate">
+                                        <th mat-header-cell
+                                            *matHeaderCellDef style="background:#e2e8f0;">
+                                            Conversion Rate
+                                        </th>
+                                        <ng-container mat-cell *matCellDef="let memberVouchers">
+                                            <td mat-cell [routerLink]="['./voucher', memberVouchers.id]" style="cursor:pointer;">
+                                                <span class="pr-6 whitespace-nowrap">
+                                                    {{memberVouchers.conversion_rate| number : '1.2-2'}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+        
+                                    <!-- Amount -->
+                                    <ng-container matColumnDef="amount">
+                                        <th mat-header-cell
+                                            *matHeaderCellDef style="background:#e2e8f0;">
+                                            Amount
+                                        </th>
+                                        <ng-container mat-cell *matCellDef="let memberVouchers">
+                                            <td mat-cell [routerLink]="['./voucher', memberVouchers.id]" style="cursor:pointer;">
+                                                <span class="pr-6 whitespace-nowrap">
+                                                    ${{memberVouchers.amount| number : '1.2-2'}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+        
+                                    <!-- Status -->
+                                    <!-- <ng-container matColumnDef="point_amount">
+                                        <th mat-header-cell
+                                            *matHeaderCellDef style="background:#e2e8f0;">
+                                            Status
+                                        </th>
+                                        <ng-container mat-cell *matCellDef="let memberVouchers">
+                                            <td mat-cell [routerLink]="['./voucher', memberVouchers.id]" style="cursor:pointer;">
+                                                <span class="pr-6 whitespace-nowrap">
+                                                    ${{transaction.point_amount | number : '1.2-2'}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+                                    </ng-container> -->
+        
+                                    <!-- Redeemed Order -->
+                                    <!-- <ng-container matColumnDef="point_type">
+                                        <th mat-header-cell
+                                            *matHeaderCellDef style="background:#e2e8f0;">
+                                            Redeemed Order
+                                        </th>
+                                        <ng-container mat-cell *matCellDef="let memberVouchers">
+                                            <td mat-cell [routerLink]="['./voucher', memberVouchers.id]" style="cursor:pointer;">
+                                                <span class="pr-6 whitespace-nowrap" style="text-transform:capitalize;">
+                                                    {{transaction.point_type}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+                                    </ng-container> -->
+        
+                                    <!-- Button Email to Customer -->
+                                    <!-- <ng-container matColumnDef="balance">
+                                        <th mat-header-cell
+                                            *matHeaderCellDef style="background:#e2e8f0;">
+                                            Send <br/> Email
+                                        </th>
+                                        <td mat-cell style="cursor:pointer;"
+                                            *matCellDef="let memberVouchers">
+                                            <button mat-icon-button color="primary" [matTooltip]="'Send Email'">
+                                                <mat-icon>send</mat-icon>
+                                            </button>
+                                        </td>
+                                    </ng-container> -->
+        
+                                    <!-- Footer -->
+                                    <ng-container *ngIf="memberVouchers.length > 0">
+                                        <ng-container matColumnDef="recentMemberVouchersTableFooter">
+                                            <td class="py-6 px-0 border-0"
+                                                mat-footer-cell
+                                                *matFooterCellDef
+                                                colspan="6">
+                                                <button mat-stroked-button [routerLink]="['./voucher']">See All Member Vouchers</button>
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="memberVouchers.length === 0">
+                                        <ng-container matColumnDef="recentMemberVouchersTableFooter">
+                                            <td class="py-6 px-0 border-0"
+                                                mat-footer-cell
+                                                *matFooterCellDef
+                                                colspan="6"
+                                                style="color:grey;">
+                                                No Member Vouchers
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+        
+                                    <tr mat-header-row
+                                        *matHeaderRowDef="recentMemberVouchersTableColumns"></tr>
+                                    <tr class="order-row h-16"
+                                        mat-row
+                                        *matRowDef="let row; columns: recentMemberVouchersTableColumns;"></tr>
+                                    <tr class="h-16 border-0"
+                                        mat-footer-row
+                                        *matFooterRowDef="['recentMemberVouchersTableFooter']"></tr>
                                 </table>
                             </div>
                         </div>
@@ -721,32 +868,6 @@
                                         </ng-container>
         
                                     </ng-container>
-        
-                                    <!-- $ Value -->
-                                    <!-- <ng-container matColumnDef="point_amount">
-                                        <th mat-header-cell
-                                            mat-sort-header
-                                            *matHeaderCellDef style="background:#e2e8f0;">
-                                            $ Value
-                                        </th>
-                                        <ng-container mat-cell *matCellDef="let transaction">
-                                            <ng-container *ngIf="transaction.point_type !== 'adjustment'">
-                                                <td mat-cell [routerLink]="['./transaction', transaction.id]" style="cursor:pointer;">
-                                                    <span class="pr-6 whitespace-nowrap">
-                                                        ${{transaction.point_amount | number : '1.2-2'}}
-                                                    </span>
-                                                </td>
-                                            </ng-container>
-                                            <ng-container *ngIf="transaction.point_type === 'adjustment'">
-                                                <td mat-cell>
-                                                    <span class="pr-6 whitespace-nowrap">
-                                                        ${{transaction.point_amount | number : '1.2-2'}}
-                                                    </span>
-                                                </td>
-                                            </ng-container>
-                                        </ng-container>
-        
-                                    </ng-container> -->
         
                                     <!-- Point Type -->
                                     <ng-container matColumnDef="point_type">
@@ -956,7 +1077,7 @@
                 </div>
             </ng-container>
         
-            <!-- Edit mode (click)="toggleEditMode(false)" -->
+            <!-- Edit mode -->
             <ng-container *ngIf="editMode">
                 <!-- Header -->
                 <div class="relative w-full h-20 sm:h-20 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700" style="position: sticky !important;top: 0;z-index: 99;">

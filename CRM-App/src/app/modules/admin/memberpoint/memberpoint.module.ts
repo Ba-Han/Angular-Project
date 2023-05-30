@@ -61,7 +61,6 @@ import { MemberPointDetailComponent } from './detail/detail.component';
         FuseFindByKeyPipeModule,
         SharedModule,
         FuseDrawerModule
-        
     ],
     providers   : [
         {

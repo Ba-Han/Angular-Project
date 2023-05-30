@@ -90,12 +90,11 @@
                                     <ng-container *ngFor="let transaction of transactions; trackBy: trackByFn">
                                         <ng-container *ngIf="transaction.point_type !== 'adjustment'">
                                             <a class="cursor-pointer hover:bg-gray-100 dark:hover:bg-hover"
-                                               [routerLink]="canEdit ? ['/member/', memberId , 'transaction', transaction.id] : null"
+                                               [routerLink]="['/member/', memberId , 'transaction', transaction.id]"
                                                (click)="openDetail()">
         
                                                 <div class="transaction-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
-        
-        
+
                                                     <div class=" truncate" [matTooltip]="transaction.document_no">
                                                         {{transaction.document_no}}
                                                     </div>

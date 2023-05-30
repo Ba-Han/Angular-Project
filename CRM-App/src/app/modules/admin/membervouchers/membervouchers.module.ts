@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Route, RouterModule, ActivatedRouteSnapshot } from '@angular/router';
+import { Route, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -20,27 +20,24 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { DatePipe, DecimalPipe } from '@angular/common';
 import * as moment from 'moment';
+import { FuseDrawerModule, FuseDrawerService } from '@fuse/components/drawer';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
-import { FuseAlertModule } from '@fuse/components/alert';
 import { SharedModule } from 'app/shared/shared.module';
-import { memberRoutes } from 'app/modules/admin/member/member.routing';
-import { MemberComponent } from 'app/modules/admin/member/member.component';
-import { MemberListComponent } from './list/list.component';
-import { MemberDetailComponent } from './detail/detail.component';
-
+import { MemberVoucherComponent } from 'app/modules/admin/membervouchers/membervouchers.component';
+import { memberVoucherRoutes } from 'app/modules/admin/membervouchers/membervouchers.routing';
+import { MemberVoucherListComponent } from 'app/modules/admin/membervouchers/list/list.component';
+import { MemberVoucherDetailComponent } from 'app/modules/admin/membervouchers/detail/detail.component';
 
 @NgModule({
     declarations: [
-        MemberComponent,
-        MemberListComponent,
-        MemberDetailComponent
+        MemberVoucherComponent,
+        MemberVoucherListComponent,
+        MemberVoucherDetailComponent
     ],
     imports     : [
-        RouterModule.forChild(memberRoutes),
+        RouterModule.forChild(memberVoucherRoutes),
         MatButtonModule,
         MatButtonToggleModule,
         MatCheckboxModule,
@@ -60,15 +57,12 @@ import { MemberDetailComponent } from './detail/detail.component';
         MatSortModule,
         MatTableModule,
         MatTooltipModule,
-        MatExpansionModule,
         NgApexchartsModule,
         FuseFindByKeyPipeModule,
-        FuseAlertModule,
-        SharedModule
+        SharedModule,
+        FuseDrawerModule
     ],
-    providers: [
-        DecimalPipe,
-        DatePipe,
+    providers   : [
         {
             provide : MAT_DATE_FORMATS,
             useValue: {
@@ -85,6 +79,6 @@ import { MemberDetailComponent } from './detail/detail.component';
         }
     ]
 })
-export class MemberModule
+export class MemberVoucherModule
 {
 }

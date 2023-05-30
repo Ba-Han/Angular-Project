@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
-import { Member, MemberPagination, Transaction, MemberInfo, MemberTier, MemberDocument, MemberDocumentPagination } from 'app/modules/admin/member/member.types';
+import { Member, MemberPagination, Transaction, MemberInfo, MemberTier, MemberDocument, MemberDocumentPagination, MemberVoucher } from 'app/modules/admin/member/member.types';
 import { MemberPoint} from 'app/modules/admin/member/member.types';
+import { DatePipe } from '@angular/common';
 import { environment } from 'environments/environment';
 
 @Injectable({
@@ -20,6 +21,7 @@ export class MemberService
     private _transactions: BehaviorSubject<any> = new BehaviorSubject(null);
     private _transaction: BehaviorSubject<any> = new BehaviorSubject(null);
     private _membertransactions: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _memberVouchers: BehaviorSubject<any> = new BehaviorSubject(null);
     private _points: BehaviorSubject<any> = new BehaviorSubject(null);
     private _memberDocuments: BehaviorSubject<MemberDocument[] | null> = new BehaviorSubject(null);
     private _memberDocument: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -28,6 +30,8 @@ export class MemberService
     private _memberPoints: BehaviorSubject<MemberPoint[]> = new BehaviorSubject(null);
 
     private _isAddressexit: boolean = true;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    datePipe: any;
 
      constructor(private _httpClient: HttpClient)
      {
@@ -60,6 +64,11 @@ export class MemberService
     get transactions$(): Observable<any>
     {
         return this._transactions.asObservable();
+    }
+
+    get memberVouchers$(): Observable<any>
+    {
+        return this._memberVouchers.asObservable();
     }
 
     get points$(): Observable<any>
@@ -159,6 +168,17 @@ export class MemberService
                 this._member.next(response);
             })
         );
+    }
+
+    getRecentMemberVouchersById(): Observable<MemberVoucher> {
+        return this._httpClient.get<any>(`${this._apiurl}/items/voucher`, {
+            params: { limit: 5, sort: 'date_created' }
+        })
+            .pipe(
+                tap((response) => {
+                    this._memberVouchers.next(response.data);
+                })
+            );
     }
 
     getRecentTransactionsById(id: number): Observable<Transaction> {
@@ -317,6 +337,31 @@ export class MemberService
                 const res = response.data;
                 return res;
             })
+        );
+    }
+
+    createGenerateVoucher(memberVoucher: MemberVoucher): Observable<MemberVoucher>
+    {
+        const currentDate = new Date();
+        const formattedDate = currentDate.toLocaleDateString();
+
+        return this.memberVouchers$.pipe(
+            take(1),
+            switchMap(memberVouchers => this._httpClient.post<any>(`${this._apiurl}/items/voucher`, {
+                'voucher_code': formattedDate,
+                'points_used': memberVoucher.points_used,
+                'conversion_rate': memberVoucher.conversion_rate,
+                'amount': memberVoucher.amount,
+                'member_id': memberVoucher.member_id
+            }).pipe(
+                map((newMemberVoucher) => {
+                    // Update the contacts with the new contact
+                    this._memberVouchers.next([newMemberVoucher.data, ...memberVouchers]);
+
+                    // Return the new contact
+                    return newMemberVoucher;
+                })
+            ))
         );
     }
 }

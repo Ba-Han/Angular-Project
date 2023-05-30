@@ -103,13 +103,6 @@
                                     </div>
                                 </ng-container>
         
-                                <!-- <ng-container *ngIf="product.price">
-                                    <div class="flex sm:items-center">
-                                        <div class="w-1/4">Price: </div>
-                                        <div class="ml-6 leading-6">{{product.price}}</div>
-                                    </div>
-                                </ng-container> -->
-        
                                 <ng-container *ngIf="product.status === 'active'">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Status: </div>
@@ -153,9 +146,9 @@
         
                             <div class="mt-8 hidden">
                                 <input matInput
-                                       [formControlName]="'id'"
-                                       [placeholder]="'id'"
-                                       [spellcheck]="false">
+                                    [formControlName]="'id'"
+                                    [placeholder]="'id'"
+                                    [spellcheck]="false">
                             </div>
         
                             <div class="mt-8">
@@ -183,18 +176,6 @@
                                 </mat-form-field>
                             </div>
         
-                            <!-- <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-full">
-                                    <mat-label>Price</mat-label>
-                                    <mat-icon matPrefix
-                                              class="hidden sm:flex icon-size-5"
-                                              [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                    <input matInput
-                                           [formControlName]="'price'"
-                                           [placeholder]="'Price'">
-                                </mat-form-field>
-                            </div> -->
-        
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Status</mat-label>
@@ -204,8 +185,6 @@
                                     </mat-select>
                                 </mat-form-field>
                             </div>
-        
-        
         
                             <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                                 <button class="ml-2" style="width: 6rem;"

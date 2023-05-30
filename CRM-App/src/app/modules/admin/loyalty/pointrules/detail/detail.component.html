@@ -3,8 +3,7 @@
                 [mode]="'over'"
                 [opened]="false"
                 [position]="'start'"
-                [disableClose]="true"
-                #matDrawer>
+                [disableClose]="true">
 
         <!-- Delete single point rule popup -->
         <ng-container *ngIf="DeleteMode">
@@ -70,8 +69,7 @@
                 [mode]="'over'"
                 [opened]="false"
                 [position]="'end'"
-                [disableClose]="true"
-                #matDrawer>
+                [disableClose]="true">
 
         <!-- Member Tier List-->
         <ng-container *ngIf="MemberTierListMode">
@@ -397,6 +395,13 @@
                                         <div class="ml-6 leading-6">{{pointRule.point_value}}</div>
                                     </div>
                                 </ng-container>
+
+                                <ng-container *ngIf="pointRule.min_expense">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Minimum Order Expense: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.min_expense}}</div>
+                                    </div>
+                                </ng-container>
                             </ng-container>                      
 
                             <ng-container *ngIf="pointRule.reward_code">
@@ -595,6 +600,18 @@
                                         <input matInput type="number"
                                             [formControlName]="'point_value'"
                                             [placeholder]="'Point Value'">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Minimum Order Expense</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'min_expense'"
+                                            [placeholder]="'Minimum Order Expense'">
                                     </mat-form-field>
                                 </div>
                             </ng-container>

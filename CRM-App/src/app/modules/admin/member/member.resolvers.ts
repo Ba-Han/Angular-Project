@@ -85,6 +85,18 @@ export class MemberTierResolver implements Resolve<any>
     }
 }
 
+@Injectable({
+    providedIn: 'root'
+})
+export class MemberVouchersRecentResolver implements Resolve<any>
+{
+    constructor(private _memberService: MemberService) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+        return this._memberService.getRecentMemberVouchersById();
+    }
+}
+
 
 @Injectable({
     providedIn: 'root'

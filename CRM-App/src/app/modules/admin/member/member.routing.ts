@@ -1,14 +1,17 @@
 import { Route } from '@angular/router';
-import { MembersMemberResolver, MemberResolver, MemberTierResolver, TransactionsRecentResolver, MemberPointsRecentResolver, MemberResolverByTier, MemberDocumentsResolver, MemberDocumentRecentResolver } from 'app/modules/admin/member/member.resolvers';
+import { MembersMemberResolver, MemberResolver, MemberTierResolver, TransactionsRecentResolver, MemberPointsRecentResolver, MemberResolverByTier, MemberDocumentsResolver, MemberDocumentRecentResolver, MemberVouchersRecentResolver } from 'app/modules/admin/member/member.resolvers';
 import { MemberComponent } from 'app/modules/admin/member/member.component';
 import { MemberListComponent } from './list/list.component';
 import { MemberDetailComponent } from './detail/detail.component';
 import { MemberPointListComponent } from 'app/modules/admin/memberpoint/list/list.component';
 import { MemberPointDetailComponent } from 'app/modules/admin/memberpoint/detail/detail.component';
-import { MemberPointResolver, MemberPointDetailResolver, PointSegmentResolver } from 'app/modules/admin/memberpoint/memberpoint.resolvers';
+import { MemberPointResolver, MemberPointDetailResolver } from 'app/modules/admin/memberpoint/memberpoint.resolvers';
 import { TransactionsResolver, TransactionDetailResolver } from 'app/modules/admin/transaction/transaction.resolvers';
 import { TransactionListComponent } from 'app/modules/admin/transaction/list/list.component';
 import { TransactionDetailComponent } from 'app/modules/admin/transaction/detail/detail.component';
+import { MemberVoucherResolver, MemberVoucherDetailResolver } from 'app/modules/admin/membervouchers/membervouchers.resolvers';
+import { MemberVoucherListComponent } from 'app/modules/admin/membervouchers/list/list.component';
+import { MemberVoucherDetailComponent } from 'app/modules/admin/membervouchers/detail/detail.component';
 
 
 export const memberRoutes: Route[] = [
@@ -39,6 +42,7 @@ export const memberRoutes: Route[] = [
                     point: MemberPointsRecentResolver,
                     memberDocuments: MemberDocumentRecentResolver,
                     memberDocument: MemberDocumentsResolver,
+                    memberVouchers: MemberVouchersRecentResolver,
                     tier: MemberTierResolver
                 },
             },
@@ -46,16 +50,14 @@ export const memberRoutes: Route[] = [
                 path: ':id/memberpoint',
                 component: MemberPointListComponent,
                 resolve: {
-                    task: MemberPointResolver,
-                    pointsegment: PointSegmentResolver,
+                    task: MemberPointResolver
                 }
             },
             {
                 path: ':id/memberpoint/:pointid',
                 component: MemberPointDetailComponent,
                 resolve: {
-                    task: MemberPointDetailResolver,
-                    pointsegment: PointSegmentResolver,
+                    task: MemberPointDetailResolver
                 }
             },
             {
@@ -70,6 +72,20 @@ export const memberRoutes: Route[] = [
                 component: TransactionDetailComponent,
                 resolve: {
                     task: TransactionDetailResolver,
+                }
+            },
+            {
+                path: ':id/voucher',
+                component: MemberVoucherListComponent,
+                resolve: {
+                    task: MemberVoucherResolver,
+                }
+            },
+            {
+                path: ':id/voucher/:membervoucherid',
+                component: MemberVoucherDetailComponent,
+                resolve: {
+                    task: MemberVoucherDetailResolver,
                 }
             }
         ]

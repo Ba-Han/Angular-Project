@@ -11,70 +11,51 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { debounceTime, Subject, takeUntil, Observable, map, merge, switchMap } from 'rxjs';
-import { MemberPoint } from 'app/modules/admin/memberpoint/memberpoint.types';
-import { MemberPointService } from 'app/modules/admin/memberpoint/memberpoint.service';
+import { MemberVoucher } from 'app/modules/admin/membervouchers/membervouchers.types';
+import { MemberVoucherService } from 'app/modules/admin/membervouchers/membervouchers.service';
 
 @Component({
     selector       : 'memberpoint-details',
     templateUrl: './detail.component.html',
     styles:[ `
-                .members-grid {
-                    grid-template-columns: 60px 100px 100px 100px 100px;
+                membervoucher-grid {
+                    grid-template-columns: 150px 150px 150px 100px 100px;
 
                     @screen sm {
-                        grid-template-columns: 60px 100px 100px 100px 100px;
+                        grid-template-columns: 150px 150px 150px 100px 100px;
                     }
 
                     @screen md {
-                        grid-template-columns: 60px 150px 150px 150px 150px;
+                        grid-template-columns: 150px 150px 150px 100px 100px;
                     }
 
                     @screen lg {
-                        grid-template-columns: 60px 150px 150px 150px 150px;
+                        grid-template-columns: 150px 150px 150px 100px 100px;
                     }
                 }
                 .membercustom-paging {
                    position: fixed !important;
                     bottom: 57px;
                 }
-                .pointsegment-grid{
-                   grid-template-columns: 60px 100px auto;
-
-                    @screen sm {
-                        grid-template-columns: 60px 100px auto;
-                    }
-
-                    @screen md {
-                        grid-template-columns: 60px 150px auto;
-                    }
-
-                    @screen lg {
-                        grid-template-columns: 60px 150px auto;
-                    }
-                }
             `],
     encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDestroy
+export class MemberVoucherDetailComponent implements OnInit, AfterViewInit, OnDestroy
 {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
 
     editMode: boolean = false;
-    memberPoint: MemberPoint;
-    memberPointEditForm: FormGroup;
-    memberPoints: MemberPoint[];
+    memberVoucher: MemberVoucher;
+    memberVoucherEditForm: FormGroup;
     memberId: number;
-    pointType: boolean = false;
-    minDate: string;
-    adjustmentType: number;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
       constructor(
         private _activatedRoute: ActivatedRoute,
         private _changeDetectorRef: ChangeDetectorRef,
-        private _memberPointService: MemberPointService,
+        private _memberVoucherService: MemberVoucherService,
         private _formBuilder: FormBuilder,
         @Inject(DOCUMENT) private _document: any,
         private _router: Router,
@@ -82,8 +63,6 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
         private _viewContainerRef: ViewContainerRef,
     )
     {
-        const today = new Date();
-        this.minDate = today.toISOString().slice(0, 16);
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -97,29 +76,24 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
             if (param != null) {
                 this.memberId = Number(param[0].path);
             }
-
         });
 
-        //MemberPointEditForm
-        this.memberPointEditForm = this._formBuilder.group({
+        //MemberVoucherEditForm
+        this.memberVoucherEditForm = this._formBuilder.group({
             id: [''],
-            member: this.memberId,
-            point_type: ['adjustment', [Validators.required]],
-            point_type_int: ['', [Validators.required]],
-            reward_code: ['', [Validators.required]],
-            point: ['', [Validators.required]],
-            earning_valid_to: ['', [Validators.required]],
-            comment: ['', [Validators.required]],
+            member_id: this.memberId,
+            voucher_code: ['', [Validators.required]],
+            points_used: ['', [Validators.required]],
+            conversion_rate: ['', [Validators.required]],
+            amount: ['', [Validators.required]]
         });
 
-        this._memberPointService.memberPoint$
+        this._memberVoucherService.memberVoucher$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((memberPoint: MemberPoint) => {
-                this.memberPoint = memberPoint;
-                this.pointType = memberPoint.point_type.toString().toLowerCase() === 'adjustment' ? true : false;
-                this.adjustmentType = memberPoint.point_type_int;
+            .subscribe((memberVoucher: MemberVoucher) => {
+                this.memberVoucher = memberVoucher;
                 // Patch values to the form
-                this.memberPointEditForm.patchValue(memberPoint);
+                this.memberVoucherEditForm.patchValue(memberVoucher);
                 this.toggleEditMode(false);
                 this._changeDetectorRef.markForCheck();
             });
@@ -144,11 +118,11 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
          this._changeDetectorRef.markForCheck();
      }
 
-    updateMemberPoint(): void
+    updateMemberVoucher(): void
     {
-        const memberPoint = this.memberPointEditForm.getRawValue();
-        this._memberPointService.updateMemberPoint(memberPoint.id, memberPoint).subscribe(() => {
-            this._router.navigate(['/member/', this.memberId, 'memberpoint'], { relativeTo: this._activatedRoute });
+        const memberVoucher = this.memberVoucherEditForm.getRawValue();
+        this._memberVoucherService.updateMemberVoucher(memberVoucher.id, memberVoucher).subscribe(() => {
+            this._router.navigate(['/member/', this.memberId, 'voucher'], { relativeTo: this._activatedRoute });
         });
     }
 
@@ -165,7 +139,7 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
          return item.id || index;
     }
 
-    tooglepointEditFormMode(editMode: boolean | null = null): void {
+    toogleVoucherEditFormMode(editMode: boolean | null = null): void {
         if (editMode === null) {
             this.editMode = !this.editMode;
         }
@@ -177,6 +151,6 @@ export class MemberPointDetailComponent implements OnInit, AfterViewInit, OnDest
     }
 
     EditFormclose(): void {
-        this.tooglepointEditFormMode(false);
+        this.toogleVoucherEditFormMode(false);
     }
 }

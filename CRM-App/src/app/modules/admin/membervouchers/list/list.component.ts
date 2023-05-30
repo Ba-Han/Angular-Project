@@ -9,29 +9,27 @@ import { MatSort } from '@angular/material/sort';
 import { debounceTime, map, merge, filter, fromEvent, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { MemberPointService } from 'app/modules/admin/memberpoint/memberpoint.service';
-import { MemberService } from 'app/modules/admin/member/member.service';
-import { MemberPoint, MemberPointPagination } from 'app/modules/admin/memberpoint/memberpoint.types';
-import { UserService } from 'app/core/user/user.service';
+import { MemberVoucherService } from 'app/modules/admin/membervouchers/membervouchers.service';
+import { MemberVoucher, MemberVoucherPagination } from 'app/modules/admin/membervouchers/membervouchers.types';
 
 @Component({
-    selector       : 'memberpoint-list',
+    selector       : 'membervouchers-list',
     templateUrl    : './list.component.html',
     styles         : [
         `
-            .memberpoint-grid {
-                grid-template-columns: 150px 150px 100px 100px 150px 180px;
+            .membervoucher-grid {
+                grid-template-columns: 150px 150px 150px 100px 100px;
 
                 @screen sm {
-                    grid-template-columns: 150px 150px 100px 100px 150px 180px;
+                    grid-template-columns: 150px 150px 150px 100px 100px;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 150px 100px 100px 150px 180px;
+                    grid-template-columns: 150px 150px 150px 100px 100px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 150px 100px 100px 150px 180px;
+                    grid-template-columns: 150px 150px 150px 100px 100px;
                 }
             }
             .membercustom-paging {
@@ -47,7 +45,7 @@ import { UserService } from 'app/core/user/user.service';
                 content: '\u2193';
             }
 
-            .memberpoint-2-sort {
+            .membervoucher-2-sort {
                 position: static;
                 width: 10rem !important;
             }
@@ -63,39 +61,35 @@ import { UserService } from 'app/core/user/user.service';
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations     : fuseAnimations
 })
-export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestroy
+export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDestroy
 {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
 
-    memberPoints$: Observable<MemberPoint[]>;
-    memberPointsCount: number = 0;
+    memberVouchers$: Observable<MemberVoucher[]>;
+    memberVouchersCount: number = 0;
     isLoading: boolean = false;
-    pagination: MemberPointPagination;
+    pagination: MemberVoucherPagination;
     minDate: string;
     memberId: number;
-    pointAddFormMode: boolean = false;
-    memberPointAddForm: FormGroup;
+    voucherAddFormMode: boolean = false;
+    memberVoucherAddForm: FormGroup;
     searchInputControl: FormControl = new FormControl();
     isAscending: boolean = true;
-    selectedCoulumn = 'documentno';
+    selectedCoulumn = 'vouchercode';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor( private _activatedRoute: ActivatedRoute,
         private _fuseConfirmationService: FuseConfirmationService,
         private _changeDetectorRef: ChangeDetectorRef,
-        private _memberPointService: MemberPointService,
-        private _memberservice: MemberService,
+        private _memberVoucherService: MemberVoucherService,
         private _formBuilder: FormBuilder,
         @Inject(DOCUMENT) private _document: any,
         private _router: Router,
-        private _userService: UserService
     )
     {
-        const today = new Date();
-        this.minDate = today.toISOString().slice(0, 16);
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -111,31 +105,29 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
 
         });
 
-        this.memberPointAddForm = this._formBuilder.group({
+        this.memberVoucherAddForm = this._formBuilder.group({
             id: 0,
-            member: this.memberId,
-            point_type: ['adjustment', [Validators.required]],
-            point_type_int: ['', [Validators.required]],
-            reward_code: ['', [Validators.required]],
-            point: ['', [Validators.required]],
-            expiry_date: ['', [Validators.required]],
-            comment: ['', [Validators.required]],
+            member_id: this.memberId,
+            voucher_code: ['', [Validators.required]],
+            points_used: ['', [Validators.required]],
+            conversion_rate: ['', [Validators.required]],
+            amount: ['', [Validators.required]]
         });
 
         // Get the data
-        this.memberPoints$ = this._memberPointService.memberPoints$;
-        this._memberPointService.memberPoints$
+        this.memberVouchers$ = this._memberVoucherService.memberVouchers$;
+        this._memberVoucherService.memberVouchers$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((memberPoints: MemberPoint[]) => {
-                this.memberPointsCount = memberPoints.length;
+            .subscribe((memberVouchers: MemberVoucher[]) => {
+                this.memberVouchersCount = memberVouchers.length;
                  this._changeDetectorRef.markForCheck();
 
             });
 
         // Get the pagination
-        this._memberPointService.pagination$
+        this._memberVoucherService.pagination$
         .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((pagination: MemberPointPagination) => {
+        .subscribe((pagination: MemberVoucherPagination) => {
             this.pagination = pagination;
             this._changeDetectorRef.markForCheck();
         });
@@ -147,7 +139,7 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
              debounceTime(300),
              switchMap((query) => {
                  this.isLoading = true;
-                 return this._memberPointService.getData(Number(this.memberId),0, 10, 'date_created', 'desc', query);
+                 return this._memberVoucherService.getMemberVoucher(Number(this.memberId),0, 10, 'date_created', 'desc', query);
              }),
              map(() => {
                  this.isLoading = false;
@@ -160,51 +152,39 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
         if ( this._sort && this._paginator )
         {
             // Set the initial sort
-            if (this.isAscending && this.selectedCoulumn === 'documentno') {
+            if (this.isAscending && this.selectedCoulumn === 'vouchercode') {
                 this._sort.sort({
-                    id: 'transaction_document_no',
+                    id: 'voucher_code',
                     start: 'asc',
                     disableClear: true
                 });
-            } else if (!this.isAscending && this.selectedCoulumn === 'documentno') {
+            } else if (!this.isAscending && this.selectedCoulumn === 'vouchercode') {
                 this._sort.sort({
-                    id: 'transaction_document_no',
+                    id: 'voucher_code',
                     start: 'desc',
                     disableClear: true
                 });
-            } else if (this.isAscending && this.selectedCoulumn === 'pointtype') {
+            } else if (this.isAscending && this.selectedCoulumn === 'pointused') {
                 this._sort.sort({
-                    id: 'point_type',
+                    id: 'points_used',
                     start: 'asc',
                     disableClear: true
                 });
-            } else if (!this.isAscending && this.selectedCoulumn === 'pointtype') {
+            } else if (!this.isAscending && this.selectedCoulumn === 'pointused') {
                 this._sort.sort({
-                    id: 'point_type',
+                    id: 'points_used',
                     start: 'desc',
                     disableClear: true
                 });
-            } else if (this.isAscending && this.selectedCoulumn === 'points') {
+            } else if (this.isAscending && this.selectedCoulumn === 'conversionrate') {
                 this._sort.sort({
-                    id: 'point',
+                    id: 'conversion_rate',
                     start: 'asc',
                     disableClear: true
                 });
-            } else if (!this.isAscending && this.selectedCoulumn === 'points') {
+            } else if (!this.isAscending && this.selectedCoulumn === 'conversionrate') {
                 this._sort.sort({
-                    id: 'point',
-                    start: 'desc',
-                    disableClear: true
-                });
-            } else if (this.isAscending && this.selectedCoulumn === 'date') {
-                this._sort.sort({
-                    id: 'date_created',
-                    start: 'asc',
-                    disableClear: true
-                });
-            } else if (!this.isAscending && this.selectedCoulumn === 'date') {
-                this._sort.sort({
-                    id: 'date_created',
+                    id: 'conversion_rate',
                     start: 'desc',
                     disableClear: true
                 });
@@ -225,7 +205,8 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
                     this.isLoading = true;
-                    return this._memberPointService.getData(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    // eslint-disable-next-line max-len
+                    return this._memberVoucherService.getMemberVoucher(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
                 }),
                 map(() => {
                     this.isLoading = false;
@@ -249,13 +230,11 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingColumnList() {
-        if ( this.selectedCoulumn === 'documentno') {
+        if ( this.selectedCoulumn === 'vouchercode') {
             this.ngAfterViewInit();
-        } else if ( this.selectedCoulumn === 'pointtype' ) {
+        } else if ( this.selectedCoulumn === 'pointused' ) {
             this.ngAfterViewInit();
-        } else if ( this.selectedCoulumn === 'points' ) {
-            this.ngAfterViewInit();
-        } else if ( this.selectedCoulumn === 'date' ) {
+        } else if ( this.selectedCoulumn === 'conversionrate' ) {
             this.ngAfterViewInit();
         }
     }
@@ -263,30 +242,26 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingPageList() {
         this.isAscending = !this.isAscending;
-        if ( this.isAscending && this.selectedCoulumn === 'documentno' ) {
+        if ( this.isAscending && this.selectedCoulumn === 'vouchercode' ) {
             this.ngAfterViewInit();
-        } else if ( !this.isAscending && this.selectedCoulumn === 'documentno' ) {
+        } else if ( !this.isAscending && this.selectedCoulumn === 'vouchercode' ) {
             this.ngAfterViewInit();
-        } else if ( this.isAscending && this.selectedCoulumn === 'pointtype' ) {
+        } else if ( this.isAscending && this.selectedCoulumn === 'pointused' ) {
             this.ngAfterViewInit();
-        } else if ( !this.isAscending && this.selectedCoulumn === 'pointtype' ) {
+        } else if ( !this.isAscending && this.selectedCoulumn === 'pointused' ) {
             this.ngAfterViewInit();
-        } else if ( this.isAscending && this.selectedCoulumn === 'points' ) {
+        } else if ( this.isAscending && this.selectedCoulumn === 'conversionrate' ) {
             this.ngAfterViewInit();
-        } else if ( !this.isAscending && this.selectedCoulumn === 'points' ) {
-            this.ngAfterViewInit();
-        } else if ( this.isAscending && this.selectedCoulumn === 'date' ) {
-            this.ngAfterViewInit();
-        } else if ( !this.isAscending && this.selectedCoulumn === 'date' ) {
+        } else if ( !this.isAscending && this.selectedCoulumn === 'conversionrate' ) {
             this.ngAfterViewInit();
         }
     }
 
-    createMemberPoint(): void
+    createMemberVoucher(): void
     {
-        const newmemberPoint = this.memberPointAddForm.getRawValue();
-        this._memberPointService.createMemberPoint(newmemberPoint).subscribe(() => {
-            this.tooglepointAddFormMode(false);
+        const newmemberVoucher = this.memberVoucherAddForm.getRawValue();
+        this._memberVoucherService.createMemberVoucher(newmemberVoucher).subscribe(() => {
+            this.toogleVoucherAddFormMode(false);
             this._changeDetectorRef.markForCheck();
         });
     }
@@ -296,12 +271,12 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
         return item.id || index;
     }
 
-    tooglepointAddFormMode(pointAddFormMode: boolean | null = null): void {
-        if (pointAddFormMode === null) {
-            this.pointAddFormMode = !this.pointAddFormMode;
+    toogleVoucherAddFormMode(voucherAddFormMode: boolean | null = null): void {
+        if (voucherAddFormMode === null) {
+            this.voucherAddFormMode = !this.voucherAddFormMode;
         }
         else {
-            this.pointAddFormMode = pointAddFormMode;
+            this.voucherAddFormMode = voucherAddFormMode;
         }
 
         this._changeDetectorRef.markForCheck();
@@ -309,6 +284,6 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     AddFormclose(): void {
-        this.tooglepointAddFormMode(false);
+        this.toogleVoucherAddFormMode(false);
     }
 }

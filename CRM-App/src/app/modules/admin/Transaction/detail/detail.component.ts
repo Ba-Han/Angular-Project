@@ -33,7 +33,6 @@ import { TransactionService } from 'app/modules/admin/transaction/transaction.se
 export class TransactionDetailComponent implements OnInit, AfterViewInit, OnDestroy
 {
     transaction: Transaction;
-    
     memberId: number;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -68,9 +67,7 @@ export class TransactionDetailComponent implements OnInit, AfterViewInit, OnDest
 
         });
 
-
         // Get the transaction
-       
         this._transactionService.memberTransaction$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((transaction: Transaction) => {
@@ -78,14 +75,12 @@ export class TransactionDetailComponent implements OnInit, AfterViewInit, OnDest
                 this.transaction.real_amount = (transaction[0].total_amount - transaction[0].delivery_amount) - transaction[0].vat_amount;
                 this._changeDetectorRef.markForCheck();
             });
-      
     }
 
     ngAfterViewInit(): void {
 
     }
 
-    
     ngOnDestroy(): void
     {
         // Unsubscribe from all subscriptions
