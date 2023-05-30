@@ -22,7 +22,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import * as moment from 'moment';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { FuseAlertModule } from '@fuse/components/alert';
@@ -67,6 +67,7 @@ import { MemberDetailComponent } from './detail/detail.component';
         SharedModule
     ],
     providers: [
+        DecimalPipe,
         DatePipe,
         {
             provide : MAT_DATE_FORMATS,

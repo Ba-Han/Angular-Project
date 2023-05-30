@@ -14,7 +14,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { debounceTime, merge, map, switchMap, Subject, takeUntil, Observable, finalize } from 'rxjs';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { fuseAnimations } from '@fuse/animations';
 import { Member, MemberPoint, Transaction, MemberTier, MemberInfo, MemberDocument, MemberDocumentPagination, MemberVoucher } from 'app/modules/admin/member/member.types';
 import { MemberService } from 'app/modules/admin/member/member.service';
@@ -197,11 +197,12 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
     selectedId: number | null = null;
-    successMessage: string | null = null;
-    errorMessage: string | null = null;
-    deleteErrorMessage: string | null = null;
-    validFileMessage: string | null = null;
-    invalidFileMessage: string | null = null;
+    successMessage: string | '' = '';
+    errorMessage: string | '' = '';
+    voucherErrorMessage: string | '' = '';
+    deleteErrorMessage: string | '' = '';
+    validFileMessage: string | '' = '';
+    invalidFileMessage: string | '' = '';
     memberDocuments: any;
     memberDocument: any;
     memberDocumentsForm: FormGroup;
@@ -238,6 +239,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     getPointToConvert: any;
     getVoucherAmount: any;
     inputPointValue: number = 0;
+    formattedNumber: string;
     // private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -259,6 +261,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         private _httpClient: HttpClient,
         private _viewContainerRef: ViewContainerRef,
         private datePipe: DatePipe,
+        private decimalPipe: DecimalPipe
     )
     {
         this._apiurl = environment.apiurl;
@@ -796,10 +799,12 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             }
 
         });
+
         this.getAvailablePoints = this.member.spending.totalPoint;
         this.getPointValue = this.member.member[0].point_conversion;
-        this.getPointToConvert = this.inputPointValue === undefined ? 0 : this.inputPointValue;
+        this.getPointToConvert = this.inputPointValue;
         this.getVoucherAmount = this.getPointToConvert / this.getPointValue;
+        this.formattedNumber = this.decimalPipe.transform(this.getVoucherAmount, '1.2-2');
 
          // Create the generate voucher form
          this.GenerateVoucherForm = this._formBuilder.group({
@@ -808,7 +813,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             member_id: this.memberId,
             points_used: [this.getPointToConvert],
             conversion_rate: [this.getPointValue],
-            amount: [this.getVoucherAmount],
+            amount: [this.formattedNumber],
         });
 
         this.toogleGenerateVoucherFormMode(true);
@@ -820,7 +825,19 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         const generateVoucher = this.GenerateVoucherForm.getRawValue();
         this._memberService.createGenerateVoucher(generateVoucher).subscribe(() => {
             this.toogleGenerateVoucherFormMode(false);
+            this.drawerTwo.close();
             this._changeDetectorRef.markForCheck();
-        });
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.voucherErrorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
     }
 }

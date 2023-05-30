@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Member, MemberPagination, Transaction, MemberInfo, MemberTier, MemberDocument, MemberDocumentPagination, MemberVoucher } from 'app/modules/admin/member/member.types';
 import { MemberPoint} from 'app/modules/admin/member/member.types';
+import { DatePipe } from '@angular/common';
 import { environment } from 'environments/environment';
 
 @Injectable({
@@ -29,6 +30,8 @@ export class MemberService
     private _memberPoints: BehaviorSubject<MemberPoint[]> = new BehaviorSubject(null);
 
     private _isAddressexit: boolean = true;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    datePipe: any;
 
      constructor(private _httpClient: HttpClient)
      {
@@ -339,12 +342,13 @@ export class MemberService
 
     createGenerateVoucher(memberVoucher: MemberVoucher): Observable<MemberVoucher>
     {
-        const voucherCode = !memberVoucher.voucher_code ? '' : memberVoucher.voucher_code;
+        const currentDate = new Date();
+        const formattedDate = currentDate.toLocaleDateString();
 
         return this.memberVouchers$.pipe(
             take(1),
             switchMap(memberVouchers => this._httpClient.post<any>(`${this._apiurl}/items/voucher`, {
-                'voucher_code': voucherCode,
+                'voucher_code': formattedDate,
                 'points_used': memberVoucher.points_used,
                 'conversion_rate': memberVoucher.conversion_rate,
                 'amount': memberVoucher.amount,

@@ -107,7 +107,7 @@
                             <mat-icon matPrefix
                                       class="hidden sm:flex icon-size-5"
                                       [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                            <input matInput type="number"
+                            <input matInput
                                    [(ngModel)]="inputPointValue"
                                    [formControlName]="'points_used'"
                                    [placeholder]="'points to convert'"
@@ -121,9 +121,11 @@
                             <!-- <mat-icon matPrefix
                                       class="hidden sm:flex icon-size-5"
                                       [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon> -->
-                            <input matInput type="number"
+                            <input matInput
+                                   [(ngModel)]="member.member[0].point_conversion"
                                    [formControlName]="'conversion_rate'"
-                                   [placeholder]="'points value'">
+                                   [placeholder]="'points value'"
+                                   (input)="openGernerateVoucherForm()">
                         </mat-form-field>
                     </div>
 
@@ -149,8 +151,11 @@
                                 (click)="createGenerateVoucher()">
                             Generate
                         </button>
-                    </div>
 
+                        <div *ngIf="voucherErrorMessage" style="position: relative; color: red;">
+                            {{ voucherErrorMessage }}
+                        </div>
+                    </div>
                 </form>
             </div>
         </ng-container>

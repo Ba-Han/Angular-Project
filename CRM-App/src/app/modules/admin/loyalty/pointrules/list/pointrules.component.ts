@@ -151,7 +151,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     isButtonDisabled: boolean = true;
     isAscending: boolean = true;
     selectedCoulumn = 'name';
-    errorMessage: string | null = null;
+    errorMessage: string | '' = '';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
