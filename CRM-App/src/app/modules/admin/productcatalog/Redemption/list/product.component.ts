@@ -48,6 +48,9 @@ import { UserService } from 'app/core/user/user.service';
                 min-width: 5px !important;
             }
 
+            .redemption-search {
+                width: 17rem !important;
+            }
 
         `
     ],
