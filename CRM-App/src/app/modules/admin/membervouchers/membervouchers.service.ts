@@ -49,7 +49,7 @@ export class MemberVoucherService
     /**
      * Get data
      */
-    getMemberVoucher(id: number = 0, page: number = 0, limit: number = 10, sort: string = 'date_created', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+    getMemberVoucher(id: number = 0, page: number = 0, limit: number = 10, sort: string = 'voucher_code', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: MemberVoucherPagination; membervouchers: MemberVoucher[] }>
     {
         return this._httpClient.get(`${this._apiurl}/items/voucher`, {

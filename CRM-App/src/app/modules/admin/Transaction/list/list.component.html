@@ -31,7 +31,7 @@
                             <input matInput
                                    [formControl]="searchInputControl"
                                    [autocomplete]="'off'"
-                                   [placeholder]="'Search Transaction'">
+                                   [placeholder]="'Search Transactions'">
                         </mat-form-field>
 
                         <!--sorting dropdown-->
@@ -171,7 +171,7 @@
                                     </ng-container>
                                 </ng-container>
                             </div>
-                            <mat-paginator class="custom-paging sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                            <mat-paginator class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
                                            [ngClass]="{'pointer-events-none': isLoading}"
                                            [length]="pagination.length"
                                            [pageIndex]="pagination.page"

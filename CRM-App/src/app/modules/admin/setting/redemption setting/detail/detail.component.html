@@ -1,10 +1,9 @@
 <mat-drawer-container class="flex flex-col w-full">
-    <mat-drawer #drawerOne class="reset_popup w-2/4 dark:bg-gray-900"
+    <mat-drawer #drawerOne class="redem_reset_popup dark:bg-gray-900"
                 [mode]="'over'"
                 [opened]="false"
                 [position]="'end'"
-                [disableClose]="true"
-                #matDrawer>
+                [disableClose]="true">
 
         <!-- Delete single redemption setting popup -->
         <ng-container *ngIf="DeleteMode">
@@ -22,22 +21,22 @@
                     </div>
                 </div>
                 <div class="mt-8">
-                    <div class="successMessage_scss" *ngIf="successMessage">
+                    <div class="redem_successMessage_scss" *ngIf="successMessage">
                         {{ successMessage }} 
                     </div>
-                    <div class="errorMessage_scss" *ngIf="popupErrorMessage">
+                    <div class="redem_errorMessage_scss" *ngIf="popupErrorMessage">
                         {{ popupErrorMessage }} 
                     </div>
                 </div>
             </ng-container>
 
             <ng-container *ngIf="!isSuccess">
-                <div class="parent_popup">
+                <div class="redem_parent_popup">
                     <div>
-                        <div class="delete-scss"> Are you sure want to delete? </div>
+                        <div class="redem_delete_scss"> Are you sure want to delete? </div>
                     </div>    
-                    <div class="child_btn">
-                        <button class="ml-2"
+                    <div class="redem_child_btn">
+                        <button
                                 mat-flat-button
                                 [color]="'primary'"
                                 [matTooltip]="'Cancel'"
@@ -46,7 +45,7 @@
                             Cancel
                         </button>
     
-                        <button class="ml-2"
+                        <button
                                 mat-flat-button
                                 [color]="'primary'"
                                 [matTooltip]="'Proceed'"

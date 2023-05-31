@@ -55,6 +55,13 @@ import { MemberVoucher, MemberVoucherPagination } from 'app/modules/admin/member
                 padding: 12px !important;
                 min-width: 5px !important;
             }
+
+            .sendEmail {
+                position: relative;
+                bottom: 0.6rem;
+                left: 44rem;
+                margin: -2rem;
+            }
         `
     ],
     encapsulation  : ViewEncapsulation.None,
@@ -188,6 +195,18 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
                     start: 'desc',
                     disableClear: true
                 });
+            } else if (this.isAscending && this.selectedCoulumn === 'amount') {
+                this._sort.sort({
+                    id: 'amount',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'amount') {
+                this._sort.sort({
+                    id: 'amount',
+                    start: 'desc',
+                    disableClear: true
+                });
             }
 
             // Mark for check
@@ -236,6 +255,8 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
             this.ngAfterViewInit();
         } else if ( this.selectedCoulumn === 'conversionrate' ) {
             this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'amount' ) {
+            this.ngAfterViewInit();
         }
     }
 
@@ -253,6 +274,10 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
         } else if ( this.isAscending && this.selectedCoulumn === 'conversionrate' ) {
             this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'conversionrate' ) {
+            this.ngAfterViewInit();
+        } else if ( this.isAscending && this.selectedCoulumn === 'amount' ) {
+            this.ngAfterViewInit();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'amount' ) {
             this.ngAfterViewInit();
         }
     }

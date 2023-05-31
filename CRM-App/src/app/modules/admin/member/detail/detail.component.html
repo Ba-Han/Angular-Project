@@ -1,5 +1,5 @@
 <mat-drawer-container class="flex flex-col w-full">
-    <mat-drawer class="reset_popup dark:bg-gray-900"
+    <mat-drawer class="memberdocument_reset_popup dark:bg-gray-900"
                 [mode]="'over'"
                 [opened]="false"
                 [disableClose]="true"
@@ -20,22 +20,22 @@
                     </div>
                 </div>
                 <div class="mt-8">
-                    <div class="successMessage_scss" *ngIf="successMessage">
+                    <div class="memberdocument_successMessage_scss" *ngIf="successMessage">
                         {{ successMessage }} 
                     </div>
-                    <div class="errorMessage_scss" *ngIf="deleteErrorMessage">
+                    <div class="memberdocument_errorMessage_scss" *ngIf="deleteErrorMessage">
                         {{ deleteErrorMessage }} 
                     </div>
                 </div>
             </ng-container>
 
             <ng-container *ngIf="!isSuccess">
-                <div class="parent_popup">
+                <div class="memberdocument_parent_popup">
                     <div>
-                        <div class="delete-scss"> Are you sure want to delete? </div>
+                        <div class="memberdocument_delete_scss"> Are you sure want to delete? </div>
                     </div>    
-                    <div class="child_btn">
-                        <button class="ml-2"
+                    <div class="memberdocument_child_btn">
+                        <button
                                 mat-flat-button
                                 [color]="'primary'"
                                 [matTooltip]="'Cancel'"
@@ -44,7 +44,7 @@
                             Cancel
                         </button>
     
-                        <button class="ml-2"
+                        <button
                                 mat-flat-button
                                 [color]="'primary'"
                                 [matTooltip]="'Proceed'"
@@ -143,16 +143,16 @@
                     </div>
 
                     <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
-                        <button class="ml-2"
+                        <button class="ml-2" style="width: 6rem;"
                                 mat-flat-button
                                 [disabled]="GenerateVoucherForm.invalid"
                                 [color]="'primary'"
-                                [matTooltip]="'Generate'"
+                                [matTooltip]="'Save'"
                                 (click)="createGenerateVoucher()">
-                            Generate
+                            Save
                         </button>
 
-                        <div *ngIf="voucherErrorMessage" style="position: relative; color: red;">
+                        <div *ngIf="voucherErrorMessage" style="position: relative; color: red; left: 1rem;">
                             {{ voucherErrorMessage }}
                         </div>
                     </div>
@@ -625,7 +625,7 @@
                                         <ng-container mat-cell *matCellDef="let memberVouchers">
                                             <td mat-cell [routerLink]="['./voucher', memberVouchers.id]" style="cursor:pointer;">
                                                 <span class="pr-6 font-medium whitespace-nowrap">
-                                                    {{memberVouchers.points_used| number : '1.2-2'}}
+                                                    {{memberVouchers.points_used}}
                                                 </span>
                                             </td>
                                         </ng-container>

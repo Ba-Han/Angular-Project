@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Member, MemberPagination, Transaction, MemberInfo, MemberTier, MemberDocument, MemberDocumentPagination, MemberVoucher } from 'app/modules/admin/member/member.types';
 import { MemberPoint} from 'app/modules/admin/member/member.types';
-import { DatePipe } from '@angular/common';
 import { environment } from 'environments/environment';
 
 @Injectable({
@@ -172,7 +171,7 @@ export class MemberService
 
     getRecentMemberVouchersById(): Observable<MemberVoucher> {
         return this._httpClient.get<any>(`${this._apiurl}/items/voucher`, {
-            params: { limit: 5, sort: 'date_created' }
+            params: { limit: 5, sort: 'date_created', order: 'desc' }
         })
             .pipe(
                 tap((response) => {
@@ -342,13 +341,12 @@ export class MemberService
 
     createGenerateVoucher(memberVoucher: MemberVoucher): Observable<MemberVoucher>
     {
-        const currentDate = new Date();
-        const formattedDate = currentDate.toLocaleDateString();
+        const voucherCode = !memberVoucher.voucher_code ? '' : memberVoucher.voucher_code;
 
         return this.memberVouchers$.pipe(
             take(1),
             switchMap(memberVouchers => this._httpClient.post<any>(`${this._apiurl}/items/voucher`, {
-                'voucher_code': formattedDate,
+                'voucher_code': voucherCode,
                 'points_used': memberVoucher.points_used,
                 'conversion_rate': memberVoucher.conversion_rate,
                 'amount': memberVoucher.amount,

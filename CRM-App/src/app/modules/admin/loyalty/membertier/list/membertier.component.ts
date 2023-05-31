@@ -123,7 +123,7 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
     pointruleId: number;
     isAscending: boolean = true;
     selectedCoulumn = 'level';
-    errorMessage: string | null = null;
+    errorMessage: string | '' = '';
     conditionPeriodValue: number = 0;
     downgradeConditionPeriodTypeValue: number = 0;
     private _unsubscribeAll: Subject<any> = new Subject<any>();

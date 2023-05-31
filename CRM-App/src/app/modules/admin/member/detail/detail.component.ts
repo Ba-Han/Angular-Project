@@ -70,38 +70,29 @@ import { MemberService } from 'app/modules/admin/member/member.service';
                 min-width: 5px !important;
             }
 
-            .reset_popup {
+            .memberdocument_reset_popup {
                 position: fixed !important;
                 top: 50% !important;
                 left: 50% !important;
                 transform: translate(-50%, -50%) !important;
-                width: 28% !important;
-                height: 34% !important;
+                width: 30% !important;
+                height: 32% !important;
                 border-radius: 8px;
             }
 
-            .parent_popup {
-                position: fixed;
+            .memberdocument_parent_popup {
                 display: grid;
-                justify-content: center;
-                padding: 4rem;
+                align-items: center !important;
+                justify-content: center !important;
+                height: 27vh;
             }
 
-            .child_btn {
-                padding-left: 1.5rem;
-                position: fixed;
-                margin-top: 2rem !important;
+            .memberdocument_child_btn {
+                display: flex;
+                gap: 10px;
             }
 
-            .update_scss {
-                position: unset;
-                text-align: center;
-                color: rgb(0, 128, 0);
-                padding: 4rem;
-                font-size: 16px;
-            }
-
-            .successMessage_scss {
+            .memberdocument_successMessage_scss {
                 position: unset;
                 text-align: center;
                 color: rgb(0, 128, 0);
@@ -109,7 +100,7 @@ import { MemberService } from 'app/modules/admin/member/member.service';
                 font-size: 16px;
             }
 
-            .errorMessage_scss {
+            .memberdocument_errorMessage_scss {
                 position: unset;
                 text-align: center;
                 color: rgb(255, 49, 49);
@@ -117,9 +108,9 @@ import { MemberService } from 'app/modules/admin/member/member.service';
                 font-size: 16px;
             }
 
-            .delete-scss {
-                position: fixed;
-                padding-left: 2rem;
+            .memberdocument_delete_scss {
+                position: relative;
+                top: 2rem;
             }
 
             .memberdocument-2-sort {
@@ -810,6 +801,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
          this.GenerateVoucherForm = this._formBuilder.group({
             id: [''],
             available_points: [this.getAvailablePoints],
+            voucher_code: [''],
             member_id: this.memberId,
             points_used: [this.getPointToConvert],
             conversion_rate: [this.getPointValue],

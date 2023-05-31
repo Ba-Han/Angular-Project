@@ -48,6 +48,9 @@ import { UserService } from 'app/core/user/user.service';
                 min-width: 5px !important;
             }
 
+            .redemption-search {
+                width: 17rem !important;
+            }
 
         `
     ],
@@ -74,7 +77,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     selectedChannel: Product | null = null;
     isAscending: boolean = true;
     selectedCoulumn = 'sku';
-    errorMessage: string | null = null;
+    errorMessage: string | '' = '';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(

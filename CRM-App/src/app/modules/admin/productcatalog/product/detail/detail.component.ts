@@ -19,38 +19,29 @@ import { UserService } from 'app/core/user/user.service';
                background-color:#FFF;
             }
 
-            .reset_popup {
+            .product_reset_popup {
                 position: fixed !important;
                 top: 50% !important;
                 left: 50% !important;
                 transform: translate(-50%, -50%) !important;
-                width: 28% !important;
-                height: 34% !important;
+                width: 30% !important;
+                height: 32% !important;
                 border-radius: 8px;
             }
 
-            .parent_popup {
-                position: fixed;
+            .product_parent_popup {
                 display: grid;
-                justify-content: center;
-                padding: 4rem;
+                align-items: center !important;
+                justify-content: center !important;
+                height: 27vh;
             }
 
-            .child_btn {
-                padding-left: 1.5rem;
-                position: fixed;
-                margin-top: 2rem !important;
+            .product_child_btn {
+                display: flex;
+                gap: 10px;
             }
 
-            .update_scss {
-                position: unset;
-                text-align: center;
-                color: rgb(0, 128, 0);
-                padding: 4rem;
-                font-size: 16px;
-            }
-
-            .successMessage_scss {
+            .product_successMessage_scss {
                 position: unset;
                 text-align: center;
                 color: rgb(0, 128, 0);
@@ -58,7 +49,7 @@ import { UserService } from 'app/core/user/user.service';
                 font-size: 16px;
             }
 
-            .errorMessage_scss {
+            .product_errorMessage_scss {
                 position: unset;
                 text-align: center;
                 color: rgb(255, 49, 49);
@@ -66,9 +57,9 @@ import { UserService } from 'app/core/user/user.service';
                 font-size: 16px;
             }
 
-            .delete-scss {
-                position: fixed;
-                padding-left: 2rem;
+            .product_delete_scss {
+                position: relative;
+                top: 2rem;
             }
 
         `
@@ -90,8 +81,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
     selectedId: number | null = null;
-    successMessage: string | null = null;
-    errorMessage: string | null = null;
+    successMessage: string | '' = '';
+    errorMessage: string | '' = '';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
