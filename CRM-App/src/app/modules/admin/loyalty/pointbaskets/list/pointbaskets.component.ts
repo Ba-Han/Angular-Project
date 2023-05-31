@@ -123,7 +123,7 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
     fromstarttypeValue = 0;
     isAscending: boolean = true;
     selectedCoulumn = 'name';
-    errorMessage: string | null = null;
+    errorMessage: string | '' = '';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(

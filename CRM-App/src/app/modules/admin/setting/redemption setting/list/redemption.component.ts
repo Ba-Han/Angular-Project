@@ -50,50 +50,6 @@ import { UserService } from 'app/core/user/user.service';
                 padding: 12px !important;
                 min-width: 5px !important;
             }
-
-            .reset_popup {
-                position: fixed !important;
-                top: 50% !important;
-                left: 50% !important;
-                transform: translate(-50%, -50%) !important;
-                width: 28% !important;
-                height: 34% !important;
-                border-radius: 8px;
-            }
-
-            .parent_popup {
-                position: fixed;
-                display: grid;
-                justify-content: center;
-                padding: 4rem;
-            }
-
-            .child_btn {
-                padding-left: 1.5rem;
-                position: fixed;
-                margin-top: 2rem !important;
-            }
-
-            .update_scss {
-                position: unset;
-                text-align: center;
-                color: rgb(0, 128, 0);
-                padding: 4rem;
-                font-size: 16px;
-            }
-
-            .errorMessage_scss {
-                position: unset;
-                text-align: center;
-                color: rgb(255, 49, 49);
-                padding: 3rem;
-                font-size: 16px;
-            }
-
-            .delete-scss {
-                position: fixed;
-                padding-left: 2rem;
-            }
         `
     ],
     encapsulation: ViewEncapsulation.None,

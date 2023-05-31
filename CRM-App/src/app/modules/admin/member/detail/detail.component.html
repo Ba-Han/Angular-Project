@@ -1,5 +1,5 @@
 <mat-drawer-container class="flex flex-col w-full">
-    <mat-drawer class="reset_popup dark:bg-gray-900"
+    <mat-drawer class="memberdocument_reset_popup dark:bg-gray-900"
                 [mode]="'over'"
                 [opened]="false"
                 [disableClose]="true"
@@ -20,22 +20,22 @@
                     </div>
                 </div>
                 <div class="mt-8">
-                    <div class="successMessage_scss" *ngIf="successMessage">
+                    <div class="memberdocument_successMessage_scss" *ngIf="successMessage">
                         {{ successMessage }} 
                     </div>
-                    <div class="errorMessage_scss" *ngIf="deleteErrorMessage">
+                    <div class="memberdocument_errorMessage_scss" *ngIf="deleteErrorMessage">
                         {{ deleteErrorMessage }} 
                     </div>
                 </div>
             </ng-container>
 
             <ng-container *ngIf="!isSuccess">
-                <div class="parent_popup">
+                <div class="memberdocument_parent_popup">
                     <div>
-                        <div class="delete-scss"> Are you sure want to delete? </div>
+                        <div class="memberdocument_delete_scss"> Are you sure want to delete? </div>
                     </div>    
-                    <div class="child_btn">
-                        <button class="ml-2"
+                    <div class="memberdocument_child_btn">
+                        <button
                                 mat-flat-button
                                 [color]="'primary'"
                                 [matTooltip]="'Cancel'"
@@ -44,7 +44,7 @@
                             Cancel
                         </button>
     
-                        <button class="ml-2"
+                        <button
                                 mat-flat-button
                                 [color]="'primary'"
                                 [matTooltip]="'Proceed'"

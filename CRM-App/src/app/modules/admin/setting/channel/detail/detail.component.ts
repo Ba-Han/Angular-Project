@@ -20,30 +20,29 @@ import { HttpErrorResponse } from '@angular/common/http';
                background-color:#FFF;
             }
 
-            .reset_popup {
+            .channel_reset_popup {
                 position: fixed !important;
                 top: 50% !important;
                 left: 50% !important;
                 transform: translate(-50%, -50%) !important;
-                width: 28% !important;
-                height: 34% !important;
+                width: 30% !important;
+                height: 32% !important;
                 border-radius: 8px;
             }
 
-            .parent_popup {
-                position: fixed;
+            .channel_parent_popup {
                 display: grid;
-                justify-content: center;
-                padding: 4rem;
+                align-items: center !important;
+                justify-content: center !important;
+                height: 27vh;
             }
 
-            .child_btn {
-                padding-left: 1.5rem;
-                position: fixed;
-                margin-top: 2rem !important;
+            .channel_child_btn {
+                display: flex;
+                gap: 10px;
             }
 
-            .successMessage_scss {
+            .channel_successMessage_scss {
                 position: unset;
                 text-align: center;
                 color: rgb(0, 128, 0);
@@ -51,7 +50,7 @@ import { HttpErrorResponse } from '@angular/common/http';
                 font-size: 16px;
             }
 
-            .errorMessage_scss {
+            .channel_errorMessage_scss {
                 position: unset;
                 text-align: center;
                 color: rgb(255, 49, 49);
@@ -59,9 +58,9 @@ import { HttpErrorResponse } from '@angular/common/http';
                 font-size: 16px;
             }
 
-            .delete-scss {
-                position: fixed;
-                padding-left: 2rem;
+            .channel_delete_scss {
+                position: relative;
+                top: 2rem;
             }
 
         `
@@ -83,8 +82,8 @@ export class ChannelDetailComponent implements OnInit, OnDestroy {
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
     selectedCode: string | null = null;
-    successMessage: string | null = null;
-    errorMessage: string | null = null;
+    successMessage: string | '' = '';
+    errorMessage: string | '' = '';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(

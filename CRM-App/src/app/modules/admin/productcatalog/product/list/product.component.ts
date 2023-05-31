@@ -73,7 +73,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     selectedChannel: Product | null = null;
     isAscending: boolean = true;
     selectedCoulumn = 'sku';
-    errorMessage: string | null = null;
+    errorMessage: string | '' = '';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(

@@ -78,7 +78,7 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
     channels$: Observable<Channel[]>;
     getChannelData: any;
     selectedCoulumn = 'storename';
-    errorMessage: string | null = null;
+    errorMessage: string | '' = '';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(

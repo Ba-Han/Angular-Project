@@ -79,7 +79,7 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
     selectedChannel: Channel | null = null;
     isAscending: boolean = true;
     selectedCoulumn = 'channelname';
-    errorMessage: string | null = null;
+    errorMessage: string | '' = '';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(

@@ -1,5 +1,5 @@
 <mat-drawer-container class="flex flex-col w-full">
-    <mat-drawer #drawerOne class="reset_popup dark:bg-gray-900"
+    <mat-drawer #drawerOne class="pointrule_reset_popup dark:bg-gray-900"
                 [mode]="'over'"
                 [opened]="false"
                 [position]="'start'"
@@ -21,28 +21,22 @@
                     </div>
                 </div>
                 <div class="mt-8">
-                    <fuse-alert [appearance]="'soft'"
-                                [dismissible]="false"
-                                [dismissed]="false"
-                                [name]="'alertBox1'"
-                                [type]="'success'">
-                        <div class="successMessage_scss" *ngIf="successMessage">
-                            {{ successMessage }} 
-                        </div>
-                        <div class="errorMessage_scss" *ngIf="errorMessage">
-                            {{ errorMessage }} 
-                        </div>
-                    </fuse-alert>
+                    <div class="pointrule_successMessage_scss" *ngIf="successMessage">
+                        {{ successMessage }} 
+                    </div>
+                    <div class="pointrule_errorMessage_scss" *ngIf="errorMessage">
+                        {{ errorMessage }} 
+                    </div>
                 </div>
             </ng-container>
 
             <ng-container *ngIf="!isSuccess">
-                <div class="parent_popup">
+                <div class="pointrule_parent_popup">
                     <div>
-                        <div class="delete-scss"> Are you sure want to delete? </div>
+                        <div class="pointrule_delete_scss"> Are you sure want to delete? </div>
                     </div>    
-                    <div class="child_btn">
-                        <button class="ml-2"
+                    <div class="pointrule_child_btn">
+                        <button
                                 mat-flat-button
                                 [color]="'primary'"
                                 [matTooltip]="'Cancel'"
@@ -51,7 +45,7 @@
                             Cancel
                         </button>
     
-                        <button class="ml-2"
+                        <button
                                 mat-flat-button
                                 [color]="'primary'"
                                 [matTooltip]="'Proceed'"

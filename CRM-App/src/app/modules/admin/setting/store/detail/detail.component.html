@@ -1,6 +1,6 @@
 
 <mat-drawer-container class="flex flex-col w-full">
-    <mat-drawer class="reset_popup dark:bg-gray-900"
+    <mat-drawer class="store_reset_popup dark:bg-gray-900"
                 [mode]="'over'"
                 [opened]="false"
                 [disableClose]="true"
@@ -22,28 +22,22 @@
                     </div>
                 </div>
                 <div class="mt-8">
-                    <fuse-alert [appearance]="'soft'"
-                                [dismissible]="false"
-                                [dismissed]="false"
-                                [name]="'alertBox1'"
-                                [type]="'success'">
-                        <div class="successMessage_scss" *ngIf="successMessage">
-                            {{ successMessage }} 
-                        </div>
-                        <div class="errorMessage_scss" *ngIf="errorMessage">
-                            {{ errorMessage }} 
-                        </div>
-                    </fuse-alert>
+                    <div class="store_successMessage_scss" *ngIf="successMessage">
+                        {{ successMessage }} 
+                    </div>
+                    <div class="store_errorMessage_scss" *ngIf="errorMessage">
+                        {{ errorMessage }} 
+                    </div>
                 </div>
             </ng-container>
 
             <ng-container *ngIf="!isSuccess">
-                <div class="parent_popup">
+                <div class="store_parent_popup">
                     <div>
-                        <div class="delete-scss"> Are you sure want to delete? </div>
+                        <div class="store_delete_scss"> Are you sure want to delete? </div>
                     </div>    
-                    <div class="child_btn">
-                        <button class="ml-2"
+                    <div class="store_child_btn">
+                        <button
                                 mat-flat-button
                                 [color]="'primary'"
                                 [matTooltip]="'Cancel'"
@@ -52,7 +46,7 @@
                             Cancel
                         </button>
     
-                        <button class="ml-2"
+                        <button
                                 mat-flat-button
                                 [color]="'primary'"
                                 [matTooltip]="'Proceed'"
@@ -122,34 +116,6 @@
                                     </div>
                                 </ng-container>
         
-                                <!--<ng-container *ngIf="store.user_created">
-                                    <div class="flex sm:items-center">
-                                        <div class="w-1/4">User Created Date: </div>
-                                        <div class="ml-6 leading-6">{{store.user_created}}</div>
-                                    </div>
-                                </ng-container>-->
-        
-                                <!--<ng-container *ngIf="store.user_updated">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">User Updated Date: </div>
-                                    <div class="ml-6 leading-6">{{store.user_updated | date:'MMM dd, y'}}</div>
-                                </div>
-                            </ng-container>-->
-        
-                                <!--<ng-container *ngIf="store.date_created">
-                                    <div class="flex sm:items-center">
-                                        <div class="w-1/4">Created Date: </div>
-                                        <div class="ml-6 leading-6">{{store.date_created | date:'MMM dd, y'}}</div>
-                                    </div>
-                                </ng-container>
-        
-                                <ng-container *ngIf="store.date_updated">
-                                    <div class="flex sm:items-center">
-                                        <div class="w-1/4">Last Update Date: </div>
-                                        <div class="ml-6 leading-6">{{store.date_updated | date:'MMM dd, y'}}</div>
-                                    </div>
-                                </ng-container>-->
-        
                                  <ng-container *ngIf="store.country">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Country: </div>
@@ -170,10 +136,6 @@
                                         <div class="ml-6 leading-6">Inactive</div>
                                     </div>
                                 </ng-container>
-        
-                                <!--<div class="flex sm:items-center mt-3">
-                                    <div class="w-full text-3xl font-bold">Address Information </div>
-                                </div>-->
         
                                 <ng-container *ngIf="store.address_line_1">
                                     <div class="flex sm:items-center">
@@ -242,7 +204,7 @@
                         <form [formGroup]="StoreEditForm">
         
                             <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-full" disabled>
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Code</mat-label>
                                     <mat-icon matPrefix
                                               class="hidden sm:flex icon-size-5"
