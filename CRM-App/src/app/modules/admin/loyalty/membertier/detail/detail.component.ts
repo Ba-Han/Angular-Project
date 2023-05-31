@@ -173,6 +173,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
     downgradeConditionPeriodTypeValue: number = 0;
     memberTierPagination: MemberTierPagination;
     selectedUpgradeItem: Array<MemberTierUpgrade> = [];
+    readonly = true;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**

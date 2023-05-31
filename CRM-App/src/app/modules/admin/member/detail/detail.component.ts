@@ -810,6 +810,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
          this.GenerateVoucherForm = this._formBuilder.group({
             id: [''],
             available_points: [this.getAvailablePoints],
+            voucher_code: [''],
             member_id: this.memberId,
             points_used: [this.getPointToConvert],
             conversion_rate: [this.getPointValue],
