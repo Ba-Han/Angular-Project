@@ -44,10 +44,19 @@ import { UserService } from 'app/core/user/user.service';
 
             .store-2-sort {
                 position: static;
-                width: 9rem !important;
+                width: 12rem !important;
             }
 
-            .sort-btn-01 {
+            .store_sort_by {
+                display: grid;
+                grid-template-columns: max-content;
+                font-weight: 600;
+                position: relative;
+                margin-left: -5px;
+                margin-right: 5px;
+            }
+
+            .store-sort-btn-01 {
                 border-radius: 3px !important;
                 padding: 12px !important;
                 min-width: 5px !important;

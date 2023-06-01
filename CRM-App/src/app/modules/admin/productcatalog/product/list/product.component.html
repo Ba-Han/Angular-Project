@@ -33,7 +33,8 @@
                             </mat-form-field>
 
                             <!--sorting dropdown-->
-                            <mat-form-field class="ml-4 fuse-mat-no-subscript">
+                            <mat-form-field class="ml-4 fuse-mat-no-subscript product-2-sort">
+                                <span class="product_sort_by">Sort By:</span>
                                 <mat-select [(ngModel)]="selectedCoulumn" (selectionChange)="sortingColumnList()">
                                     <mat-option value="sku">SKU</mat-option>
                                     <mat-option value="name">Name</mat-option>
@@ -41,7 +42,7 @@
                                 </mat-select>
                             </mat-form-field>
                             <!--sorting button-->
-                            <button class="ml-2 sort-btn-01"
+                            <button class="ml-2 product-sort-btn-01"
                                 (click)="sortingPageList()"
                                 [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
                                 mat-flat-button

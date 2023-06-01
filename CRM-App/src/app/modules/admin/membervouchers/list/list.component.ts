@@ -47,13 +47,22 @@ import { MemberVoucher, MemberVoucherPagination } from 'app/modules/admin/member
 
             .membervoucher-2-sort {
                 position: static;
-                width: 10rem !important;
+                width: 13rem !important;
             }
 
-            .sort-btn-01 {
+            .membervoucher-sort-btn-01 {
                 border-radius: 3px !important;
                 padding: 12px !important;
                 min-width: 5px !important;
+            }
+
+            .membervoucher_sort_by {
+                display: grid;
+                grid-template-columns: max-content;
+                font-weight: 600;
+                position: relative;
+                margin-left: -5px;
+                margin-right: 5px;
             }
 
             .sendEmail {

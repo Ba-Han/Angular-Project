@@ -26,7 +26,7 @@
                         </div>
     
                         <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
-                            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
+                            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded memberpoint_search">
                                 <mat-icon class="icon-size-5"
                                           matPrefix
                                           [svgIcon]="'heroicons_solid:search'"></mat-icon>
@@ -36,8 +36,18 @@
                                        [placeholder]="'Search Member Points'">
                             </mat-form-field>
 
+                            <!--active and expire points-->
+                            <mat-form-field class="ml-4 fuse-mat-no-subscript active-expire-point">
+                                <mat-select [(ngModel)]="filterActiveAndExpirePoint" (selectionChange)="activeAndExpirePointfieldChange($event)">
+                                    <mat-option value="all">All</mat-option>
+                                    <mat-option value="active">Active</mat-option>
+                                    <mat-option value="expired">Expired</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
                             <!--sorting dropdown-->
                             <mat-form-field class="ml-4 fuse-mat-no-subscript memberpoint-2-sort">
+                                <span class="memberpoint_sort_by">Sort By:</span>
                                 <mat-select [(ngModel)]="selectedCoulumn" (selectionChange)="sortingColumnList()">
                                     <mat-option value="documentno">Document No</mat-option>
                                     <mat-option value="pointtype">Point Type</mat-option>
@@ -46,7 +56,7 @@
                                 </mat-select>
                             </mat-form-field>
                             <!--sorting button-->
-                            <button class="ml-2 sort-btn-01"
+                            <button class="ml-2 memberpoint-sort-btn-01"
                                 (click)="sortingPageList()"
                                 [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
                                 mat-flat-button

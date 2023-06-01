@@ -79,10 +79,19 @@ import { UserService } from 'app/core/user/user.service';
 
             .pointbasket-2-sort {
                 position: static;
-                width: 11rem !important;
+                width: 14rem !important;
             }
 
-            .sort-btn-01 {
+            .pointbasket_sort_by {
+                display: grid;
+                grid-template-columns: max-content;
+                font-weight: 600;
+                position: relative;
+                margin-left: -5px;
+                margin-right: 5px;
+            }
+
+            .pointbasket-sort-btn-01 {
                 border-radius: 3px !important;
                 padding: 12px !important;
                 min-width: 5px !important;
