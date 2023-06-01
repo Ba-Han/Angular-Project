@@ -32,14 +32,15 @@
                         </mat-form-field> -->
 
                         <!--sorting dropdown-->
-                        <mat-form-field class="ml-4 fuse-mat-no-subscript" style="position: static; width: 11rem !important;">
+                        <mat-form-field class="ml-4 fuse-mat-no-subscript redem-2-sort">
+                            <span class="redem_sort_by">Sort By:</span>
                             <mat-select [(ngModel)]="selectedCoulumn" (selectionChange)="sortingColumnList()">
                                 <mat-option value="type">Type</mat-option>
                                 <mat-option value="pointconversion">Point Conversion</mat-option>
                             </mat-select>
                         </mat-form-field>
                         <!--sorting button-->
-                        <button class="ml-2 sort-btn-01"
+                        <button class="ml-2 redem-sort-btn-01"
                             (click)="sortingPageList()"
                             [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
                             mat-flat-button

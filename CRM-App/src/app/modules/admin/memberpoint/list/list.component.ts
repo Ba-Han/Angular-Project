@@ -49,13 +49,30 @@ import { UserService } from 'app/core/user/user.service';
 
             .memberpoint-2-sort {
                 position: static;
-                width: 10rem !important;
+                width: 12rem !important;
             }
 
-            .sort-btn-01 {
+            .memberpoint-sort-btn-01 {
                 border-radius: 3px !important;
                 padding: 12px !important;
                 min-width: 5px !important;
+            }
+
+            .active-expire-point {
+                width: 7rem !important;
+            }
+
+            .memberpoint_sort_by {
+                display: grid;
+                grid-template-columns: max-content;
+                font-weight: 600;
+                position: relative;
+                margin-left: -5px;
+                margin-right: 5px;
+            }
+
+            .memberpoint_search {
+                width: 14rem !important;
             }
         `
     ],
@@ -81,6 +98,9 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
     searchInputControl: FormControl = new FormControl();
     isAscending: boolean = true;
     selectedCoulumn = 'documentno';
+    filterActiveAndExpirePoint: string = 'all';
+    getFilterValue: any;
+    pageIndex: number = 0;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor( private _activatedRoute: ActivatedRoute,
@@ -147,7 +167,7 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
              debounceTime(300),
              switchMap((query) => {
                  this.isLoading = true;
-                 return this._memberPointService.getData(Number(this.memberId),0, 10, 'date_created', 'desc', query);
+                 return this._memberPointService.getData(Number(this.memberId),0, 10, 'date_created', 'desc', 'all', query);
              }),
              map(() => {
                  this.isLoading = false;
@@ -225,7 +245,8 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
                     this.isLoading = true;
-                    return this._memberPointService.getData(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    // eslint-disable-next-line max-len
+                    return this._memberPointService.getData(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.getFilterValue);
                 }),
                 map(() => {
                     this.isLoading = false;
@@ -310,5 +331,16 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
     // eslint-disable-next-line @typescript-eslint/naming-convention
     AddFormclose(): void {
         this.tooglepointAddFormMode(false);
+    }
+
+    activeAndExpirePointfieldChange(e: any): void {
+        this.getFilterValue = e.value;
+        this._memberPointService.getData(Number(this.memberId), 0, 10, '', 'asc', this.getFilterValue)
+       .pipe(
+        takeUntil(this._unsubscribeAll)
+            )
+            .subscribe((response: any) => {
+                this._changeDetectorRef.markForCheck();
+        });
     }
 }
