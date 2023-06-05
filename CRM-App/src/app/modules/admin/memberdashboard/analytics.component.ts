@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { TotalRegisterMember } from './analytics.resolvers';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation, Injectable, ChangeDetectorRef} from '@angular/core';
 import { Router } from '@angular/router';
@@ -23,9 +24,13 @@ import { AnalyticsService } from 'app/modules/admin/memberdashboard/analytics.se
 export class AnalyticsComponent implements OnInit, OnDestroy {
     chartAge: ApexOptions;
     totalMembers: number;
-    totalBeInformed: number;
-    totalBeReward: number;
-    totalBeWow: number;
+    getRegisteredLevel: any;
+    silverName: string;
+    goldName: string;
+    platinumName: string;
+    totalSilverCount: number;
+    totalGoldCount: number;
+    totalPlatinumCount: number;
     startDate = new Date();
     startYear = new Date();
     registerMember: number;
@@ -45,9 +50,9 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     expiredSelectedValue: string;
     totalAmount: number;
     transactionAmountByStore: number;
-    informedId: number;
-    rewardedId: number;
-    wowId: number;
+    silverId: number;
+    goldId: number;
+    platinumId: number;
     totalActivePoint: number;
     totalActiveDollar: number;
     totalExpiredPoint: number;
@@ -131,9 +136,9 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         this._analyticsService.memberTiers$
             .subscribe((response: any) => {
                 this.tiers$ = response.data ? response.data : null;
-                this.informedId = response.data ? response.data[0].id : 0;
-                this.rewardedId = response.data ? response.data[1].id : 0;
-                this.wowId = response.data ? response.data[2].id : 0;
+                this.silverId = response.data ? response.data[0].id : 0;
+                this.goldId = response.data ? response.data[1].id : 0;
+                this.platinumId = response.data ? response.data[2].id : 0;
             });
 
         this._analyticsService.channel$
@@ -148,18 +153,16 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
             .subscribe((response: any) => {
                 this.totalMembers = response.data ? response.data[0].count.member_code : 0;
             });
-        this._analyticsService.beInformed$
-            .subscribe((response: any) => {
-                this.totalBeInformed = response.data ? response.data[0].count.member_code : 0;
-            });
-        this._analyticsService.beReward$
-            .subscribe((response: any) => {
-                this.totalBeReward = response.data ? response.data[0].count.member_code : 0;
-            });
-        this._analyticsService.beWow$
-            .subscribe((response: any) => {
-                this.totalBeWow = response.data ? response.data[0].count.member_code : 0;
-            });
+        this._analyticsService.getRegisteredLevel$
+        .subscribe((response: any) => {
+            this.getRegisteredLevel = response.data ? response.data : null;
+            this.silverName = response.data ? response.data[0].name : '';
+            this.goldName = response.data ? response.data[1].name : '';
+            this.platinumName = response.data ? response.data[2].name : '';
+            this.totalSilverCount = response.data ? response.data[0].count : 0;
+            this.totalGoldCount = response.data ? response.data[1].count : 0;
+            this.totalPlatinumCount = response.data ? response.data[2].count : 0;
+        });
         this._analyticsService.totalRegisterMember$
             .subscribe((response: any) => {
                 const date = new Date();
@@ -385,10 +388,10 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
                                     <div class="ml-2 text-md leading-none">Transactions : ${this.transactionObject.TransactionCountSeries[seriesIndex]}</div>
                                 </div>
                                 <div class="flex items-center h-8 min-h-8 max-h-8 px-3">
-                                <div class="ml-2 text-md leading-none">Total Purchase Amount : $ ${(Math.round((this.transactionObject.TransactionAmountSeries[seriesIndex]) * 100) / 100).toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</div>
+                                <div class="ml-2 text-md leading-none">Total Purchase Amount : $ ${(Math.round((this.transactionObject.TransactionAmountSeries[seriesIndex]) * 100) / 100).toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}</div>
                                 </div>
                                 <div class="flex items-center h-8 min-h-8 max-h-8 px-3">
-                                    <div class="ml-2 text-md leading-none">Average Transactions : ${(Math.round((this.transactionObject.TransactionAmountSeries[seriesIndex]/this.transactionObject.TransactionCountSeries[seriesIndex]) * 100) / 100).toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</div>
+                                    <div class="ml-2 text-md leading-none">Average Transactions : ${(Math.round((this.transactionObject.TransactionAmountSeries[seriesIndex]/this.transactionObject.TransactionCountSeries[seriesIndex]) * 100) / 100).toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}</div>
                                 </div>`
             }
         };

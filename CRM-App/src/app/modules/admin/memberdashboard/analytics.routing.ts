@@ -2,9 +2,7 @@ import { Route } from '@angular/router';
 import { AnalyticsComponent } from 'app/modules/admin/memberdashboard/analytics.component';
 import {
     TotalMembersResolver,
-    TotalBeInformedResolver,
-    TotalBeRewardResolver,
-    TotalBeWowResolver,
+    TotalRegisteredLevelResolver,
     TotalRegisterMember,
     TotalTransactionCount,
     MemberTiers,
@@ -21,9 +19,7 @@ export const analyticsRoutes: Route[] = [
         component: AnalyticsComponent,
         resolve  : {
             totalmembers: TotalMembersResolver,
-            totalbeinformed: TotalBeInformedResolver,
-            totalbereward: TotalBeRewardResolver,
-            totalbewow: TotalBeWowResolver,
+            totalRegisteredLevel: TotalRegisteredLevelResolver,
             totalMember: TotalRegisterMember,
             totalTransaction: TotalTransactionCount,
             tiers: MemberTiers,

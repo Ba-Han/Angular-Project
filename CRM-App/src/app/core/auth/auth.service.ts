@@ -123,7 +123,7 @@ export class AuthService {
      * @param password
      */
     resetPassword(password: string): Observable<any> {
-        let accessToken: string =
+        const accessToken: string =
             this.router.snapshot.queryParamMap.get('token');
         return this._httpClient.post(`${this._apiurl}/auth/password/reset`, {
             token: accessToken,
@@ -195,8 +195,8 @@ export class AuthService {
                 ),
                 switchMap((response: any) => {
                     // Store the access token in the local storage
-                    this.accessToken = ((response.data) ? response.data.access_token : "");
-                    this.refreshToken = ((response.data) ? response.data.refresh_token : "");
+                    this.accessToken = ((response.data) ? response.data.access_token : '');
+                    this.refreshToken = ((response.data) ? response.data.refresh_token : '');
                     const expires = new Date();
                     expires.setMilliseconds(
                         expires.getMilliseconds() + ((response.data) ? response.data.expires :0)
@@ -325,7 +325,6 @@ export class AuthService {
                         this.otpAuthUrl = response.data.otpauth_url
                             ? response.data.otpauth_url
                             : '';
-                        
                         return of(response);
                     }
                 })
@@ -351,8 +350,8 @@ export class AuthService {
         );
     }
 
-    sendQRCodeLink(email:string): Observable<any> {
-        const headers = { Authorization: 'Bearer ' + "5dutgiMfxSRfLfd8WehnT9-Qf7_H0fQC" };
+    sendQRCodeLink(email: string): Observable<any> {
+        const headers = { Authorization: 'Bearer ' + '5dutgiMfxSRfLfd8WehnT9-Qf7_H0fQC' };
         return this._httpClient.post(`${this._apiurl}/utility/send-tfa-mail`, {
             email: email,
             qrCodeUrl: `${this._appUrl}/get-authenticator-app`,

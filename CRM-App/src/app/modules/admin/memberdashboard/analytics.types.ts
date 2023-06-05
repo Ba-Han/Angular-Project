@@ -10,6 +10,12 @@ export interface Channel {
 export interface Tiers {
   id: string;
   name: string;
+  level: number;
+}
+export interface RegisteredLevel {
+  id: number;
+  name: string;
+  count: number;
 }
 export interface RegisteredMember{
   'type': string;
