@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { ActivePoint, ExpiredPoint, DateParameter,EarnPoint,RegisteredMember } from '../memberdashboard/analytics.types';
+import { ActivePoint, ExpiredPoint, DateParameter,EarnPoint,RegisteredMember, RegisteredLevel } from '../memberdashboard/analytics.types';
 
 @Injectable({
     providedIn: 'root'
@@ -10,9 +10,7 @@ import { ActivePoint, ExpiredPoint, DateParameter,EarnPoint,RegisteredMember } f
 export class AnalyticsService
 {
     private _totalMembers: BehaviorSubject<any> = new BehaviorSubject(null);
-    private _beInformedMembers: BehaviorSubject<any> = new BehaviorSubject(null);
-    private _beRewardMembers: BehaviorSubject<any> = new BehaviorSubject(null);
-    private _beWowMembers: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _getRegisteredLevel: BehaviorSubject<RegisteredLevel[]> = new BehaviorSubject(null);
     private _totalRegisterMember: BehaviorSubject<any> = new BehaviorSubject(null);
     private _totalTransactionCounts: BehaviorSubject<any> = new BehaviorSubject(null);
     private _totalActivePoints: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -34,14 +32,8 @@ export class AnalyticsService
     {
         return this._totalMembers.asObservable();
     }
-    get beInformed$(): Observable<any> {
-        return this._beInformedMembers.asObservable();
-    }
-    get beReward$(): Observable<any> {
-        return this._beRewardMembers.asObservable();
-    }
-    get beWow$(): Observable<any> {
-        return this._beWowMembers.asObservable();
+    get getRegisteredLevel$(): Observable<RegisteredLevel[]> {
+        return this._getRegisteredLevel.asObservable();
     }
     get totalRegisterMember$(): Observable<any> {
         return this._totalRegisterMember.asObservable();
@@ -89,25 +81,11 @@ export class AnalyticsService
             })
         );
     }
-    getBeInformed(): Observable<any> {
-        return this._httpClient.get<any>(`${this._apiurl}/items/memberaggregate?level=1`).pipe(
-            tap((response: any) => {
-                this._beInformedMembers.next(response);
-            })
-        );
-    }
-    getBeReward(): Observable<any> {
-        return this._httpClient.get<any>(`${this._apiurl}/items/memberaggregate?level=2`).pipe(
-            tap((response: any) => {
-                this._beRewardMembers.next(response);
-            })
-        );
-    }
 
-    getBeWow(): Observable<any> {
-        return this._httpClient.get<any>(`${this._apiurl}/items/memberaggregate?level=3`).pipe(
+    getRegisteredLevel(): Observable<RegisteredLevel[]> {
+        return this._httpClient.get<any>(`${this._apiurl}/items/member/registeredlevel`).pipe(
             tap((response: any) => {
-                this._beWowMembers.next(response);
+                this._getRegisteredLevel.next(response);
             })
         );
     }

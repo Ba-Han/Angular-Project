@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AnalyticsService } from 'app/modules/admin/memberdashboard/analytics.service';
-import { DateParameter,EarnPoint } from '../memberdashboard/analytics.types';
+import { DateParameter,EarnPoint, RegisteredLevel } from '../memberdashboard/analytics.types';
 
 @Injectable({
     providedIn: 'root'
@@ -21,39 +21,16 @@ export class TotalMembersResolver implements Resolve<any>
 @Injectable({
     providedIn: 'root'
 })
-export class TotalBeInformedResolver implements Resolve<any>
+export class TotalRegisteredLevelResolver implements Resolve<any>
 {
-    constructor(private _analyticsService: AnalyticsService) {
+    constructor(private _analyticsService: AnalyticsService)
+    {
     }
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        return this._analyticsService.getBeInformed();
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<RegisteredLevel[]>
+    {
+        return this._analyticsService.getRegisteredLevel();
     }
 }
-
-@Injectable({
-    providedIn: 'root'
-})
-export class TotalBeRewardResolver implements Resolve<any>
-{
-    constructor(private _analyticsService: AnalyticsService) {
-    }
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        return this._analyticsService.getBeReward();
-    }
-}
-
-@Injectable({
-    providedIn: 'root'
-})
-export class TotalBeWowResolver implements Resolve<any>
-{
-    constructor(private _analyticsService: AnalyticsService) {
-    }
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        return this._analyticsService.getBeWow();
-    }
-}
-
 
 @Injectable({
     providedIn: 'root'

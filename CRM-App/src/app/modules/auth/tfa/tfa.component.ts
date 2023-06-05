@@ -55,7 +55,7 @@ export class AuthTfaComponent implements OnInit {
      * Send the reset link
      */
     enableTFA(): void {
-        
+
         // Return if the form is invalid
         if (this.tfaForm.invalid) {
             return;

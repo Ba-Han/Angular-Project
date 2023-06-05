@@ -30,13 +30,13 @@
             <!-- Total Silver Members-->
             <div class="card h-40">
                 <div class="card-header card-header-warning">
-                    <h4 class="card-title">Silver</h4>
-                    <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalBeInformed | number:'1.0-0'}}</p>
+                    <h4 class="card-title">{{ silverName }}</h4>
+                    <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalSilverCount | number:'1.0-0'}}</p>
                 </div>
                 <div class="card-body">
                     <div style="border: 1px solid #ccc;"></div>
                     <div class="mt-2" style="cursor:pointer;color: gray !important;"
-                         (click)="detailTierList(informedId)">
+                         (click)="detailTierList(silverId)">
                         See More Details
                     </div>
                 </div>
@@ -46,13 +46,13 @@
             <!-- Total Gold Members -->
             <div class="card h-40">
                 <div class="card-header card-header-twittercolor">
-                    <h4 class="card-title">Gold</h4>
-                    <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalBeReward | number:'1.0-0'}}</p>
+                    <h4 class="card-title">{{ goldName }}</h4>
+                    <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalGoldCount | number:'1.0-0'}}</p>
                 </div>
                 <div class="card-body">
                     <div style="border: 1px solid #ccc;"></div>
                     <div class="mt-2" style="cursor:pointer;color: gray !important;"
-                         (click)="detailTierList(rewardedId)">
+                         (click)="detailTierList(goldId)">
                         See More Details
                     </div>
                 </div>
@@ -61,13 +61,13 @@
             <!-- Total Platinum Members -->
             <div class="card h-40">
                 <div class="card-header card-header-success">
-                    <h4 class="card-title">Platinum</h4>
-                    <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalBeWow | number:'1.0-0'}}</p>
+                    <h4 class="card-title">{{ platinumName }}</h4>
+                    <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalPlatinumCount | number:'1.0-0'}}</p>
                 </div>
                 <div class="card-body">
                     <div style="border: 1px solid #ccc;"></div>
                     <div class="mt-2" style="cursor:pointer;color: gray !important;"
-                         (click)="detailTierList(wowId)">
+                         (click)="detailTierList(platinumId)">
                         See More Details
                     </div>
                 </div>
