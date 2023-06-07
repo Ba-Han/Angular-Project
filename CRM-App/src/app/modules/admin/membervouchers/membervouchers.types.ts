@@ -10,6 +10,7 @@ export interface MemberVoucher {
     conversion_rate: number;
     amount: number;
     status: string;
+    balance: number;
     redeemed_order: string;
 }
 

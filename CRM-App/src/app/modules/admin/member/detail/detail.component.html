@@ -71,7 +71,7 @@
                 <div class="">
                     <button mat-icon-button style="background-color:#ccc;"
                             [matTooltip]="'Close'"
-                            (click)="drawerTwo.close()">
+                            (click)="closeGenerateVoucherForm()">
                         <mat-icon class="text-white"
                                   [svgIcon]="'heroicons_outline:x'"></mat-icon>
                     </button>
@@ -107,7 +107,7 @@
                             <mat-icon matPrefix
                                       class="hidden sm:flex icon-size-5"
                                       [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                            <input matInput
+                            <input matInput id="points_used"
                                    [(ngModel)]="inputPointValue"
                                    [formControlName]="'points_used'"
                                    [placeholder]="'points to convert'"
@@ -152,9 +152,18 @@
                             Save
                         </button>
 
-                        <div *ngIf="voucherErrorMessage" style="position: relative; color: red; left: 1rem;">
+                        <div *ngIf="GenerateVoucherForm.get('points_used').errors && GenerateVoucherForm.get('points_used').errors.max" class="text_danger">
+                            Maximum points allowed: {{ getAvailablePoints }}
+                        </div>
+
+                        <div *ngIf="voucherErrorMessage" class="text_danger">
                             {{ voucherErrorMessage }}
                         </div>
+
+                        <div *ngIf="createGeneateVoucherSuccessfully" class="success_text_danger">
+                            {{ createGeneateVoucherSuccessfully }}
+                        </div>
+                       
                     </div>
                 </form>
             </div>
@@ -382,7 +391,7 @@
                                         
                                         <div style="margin-top: 0 !important;" >
                                             <div class="flex w-full ">
-                                                <button class="w-1/8 bg-green-500 text-white" mat-flat-button
+                                                <button class="w-1/8 font-bold generate-btn-memberdetial text-secondary"
                                                         [matTooltip]="'Generate Voucher'"
                                                         (click)="openGernerateVoucherForm()">
                                                     Generate Voucher
@@ -655,7 +664,7 @@
                                         <ng-container mat-cell *matCellDef="let memberVouchers">
                                             <td mat-cell [routerLink]="['./voucher', memberVouchers.id]" style="cursor:pointer;">
                                                 <span class="pr-6 whitespace-nowrap">
-                                                    ${{memberVouchers.amount| number : '1.2-2'}}
+                                                    {{memberVouchers.amount| number : '1.2-2'}}
                                                 </span>
                                             </td>
                                         </ng-container>
