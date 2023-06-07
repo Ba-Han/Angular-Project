@@ -78,6 +78,18 @@ import { UserService } from 'app/core/user/user.service';
                     margin-left: 0 !important;
                 }
 
+                .new_checkbox_00 {
+                    display: inline-flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                .new_checkbox_01 {
+                    width: 24px;
+                    height: 24px;
+                }
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -141,6 +153,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     getStoreData: any;
     typeRuleValue: number;
     pointRewardedAtValue: number = 0;
+    priorityValue: number;
     spendingtypeValue: number = 0;
     totypeValue: number = 0;
     toendTypeValue: number = 0;
@@ -148,6 +161,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     fromstarttypeValue: number = 0;
     storeSelectionTypeValue: number;
     isButtonDisabled: boolean = true;
+    showNewMemberPointAmount: boolean = false;
+    stopFurtherValue: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
 
@@ -192,6 +207,10 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             point_basketName: ['', [Validators.required]],
             store_selection_type: ['', [Validators.required]],
             store_codes: [''],
+            new_member_to_earn_points: [''],
+            new_member_point_amount: [''],
+            priority: [''],
+            stop_further: [''],
         });
 
         this.PointBasketForm = this._formBuilder.group({
@@ -220,7 +239,9 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             this.pointRewardedAtValue = pointrule.point_rewarded_at;
             this.validitytypeValue = pointrule.validity_type;
             this.storeSelectionTypeValue = pointrule.store_selection_type;
-            //this.pointRule.point_basket = pointrule.name;
+            this.priorityValue = pointrule.priority;
+            this.showNewMemberPointAmount = pointrule.new_member_to_earn_points;
+            this.stopFurtherValue = pointrule.stop_further;
             this.pointRule.point_basketName = pointrule.point_basket?.name;
             this.PointRuleEditForm.patchValue(pointrule);
             this._changeDetectorRef.markForCheck();
