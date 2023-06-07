@@ -1085,6 +1085,12 @@
                     </div>
                 </div>
             </ng-container>
+
+            <ng-container *ngIf="!editMode && !pointlistMode && !transactionlistMode && !pointDetailViewMode && !pointDetailEditMode && !pointDetailAddMode && !transactionDetailMode">
+                <div class="relative flex flex-col flex-auto p-6 pt-0 sm:p-12 sm:pt-0 see_all_member_log">
+                    <button mat-stroked-button>See All Member Log</button>
+                </div>
+            </ng-container>
         
             <!-- Edit mode -->
             <ng-container *ngIf="editMode">

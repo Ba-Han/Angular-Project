@@ -167,6 +167,11 @@ import { MemberService } from 'app/modules/admin/member/member.service';
                 color: green;
                 left: 1rem;
             }
+
+            .see_all_member_log {
+                justify-content: end;
+                align-items: end;
+            }
         `
     ],
     encapsulation  : ViewEncapsulation.None,
