@@ -12,18 +12,19 @@ import { TransactionDetailComponent } from 'app/modules/admin/transaction/detail
 import { MemberVoucherResolver, MemberVoucherDetailResolver } from 'app/modules/admin/membervouchers/membervouchers.resolvers';
 import { MemberVoucherListComponent } from 'app/modules/admin/membervouchers/list/list.component';
 import { MemberVoucherDetailComponent } from 'app/modules/admin/membervouchers/detail/detail.component';
-
+import { MemberLogsResolver } from 'app/modules/admin/memberlogs/memberlogs.resolvers';
+import { MemberLogsListComponent } from 'app/modules/admin/memberlogs/list/memberlogs.component';
 
 export const memberRoutes: Route[] = [
     {
-        path     : '',
+        path: '',
         component: MemberComponent,
         children : [
             {
-                path     : '',
+                path: '',
                 component: MemberListComponent,
-                resolve  : {
-                    tasks    : MemberResolver,
+                resolve: {
+                    tasks: MemberResolver,
                 }
             },
             {
@@ -86,6 +87,13 @@ export const memberRoutes: Route[] = [
                 component: MemberVoucherDetailComponent,
                 resolve: {
                     task: MemberVoucherDetailResolver,
+                }
+            },
+            {
+                path: ':id/memberlog',
+                component: MemberLogsListComponent,
+                resolve: {
+                    task: MemberLogsResolver,
                 }
             }
         ]

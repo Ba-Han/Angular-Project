@@ -664,9 +664,11 @@
                                         <input class="new_checkbox_01" type="checkbox" [formControlName]="'new_member_to_earn_points'" [(ngModel)]="showNewMemberPointAmount">
                                         New Member to Earn Points
                                     </label>
+                                </div>
 
-                                    <ng-container *ngIf="showNewMemberPointAmount">
-                                        <mat-form-field class="fuse-mat-no-subscript w-1/2 ml-4">
+                                <ng-container *ngIf="showNewMemberPointAmount">
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
                                             <mat-label>New Member Point Amount</mat-label>
                                             <mat-icon matPrefix
                                                     class="hidden sm:flex icon-size-5"
@@ -675,8 +677,8 @@
                                                 [formControlName]="'new_member_point_amount'"
                                                 [placeholder]="'New Member Point Amount'">
                                         </mat-form-field>
-                                    </ng-container>
-                                </div>
+                                    </div>
+                                </ng-container>
     
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">

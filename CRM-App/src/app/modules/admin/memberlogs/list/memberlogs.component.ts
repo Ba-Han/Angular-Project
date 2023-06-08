@@ -9,27 +9,27 @@ import { MatSort } from '@angular/material/sort';
 import { debounceTime, map, merge, filter, fromEvent, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { MemberVoucherService } from 'app/modules/admin/membervouchers/membervouchers.service';
-import { MemberVoucher, MemberVoucherPagination } from 'app/modules/admin/membervouchers/membervouchers.types';
+import { MemberLogsService } from 'app/modules/admin/memberlogs/memberlogs.service';
+import { MemberLogs, MemberLogsPagination } from 'app/modules/admin/memberlogs/memberlogs.types';
 
 @Component({
-    selector       : 'membervouchers-list',
-    templateUrl    : './list.component.html',
+    selector       : 'memberlogs-list',
+    templateUrl    : './memberlogs.component.html',
     styles         : [
         `
-            .membervoucher-grid {
-                grid-template-columns: 150px 150px 150px 100px 100px 100px;
+            .memberlogs-grid {
+                grid-template-columns: 100px auto;
 
                 @screen sm {
-                    grid-template-columns: 150px 150px 150px 100px 100px 100px;
+                    grid-template-columns: 100px auto;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 150px 150px 100px 100px 100px;
+                    grid-template-columns: 100px auto;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 150px 150px 100px 100px 100px;
+                    grid-template-columns: 100px auto;
                 }
             }
             .membercustom-paging {
@@ -45,18 +45,18 @@ import { MemberVoucher, MemberVoucherPagination } from 'app/modules/admin/member
                 content: '\u2193';
             }
 
-            .membervoucher-2-sort {
+            .memberlogs-2-sort {
                 position: static;
                 width: 13rem !important;
             }
 
-            .membervoucher-sort-btn-01 {
+            .memberlogs-sort-btn-01 {
                 border-radius: 3px !important;
                 padding: 12px !important;
                 min-width: 5px !important;
             }
 
-            .membervoucher_sort_by {
+            .memberlogs_sort_by {
                 display: grid;
                 grid-template-columns: max-content;
                 font-weight: 600;
@@ -65,11 +65,8 @@ import { MemberVoucher, MemberVoucherPagination } from 'app/modules/admin/member
                 margin-right: 5px;
             }
 
-            .sendEmail {
-                position: relative;
-                top: 0rem;
-                left: 51rem;
-                margin: -2rem;
+            .show_long_text {
+                white-space: pre-wrap !important;
             }
         `
     ],
@@ -77,30 +74,27 @@ import { MemberVoucher, MemberVoucherPagination } from 'app/modules/admin/member
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations     : fuseAnimations
 })
-export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDestroy
+export class MemberLogsListComponent implements OnInit, AfterViewInit, OnDestroy
 {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
 
-    memberVouchers$: Observable<MemberVoucher[]>;
-    memberVouchersCount: number = 0;
+    memberLogs$: Observable<MemberLogs[]>;
+    memberLogsCount: number = 0;
     isLoading: boolean = false;
-    pagination: MemberVoucherPagination;
-    minDate: string;
+    pagination: MemberLogsPagination;
     memberId: number;
-    voucherAddFormMode: boolean = false;
-    memberVoucherAddForm: FormGroup;
     searchInputControl: FormControl = new FormControl();
     isAscending: boolean = true;
-    selectedCoulumn = 'vouchercode';
+    selectedCoulumn: string = 'dateupdated';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor( private _activatedRoute: ActivatedRoute,
         private _fuseConfirmationService: FuseConfirmationService,
         private _changeDetectorRef: ChangeDetectorRef,
-        private _memberVoucherService: MemberVoucherService,
+        private _memberLogsService: MemberLogsService,
         private _formBuilder: FormBuilder,
         @Inject(DOCUMENT) private _document: any,
         private _router: Router,
@@ -118,32 +112,22 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
             if (param != null) {
                 this.memberId = Number(param[0].path);
             }
-
-        });
-
-        this.memberVoucherAddForm = this._formBuilder.group({
-            id: 0,
-            member_id: this.memberId,
-            voucher_code: ['', [Validators.required]],
-            points_used: ['', [Validators.required]],
-            conversion_rate: ['', [Validators.required]],
-            amount: ['', [Validators.required]]
         });
 
         // Get the data
-        this.memberVouchers$ = this._memberVoucherService.memberVouchers$;
-        this._memberVoucherService.memberVouchers$
+        this.memberLogs$ = this._memberLogsService.memberLogs$;
+        this._memberLogsService.memberLogs$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((memberVouchers: MemberVoucher[]) => {
-                this.memberVouchersCount = memberVouchers.length;
+            .subscribe((memberLogs: MemberLogs[]) => {
+                this.memberLogsCount = memberLogs.length;
                  this._changeDetectorRef.markForCheck();
 
             });
 
         // Get the pagination
-        this._memberVoucherService.pagination$
+        this._memberLogsService.pagination$
         .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((pagination: MemberVoucherPagination) => {
+        .subscribe((pagination: MemberLogsPagination) => {
             this.pagination = pagination;
             this._changeDetectorRef.markForCheck();
         });
@@ -155,7 +139,7 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
              debounceTime(300),
              switchMap((query) => {
                  this.isLoading = true;
-                 return this._memberVoucherService.getMemberVoucher(Number(this.memberId),0, 10, 'date_created', 'asc', query);
+                 return this._memberLogsService.getMemberLogs(Number(this.memberId),0, 10, 'date_updated', 'asc', query);
              }),
              map(() => {
                  this.isLoading = false;
@@ -168,51 +152,27 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
         if ( this._sort && this._paginator )
         {
             // Set the initial sort
-            if (this.isAscending && this.selectedCoulumn === 'vouchercode') {
+            if (this.isAscending && this.selectedCoulumn === 'dateupdated') {
                 this._sort.sort({
-                    id: 'voucher_code',
+                    id: 'date_updated',
                     start: 'asc',
                     disableClear: true
                 });
-            } else if (!this.isAscending && this.selectedCoulumn === 'vouchercode') {
+            } else if (!this.isAscending && this.selectedCoulumn === 'dateupdated') {
                 this._sort.sort({
-                    id: 'voucher_code',
+                    id: 'date_updated',
                     start: 'desc',
                     disableClear: true
                 });
-            } else if (this.isAscending && this.selectedCoulumn === 'pointused') {
+            } else if (this.isAscending && this.selectedCoulumn === 'logdata') {
                 this._sort.sort({
-                    id: 'points_used',
+                    id: 'log_data',
                     start: 'asc',
                     disableClear: true
                 });
-            } else if (!this.isAscending && this.selectedCoulumn === 'pointused') {
+            } else if (!this.isAscending && this.selectedCoulumn === 'logdata') {
                 this._sort.sort({
-                    id: 'points_used',
-                    start: 'desc',
-                    disableClear: true
-                });
-            } else if (this.isAscending && this.selectedCoulumn === 'conversionrate') {
-                this._sort.sort({
-                    id: 'conversion_rate',
-                    start: 'asc',
-                    disableClear: true
-                });
-            } else if (!this.isAscending && this.selectedCoulumn === 'conversionrate') {
-                this._sort.sort({
-                    id: 'conversion_rate',
-                    start: 'desc',
-                    disableClear: true
-                });
-            } else if (this.isAscending && this.selectedCoulumn === 'amount') {
-                this._sort.sort({
-                    id: 'amount',
-                    start: 'asc',
-                    disableClear: true
-                });
-            } else if (!this.isAscending && this.selectedCoulumn === 'amount') {
-                this._sort.sort({
-                    id: 'amount',
+                    id: 'log_data',
                     start: 'desc',
                     disableClear: true
                 });
@@ -234,7 +194,7 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
                 switchMap(() => {
                     this.isLoading = true;
                     // eslint-disable-next-line max-len
-                    return this._memberVoucherService.getMemberVoucher(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    return this._memberLogsService.getMemberLogs(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
                 }),
                 map(() => {
                     this.isLoading = false;
@@ -258,13 +218,9 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingColumnList() {
-        if ( this.selectedCoulumn === 'vouchercode') {
+        if ( this.selectedCoulumn === 'dateupdated') {
             this.ngAfterViewInit();
-        } else if ( this.selectedCoulumn === 'pointused' ) {
-            this.ngAfterViewInit();
-        } else if ( this.selectedCoulumn === 'conversionrate' ) {
-            this.ngAfterViewInit();
-        } else if ( this.selectedCoulumn === 'amount' ) {
+        } else if ( this.selectedCoulumn === 'logdata') {
             this.ngAfterViewInit();
         }
     }
@@ -272,52 +228,19 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingPageList() {
         this.isAscending = !this.isAscending;
-        if ( this.isAscending && this.selectedCoulumn === 'vouchercode' ) {
+        if ( this.isAscending && this.selectedCoulumn === 'dateupdated' ) {
             this.ngAfterViewInit();
-        } else if ( !this.isAscending && this.selectedCoulumn === 'vouchercode' ) {
+        } else if ( !this.isAscending && this.selectedCoulumn === 'dateupdated' ) {
             this.ngAfterViewInit();
-        } else if ( this.isAscending && this.selectedCoulumn === 'pointused' ) {
+        } else if ( this.isAscending && this.selectedCoulumn === 'logdata' ) {
             this.ngAfterViewInit();
-        } else if ( !this.isAscending && this.selectedCoulumn === 'pointused' ) {
-            this.ngAfterViewInit();
-        } else if ( this.isAscending && this.selectedCoulumn === 'conversionrate' ) {
-            this.ngAfterViewInit();
-        } else if ( !this.isAscending && this.selectedCoulumn === 'conversionrate' ) {
-            this.ngAfterViewInit();
-        } else if ( this.isAscending && this.selectedCoulumn === 'amount' ) {
-            this.ngAfterViewInit();
-        } else if ( !this.isAscending && this.selectedCoulumn === 'amount' ) {
+        } else if ( !this.isAscending && this.selectedCoulumn === 'logdata' ) {
             this.ngAfterViewInit();
         }
-    }
-
-    createMemberVoucher(): void
-    {
-        const newmemberVoucher = this.memberVoucherAddForm.getRawValue();
-        this._memberVoucherService.createMemberVoucher(newmemberVoucher).subscribe(() => {
-            this.toogleVoucherAddFormMode(false);
-            this._changeDetectorRef.markForCheck();
-        });
     }
 
     trackByFn(index: number, item: any): any
     {
         return item.id || index;
-    }
-
-    toogleVoucherAddFormMode(voucherAddFormMode: boolean | null = null): void {
-        if (voucherAddFormMode === null) {
-            this.voucherAddFormMode = !this.voucherAddFormMode;
-        }
-        else {
-            this.voucherAddFormMode = voucherAddFormMode;
-        }
-
-        this._changeDetectorRef.markForCheck();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    AddFormclose(): void {
-        this.toogleVoucherAddFormMode(false);
     }
 }

@@ -15,7 +15,7 @@ import { MemberVoucher } from 'app/modules/admin/membervouchers/membervouchers.t
 import { MemberVoucherService } from 'app/modules/admin/membervouchers/membervouchers.service';
 
 @Component({
-    selector       : 'memberpoint-details',
+    selector       : 'memberpoint-detail',
     templateUrl: './detail.component.html',
     styles:[ `
                 .membervoucher-grid {

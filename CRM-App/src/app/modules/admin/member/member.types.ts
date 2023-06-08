@@ -76,39 +76,6 @@ export interface MemberPagination
     endIndex: number;
 }
 
-// export interface Country
-// {
-//     id: string;
-//     iso_code: string;
-//     country_name: string;
-//     country_code: string;
-//     flag_image: string;
-// }
-
-
-// export interface Member
-// {
-//     id: string;
-//     avatar?: string | null;
-//     background?: string | null;
-//     name: string;
-//     emails?: {
-//         email: string;
-//         label: string;
-//     }[];
-//     phoneNumbers?: {
-//         country: string;
-//         phoneNumber: string;
-//         label: string;
-//     }[];
-//     title?: string;
-//     company?: string;
-//     birthday?: string | null;
-//     address?: string | null;
-//     notes?: string | null;
-//     tags: string[];
-// }
-
 export interface Country
 {
     id: string;
@@ -251,6 +218,16 @@ export interface MemberVoucher {
     points_used: number;
     conversion_rate: number;
     amount: number;
+}
+
+export interface MemberLogs {
+    id: number;
+    user_created: string;
+    date_created: string;
+    user_updated: string;
+    date_updated: string;
+    updated_by: string;
+    log_data: string;
 }
 
 
