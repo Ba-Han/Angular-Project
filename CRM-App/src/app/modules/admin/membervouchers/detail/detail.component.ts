@@ -18,19 +18,19 @@ import { MemberVoucherService } from 'app/modules/admin/membervouchers/membervou
     selector       : 'memberpoint-details',
     templateUrl: './detail.component.html',
     styles:[ `
-                membervoucher-grid {
-                    grid-template-columns: 150px 150px 150px 100px 100px;
+                .membervoucher-grid {
+                    grid-template-columns: 150px 150px 150px 100px 100px 100px;
 
                     @screen sm {
-                        grid-template-columns: 150px 150px 150px 100px 100px;
+                        grid-template-columns: 150px 150px 150px 100px 100px 100px;
                     }
 
                     @screen md {
-                        grid-template-columns: 150px 150px 150px 100px 100px;
+                        grid-template-columns: 150px 150px 150px 100px 100px 100px;
                     }
 
                     @screen lg {
-                        grid-template-columns: 150px 150px 150px 100px 100px;
+                        grid-template-columns: 150px 150px 150px 100px 100px 100px;
                     }
                 }
                 .membercustom-paging {

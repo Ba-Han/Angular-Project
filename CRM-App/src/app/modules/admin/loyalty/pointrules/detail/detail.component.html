@@ -297,13 +297,6 @@
                                     [svgIcon]="'heroicons_outline:x'"></mat-icon>
                         </button>
                     </div>
-
-                    <!--<div class="flex items-center w-full max-w-3xl mx-auto pt-4">
-                        <div class="flex sm:items-center w-full">
-                            <div class="w-2/4 pr-2">Start Date: {{pointRule.start_date | date:'MMM dd, y'}}</div>
-                            <div class="w-2/4 pr-2">End Date: {{pointRule.end_date | date:'MMM dd, y'}}</div>
-                        </div>
-                    </div>-->
                 </div>
 
                 <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0" style="background:#fff;">
@@ -314,6 +307,13 @@
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Description: </div>
                                     <div class="ml-6 leading-6">{{pointRule.description}}</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="pointRule.reward_code">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Reward Code: </div>
+                                    <div class="ml-6 leading-6">{{pointRule.reward_code}}</div>
                                 </div>
                             </ng-container>
 
@@ -366,6 +366,15 @@
                                         <div class="ml-6 leading-6">{{pointRule.point_amount}}</div>
                                     </div>
                                 </ng-container>
+
+                                <ng-container *ngIf="pointRule.new_member_to_earn_points">
+                                    <ng-container *ngIf="pointRule.new_member_point_amount">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">New Member Point Amount: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.new_member_point_amount}}</div>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
     
                                 <ng-container *ngIf="pointRule.min_expense">
                                     <div class="flex sm:items-center">
@@ -396,14 +405,28 @@
                                         <div class="ml-6 leading-6">{{pointRule.min_expense}}</div>
                                     </div>
                                 </ng-container>
-                            </ng-container>                      
 
-                            <ng-container *ngIf="pointRule.reward_code">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Reward Code: </div>
-                                    <div class="ml-6 leading-6">{{pointRule.reward_code}}</div>
-                                </div>
-                            </ng-container>
+                                <ng-container *ngIf="pointRule.priority === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Priority: </div>
+                                        <div class="ml-6 leading-6">Low</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.priority === 2">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Priority: </div>
+                                        <div class="ml-6 leading-6">Medium</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.priority === 3">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Priority: </div>
+                                        <div class="ml-6 leading-6">High</div>
+                                    </div>
+                                </ng-container>
+                            </ng-container>                      
 
                             <ng-container *ngIf="pointRule.store_selection_type === 0">
                                 <div class="flex sm:items-center">
@@ -481,27 +504,10 @@
                                     </div>
                                 </ng-container>
                             </ng-container>
-
-                            <!--<ng-container *ngIf="pointRule.date_created">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Created Date: </div>
-                                    <div class="ml-6 leading-6">{{pointRule.date_created | date:'MMM dd, y'}}</div>
-                                </div>
-                            </ng-container>
-
-                            <ng-container *ngIf="pointRule.date_updated">
-                                <div class="flex sm:items-center">
-                                    <div class="w-1/4">Last Update Date: </div>
-                                    <div class="ml-6 leading-6">{{pointRule.date_updated | date:'MMM dd, y'}}</div>
-                                </div>
-                            </ng-container>-->
-
                         </div>
-
                     </div>
                 </div>
             </ng-container>
-
 
             <!-- Edit Form-->
             <ng-container *ngIf="AddMode">
@@ -608,6 +614,25 @@
                                             [placeholder]="'Minimum Order Expense'">
                                     </mat-form-field>
                                 </div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Priority</mat-label>
+                                        <mat-select [formControlName]="'priority'" [(ngModel)]="priorityValue">
+                                            <mat-option [value]="0">None</mat-option>
+                                            <mat-option [value]="1">Low</mat-option>
+                                            <mat-option [value]="2">Medium</mat-option>
+                                            <mat-option [value]="3">High</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="mt-8">
+                                    <label class="new_checkbox_00">
+                                        <input class="new_checkbox_01" type="checkbox" [formControlName]="'stop_further'" [(ngModel)]="stopFurtherValue">
+                                        Stop Further
+                                    </label>
+                                </div>
                             </ng-container>
 
                             <ng-container *ngIf="typeRuleValue === 3">
@@ -632,6 +657,25 @@
                                             [formControlName]="'point_amount'"
                                             [placeholder]="'Point Amount'">
                                     </mat-form-field>
+                                </div>
+
+                                <div class="mt-8">
+                                    <label class="new_checkbox_00">
+                                        <input class="new_checkbox_01" type="checkbox" [formControlName]="'new_member_to_earn_points'" [(ngModel)]="showNewMemberPointAmount">
+                                        New Member to Earn Points
+                                    </label>
+
+                                    <ng-container *ngIf="showNewMemberPointAmount">
+                                        <mat-form-field class="fuse-mat-no-subscript w-1/2 ml-4">
+                                            <mat-label>New Member Point Amount</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'new_member_point_amount'"
+                                                [placeholder]="'New Member Point Amount'">
+                                        </mat-form-field>
+                                    </ng-container>
                                 </div>
     
                                 <div class="mt-8">

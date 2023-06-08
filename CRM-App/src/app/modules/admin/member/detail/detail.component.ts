@@ -144,6 +144,29 @@ import { MemberService } from 'app/modules/admin/member/member.service';
                 justify-content: center;
                 align-items: center;
             }
+
+            .text_danger {
+                position: relative;
+                color: red;
+                left: 1rem;
+            }
+
+            .generate-btn-memberdetial {
+                display: inline-flex !important;
+                align-items: center;
+                justify-content: center;
+                height: 40px;
+                line-height: 1 !important;
+                padding: 0 20px !important;
+                border-radius: 9999px !important;
+                background-color: #dbedff !important;
+            }
+
+            .success_text_danger {
+                position: relative;
+                color: green;
+                left: 1rem;
+            }
         `
     ],
     encapsulation  : ViewEncapsulation.None,
@@ -240,6 +263,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     getVoucherAmount: any;
     inputPointValue: number = 0;
     formattedNumber: string;
+    createGeneateVoucherSuccessfully: string | '' = '';
     // private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -804,7 +828,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         this.getPointValue = this.member.member[0].point_conversion;
         this.getPointToConvert = this.inputPointValue;
         this.getVoucherAmount = this.getPointToConvert / this.getPointValue;
-        this.formattedNumber = this.decimalPipe.transform(this.getVoucherAmount, '1.2-2');
+        this.formattedNumber = this.getVoucherAmount.toFixed(2);
 
          // Create the generate voucher form
          this.GenerateVoucherForm = this._formBuilder.group({
@@ -812,7 +836,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             available_points: [this.getAvailablePoints],
             voucher_code: [''],
             member_id: this.memberId,
-            points_used: [this.getPointToConvert],
+            points_used: [this.getPointToConvert, [Validators.required, Validators.max(this.getAvailablePoints)]],
             conversion_rate: [this.getPointValue],
             amount: [this.formattedNumber],
         });
@@ -825,8 +849,8 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     {
         const generateVoucher = this.GenerateVoucherForm.getRawValue();
         this._memberService.createGenerateVoucher(generateVoucher).subscribe(() => {
-            this.toogleGenerateVoucherFormMode(false);
-            this.drawerTwo.close();
+            this.createGeneateVoucherSuccessfully = 'Generate Voucher Successfully!';
+            this.toogleGenerateVoucherFormMode(true);
             this._changeDetectorRef.markForCheck();
         },
             (response) => {
@@ -840,5 +864,14 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                 }
             }
         );
+    }
+
+    closeGenerateVoucherForm(): void
+    {
+        this.createGeneateVoucherSuccessfully = '';
+        //this.GenerateVoucherForm.reset();
+        this.toogleGenerateVoucherFormMode(false);
+        this.drawerTwo.close();
+        this._changeDetectorRef.markForCheck();
     }
 }

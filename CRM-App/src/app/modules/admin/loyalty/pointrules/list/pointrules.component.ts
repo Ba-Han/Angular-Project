@@ -101,6 +101,18 @@ import { UserService } from 'app/core/user/user.service';
                 margin-left: 0;
             }
 
+            .new_checkbox_00 {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .new_checkbox_01 {
+                width: 24px;
+                height: 24px;
+            }
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -151,16 +163,18 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     timeoutId: any;
     timeOutUpId: any;
     getStoreData: any;
-    pointRewardedAtValue = 0;
-    spendingtypeValue = 0;
-    totypeValue = 0;
-    toendTypeValue = 0;
-    fromtypeValue = 0;
-    fromstarttypeValue = 0;
+    pointRewardedAtValue: number = 0;
+    priorityValue: number = 0;
+    spendingtypeValue: number = 0;
+    totypeValue: number = 0;
+    toendTypeValue: number = 0;
+    fromtypeValue: number = 0;
+    fromstarttypeValue: number = 0;
     isButtonDisabled: boolean = true;
     isAscending: boolean = true;
-    selectedCoulumn = 'name';
+    selectedCoulumn: string = 'name';
     errorMessage: string | '' = '';
+    showNewMemberPointAmount: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -203,6 +217,10 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             point_basketName: ['', [Validators.required]],
             store_selection_type: ['', [Validators.required]],
             store_codes: [''],
+            new_member_to_earn_points: [''],
+            new_member_point_amount: [''],
+            priority: [''],
+            stop_further: [''],
         });
 
         this.PointBasketForm = this._formBuilder.group({

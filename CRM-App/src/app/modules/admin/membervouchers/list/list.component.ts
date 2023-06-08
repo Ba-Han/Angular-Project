@@ -18,18 +18,18 @@ import { MemberVoucher, MemberVoucherPagination } from 'app/modules/admin/member
     styles         : [
         `
             .membervoucher-grid {
-                grid-template-columns: 150px 150px 150px 100px 100px;
+                grid-template-columns: 150px 150px 150px 100px 100px 100px;
 
                 @screen sm {
-                    grid-template-columns: 150px 150px 150px 100px 100px;
+                    grid-template-columns: 150px 150px 150px 100px 100px 100px;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 150px 150px 100px 100px;
+                    grid-template-columns: 150px 150px 150px 100px 100px 100px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 150px 150px 100px 100px;
+                    grid-template-columns: 150px 150px 150px 100px 100px 100px;
                 }
             }
             .membercustom-paging {
@@ -68,7 +68,7 @@ import { MemberVoucher, MemberVoucherPagination } from 'app/modules/admin/member
             .sendEmail {
                 position: relative;
                 bottom: 0.6rem;
-                left: 44rem;
+                left: 51rem;
                 margin: -2rem;
             }
         `

@@ -308,6 +308,12 @@ export class PointRuleService {
         const minimumExpense = !pointrule.min_expense ? 0 : pointrule.min_expense;
         const pointRewardedAt = !pointrule.point_rewarded_at ? 0 : pointrule.point_rewarded_at;
         const storeCodes = !pointrule.store_codes ? '' : pointrule.store_codes.toString();
+        const newMemberToEarnPoints = !pointrule.new_member_to_earn_points ? '' : pointrule.new_member_to_earn_points;
+        const newMemberToEarnPointsValue = Boolean(newMemberToEarnPoints);
+        const newMemberPointAamount = !pointrule.new_member_point_amount ? 0 : pointrule.new_member_point_amount;
+        const priority = !pointrule.priority ? 0 : pointrule.priority;
+        const stopFurther = !pointrule.stop_further ? '' : pointrule.stop_further;
+        const stopFurtherValue = Boolean(stopFurther);
 
         /* let startDate:any = new Date(pointrule.start_date);
 
@@ -344,7 +350,11 @@ export class PointRuleService {
                 "point_basket": pointrule.point_basket,
                 "validity_type": pointrule.validity_type,
                 "store_selection_type": pointrule.store_selection_type,
-                "store_codes": storeCodes
+                "store_codes": storeCodes,
+                "new_member_to_earn_points": newMemberToEarnPointsValue,
+                "new_member_point_amount": newMemberPointAamount,
+                "priority": priority,
+                "stop_further": stopFurtherValue
             }).pipe(
                 map((newPointRule) => {
                     this._pointRules.next([newPointRule.data, ...pointrules]);
@@ -367,6 +377,12 @@ export class PointRuleService {
         const minimumExpense = !pointrule.min_expense ? 0 : pointrule.min_expense;
         const pointRewardedAt = !pointrule.point_rewarded_at ? 0 : pointrule.point_rewarded_at;
         const storeCodes = !pointrule.store_codes ? '' : pointrule.store_codes.toString();
+        const newMemberToEarnPoints = !pointrule.new_member_to_earn_points ? '' : pointrule.new_member_to_earn_points;
+        const newMemberToEarnPointsValue = Boolean(newMemberToEarnPoints);
+        const newMemberPointAamount = !pointrule.new_member_point_amount ? 0 : pointrule.new_member_point_amount;
+        const priority = !pointrule.priority ? 0 : pointrule.priority;
+        const stopFurther = !pointrule.stop_further ? '' : pointrule.stop_further;
+        const stopFurtherValue = Boolean(stopFurther);
 
         /* let startDate:any = new Date(pointrule.start_date);
             // startDate.setMinutes(800);
@@ -403,7 +419,11 @@ export class PointRuleService {
                 "point_basket": pointrule.point_basket,
                 "validity_type": pointrule.validity_type,
                 "store_selection_type": pointrule.store_selection_type,
-                "store_codes": storeCodes
+                "store_codes": storeCodes,
+                "new_member_to_earn_points": newMemberToEarnPointsValue,
+                "new_member_point_amount": newMemberPointAamount,
+                "priority": priority,
+                "stop_further": stopFurtherValue
             }
         ).pipe(
             map(createPointRule => createPointRule)

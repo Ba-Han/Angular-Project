@@ -84,15 +84,15 @@
                                         </div>
                                         <div class="hidden md:block">
                                             Amount
-                                        </div><!-- 
+                                        </div>
                                         <div class="hidden md:block">
                                             Status
                                         </div>
-                                        <div class="hidden md:block">
+                                        <!-- <div class="hidden md:block">
                                             Redeemed Order
                                         </div> -->
                                         <div class="hidden md:block" style="text-align: center;">
-                                            Send Email
+                                            Email
                                         </div>
                                     </div>
     
@@ -120,19 +120,19 @@
                                                         {{memberVoucher.amount}}
                                                     </div>
 
-                                                    <!-- <div class="hidden md:block truncate">
-                                                        {{memberVoucher.status}}
+                                                    <div class="hidden md:block truncate">
+                                                        {{memberVoucher.balance}}
                                                     </div>
 
-                                                    <div class="hidden md:block truncate">
+                                                    <!-- <div class="hidden md:block truncate">
                                                         {{memberVoucher.redeemed_order}}
                                                     </div> -->
                                                 </div>
                                             </a>
                                             <div class="sendEmail">
-                                                <button mat-icon-button [matTooltip]="'Send Email'" (click)="sendEmail(memberVoucher.id)">
-                                                    <mat-icon>send</mat-icon>
-                                                </button>
+                                                <span (click)="sendEmail(memberVoucher.id)" style="cursor: pointer;">
+                                                    Send Email
+                                                </span>
                                             </div>
                                         </ng-container>
                                     </ng-container>
