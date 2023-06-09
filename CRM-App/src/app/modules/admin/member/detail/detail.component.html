@@ -391,9 +391,8 @@
                                         
                                         <div style="margin-top: 0 !important;" >
                                             <div class="flex w-full ">
-                                                <button class="w-1/8 font-bold generate-btn-memberdetial text-secondary"
-                                                        [matTooltip]="'Generate Voucher'"
-                                                        (click)="openGernerateVoucherForm()">
+                                                <button class="w-1/8 generate-btn-memberdetial text-secondary"
+                                                    (click)="openGernerateVoucherForm()">
                                                     Generate Voucher
                                                 </button>
                                             </div>
@@ -1083,6 +1082,12 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="!editMode && !pointlistMode && !transactionlistMode && !pointDetailViewMode && !pointDetailEditMode && !pointDetailAddMode && !transactionDetailMode">
+                <div class="relative flex flex-col flex-auto p-6 pt-0 sm:p-12 sm:pt-0 see_all_member_log">
+                    <button mat-stroked-button [routerLink]="['./memberlog']">See Member Logs</button>
                 </div>
             </ng-container>
         

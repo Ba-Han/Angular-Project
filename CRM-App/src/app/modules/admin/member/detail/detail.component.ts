@@ -159,13 +159,18 @@ import { MemberService } from 'app/modules/admin/member/member.service';
                 line-height: 1 !important;
                 padding: 0 20px !important;
                 border-radius: 9999px !important;
-                background-color: #dbedff !important;
+                border: 1px solid #e2e8f0;
             }
 
             .success_text_danger {
                 position: relative;
                 color: green;
                 left: 1rem;
+            }
+
+            .see_all_member_log {
+                justify-content: end;
+                align-items: end;
             }
         `
     ],

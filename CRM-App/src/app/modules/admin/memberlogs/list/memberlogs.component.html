@@ -1,0 +1,107 @@
+
+<mat-drawer-container class="flex flex-col w-full">
+    <mat-drawer class="w-2/4 dark:bg-gray-900"
+                [mode]="'over'"
+                [opened]="false"
+                [position]="'end'"
+                [disableClose]="true"
+                #matDrawer>
+    </mat-drawer>
+    <mat-drawer-content style="background:#fff;">
+        <div class="flex flex-col w-full">
+
+            <!-- Member Logs Lists-->
+            <div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+                <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+                    <div class="absolute inset-x-0 bottom-0"
+                         *ngIf="isLoading">
+                        <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+                    </div>
+
+                    <div class="text-4xl font-extrabold tracking-tight flex flex-col sm:flex-row flex-0 sm:items-center">
+                        <mat-icon class="icon-size-10" style="cursor:pointer;margin-right: 10px;" svgIcon="heroicons_solid:arrow-circle-left" [routerLink]="['/member/', memberId]"></mat-icon>
+
+                        <div>Member Logs</div>
+                    </div>
+
+                    <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+                        <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
+                            <mat-icon class="icon-size-5"
+                                      matPrefix
+                                      [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                            <input matInput
+                                   [formControl]="searchInputControl"
+                                   [autocomplete]="'off'"
+                                   [placeholder]="'Search Member Logs'">
+                        </mat-form-field>
+
+                        <!--sorting dropdown-->
+                        <mat-form-field class="ml-4 fuse-mat-no-subscript memberlogs-2-sort">
+                            <span class="memberlogs_sort_by">Sort By:</span>
+                            <mat-select [(ngModel)]="selectedCoulumn" (selectionChange)="sortingColumnList()">
+                                <mat-option value="dateupdated">Date Updated</mat-option>
+                                <mat-option value="logdata">Log Data</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <!--sorting button-->
+                        <button class="ml-2 memberlogs-sort-btn-01"
+                            (click)="sortingPageList()"
+                            [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
+                            mat-flat-button
+                            [color]="'primary'">
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Member Logs lists -->
+                <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+                    <ng-container *ngIf="(memberLogs$ | async) as memberLogs">
+                        <ng-container *ngIf="memberLogs.length; else noMemberLogs">
+                            <div class="grid">
+                                <div class="memberlogs-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                     matSort
+                                     matSortDisableClear>
+                                    
+                                    <div class="sm:block">
+                                        Date Updated
+                                    </div>
+                                    
+                                    <div class="sm:block">
+                                        Log Data
+                                    </div>
+                                </div>
+
+                                <!-- Rows -->
+                                <ng-container *ngIf="(memberLogs$ | async) as memberLogs">
+                                    <ng-container *ngFor="let memberLog of memberLogs; trackBy: trackByFn">
+                                        <div class="memberlogs-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+
+                                            <div class="truncate">
+                                                {{memberLog.date_updated | date:'MMM dd, y'}}
+                                            </div>
+
+                                            <div class="sm:block truncate show_long_text">
+                                                {{memberLog.log_data}}
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                            <mat-paginator class="custom-paging sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                                           [ngClass]="{'pointer-events-none': isLoading}"
+                                           [length]="pagination.length"
+                                           [pageIndex]="pagination.page"
+                                           [pageSize]="pagination.limit"
+                                           [pageSizeOptions]="[10, 25, 50, 100]"
+                                           [showFirstLastButtons]="true"></mat-paginator>
+                        </ng-container>
+
+                    </ng-container>
+                    <ng-template #noMemberLogs>
+                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no member logs!</div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>
