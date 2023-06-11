@@ -122,7 +122,7 @@
                                       class="hidden sm:flex icon-size-5"
                                       [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon> -->
                             <input matInput
-                                   [(ngModel)]="member.member[0].point_conversion"
+                                   [(ngModel)]="getPointConversionRate"
                                    [formControlName]="'conversion_rate'"
                                    [placeholder]="'points value'"
                                    (input)="openGernerateVoucherForm()">

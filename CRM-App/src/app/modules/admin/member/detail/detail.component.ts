@@ -269,6 +269,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     inputPointValue: number = 0;
     formattedNumber: string;
     createGeneateVoucherSuccessfully: string | '' = '';
+    getPointConversionRate: any;
     // private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -450,19 +451,12 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
              this._changeDetectorRef.markForCheck();
          });
 
-         // search
-         this.searchInputControl.valueChanges
-         .pipe(
-             takeUntil(this._unsubscribeAll),
-             debounceTime(300),
-             switchMap((query) => {
-                 this.isLoading = true;
-                 return this._memberService.getMemberDocuments(0, 10, 'uploaded_on', 'asc', query);
-             }),
-             map(() => {
-                 this.isLoading = false;
-             })
-        ).subscribe();
+        // Get Point Rate for Generate Vouchers
+        this._memberService.generateVouchers$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((generatevouchers) => {
+            this.getPointConversionRate = generatevouchers;
+        });
     }
 
      ngAfterViewInit(): void
@@ -517,7 +511,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                     this.isLoading = true;
                     //const sort = this._sort.direction === 'desc' ? '-' + this._sort.active : this._sort.active;
                     // eslint-disable-next-line max-len
-                    return this._memberService.getMemberDocuments(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    return this._memberService.getMemberDocuments(this.memberId, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
                 }),
                 map(() => {
                     this.isLoading = false;
@@ -531,7 +525,6 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
-
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -573,11 +566,11 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onPageChange() {
-        this._memberService.getMemberDocuments(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+        this._memberService.getMemberDocuments(this.memberId, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
             switchMap(() => {
                 this.isLoading = true;
                 // eslint-disable-next-line max-len
-                return this._memberService.getMemberDocuments(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                return this._memberService.getMemberDocuments(this.memberId, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
             }),
             map(() => {
                 this.isLoading = false;
@@ -587,11 +580,11 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     fistUploadFileToTable() {
-        this._memberService.getMemberDocuments().pipe(
+        this._memberService.getMemberDocuments(this.memberId).pipe(
             switchMap(() => {
                 this.isLoading = true;
                 // eslint-disable-next-line max-len
-                return this._memberService.getMemberDocuments();
+                return this._memberService.getMemberDocuments(this.memberId);
             }),
             map(() => {
                 this.isLoading = false;
@@ -826,13 +819,11 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             if (param != null) {
                 this.memberId = Number(param[0].path);
             }
-
         });
 
         this.getAvailablePoints = this.member.spending.totalPoint;
-        this.getPointValue = this.member.member[0].point_conversion;
         this.getPointToConvert = this.inputPointValue;
-        this.getVoucherAmount = this.getPointToConvert / this.getPointValue;
+        this.getVoucherAmount = this.getPointToConvert / this.getPointConversionRate;
         this.formattedNumber = this.getVoucherAmount.toFixed(2);
 
          // Create the generate voucher form
@@ -842,12 +833,13 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             voucher_code: [''],
             member_id: this.memberId,
             points_used: [this.getPointToConvert, [Validators.required, Validators.max(this.getAvailablePoints)]],
-            conversion_rate: [this.getPointValue],
+            conversion_rate: [this.getPointConversionRate],
             amount: [this.formattedNumber],
         });
 
         this.toogleGenerateVoucherFormMode(true);
         this.drawerTwo.open();
+        this._changeDetectorRef.markForCheck();
     }
 
     createGenerateVoucher(): void
@@ -856,6 +848,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         this._memberService.createGenerateVoucher(generateVoucher).subscribe(() => {
             this.createGeneateVoucherSuccessfully = 'Generate Voucher Successfully!';
             this.toogleGenerateVoucherFormMode(true);
+            this.GenerateVoucherForm.reset();
             this._changeDetectorRef.markForCheck();
         },
             (response) => {
@@ -874,7 +867,6 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     closeGenerateVoucherForm(): void
     {
         this.createGeneateVoucherSuccessfully = '';
-        //this.GenerateVoucherForm.reset();
         this.toogleGenerateVoucherFormMode(false);
         this.drawerTwo.close();
         this._changeDetectorRef.markForCheck();

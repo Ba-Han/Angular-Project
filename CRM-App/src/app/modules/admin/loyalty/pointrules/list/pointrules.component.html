@@ -210,6 +210,76 @@
                 </div>
             </div>
         </ng-container>
+        <!-- Point Rule Product Form-->
+        <ng-container *ngIf="pointRuleProductFormMode">
+            <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
+                <div class="">
+                    <button mat-icon-button style="background-color:#ccc;"
+                            [matTooltip]="'Close'"
+                            (click)="drawerTwo.close()">
+                        <mat-icon class="text-white"
+                                  [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+                <div class="w-full text-3xl font-bold" style="text-align:center;">Product</div>
+            </div>
+
+            <div class="flex-auto p-5">
+                <form [formGroup]="PointRuleProductForm">
+
+                    <div class="mt-8 hidden">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>id</mat-label>
+                            <input matInput
+                                   [formControlName]="'id'"
+                                   [placeholder]="'id'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Product Number</mat-label>
+                            <input matInput
+                                   [formControlName]="'product_number'"
+                                   [placeholder]="'Product Number'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Point Type</mat-label>
+                            <mat-select [formControlName]="'extra_point_type'">
+                                <mat-option [value]="0">Percentage</mat-option>
+                                <mat-option [value]="1">Points</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-8">
+                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                            <mat-label>Point Value</mat-label>
+                            <mat-icon matPrefix
+                                      class="hidden sm:flex icon-size-5"
+                                      [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                            <input matInput type="number"
+                                   [formControlName]="'extra_point_value'"
+                                   [placeholder]="'Point Value'">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                        <button class="ml-2" style="width: 6rem;"
+                                mat-flat-button
+                                [disabled]="PointRuleProductForm.invalid"
+                                [color]="'primary'"
+                                [matTooltip]="'Save'"
+                                (click)="createPointRuleProduct()">
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </ng-container>
     </mat-drawer>
 
     <mat-drawer-content>
@@ -258,7 +328,7 @@
                             <button class="ml-4"
                                     mat-flat-button
                                     [color]="'primary'"
-                                    (click)="toogleStoreAddFormMode(true)">
+                                    (click)="tooglePointRuleAddFormMode(true)">
                                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                                 <span class="ml-2 mr-1">Add</span>
                             </button>
@@ -282,13 +352,6 @@
                                             <div> Member Tier </div>
                                             <div> Start Date </div>
                                             <div> End Date </div>
-
-                                            <!-- <div [mat-sort-header]="'name'"> Name </div>
-                                            <div [mat-sort-header]="'reward_code'"> Reward Code </div>
-                                            <div [mat-sort-header]="'point_value'"> Point Value </div>
-                                            <div [mat-sort-header]="'member_tierFullName'"> Member Tier </div>
-                                            <div [mat-sort-header]="'start_date'"> Start Date </div>
-                                            <div [mat-sort-header]="'end_date'"> End Date </div> -->
                                         </div>
 
                                         <!-- Rows -->
@@ -357,7 +420,7 @@
                         <div class="mt-3 text-4xl w-full font-bold truncate">Add Point Rule</div>
                         <button mat-icon-button
                                 [matTooltip]="'Close'"
-                                (click)="toogleStoreAddFormMode(false)"
+                                (click)="tooglePointRuleAddFormMode(false)"
                                 style="background:#ccc;">
                             <mat-icon class="text-white"
                                     [svgIcon]="'heroicons_outline:x'"></mat-icon>
@@ -365,7 +428,6 @@
                     </div>
                 </div>
                 
-
                 <!-- Add Form -->
                 <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
                     <div class="w-full max-w-3xl">
@@ -461,10 +523,9 @@
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Priority</mat-label>
                                         <mat-select [formControlName]="'priority'" [(ngModel)]="priorityValue">
-                                            <mat-option [value]="0">None</mat-option>
-                                            <mat-option [value]="1">Low</mat-option>
-                                            <mat-option [value]="2">Medium</mat-option>
-                                            <mat-option [value]="3">High</mat-option>
+                                            <mat-option [value]="0">Low</mat-option>
+                                            <mat-option [value]="1">Medium</mat-option>
+                                            <mat-option [value]="2">High</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -482,7 +543,6 @@
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Point Reward At</mat-label>
                                         <mat-select [formControlName]="'point_rewarded_at'" [(ngModel)]="pointRewardedAtValue">
-                                            <mat-option [value]="0">None</mat-option>
                                             <mat-option [value]="1">After Register</mat-option>
                                             <mat-option [value]="2">After First Purchase</mat-option>
                                         </mat-select>
@@ -654,6 +714,39 @@
                                 </div>
                             </ng-container>
 
+                            <mat-form-field class="fuse-mat-no-subscript w-full hidden">
+                                <input matInput readonly style="cursor:pointer;"
+                                       [formControlName]="'point_rule_products'">
+                            </mat-form-field>
+
+                            <div class="mt-3 text-3xl w-full font-bold truncate" style="position: relative; top: 15px !important;">Product</div>
+                            <div class="mt-8">
+                                <label>Product</label>
+                                <ng-container *ngIf="selectedPointRuleProduct.length === 0">
+                                    <div class="customPoint mt-3 h-12" style="cursor: pointer; border: 1px solid #ccc; border-radius: 6px; padding: 10px;">
+                                        <span style="color:#ccc;">Create Product</span>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="selectedPointRuleProduct.length > 0">
+                                    <ng-container *ngFor="let productItem of selectedPointRuleProduct; trackBy: trackByFn">
+                                        <div [matTooltip]="'Edit Product'" (click)="setPointRuleProductEditForm(productItem.id)" class="customPoint mt-3 h-12" style="border: 1px solid #ccc;border-radius: 10px;padding: 12px;cursor: pointer;">
+                                            {{productItem.product_number}}
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="flex w-full ">
+                                    <button class="w-1/8 bg-green-500 text-white" style="width: 6rem;"
+                                            mat-flat-button
+                                            [matTooltip]="'Create Product'"
+                                            (click)="openPointRuleProductForm()">
+                                        Add
+                                    </button>
+                                </div>
+                            </div>
+
                             <div class="flex justify-end items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                                 <div *ngIf="errorMessage" style="position: relative; color: red;">
                                     {{ errorMessage }}
@@ -668,7 +761,6 @@
                                     Save
                                 </button>
                             </div>
-
                         </form>
                     </div>
                 </div>

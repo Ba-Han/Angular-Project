@@ -73,48 +73,65 @@ import { UserService } from 'app/core/user/user.service';
                     }
                 }
 
-                .membertier_reset_popup {
-                    position: fixed !important;
-                    top: 50% !important;
-                    left: 50% !important;
-                    transform: translate(-50%, -50%) !important;
-                    width: 30% !important;
-                    height: 32% !important;
-                    border-radius: 8px;
-                }
+            .membertier_reset_popup {
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                width: 30% !important;
+                height: 32% !important;
+                border-radius: 8px;
+            }
 
-                .membertier_parent_popup {
-                    display: grid;
-                    align-items: center !important;
-                    justify-content: center !important;
-                    height: 27vh;
-                }
+            .membertier_parent_popup {
+                display: grid;
+                align-items: center !important;
+                justify-content: center !important;
+                height: 27vh;
+            }
 
-                .membertier_child_btn {
-                    display: flex;
-                    gap: 10px;
-                }
+            .membertier_child_btn {
+                display: flex;
+                gap: 10px;
+            }
 
-                .membertier_successMessage_scss {
-                    position: unset;
-                    text-align: center;
-                    color: rgb(0, 128, 0);
-                    padding: 3rem;
-                    font-size: 16px;
-                }
+            .membertier_successMessage_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(0, 128, 0);
+                padding: 3rem;
+                font-size: 16px;
+            }
 
-                .membertier_errorMessage_scss {
-                    position: unset;
-                    text-align: center;
-                    color: rgb(255, 49, 49);
-                    padding: 3rem;
-                    font-size: 16px;
-                }
+            .membertier_errorMessage_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(255, 49, 49);
+                padding: 3rem;
+                font-size: 16px;
+            }
 
-                .membertier_delete_scss {
-                    position: relative;
-                    top: 2rem;
-                }
+            .membertier_delete_scss {
+                position: relative;
+                top: 2rem;
+            }
+
+            .membertier_upgrade {
+                display: grid;
+                grid-template-columns: repeat(2,minmax(0,1fr))!important;
+                align-items: center;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                padding: 0px;
+                cursor: pointer;
+            }
+
+            .delete_tierupgrade_item_btn {
+                background: #ccc !important;
+                cursor: pointer;
+                position: relative;
+                left: 25rem;
+            }
 
         `
     ],
@@ -339,18 +356,6 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
         this._changeDetectorRef.markForCheck();
     }
 
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    toogleMemberListMode(MemberListMode: boolean | null = null) {
-        if (MemberListMode === null) {
-            this.MemberListMode = !this.MemberListMode;
-        }
-        else {
-            this.MemberListMode = MemberListMode;
-        }
-
-        this._changeDetectorRef.markForCheck();
-    }
-
     AddFormclose(): void {
         this.tooglepointAddFormMode(false);
     }
@@ -468,19 +473,18 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
     }
 
     closeMemberListMode(): void{
-        this.toogleMemberListMode(false);
         this.toogleTierUpgradeFormMode(true);
     }
 
-    //delete function
-    deleteTierUpgradeItem(id: number): void {
-        if (Number(id) > 0) {
-            this.isLoading = true;
-            this._memberTierService.getDeleteTierUpgradeById(id)
-                .subscribe(() => {
-                    this._router.navigate(['/member-tier/'] , { relativeTo: this._activatedRoute });
-                });
-        }
+    //Delete member tier upgrade
+    deleteTierUpgradeItem(tierUpgradeId: number): void {
+        this._memberTierService.getDeleteTierUpgradeById(tierUpgradeId)
+            .subscribe(() => {
+                this._router.navigate(['/member-tier'] , { relativeTo: this._activatedRoute });
+                this._changeDetectorRef.markForCheck();
+            });
+        this.toogleTierUpgradeFormMode(false);
+        this.drawerTwo.close();
     }
 
     setTierUpgradeEditForm(id): void {

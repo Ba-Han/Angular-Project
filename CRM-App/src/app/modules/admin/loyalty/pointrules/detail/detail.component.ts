@@ -9,7 +9,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { PointRule, PointRulePaginagion, PointBasket, PointBasketPagination, MemberTier, MemberTierPagination, Store, StorePagination } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
+import { PointRule, PointRulePaginagion, PointBasket, PointBasketPagination, MemberTier, MemberTierPagination, Store, StorePagination, PointRuleProduct } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 import { PointRuleService } from 'app/modules/admin/loyalty/pointrules/pointrules.service';
 import { UserService } from 'app/core/user/user.service';
 
@@ -90,6 +90,23 @@ import { UserService } from 'app/core/user/user.service';
                     height: 24px;
                 }
 
+                .pointrule_product {
+                    display: grid;
+                    grid-template-columns: repeat(2,minmax(0,1fr))!important;
+                    align-items: center;
+                    border: 1px solid #ccc;
+                    border-radius: 10px;
+                    padding: 0px !important;
+                    cursor: pointer;
+                }
+
+                .delete_pointrule_product_btn {
+                    background: #ccc !important;
+                    cursor: pointer;
+                    position: relative;
+                    left: 25rem;
+                }
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -111,7 +128,6 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     memberTierPagination: MemberTierPagination;
     MemberTierListMode: boolean = false;
     PointBasketListMode: boolean = false;
-    PointRuleAddForm: FormGroup;
     drawerMode: 'side' | 'over';
 
     newSegmentModel: PointBasket;
@@ -152,19 +168,18 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     timeOutUpId: any;
     getStoreData: any;
     typeRuleValue: number;
-    pointRewardedAtValue: number = 0;
+    pointRewardedAtValue: number;
     priorityValue: number;
-    spendingtypeValue: number = 0;
-    totypeValue: number = 0;
-    toendTypeValue: number = 0;
-    fromtypeValue: number = 0;
-    fromstarttypeValue: number = 0;
     storeSelectionTypeValue: number;
-    isButtonDisabled: boolean = true;
     showNewMemberPointAmount: boolean = false;
     stopFurtherValue: boolean = false;
-    private _unsubscribeAll: Subject<any> = new Subject<any>();
 
+    selectedPointRuleProduct: Array<PointRuleProduct> = [];
+    PointRuleProductForm: FormGroup;
+    productName: string;
+    pointRuleProductUpgradeId: number;
+    pointRuleProductFormMode: boolean = false;
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
@@ -182,8 +197,6 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
-
-
     ngOnInit(): void {
         this.PointRuleEditForm = this._formBuilder.group({
             id: [''],
@@ -211,25 +224,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             new_member_point_amount: [''],
             priority: [''],
             stop_further: [''],
+            point_rule_products: new FormControl(this.selectedPointRuleProduct)
         });
-
-        this.PointBasketForm = this._formBuilder.group({
-            id: [''],
-            name: ['',[Validators.required]],
-            description: ['',[Validators.required]],
-            spending_type: ['',[Validators.required]],
-            from_type: [''],
-            from_number: [''],
-            from_start_type: [''],
-            from_start_date: [''],
-            to_type: [''],
-            to_number: [''],
-            to_end_type: [''],
-            to_end_date: [''],
-        });
-
-        this.pointRule$ = this._pointRuleService.pointRule$;
-        this.pointBasket$ = this._pointRuleService.pointBasket$;
 
         this._pointRuleService.pointRule$
         .pipe(takeUntil(this._unsubscribeAll))
@@ -243,8 +239,16 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             this.showNewMemberPointAmount = pointrule.new_member_to_earn_points;
             this.stopFurtherValue = pointrule.stop_further;
             this.pointRule.point_basketName = pointrule.point_basket?.name;
+            this.selectedPointRuleProduct = pointrule.point_rule_products;
             this.PointRuleEditForm.patchValue(pointrule);
             this._changeDetectorRef.markForCheck();
+        });
+
+        this.PointRuleProductForm = this._formBuilder.group({
+            id: [''],
+            product_number: ['', [Validators.required]],
+            extra_point_type: ['', [Validators.required]],
+            extra_point_value: ['', [Validators.required]],
         });
 
         //Get the Stores []
@@ -378,7 +382,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    toogleStoreAddFormMode(AddMode: boolean | null = null): void {
+    tooglePointRuleAddFormMode(AddMode: boolean | null = null): void {
         if (AddMode === null) {
             this.AddMode = !this.AddMode;
         }
@@ -390,7 +394,6 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     toogleMemberTierListMode(MemberTierListMode: boolean | null = null): void {
-        this.pointbasketMode = false;
         this.PointBasketListMode = false;
         if (MemberTierListMode === null) {
             this.MemberTierListMode = !this.MemberTierListMode;
@@ -403,7 +406,6 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     tooglePointBasketListMode(PointBasketListMode: boolean | null = null): void {
-        this.pointbasketMode = false;
         this.MemberTierListMode = false;
         if (PointBasketListMode === null) {
             this.PointBasketListMode = !this.PointBasketListMode;
@@ -415,50 +417,31 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    toggleEditMode(MemberTierListMode: boolean | null = null): void {
-        if (MemberTierListMode === null) {
-        this.MemberTierListMode = !this.MemberTierListMode;
-        }
-        else {
-        this.MemberTierListMode = MemberTierListMode;
-        }
-        this._changeDetectorRef.markForCheck();
-    }
-
-    tooglepointBasketAddFormMode(pointbasketMode: boolean | null = null): void {
-        this.MemberTierListMode = false;
-        this.PointBasketListMode = false;
-        if (pointbasketMode === null) {
-            this.pointbasketMode = !this.pointbasketMode;
-        }
-        else {
-            this.pointbasketMode = pointbasketMode;
-        }
-
-        this._changeDetectorRef.markForCheck();
-    }
-
-    tooglepointBasketEditFormMode(pointbasketEditMode: boolean | null = null): void {
-        this.MemberTierListMode = false;
-        this.PointBasketListMode = false;
-        if (pointbasketEditMode === null) {
-            this.pointbasketEditMode = !this.pointbasketEditMode;
-        }
-        else {
-            this.pointbasketEditMode = pointbasketEditMode;
-        }
-
-        this._changeDetectorRef.markForCheck();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     toogleDeleteMode(DeleteMode: boolean | null = null): void {
+        this.MemberTierListMode = false;
+        this.PointBasketListMode = false;
+        this.pointRuleProductFormMode = false;
         if (DeleteMode === null) {
             this.DeleteMode = !this.DeleteMode;
         }
         else {
             this.DeleteMode = DeleteMode;
         }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    tooglePointRuleProductFormMode(pointRuleProductFormMode: boolean | null = null) {
+        this.MemberTierListMode = false;
+        this.PointBasketListMode = false;
+        this.DeleteMode = false;
+        if (pointRuleProductFormMode === null) {
+            this.pointRuleProductFormMode = !this.pointRuleProductFormMode;
+        }
+        else {
+            this.pointRuleProductFormMode = pointRuleProductFormMode;
+        }
+
         this._changeDetectorRef.markForCheck();
     }
 
@@ -501,6 +484,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
 
     updatePointRule(): void {
         const pointrule = this.PointRuleEditForm.getRawValue();
+        pointrule.point_rule_products = this.selectedPointRuleProduct;
         this._pointRuleService.updatePointRule(pointrule.id,pointrule).subscribe(() => {
             this._router.navigate(['/point-rules'], { relativeTo: this._activatedRoute });
         });
@@ -638,6 +622,74 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         this.PointRuleEditForm.patchValue(pointBasket);
         this.isLoading = false;
         this.drawerTwo.close();
+    }
+
+    //Delete point rule product
+    deletePointRuleProduct(pointRuleProductId: number): void {
+        this._pointRuleService.deletePointRuleProductById(pointRuleProductId)
+            .subscribe(() => {
+                this._router.navigate(['/point-rules'] , { relativeTo: this._activatedRoute });
+            });
+        this.tooglePointRuleProductFormMode(false);
+        this.drawerTwo.close();
+    }
+
+    openPointRuleProductForm(): void {
+        this.PointRuleProductForm.reset();
+        this.tooglePointRuleProductFormMode(true);
+        this.drawerTwo.open();
+    }
+
+    createPointRuleProduct(): void {
+        this.isLoading = true;
+        const pointRuleProduct = this.PointRuleProductForm.getRawValue();
+        if (pointRuleProduct.id > 0) {
+            this._pointRuleService.updatePointRuleProduct(pointRuleProduct.id,pointRuleProduct)
+                .pipe(takeUntil(this._unsubscribeAll))
+                .subscribe((product: any) => {
+                    const index = this.selectedPointRuleProduct.findIndex(x => x.id === product.data.id);
+                    this.selectedPointRuleProduct[(index)] = product.data;
+                    this.productName = product.data.product_number;
+                    const pointRule = this.PointRuleEditForm.getRawValue();
+                    this.pointRuleProductUpgradeId = product.data.id;
+                    pointRule.point_rule_products = this.selectedPointRuleProduct;
+                    pointRule.point_rule_products_Fullname = product.data.product_number;
+                    this.PointRuleEditForm.patchValue(pointRule);
+                    this.isLoading = false;
+                    this.drawerTwo.close();
+                });
+        }
+        else {
+            this._pointRuleService.createPointRuleProduct(pointRuleProduct)
+                .pipe(takeUntil(this._unsubscribeAll))
+                .subscribe((product: any) => {
+                    this.selectedPointRuleProduct.push(product.data);
+                    this.productName = product.data.product_number;
+                    const pointRule = this.PointRuleEditForm.getRawValue();
+                    this.pointRuleProductUpgradeId = product.data.id;
+                    pointRule.point_rule_products = this.selectedPointRuleProduct;
+                    pointRule.point_rule_products_Fullname = product.data.product_number;
+                    this.PointRuleEditForm.patchValue(pointRule);
+                    this.isLoading = false;
+                    this.drawerTwo.close();
+                });
+        }
+
+    }
+
+    setPointRuleProductEditForm(id): void {
+        if (Number(id) > 0) {
+            this.isLoading = true;
+            this._pointRuleService.getPointRuleProductById(id)
+                .pipe(takeUntil(this._unsubscribeAll))
+                .subscribe((productupgrade: any) => {
+                    const editproduct = productupgrade.data;
+                    this.PointRuleProductForm.patchValue(editproduct);
+                    this.isLoading = false;
+                    this.tooglePointRuleProductFormMode(true);
+                    this.drawerTwo.open();
+                });
+        }
     }
 
 }

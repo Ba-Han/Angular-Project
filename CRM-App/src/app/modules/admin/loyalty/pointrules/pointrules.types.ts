@@ -29,6 +29,8 @@ export interface PointRule {
     "new_member_point_amount": number;
     "priority": number;
     "stop_further": boolean;
+    "point_rule_products": [];
+    "point_rule_products_Fullname": string;
 }
 
 export interface PointBasket {
@@ -130,5 +132,17 @@ export interface StorePagination {
     lastPage: number;
     startIndex: number;
     endIndex: number;
+}
+
+export interface PointRuleProduct {
+    id: number;
+    user_created: string;
+    date_created: string;
+    user_updated: string;
+    date_updated: string;
+    point_rule_id: number;
+    product_number: string;
+    extra_point_type: number;
+    extra_point_value: number;
 }
 

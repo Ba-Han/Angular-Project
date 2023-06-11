@@ -95,6 +95,12 @@
                                                             Special
                                                         </div>
                                                     </ng-container>
+
+                                                    <ng-container *ngIf="redem.type === 2">
+                                                        <div class="truncate">
+                                                            Voucher
+                                                        </div>
+                                                    </ng-container>
         
                                                     <!-- <div class="truncate">
                                                         {{redem.date_from | date:'MMM dd, y, HH:mm a'}}
@@ -198,11 +204,12 @@
                                     <mat-select [formControlName]="'type'" [(ngModel)]="typeValue">
                                         <mat-option [value]="0">Base</mat-option>
                                         <mat-option [value]="1">Special</mat-option>
+                                        <mat-option [value]="2">Voucher</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
 
-                            <ng-container *ngIf="typeValue === 1">
+                            <ng-container *ngIf="typeValue === 1 || typeValue === 2">
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
                                         <mat-label>Date From</mat-label>

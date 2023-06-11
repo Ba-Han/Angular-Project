@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError, delay, catchError } from 'rxjs';
-import { PointRule, PointRulePaginagion, PointBasket, MemberTier, MemberTierPagination, StorePagination, Store } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
+import { PointRule, PointRulePaginagion, PointBasket, MemberTier, MemberTierPagination, StorePagination, Store, PointRuleProduct } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 
 @Injectable({
     providedIn: 'root'
@@ -354,7 +354,8 @@ export class PointRuleService {
                 "new_member_to_earn_points": newMemberToEarnPointsValue,
                 "new_member_point_amount": newMemberPointAamount,
                 "priority": priority,
-                "stop_further": stopFurtherValue
+                "stop_further": stopFurtherValue,
+                "point_rule_products": pointrule.point_rule_products
             }).pipe(
                 map((newPointRule) => {
                     this._pointRules.next([newPointRule.data, ...pointrules]);
@@ -423,12 +424,25 @@ export class PointRuleService {
                 "new_member_to_earn_points": newMemberToEarnPointsValue,
                 "new_member_point_amount": newMemberPointAamount,
                 "priority": priority,
-                "stop_further": stopFurtherValue
+                "stop_further": stopFurtherValue,
+                "point_rule_products": pointrule.point_rule_products
             }
         ).pipe(
             map(createPointRule => createPointRule)
         );
     }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    deletePointRuleProductById(id: number){
+        return this._httpClient.delete(`${this._apiurl}/items/point_rule_product/${id}`,
+        { responseType: 'text' })
+        .pipe(
+            map(() => true),
+            catchError((error) => {
+                console.error(error);
+                return of(false);
+            }));
+    };
 
     // Delete API method
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -436,4 +450,34 @@ export class PointRuleService {
         return this._httpClient.delete(`${this._apiurl}/items/point_rule/${id}`,
         { observe: 'response' });
     };
+
+    createPointRuleProduct(pointruleproduct: PointRuleProduct): Observable<PointRuleProduct> {
+        return this._httpClient.post<PointRuleProduct>(`${this._apiurl}/items/point_rule_product`, {
+            "point_rule_id": pointruleproduct.point_rule_id,
+            "product_number": pointruleproduct.product_number,
+            "extra_point_type": pointruleproduct.extra_point_type,
+            "extra_point_value": pointruleproduct.extra_point_value
+        }).pipe(
+            tap((response: any) => response.data)
+        );
+    }
+
+    updatePointRuleProduct(id: number, pointruleproduct: PointRuleProduct): Observable<PointRuleProduct> {
+        return this._httpClient.patch<PointRuleProduct>(`${this._apiurl}/items/point_rule_product/${id}`, {
+            "id": pointruleproduct.id,
+            "point_rule_id": pointruleproduct.point_rule_id,
+            "product_number": pointruleproduct.product_number,
+            "extra_point_type": pointruleproduct.extra_point_type,
+            "extra_point_value": pointruleproduct.extra_point_value
+        }).pipe(
+            tap((response: any) => response.data)
+        );
+    }
+
+    getPointRuleProductById(id: number): Observable<PointRuleProduct> {
+        return this._httpClient.get(`${this._apiurl}/items/point_rule_product/${id}`
+        ).pipe(
+            tap((response: any) => response.data)
+        );
+    }
 }
