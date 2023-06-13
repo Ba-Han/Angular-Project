@@ -6,9 +6,11 @@ export interface Redemption
     date_created: string;
     date_updated: string;
     type: number;
+    type_name: string;
     date_from: string;
     date_to: string;
     member_tier: number;
+    member_tier_full_name: string;
     point_conversion: number;
 }
 
@@ -34,7 +36,6 @@ export interface MemberTier
     condition_period_value: number;
     min_condition_amount: number;
     max_condition_amount: number;
-    /* point_rule: []; */
     min_point: number;
     max_point: number;
     downgrade_condition_type: number;
@@ -42,7 +43,6 @@ export interface MemberTier
     downgrade_condition_period_value: number;
     date_created: string;
     date_updated: string;
-    /* point_ruleFullname: string, */
     dw_member_group: number;
     dw_member_groupName: string;
     tier_upgrade_items: [];

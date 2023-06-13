@@ -123,9 +123,11 @@ export class RedemptionService {
             switchMap(redemptionsettings => this._httpClient.patch<any>(`${this._apiurl}/items/redemption_settings`, {
                 'id': redemptionId,
                 'type': redemption.type,
+                'type_name': redemption.type_name,
                 'date_from': dateFrom,
                 'date_to': dateTo,
                 'member_tier': redemption.member_tier,
+                'member_tier_full_name': redemption.member_tier_full_name,
                 'point_conversion': redemption.point_conversion
             }).pipe(
                 map((newRedemptionSetting) => {
@@ -144,9 +146,11 @@ export class RedemptionService {
         return this._httpClient.patch<any>(`${this._apiurl}/items/redemption_settings`, {
             'id': redemptionId,
             'type': redemption.type,
+            'type_name': redemption.type_name,
             'date_from': dateFrom,
             'date_to': dateTo,
             'member_tier': redemption.member_tier,
+            'member_tier_full_name': redemption.member_tier_full_name,
             'point_conversion': redemption.point_conversion
         }).pipe(
             map(updateRedemption => updateRedemption)

@@ -136,11 +136,7 @@ export interface StorePagination {
 
 export interface PointRuleProduct {
     id: number;
-    user_created: string;
-    date_created: string;
-    user_updated: string;
-    date_updated: string;
-    point_rule_id: number;
+    index: number;
     product_number: string;
     extra_point_type: number;
     extra_point_value: number;
