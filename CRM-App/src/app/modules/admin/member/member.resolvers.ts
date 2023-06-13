@@ -93,7 +93,19 @@ export class MemberVouchersRecentResolver implements Resolve<any>
     constructor(private _memberService: MemberService) {
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        return this._memberService.getRecentMemberVouchersById();
+        return this._memberService.getRecentMemberVouchersById(Number(route.paramMap.get('id')));
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class GenerateMemberVouchersResolver implements Resolve<any>
+{
+    constructor(private _memberService: MemberService) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+        return this._memberService.getGenerateMemberVouchersById(Number(route.paramMap.get('id')));
     }
 }
 
@@ -130,7 +142,7 @@ export class MemberDocumentRecentResolver implements Resolve<any>
     constructor(private _memberService: MemberService) {
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        return this._memberService.getMemberDocumentsById();
+        return this._memberService.getMemberDocumentsById(Number(route.paramMap.get('id')));
     }
 }
 
@@ -142,9 +154,9 @@ export class MemberDocumentsResolver implements Resolve<any>
     constructor(private _memberService: MemberService)
     {
     }
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ memberDocumentpagination: MemberDocumentPagination; memberDocuments: MemberDocument[] }>
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any>
     {
-        return this._memberService.getMemberDocuments();
+        return this._memberService.getMemberDocuments(Number(route.paramMap.get('id')));
     }
 }
 

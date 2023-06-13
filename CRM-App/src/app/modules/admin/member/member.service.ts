@@ -21,6 +21,7 @@ export class MemberService
     private _transaction: BehaviorSubject<any> = new BehaviorSubject(null);
     private _membertransactions: BehaviorSubject<any> = new BehaviorSubject(null);
     private _memberVouchers: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _generateVouchers: BehaviorSubject<any> = new BehaviorSubject(null);
     private _points: BehaviorSubject<any> = new BehaviorSubject(null);
     private _memberDocuments: BehaviorSubject<MemberDocument[] | null> = new BehaviorSubject(null);
     private _memberDocument: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -63,6 +64,11 @@ export class MemberService
     get transactions$(): Observable<any>
     {
         return this._transactions.asObservable();
+    }
+
+    get generateVouchers$(): Observable<any>
+    {
+        return this._generateVouchers.asObservable();
     }
 
     get memberVouchers$(): Observable<any>
@@ -169,8 +175,18 @@ export class MemberService
         );
     }
 
-    getRecentMemberVouchersById(): Observable<MemberVoucher> {
-        return this._httpClient.get<any>(`${this._apiurl}/items/voucher`, {
+    getGenerateMemberVouchersById(id: number): Observable<MemberVoucher> {
+        return this._httpClient.get<any>(`${this._apiurl}/items/voucher/getpointrate?memberid=${id}`, {
+        })
+            .pipe(
+                tap((response) => {
+                    this._generateVouchers.next(response);
+                })
+            );
+    }
+
+    getRecentMemberVouchersById(id: number): Observable<MemberVoucher> {
+        return this._httpClient.get<any>(`${this._apiurl}/items/voucher/memberid/${id}`, {
             params: { limit: 5, sort: 'date_created', order: 'desc' }
         })
             .pipe(
@@ -202,8 +218,8 @@ export class MemberService
             );
     }
 
-    getMemberDocumentsById(): Observable<MemberDocument> {
-        return this._httpClient.get<any>(`${this._apiurl}/items/member_document`, {
+    getMemberDocumentsById(id: number): Observable<MemberDocument> {
+        return this._httpClient.get<any>(`${this._apiurl}/member/${id}/documents`, {
             params: { limit: 5, sort: 'uploaded_on', order: 'desc' }
         })
             .pipe(
@@ -213,9 +229,9 @@ export class MemberService
             );
     }
 
-    getMemberDocuments(page: number = 0, limit: number = 10, sort: string = 'uploaded_on', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+    getMemberDocuments(id: number, page: number = 0, limit: number = 10, sort: string = 'uploaded_on', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ memberDocumentpagination: MemberDocumentPagination; memberDocuments: MemberDocument[] }> {
-            return this._httpClient.get(`${this._apiurl}/items/member_document`, {
+            return this._httpClient.get(`${this._apiurl}/member/${id}/documents`, {
             params: {
                 meta: 'filter_count',
                 page: page + 1,

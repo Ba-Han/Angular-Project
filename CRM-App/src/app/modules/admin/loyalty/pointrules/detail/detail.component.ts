@@ -9,7 +9,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { PointRule, PointRulePaginagion, PointBasket, PointBasketPagination, MemberTier, MemberTierPagination, Store, StorePagination } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
+import { PointRule, PointRulePaginagion, PointBasket, PointBasketPagination, MemberTier, MemberTierPagination, Store, StorePagination, PointRuleProduct } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 import { PointRuleService } from 'app/modules/admin/loyalty/pointrules/pointrules.service';
 import { UserService } from 'app/core/user/user.service';
 
@@ -18,77 +18,97 @@ import { UserService } from 'app/core/user/user.service';
     templateUrl: './detail.component.html',
     styles: [
         `
-            .point_rule_tier_grid {
-                grid-template-columns: 60px 100px;
-                    @screen sm {
-                        grid-template-columns: 60px 100px 100px;
-                    }
-                    @screen md {
-                        grid-template-columns: 60px 150px 150px;
-                    }
-                    @screen lg {
-                        grid-template-columns: 35px 200px 200px;
-                    }
+            .pointrule_product_grid {
+                grid-template-columns: 150px 150px 150px 100px 100px;
+
+                @screen sm {
+                    grid-template-columns: 150px 150px 150px 100px 100px;
                 }
 
-                .pointrule_reset_popup {
-                    position: fixed !important;
-                    top: 50% !important;
-                    left: 50% !important;
-                    transform: translate(-50%, -50%) !important;
-                    width: 30% !important;
-                    height: 32% !important;
-                    border-radius: 8px;
+                @screen md {
+                    grid-template-columns: 150px 150px 150px 100px 100px;
                 }
 
-                .pointrule_parent_popup {
-                    display: grid;
-                    align-items: center !important;
-                    justify-content: center !important;
-                    height: 27vh;
+                @screen lg {
+                    grid-template-columns: 150px 150px 150px 100px 100px;
                 }
+            }
 
-                .pointrule_child_btn {
-                    display: flex;
-                    gap: 10px;
-                }
+            .pointrule_reset_popup {
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                width: 30% !important;
+                height: 32% !important;
+                border-radius: 8px;
+            }
 
-                .pointrule_successMessage_scss {
-                    position: unset;
-                    text-align: center;
-                    color: rgb(0, 128, 0);
-                    padding: 3rem;
-                    font-size: 16px;
-                }
+            .pointrule_parent_popup {
+                display: grid;
+                align-items: center !important;
+                justify-content: center !important;
+                height: 27vh;
+            }
 
-                .pointrule_errorMessage_scss {
-                    position: unset;
-                    text-align: center;
-                    color: rgb(255, 49, 49);
-                    padding: 3rem;
-                    font-size: 16px;
-                }
+            .pointrule_child_btn {
+                display: flex;
+                gap: 10px;
+            }
 
-                .pointrule_delete_scss {
-                    position: relative;
-                    top: 2rem;
-                }
+            .pointrule_successMessage_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(0, 128, 0);
+                padding: 3rem;
+                font-size: 16px;
+            }
 
-                .mat-paginator-container {
-                    margin-left: 0 !important;
-                }
+            .pointrule_errorMessage_scss {
+                position: unset;
+                text-align: center;
+                color: rgb(255, 49, 49);
+                padding: 3rem;
+                font-size: 16px;
+            }
 
-                .new_checkbox_00 {
-                    display: inline-flex;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 10px;
-                }
+            .pointrule_delete_scss {
+                position: relative;
+                top: 2rem;
+            }
 
-                .new_checkbox_01 {
-                    width: 24px;
-                    height: 24px;
-                }
+            .mat-paginator-container {
+                margin-left: 0 !important;
+            }
+
+            .new_checkbox_00 {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .new_checkbox_01 {
+                width: 24px;
+                height: 24px;
+            }
+
+            .pointrule_product {
+                display: grid;
+                grid-template-columns: repeat(2,minmax(0,1fr))!important;
+                align-items: center;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                padding: 0px !important;
+                cursor: pointer;
+            }
+
+            .delete_pointrule_product_btn {
+                background: #ccc !important;
+                cursor: pointer;
+                position: relative;
+                left: 25rem;
+            }
 
         `
     ],
@@ -111,7 +131,6 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     memberTierPagination: MemberTierPagination;
     MemberTierListMode: boolean = false;
     PointBasketListMode: boolean = false;
-    PointRuleAddForm: FormGroup;
     drawerMode: 'side' | 'over';
 
     newSegmentModel: PointBasket;
@@ -152,19 +171,23 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     timeOutUpId: any;
     getStoreData: any;
     typeRuleValue: number;
-    pointRewardedAtValue: number = 0;
+    pointRewardedAtValue: number;
     priorityValue: number;
-    spendingtypeValue: number = 0;
-    totypeValue: number = 0;
-    toendTypeValue: number = 0;
-    fromtypeValue: number = 0;
-    fromstarttypeValue: number = 0;
     storeSelectionTypeValue: number;
-    isButtonDisabled: boolean = true;
     showNewMemberPointAmount: boolean = false;
     stopFurtherValue: boolean = false;
-    private _unsubscribeAll: Subject<any> = new Subject<any>();
 
+    selectedPointRuleProduct: Array<PointRuleProduct> = [];
+    editSelectedPointRuleProduct: PointRuleProduct;
+    PointRuleProductForm: FormGroup;
+    productName: string;
+    pointRuleProductUpgradeId: number;
+    pointRuleProductFormMode: boolean = false;
+    DeletePointRuleProductMode: boolean = false;
+    isPointRuleProductSuccess: boolean = false;
+    selectedPointRuleProductIndex: number | null = null;
+    pointRuleProductSccessMessage: string | '' = '';
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
@@ -182,8 +205,6 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
-
-
     ngOnInit(): void {
         this.PointRuleEditForm = this._formBuilder.group({
             id: [''],
@@ -211,25 +232,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             new_member_point_amount: [''],
             priority: [''],
             stop_further: [''],
+            point_rule_products: new FormControl(this.selectedPointRuleProduct)
         });
-
-        this.PointBasketForm = this._formBuilder.group({
-            id: [''],
-            name: ['',[Validators.required]],
-            description: ['',[Validators.required]],
-            spending_type: ['',[Validators.required]],
-            from_type: [''],
-            from_number: [''],
-            from_start_type: [''],
-            from_start_date: [''],
-            to_type: [''],
-            to_number: [''],
-            to_end_type: [''],
-            to_end_date: [''],
-        });
-
-        this.pointRule$ = this._pointRuleService.pointRule$;
-        this.pointBasket$ = this._pointRuleService.pointBasket$;
 
         this._pointRuleService.pointRule$
         .pipe(takeUntil(this._unsubscribeAll))
@@ -243,8 +247,21 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             this.showNewMemberPointAmount = pointrule.new_member_to_earn_points;
             this.stopFurtherValue = pointrule.stop_further;
             this.pointRule.point_basketName = pointrule.point_basket?.name;
+            this.selectedPointRuleProduct = pointrule.point_rule_products;
+            for( let i=0; i < this.selectedPointRuleProduct.length; i++)
+                {
+                    this.selectedPointRuleProduct[i].index = i;
+                }
             this.PointRuleEditForm.patchValue(pointrule);
             this._changeDetectorRef.markForCheck();
+        });
+
+        this.PointRuleProductForm = this._formBuilder.group({
+            id: [''],
+            index: [''],
+            product_number: ['', [Validators.required]],
+            extra_point_type: ['', [Validators.required]],
+            extra_point_value: ['', [Validators.required]],
         });
 
         //Get the Stores []
@@ -378,7 +395,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    toogleStoreAddFormMode(AddMode: boolean | null = null): void {
+    tooglePointRuleAddFormMode(AddMode: boolean | null = null): void {
         if (AddMode === null) {
             this.AddMode = !this.AddMode;
         }
@@ -390,7 +407,6 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     toogleMemberTierListMode(MemberTierListMode: boolean | null = null): void {
-        this.pointbasketMode = false;
         this.PointBasketListMode = false;
         if (MemberTierListMode === null) {
             this.MemberTierListMode = !this.MemberTierListMode;
@@ -403,7 +419,6 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     tooglePointBasketListMode(PointBasketListMode: boolean | null = null): void {
-        this.pointbasketMode = false;
         this.MemberTierListMode = false;
         if (PointBasketListMode === null) {
             this.PointBasketListMode = !this.PointBasketListMode;
@@ -415,50 +430,31 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    toggleEditMode(MemberTierListMode: boolean | null = null): void {
-        if (MemberTierListMode === null) {
-        this.MemberTierListMode = !this.MemberTierListMode;
-        }
-        else {
-        this.MemberTierListMode = MemberTierListMode;
-        }
-        this._changeDetectorRef.markForCheck();
-    }
-
-    tooglepointBasketAddFormMode(pointbasketMode: boolean | null = null): void {
-        this.MemberTierListMode = false;
-        this.PointBasketListMode = false;
-        if (pointbasketMode === null) {
-            this.pointbasketMode = !this.pointbasketMode;
-        }
-        else {
-            this.pointbasketMode = pointbasketMode;
-        }
-
-        this._changeDetectorRef.markForCheck();
-    }
-
-    tooglepointBasketEditFormMode(pointbasketEditMode: boolean | null = null): void {
-        this.MemberTierListMode = false;
-        this.PointBasketListMode = false;
-        if (pointbasketEditMode === null) {
-            this.pointbasketEditMode = !this.pointbasketEditMode;
-        }
-        else {
-            this.pointbasketEditMode = pointbasketEditMode;
-        }
-
-        this._changeDetectorRef.markForCheck();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     toogleDeleteMode(DeleteMode: boolean | null = null): void {
+        this.MemberTierListMode = false;
+        this.PointBasketListMode = false;
+        this.pointRuleProductFormMode = false;
         if (DeleteMode === null) {
             this.DeleteMode = !this.DeleteMode;
         }
         else {
             this.DeleteMode = DeleteMode;
         }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    tooglePointRuleProductFormMode(pointRuleProductFormMode: boolean | null = null) {
+        this.MemberTierListMode = false;
+        this.PointBasketListMode = false;
+        this.DeleteMode = false;
+        if (pointRuleProductFormMode === null) {
+            this.pointRuleProductFormMode = !this.pointRuleProductFormMode;
+        }
+        else {
+            this.pointRuleProductFormMode = pointRuleProductFormMode;
+        }
+
         this._changeDetectorRef.markForCheck();
     }
 
@@ -501,6 +497,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
 
     updatePointRule(): void {
         const pointrule = this.PointRuleEditForm.getRawValue();
+        pointrule.point_rule_products = this.selectedPointRuleProduct;
         this._pointRuleService.updatePointRule(pointrule.id,pointrule).subscribe(() => {
             this._router.navigate(['/point-rules'], { relativeTo: this._activatedRoute });
         });
@@ -638,6 +635,81 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         this.PointRuleEditForm.patchValue(pointBasket);
         this.isLoading = false;
         this.drawerTwo.close();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    toogleDeletePointRuleProductMode(DeletePointRuleProductMode: boolean | null = null): void {
+        if (DeletePointRuleProductMode === null) {
+            this.DeletePointRuleProductMode = !this.DeletePointRuleProductMode;
+        }
+        else {
+            this.DeletePointRuleProductMode = DeletePointRuleProductMode;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    cancelPointRuleProductPopup(): void {
+        this.isPointRuleProductSuccess = false;
+        this.toogleDeletePointRuleProductMode(false);
+        this.drawerOne.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    proceedPointRuleProductPopup(): void {
+        this.selectedPointRuleProduct.splice(this.selectedPointRuleProductIndex, 1);
+        this.pointRuleProductSccessMessage = 'Deleted Successfully.';
+        this.isPointRuleProductSuccess = true;
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    DeletePointRuleProductDrawer(index: number): void {
+        this.selectedPointRuleProductIndex = index;
+        this.toogleDeletePointRuleProductMode(true);
+        this.drawerOne.open();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    openPointRuleProductForm(): void {
+        this.PointRuleProductForm.reset();
+        this.tooglePointRuleProductFormMode(true);
+        this.drawerTwo.open();
+    }
+
+    createPointRuleProduct(): void {
+        const pointRuleProduct = this.PointRuleProductForm.getRawValue();
+        const isNew = pointRuleProduct.index === null ? true: false;
+        pointRuleProduct.id = !pointRuleProduct.id ? 0: pointRuleProduct.id;
+        pointRuleProduct.index = !pointRuleProduct.index ? 0: pointRuleProduct.index;
+        let index = 0;
+        if( this.selectedPointRuleProduct.length > 0 ) {
+            if ( isNew ) {
+                index = this.selectedPointRuleProduct.length;
+            } else {
+                index = this.selectedPointRuleProduct.findIndex(x => x.index === pointRuleProduct.index);
+            }
+        }
+        pointRuleProduct.index = index;
+        this.selectedPointRuleProduct[(index)] = pointRuleProduct;
+        if( this.selectedPointRuleProduct.length > 0 ) {
+            this.selectedPointRuleProduct = this.selectedPointRuleProduct.sort((a,b) => a.product_number.localeCompare(b.product_number));
+        }
+        this.drawerTwo.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    setPointRuleProductEditForm(id, productNumber, pointType, pointValue, index): void {
+        const data: PointRuleProduct = {
+            id: id,
+            index: index,
+            product_number: productNumber,
+            extra_point_type: pointType,
+            extra_point_value: pointValue,
+        };
+        this.PointRuleProductForm.patchValue(data);
+        this.tooglePointRuleProductFormMode(true);
+        this.drawerTwo.open();
+        this._changeDetectorRef.markForCheck();
     }
 
 }
