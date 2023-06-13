@@ -380,13 +380,11 @@
                             <button class="ml-2 pointrule-sort-btn-01"
                                 (click)="sortingPageList()"
                                 [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
-                                mat-flat-button
-                                [color]="'primary'">
+                                mat-stroked-button>
                             </button>
 
                             <button class="ml-4"
-                                    mat-flat-button
-                                    [color]="'primary'"
+                                    mat-stroked-button
                                     (click)="tooglePointRuleAddFormMode(true)">
                                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                                 <span class="ml-2 mr-1">Add</span>
@@ -791,8 +789,8 @@
 
                                     <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
                                         <button class="ml-4"
-                                                mat-flat-button
-                                                [color]="'primary'"
+                                                mat-stroked-button
+                                                [matTooltip]="'Create Point Rule Product'"
                                                 (click)="openPointRuleProductForm()">
                                             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                                             <span class="ml-2 mr-1">Add</span>
