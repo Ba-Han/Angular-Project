@@ -160,6 +160,8 @@ import { MemberService } from 'app/modules/admin/member/member.service';
                 padding: 0 20px !important;
                 border-radius: 9999px !important;
                 border: 1px solid #e2e8f0;
+                background-color: #FAA0A0;
+                color: #FFFFFF !important;
             }
 
             .success_text_danger {
