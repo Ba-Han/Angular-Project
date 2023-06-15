@@ -272,6 +272,8 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     formattedNumber: string;
     createGeneateVoucherSuccessfully: string | '' = '';
     getPointConversionRate: any;
+    isUploadDisabled: boolean = true;
+    fileNotAcceptedErrorMessage: string | '' = '';
     // private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -677,6 +679,23 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     onFileSelected(event) {
         if (event.target.files.length > 0) {
             this.fileToUpload = event.target.files[0];
+            const fileType: string = this.fileToUpload.type;
+            // List of accepted file types
+            const acceptedTypes: string[] = [
+                'text/csv', // .csv
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+                'application/pdf', // .pdf
+                'image/jpeg', // .jpg, .jpeg
+                'image/png', // .png
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // .docx
+            ];
+            // If not accepted file types, then disabled upload button
+            if (acceptedTypes.includes(fileType)) {
+                this.isUploadDisabled = false;
+            } else {
+                this.fileNotAcceptedErrorMessage = 'Not invalid file type!';
+                this.isUploadDisabled = true;
+            }
             this.memberDocumentsForm.get('upload').setValue(this.fileToUpload);
             this._changeDetectorRef.markForCheck();
         }
@@ -686,6 +705,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     clearFileToUpload(): void {
         this.fileInput.nativeElement.value = '';
         this.uploadData = '';
+        this.fileNotAcceptedErrorMessage = '';
         this.fileToUpload = null;
         this._changeDetectorRef.markForCheck();
     }

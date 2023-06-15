@@ -1435,13 +1435,17 @@
                                 Upload Successfully.
                             </div>
 
+                            <div *ngIf="fileNotAcceptedErrorMessage" style="position: relative; bottom: 4.3rem; text-align: center; color: red;">
+                                {{ fileNotAcceptedErrorMessage }}
+                            </div>
+
                             <div *ngIf="errorMessage" style="position: relative; bottom: 4.3rem; text-align: center; color: red;">
                                 {{ errorMessage }}
                             </div>
 
                             <div style="position: relative; bottom: 3.4rem; text-align: justify; display: grid; line-height: 1; justify-content: center;">
                                 <span>Accept File Types!</span> <br/>
-                                <span>* .excel, .docx, .pdf, .csv, images (.jpg, .png and .jpeg)</span>
+                                <span>* .xlsx, .docx, .pdf, .csv, images (.jpg, .png and .jpeg)</span>
                             </div>
 
                             <label for="comment" style="display: flex; font-weight: 500; position: relative; bottom: 2rem; padding-right: 17rem; justify-content: center;">Comment:</label>
@@ -1450,9 +1454,14 @@
                             </div>
 
                             <div style="position: relative; text-align: end; bottom: 2rem;right: 3rem;">
-                                <button
+                                <button style="width: 6rem !important;"
+                                    [disabled]="isUploadDisabled"
+                                    mat-flat-button
+                                    [color] = "'primary'"
                                     class="h-10 md-button md-raised md-primary"
-                                    (click)="uploadMemberDocumentsFile()" style="background: #4f46e5; color:#fff;width: 6rem !important;margin-left: 10px; border-radius: 5px; font-weight: 700;">Upload</button>
+                                    (click)="uploadMemberDocumentsFile()">
+                                    Upload
+                                </button>
                             </div>
                     </div>
                 </div>
