@@ -95,9 +95,10 @@
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Available Points</mat-label>
                             <input matInput type="number"
+                                   id = "available_points"
                                    [readonly]="true"
                                    [formControlName]="'available_points'"
-                                   [placeholder]="'available_points'">
+                                   [placeholder]="'Available Points'">
                         </mat-form-field>
                     </div>
 
@@ -110,7 +111,7 @@
                             <input matInput id="points_used"
                                    [(ngModel)]="inputPointValue"
                                    [formControlName]="'points_used'"
-                                   [placeholder]="'points to convert'"
+                                   [placeholder]="'Points to Convert'"
                                    (input)="openGernerateVoucherForm()">
                         </mat-form-field>
                     </div>
@@ -124,7 +125,7 @@
                             <input matInput
                                    [(ngModel)]="getPointConversionRate"
                                    [formControlName]="'conversion_rate'"
-                                   [placeholder]="'points value'"
+                                   [placeholder]="'Points Value'"
                                    (input)="openGernerateVoucherForm()">
                         </mat-form-field>
                     </div>
@@ -138,14 +139,14 @@
                             <input matInput type="number"
                                    [readonly]="true"
                                    [formControlName]="'amount'"
-                                   [placeholder]="'voucher amount'">
+                                   [placeholder]="'Voucher Amount'">
                         </mat-form-field>
                     </div>
 
                     <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                         <button class="ml-2" style="width: 6rem;"
                                 mat-flat-button
-                                [disabled]="GenerateVoucherForm.invalid"
+                                [disabled]="GenerateVoucherForm.invalid || GenerateVoucherForm.get('available_points').value === 0"
                                 [color]="'primary'"
                                 [matTooltip]="'Save'"
                                 (click)="createGenerateVoucher()">
