@@ -706,6 +706,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         this.fileInput.nativeElement.value = '';
         this.uploadData = '';
         this.fileNotAcceptedErrorMessage = '';
+        this.isUploadDisabled = true;
         this.fileToUpload = null;
         this._changeDetectorRef.markForCheck();
     }

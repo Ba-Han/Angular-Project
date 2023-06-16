@@ -1426,7 +1426,7 @@
                             <div class="w-full h-50 flex items-center justify-center" style="cursor:pointer; border-radius: 3px;">
                                 <div style="border-bottom: 1px solid black;">
                                     <input class="ng-hide mr-9" #fileInput multiple type="file" (change)="onFileSelected($event)" accept=".csv,.xlsx,.pdf,.jpg,.jpeg,.png,.docx" style="margin-bottom: 9px;" />
-                                    <button mat-icon-button [matTooltip]="'Clear'" *ngIf="fileToUpload" (click)="clearFileToUpload()" style="width: 35px; height: 35px; border-radius: 5px; border: 1px solid #4f46e5; top: 1px;">
+                                    <button mat-icon-button [matTooltip]="'Clear'" *ngIf="fileToUpload" (click)="clearFileToUpload()" style="width: 35px; height: 35px; border-radius: 9999px !important; border: 1px solid #4f46e5; top: 1px;">
                                         <span>x</span>
                                     </button>
                                 </div>

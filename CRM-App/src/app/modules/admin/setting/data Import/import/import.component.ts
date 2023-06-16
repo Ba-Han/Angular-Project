@@ -67,8 +67,9 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
     memberList$: Observable<ImportActivity[]>;
     exclusion$: Observable<ImportActivity[]>;
     uploadSuccess = false;
-    errorMessage: string | null = null;
-    proccedErrorMessage: string | null = null;
+    errorMessage: string | '' = '';
+    proccedSuccessMessage: string | '' = '';
+    proccedErrorMessage: string | '' = '';
     isUploadDisabled: boolean = true;
     fileNotAcceptedErrorMessage: string | '' = '';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -182,6 +183,9 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
     clearFileToUpload(): void {
         this.fileInput.nativeElement.value = '';
         this.fileNotAcceptedErrorMessage = '';
+        this.errorMessage = '';
+        this.proccedSuccessMessage = '';
+        this.isUploadDisabled = true;
         this.fileToUpload = null;
         this._changeDetectorRef.markForCheck();
     }
@@ -199,18 +203,27 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
             (error) => {
                 this.errorMessage = error.error.message;
                 this._changeDetectorRef.markForCheck();
-                //console.log(error);
-                //console.log('catcherror');
               }
         );
         this._changeDetectorRef.markForCheck();
     }
 
     proceedUploadFile(): void {
-        this._importService.proceedUploadFile(this.uploadId).subscribe();
-        if (this.uploadId) {
-            this.uploadSuccess = true;
-        }
+        this._importService.proceedUploadFile(this.uploadId).subscribe(() => {
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this.uploadSuccess = true;
+                    this.proccedSuccessMessage = 'Upload Successfully!';
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.proccedErrorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
         this._changeDetectorRef.markForCheck();
     }
 

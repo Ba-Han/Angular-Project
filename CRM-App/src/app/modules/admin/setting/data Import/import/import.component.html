@@ -28,10 +28,10 @@
                             Upload
                         </button>
                     </div>
-                    <div *ngIf="fileNotAcceptedErrorMessage" style="position: relative; bottom: 4.3rem; text-align: center; color: red;">
+                    <div *ngIf="fileNotAcceptedErrorMessage" style="position: relative; bottom: 4rem; text-align: center; color: red;">
                         {{ fileNotAcceptedErrorMessage }}
                     </div>
-                    <div *ngIf="errorMessage" style="position: relative; bottom: 21%; text-align: center; color: red;">
+                    <div *ngIf="errorMessage" style="position: relative; bottom: 4rem; text-align: center; color: red;">
                         {{ errorMessage }}
                     </div>
                     <div style="position: relative; bottom: 3.4rem; text-align: justify; display: grid; line-height: 1; justify-content: center;">
@@ -102,11 +102,16 @@
     
             <div class="flex justify-end items-center mt-10 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                 
-                <div *ngIf="uploadSuccess" style="padding: 1rem;color: green; font-size: 15px;">
-                    Uploaded Successfully!
+                <div *ngIf="uploadSuccess && proccedSuccessMessage" style="padding: 1rem;color: green; font-size: 15px;">
+                    {{ proccedSuccessMessage }}
                 </div>
+
+                <div *ngIf="proccedErrorMessage" style="padding: 1rem; font-size: 15px; color: red;">
+                    {{ proccedErrorMessage }}
+                </div>
+
                 <button
-                        style="width: 6rem;"
+                        style="width: 6rem !important;"
                         mat-flat-button
                         [color] = "'primary'"
                         *ngIf="!uploadSuccess"

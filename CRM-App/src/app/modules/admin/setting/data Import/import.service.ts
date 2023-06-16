@@ -68,13 +68,7 @@ export class ImportService {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     proceedUploadFile(id: number): Observable<any>{
         return this._httpClient.post(`${this._apiurl}/manualupload/memberpoint/process/${id}`,
-        { responseType: 'text' })
-        .pipe(
-            map(() => true),
-            catchError((error) => {
-                console.error(error);
-                return of(false);
-            }));
+        { observe: 'response' });
     }
 
     /* importFile(fileid: string, name: string, date: string): Observable<any> {
