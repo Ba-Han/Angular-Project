@@ -419,6 +419,18 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                     start: 'desc',
                     disableClear: true
                 });
+            }  else if (this.isAscending && this.selectedCoulumn === 'pointamount') {
+                this._sort.sort({
+                    id: 'point_amount',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'pointamount') {
+                this._sort.sort({
+                    id: 'point_amount',
+                    start: 'desc',
+                    disableClear: true
+                });
             } else if (this.isAscending && this.selectedCoulumn === 'membertier') {
                 this._sort.sort({
                     id: 'member_tierFullName',
