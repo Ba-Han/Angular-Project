@@ -101,7 +101,7 @@
                 <!-- Member Tier List -->
                 <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
                     <ng-container *ngIf="(memberTiers$ | async) as memberTiers">
-                        <ng-container *ngIf="memberTiers.length; else noPoints">
+                        <ng-container *ngIf="memberTiers.length; else noMemberTiers">
                             <div class="grid">
                                 <!-- Header -->
                                 <div class="point_rule_tier_grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
@@ -114,15 +114,8 @@
                                     <div class="hidden md:block">
                                         Level
                                     </div>
-                                    <!-- <div class="sm:block"
-                                         [mat-sort-header]="'name'">
-                                        Name
-                                    </div>
-                                    <div class="hidden md:block"
-                                         [mat-sort-header]="'level'">
-                                        Level
-                                    </div> -->
                                 </div>
+
                                 <!-- Rows -->
                                 <ng-container *ngIf="(memberTiers$ | async) as memberTiers">
                                     <ng-container *ngFor="let memberTier of memberTiers; trackBy: trackByFn">
@@ -147,25 +140,23 @@
 
                             <div class="">
                                 <mat-paginator class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
-                                               [ngClass]="{'pointer-events-none': isLoading}"
-                                               [length]="memberTierPagination.length"
-                                               [pageIndex]="memberTierPagination.page"
-                                               [pageSize]="memberTierPagination.limit"
-                                               [pageSizeOptions]="[10, 25, 100]"
-                                               [showFirstLastButtons]="true"></mat-paginator>
+                                    [ngClass]="{'pointer-events-none': isLoading}"
+                                    [length]="memberTierPagination.length"
+                                    [pageIndex]="memberTierPagination.page"
+                                    [pageSize]="memberTierPagination.limit"
+                                    [pageSizeOptions]="[10, 25, 100]"
+                                    [showFirstLastButtons]="true"></mat-paginator>
                             </div>
-
-
                         </ng-container>
                     </ng-container>
 
-                    <ng-template #noBaskets>
-                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no point basket!</div>
+                    <ng-template #noMemberTiers>
+                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no member tier!</div>
                     </ng-template>
-
                 </div>
             </div>
         </ng-container>
+
         <!-- Point Basket List -->
         <ng-container *ngIf="PointBasketListMode">
             <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
@@ -174,7 +165,7 @@
                             [matTooltip]="'Close'"
                             (click)="drawerTwo.close()">
                         <mat-icon class="text-white"
-                                    [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                            [svgIcon]="'heroicons_outline:x'"></mat-icon>
                     </button>
                 </div>
             </div>          
@@ -196,17 +187,6 @@
                                        [placeholder]="'Search Point Basket'">
                             </mat-form-field>
                         </div>
-
-                        <!-- <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
-                            <button class="ml-4" style="position: relative; bottom: 10px;"
-                                    mat-flat-button
-                                    [color]="'primary'"
-                                    (click)="createNewPointBasket()">
-                                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                                <span class="ml-2 mr-1">Add</span>
-                            </button>
-                        </div> -->
-                        
                     </div>
                 </div>
 
@@ -223,11 +203,8 @@
                                     <div class="sm:block">
                                         Name
                                     </div>
-                                    <!-- <div class="sm:block"
-                                         [mat-sort-header]="'name'">
-                                        Name
-                                    </div> -->
                                 </div>
+
                                 <!-- Rows -->
                                 <ng-container *ngIf="(pointBaskets$ | async) as pointBaskets">
                                     <ng-container *ngFor="let pointBasket of pointBaskets; trackBy: trackByFn">
@@ -240,11 +217,6 @@
                                             <div class=" truncate">
                                                 {{pointBasket.name}}
                                             </div>
-
-                                            <!-- <div class="hidden md:block truncate">
-                                                Level {{memberTier.level}}
-                                            </div> -->
-
                                         </div>
                                     </ng-container>
                                 </ng-container>
@@ -252,23 +224,22 @@
 
                             <div class="">
                                 <mat-paginator class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
-                                               [ngClass]="{'pointer-events-none': isLoading}"
-                                               [length]="pointBasketPagination.length"
-                                               [pageIndex]="pointBasketPagination.page"
-                                               [pageSize]="pointBasketPagination.limit"
-                                               [pageSizeOptions]="[10, 25, 100]"
-                                               [showFirstLastButtons]="true"></mat-paginator>
+                                    [ngClass]="{'pointer-events-none': isLoading}"
+                                    [length]="pointBasketPagination.length"
+                                    [pageIndex]="pointBasketPagination.page"
+                                    [pageSize]="pointBasketPagination.limit"
+                                    [pageSizeOptions]="[10, 25, 100]"
+                                    [showFirstLastButtons]="true"></mat-paginator>
                             </div>
                         </ng-container>
                     </ng-container>
-
                     <ng-template #noPointBasket>
                         <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no point basket!</div>
                     </ng-template>
-
                 </div>
             </div>
         </ng-container>
+
         <!-- Point Rule Product Form-->
         <ng-container *ngIf="pointRuleProductFormMode">
             <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
@@ -371,6 +342,7 @@
                                     <mat-option value="name">Name</mat-option>
                                     <mat-option value="rewardcode">Reward Code</mat-option>
                                     <mat-option value="pointvalue">Point Value</mat-option>
+                                    <mat-option value="pointamount">Point Amount</mat-option>
                                     <mat-option value="membertier">Member Tier</mat-option>
                                     <mat-option value="startdate">Start Date</mat-option>
                                     <mat-option value="enddate">End Date</mat-option>
@@ -406,6 +378,7 @@
                                             <div> Name </div>
                                             <div> Reward Code </div>
                                             <div> Point Value </div>
+                                            <div> Point Amount </div>
                                             <div> Member Tier </div>
                                             <div> Start Date </div>
                                             <div> End Date </div>
@@ -421,14 +394,16 @@
                                                             {{product.name}}
                                                         </div>
 
-
                                                         <div class="truncate">
                                                             {{product.reward_code}}
                                                         </div>
 
-
                                                         <div class="truncate">
                                                             {{product.point_value}}
+                                                        </div>
+
+                                                        <div class="truncate">
+                                                            {{product.point_amount}}
                                                         </div>
 
                                                         <div class="truncate">
@@ -451,13 +426,12 @@
                                     </div>
 
                                     <mat-paginator class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
-                                                [ngClass]="{'pointer-events-none': isLoading}"
-                                                [length]="pagination.length"
-                                                [pageIndex]="pagination.page"
-                                                [pageSize]="pagination.size"
-                                                [pageSizeOptions]="[10, 25, 100]"
-                                                [showFirstLastButtons]="true"></mat-paginator>
-
+                                        [ngClass]="{'pointer-events-none': isLoading}"
+                                        [length]="pagination.length"
+                                        [pageIndex]="pagination.page"
+                                        [pageSize]="pagination.size"
+                                        [pageSizeOptions]="[10, 25, 100]"
+                                        [showFirstLastButtons]="true"></mat-paginator>
                                 </ng-container>
                             </ng-container>
 

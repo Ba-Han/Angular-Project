@@ -20,18 +20,18 @@ import { UserService } from 'app/core/user/user.service';
         /* language=SCSS */
         `
             .prule-grid_point_rule {
-                grid-template-columns: 250px 250px 200px 150px;
+                grid-template-columns: 160px 160px 110px 110px 130px 130px 130px;
 
                 @screen sm {
-                    grid-template-columns: 160px 160px 150px 150px 150px 150px;
+                    grid-template-columns: 160px 160px 110px 110px 130px 130px 130px;
                 }
 
                 @screen md {
-                    grid-template-columns: 160px 160px 150px 150px 150px 150px;
+                    grid-template-columns: 160px 160px 110px 110px 130px 130px 130px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 160px 160px 110px 150px 150px 150px;
+                    grid-template-columns: 160px 160px 110px 110px 130px 130px 130px;
                 }
             }
 
@@ -419,6 +419,18 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
                     start: 'desc',
                     disableClear: true
                 });
+            }  else if (this.isAscending && this.selectedCoulumn === 'pointamount') {
+                this._sort.sort({
+                    id: 'point_amount',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'pointamount') {
+                this._sort.sort({
+                    id: 'point_amount',
+                    start: 'desc',
+                    disableClear: true
+                });
             } else if (this.isAscending && this.selectedCoulumn === 'membertier') {
                 this._sort.sort({
                     id: 'member_tierFullName',
@@ -582,6 +594,8 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             this.ngAfterViewInit();
         } else if ( this.selectedCoulumn === 'pointvalue' ) {
             this.ngAfterViewInit();
+        } else if ( this.selectedCoulumn === 'pointamount' ) {
+            this.ngAfterViewInit();
         } else if ( this.selectedCoulumn === 'membertier' ) {
             this.ngAfterViewInit();
         } else if ( this.selectedCoulumn === 'startdate' ) {
@@ -605,6 +619,10 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         } else if ( this.isAscending && this.selectedCoulumn === 'pointvalue' ) {
             this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'pointvalue' ) {
+            this.ngAfterViewInit();
+        } else if ( this.isAscending && this.selectedCoulumn === 'pointamount' ) {
+            this.ngAfterViewInit();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'pointamount' ) {
             this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'membertier' ) {
             this.ngAfterViewInit();
