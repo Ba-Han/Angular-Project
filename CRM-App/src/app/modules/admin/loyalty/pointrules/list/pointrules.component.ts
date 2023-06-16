@@ -20,18 +20,18 @@ import { UserService } from 'app/core/user/user.service';
         /* language=SCSS */
         `
             .prule-grid_point_rule {
-                grid-template-columns: 160px 160px 110px 110px 130px 130px 130px;
+                grid-template-columns: 250px 250px 200px 150px;
 
                 @screen sm {
-                    grid-template-columns: 160px 160px 110px 110px 130px 130px 130px;
+                    grid-template-columns: 160px 160px 150px 150px 150px 150px;
                 }
 
                 @screen md {
-                    grid-template-columns: 160px 160px 110px 110px 130px 130px 130px;
+                    grid-template-columns: 160px 160px 150px 150px 150px 150px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 160px 160px 110px 110px 130px 130px 130px;
+                    grid-template-columns: 160px 160px 110px 150px 150px 150px;
                 }
             }
 
@@ -594,8 +594,6 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             this.ngAfterViewInit();
         } else if ( this.selectedCoulumn === 'pointvalue' ) {
             this.ngAfterViewInit();
-        } else if ( this.selectedCoulumn === 'pointamount' ) {
-            this.ngAfterViewInit();
         } else if ( this.selectedCoulumn === 'membertier' ) {
             this.ngAfterViewInit();
         } else if ( this.selectedCoulumn === 'startdate' ) {
@@ -619,10 +617,6 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         } else if ( this.isAscending && this.selectedCoulumn === 'pointvalue' ) {
             this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'pointvalue' ) {
-            this.ngAfterViewInit();
-        } else if ( this.isAscending && this.selectedCoulumn === 'pointamount' ) {
-            this.ngAfterViewInit();
-        } else if ( !this.isAscending && this.selectedCoulumn === 'pointamount' ) {
             this.ngAfterViewInit();
         } else if ( this.isAscending && this.selectedCoulumn === 'membertier' ) {
             this.ngAfterViewInit();
