@@ -356,14 +356,14 @@
 
                                 <div class="ml-4">
                                     <ng-container *ngIf="canDelete">
-                                        <button
-                                                mat-flat-button style="width: 6rem;"
-                                                [color]="'primary'"
+                                        <button style="width: 6rem;"
+                                                mat-raised-button
+                                                color = "warn"
                                                 [matTooltip]="'Delete'"
                                                 (click)="DeleteDrawer(store.code)"
                                                 >
                                                 Delete
-                                            </button>
+                                        </button>
                                     </ng-container>
 
                                     <ng-container *ngIf="!canDelete">

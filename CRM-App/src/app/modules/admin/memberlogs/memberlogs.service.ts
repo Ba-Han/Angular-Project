@@ -46,7 +46,7 @@ export class MemberLogsService
     getMemberLogs(id: number = 0, page: number = 0, limit: number = 10, sort: string = 'date_updated', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: MemberLogsPagination; memberlogs: MemberLogs[] }>
     {
-        return this._httpClient.get(`${this._apiurl}/items/member/logs`, {
+        return this._httpClient.get(`${this._apiurl}/member/${id}/logs`, {
             params: {
                 meta: 'filter_count',
                 page: page+1,

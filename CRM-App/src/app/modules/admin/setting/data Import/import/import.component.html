@@ -12,16 +12,26 @@
                     <div class="mb-5"> <span class="text-2xl font-bold justify-center" style="position: relative; top: 1rem; left: 1rem; border-bottom: 1px solid black;"> Select File And Upload </span></div>
                     <div class="w-full h-50 flex items-center justify-center" style="cursor:pointer; border-radius: 3px;">
                         <div style="border-bottom: 1px solid black;">
-                            <input class="ng-hide mr-9" #fileInput multiple type="file" (change)="onFileSelect($event)" style="margin-bottom: 9px;" />
-                            <button mat-icon-button [matTooltip]="'Clear'" *ngIf="fileToUpload" (click)="clearFileToUpload()" style="width: 35px; height: 35px; border-radius: 5px; border: 1px solid #2777ff; top: 1px;">
+                            <input class="ng-hide mr-9" #fileInput multiple type="file" accept=".csv" (change)="onFileSelect($event)" style="margin-bottom: 9px;" />
+                            <button mat-icon-button [matTooltip]="'Clear'" *ngIf="fileToUpload" (click)="clearFileToUpload()" style="width: 35px; height: 35px; border-radius: 9999px !important; border: 1px solid #4f46e5; top: 1px;">
                                 <span>x</span>
                             </button>
                         </div>
 
-                        <!--<label for="input-file-id" class="md-button md-raised md-primary">Choose Files</label>-->
-                        <button for="input-file-id" class="h-10 md-button md-raised md-primary" (click)="uploadFile()" style="background: #2777ff;color:#fff;width: 10% !important;margin-left: 10px; border-radius: 5px; font-weight: 700;">Upload</button>
+                        <button for="input-file-id" 
+                            class="h-10 md-button md-raised md-primary"
+                            (click)="uploadFile()"
+                            style="width: 6rem !important;"
+                            [disabled]="isUploadDisabled"
+                            mat-flat-button
+                            [color] = "'primary'">
+                            Upload
+                        </button>
                     </div>
-                    <div *ngIf="errorMessage" style="position: relative; bottom: 21%; text-align: center; color: red;">
+                    <div *ngIf="fileNotAcceptedErrorMessage" style="position: relative; bottom: 4rem; text-align: center; color: red;">
+                        {{ fileNotAcceptedErrorMessage }}
+                    </div>
+                    <div *ngIf="errorMessage" style="position: relative; bottom: 4rem; text-align: center; color: red;">
                         {{ errorMessage }}
                     </div>
                     <div style="position: relative; bottom: 3.4rem; text-align: justify; display: grid; line-height: 1; justify-content: center;">
@@ -30,14 +40,6 @@
                         <span>* Point column is required.</span>
                     </div>
                 </div>
-
-                <!-- <div class="w-2/4">
-                    <div class="mb-5"> <span class="text-2xl font-bold justify-center"> STEP 2 : Confirm To Upload </span></div>
-                    <div class="w-full h-50 flex items-center justify-center" style="border: 1px dashed black;cursor:pointer; border-radius: 3px;">
-                        <button for="input-file-id" class="w-1/4 h-15 md-button md-raised md-primary" style="background: #2777ff;color:#fff; border-radius: 3px; font-weight: 700;" (click)="importFile('member_point')">Proceed</button>
-                    </div>
-                </div> -->
-
             </mat-card>
         </div>
 
@@ -48,15 +50,7 @@
                 </div>
     
                 <div class="w-3/4 flex justify-end" style="padding:26px;padding-bottom:0; align-items: center;">
-                    <!-- <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
-                        <mat-icon class="icon-size-5"
-                                  matPrefix
-                                  [svgIcon]="'heroicons_solid:search'"></mat-icon>
-                        <input matInput
-                               [formControl]="searchInputControl"
-                               [autocomplete]="'off'"
-                               [placeholder]="'Search Upload'">
-                    </mat-form-field> -->
+                    
                 </div>
             </div>
            
@@ -73,12 +67,6 @@
                          <div> Tier </div>
                          <div> Date </div>
                          <div> Points </div>
-                        
-                        <!-- <div [mat-sort-header]="'collection_name'"> Collection Name </div>
-                        <div [mat-sort-header]="'status'"> Status  </div>
-                        <div [mat-sort-header]="'import_date'"> Import Date </div>
-                        <div [mat-sort-header]="'remark'"> Remark </div> -->
-                        <!--<div [mat-sort-header]="'job_completed_date'"> Completed Date </div>-->
                     </div>
     
                     <!-- Rows -->
@@ -110,27 +98,24 @@
                         </div>
                     </ng-container>
                 </div>
-    
-                <!-- <div class="w-full mt-5">
-                    <mat-paginator class="sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-200 dark:bg-transparent"
-                                   [ngClass]="{'pointer-events-none': isLoading}"
-                                   [length]="pagination.length"
-                                   [pageIndex]="pagination.page"
-                                   [pageSizeOptions]="[10, 25, 100]"
-                                   [showFirstLastButtons]="true"></mat-paginator>
-                </div> -->
             </div>
     
             <div class="flex justify-end items-center mt-10 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                 
-                <div *ngIf="uploadSuccess" style="padding: 1rem;color: green; font-size: 15px;">
-                    Uploaded Successfully!
+                <div *ngIf="uploadSuccess && proccedSuccessMessage" style="padding: 1rem;color: green; font-size: 15px;">
+                    {{ proccedSuccessMessage }}
                 </div>
+
+                <div *ngIf="proccedErrorMessage" style="padding: 1rem; font-size: 15px; color: red;">
+                    {{ proccedErrorMessage }}
+                </div>
+
                 <button
+                        style="width: 6rem !important;"
+                        mat-flat-button
+                        [color] = "'primary'"
                         *ngIf="!uploadSuccess"
-                        for="input-file-id"
                         class="h-10 md-button md-raised md-primary"
-                        style="width: 6rem; background: #2777ff;color:#fff; border-radius: 3px; font-weight: 700;"
                         (click)="proceedUploadFile()">
                     Proceed
                 </button>

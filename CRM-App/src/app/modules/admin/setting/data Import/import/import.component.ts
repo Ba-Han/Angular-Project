@@ -67,8 +67,11 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
     memberList$: Observable<ImportActivity[]>;
     exclusion$: Observable<ImportActivity[]>;
     uploadSuccess = false;
-    errorMessage: string | null = null;
-    proccedErrorMessage: string | null = null;
+    errorMessage: string | '' = '';
+    proccedSuccessMessage: string | '' = '';
+    proccedErrorMessage: string | '' = '';
+    isUploadDisabled: boolean = true;
+    fileNotAcceptedErrorMessage: string | '' = '';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -103,53 +106,11 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.activities$ = this._importService.activities$;
 
-        // search
-        /* this.searchInputControl.valueChanges
-            .pipe(
-                takeUntil(this._unsubscribeAll),
-                debounceTime(300),
-                switchMap((query) => {
-                    this.isLoading = true;
-                    return this._importService.getActivities(0, 10, 'import_date', 'desc', query);
-                }),
-                map(() => {
-                    this.isLoading = false;
-                })
-            )
-            .subscribe(); */
-            this.canEdit = this._userService.getEditUserPermissionByNavId('manual-upload');
+        this.canEdit = this._userService.getEditUserPermissionByNavId('manual-upload');
     }
 
     ngAfterViewInit(): void {
-        /* if (this._sort && this._paginator) {
-            // Set the initial sort
-            this._sort.sort({
-                id: 'import_date',
-                start: 'desc',
-                disableClear: true
-            });
 
-            // Mark for check
-            this._changeDetectorRef.markForCheck();
-
-            // If the user changes the sort order...
-            this._sort.sortChange
-                .pipe(takeUntil(this._unsubscribeAll))
-                .subscribe(() => {
-                    this._paginator.pageIndex = 0;
-                });
-
-            // Get channels if sort or page changes
-            merge(this._sort.sortChange, this._paginator.page).pipe(
-                switchMap(() => {
-                    this.isLoading = true;
-                    return this._importService.getActivities(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
-                }),
-                map(() => {
-                    this.isLoading = false;
-                })
-            ).subscribe();
-        } */
     }
 
     ngOnDestroy(): void {
@@ -201,6 +162,18 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
     onFileSelect(event) {
         if (event.target.files.length > 0) {
             this.fileToUpload = event.target.files[0];
+            const fileType: string = this.fileToUpload.type;
+            // Accepted file types
+            const acceptedTypes: string[] = [
+                'text/csv' // .csv
+            ];
+            // If not accepted file types, then disabled upload button
+            if (acceptedTypes.includes(fileType)) {
+                this.isUploadDisabled = false;
+            } else {
+                this.fileNotAcceptedErrorMessage = 'Only csv file type is allowed.';
+                this.isUploadDisabled = true;
+            }
             this.memberUploadForm.get('upload').setValue(this.fileToUpload);
             this._changeDetectorRef.markForCheck();
         }
@@ -209,6 +182,10 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
 
     clearFileToUpload(): void {
         this.fileInput.nativeElement.value = '';
+        this.fileNotAcceptedErrorMessage = '';
+        this.errorMessage = '';
+        this.proccedSuccessMessage = '';
+        this.isUploadDisabled = true;
         this.fileToUpload = null;
         this._changeDetectorRef.markForCheck();
     }
@@ -226,18 +203,27 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
             (error) => {
                 this.errorMessage = error.error.message;
                 this._changeDetectorRef.markForCheck();
-                //console.log(error);
-                //console.log('catcherror');
               }
         );
         this._changeDetectorRef.markForCheck();
     }
 
     proceedUploadFile(): void {
-        this._importService.proceedUploadFile(this.uploadId).subscribe();
-        if (this.uploadId) {
-            this.uploadSuccess = true;
-        }
+        this._importService.proceedUploadFile(this.uploadId).subscribe(() => {
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this.uploadSuccess = true;
+                    this.proccedSuccessMessage = 'Upload Successfully!';
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.proccedErrorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
         this._changeDetectorRef.markForCheck();
     }
 

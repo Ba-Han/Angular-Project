@@ -46,13 +46,11 @@
                             <button class="ml-2 channel-sort-btn-01"
                                 (click)="sortingPageList()"
                                 [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
-                                mat-flat-button
-                                [color]="'primary'">
+                                mat-stroked-button>
                             </button>
                             
                             <button class="ml-4"
-                                    mat-flat-button
-                                    [color]="'primary'"
+                                    mat-stroked-button
                                     (click)="tooglepointAddFormMode(true)">
                                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                                 <span class="ml-2 mr-1">Add</span>

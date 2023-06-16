@@ -170,8 +170,8 @@
                             <ng-container *ngIf="pointrange !== null">
                                 <div *ngIf="canDelete">
                                     <button class="ml-2" style="width: 6rem;"
-                                        mat-flat-button
-                                        [color]="'primary'"
+                                        mat-raised-button
+                                        color = "warn"
                                         [matTooltip]="'Delete'"
                                         (click)="DeleteDrawer(pointrange.id)">
                                         Delete

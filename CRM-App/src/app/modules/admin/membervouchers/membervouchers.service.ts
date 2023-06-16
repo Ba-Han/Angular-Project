@@ -52,7 +52,7 @@ export class MemberVoucherService
     getMemberVoucher(id: number = 0, page: number = 0, limit: number = 10, sort: string = 'voucher_code', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: MemberVoucherPagination; membervouchers: MemberVoucher[] }>
     {
-        return this._httpClient.get(`${this._apiurl}/items/voucher`, {
+        return this._httpClient.get(`${this._apiurl}/items/voucher/memberid/${id}`, {
             params: {
                 meta: 'filter_count',
                 page: page+1,

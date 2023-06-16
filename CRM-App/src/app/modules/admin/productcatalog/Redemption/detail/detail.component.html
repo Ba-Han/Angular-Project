@@ -191,8 +191,8 @@
                                 <div class="ml-4">
                                     <ng-container *ngIf="canDelete">
                                         <button style="width: 6rem;"
-                                                mat-flat-button
-                                                [color]="'primary'"
+                                                mat-raised-button
+                                                color = "warn"
                                                 [matTooltip]="'Delete'"
                                                 (click)="DeleteDrawer(product.id)"
                                                 >

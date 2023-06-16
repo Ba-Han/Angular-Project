@@ -118,13 +118,11 @@
                         <button class="ml-2 membertier-sort-btn-01"
                             (click)="sortingPageList()"
                             [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
-                            mat-flat-button
-                            [color]="'primary'">
+                            mat-stroked-button>
                         </button>
 
                         <button class="ml-4"
-                                mat-flat-button
-                                [color]="'primary'"
+                                mat-stroked-button
                                 (click)="tooglepointAddFormMode(true)">
                             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                             <span class="ml-2 mr-1">Add</span>
@@ -494,13 +492,13 @@
                             </div>
 
                             <div class="mt-4">
-                                <div class="flex w-full ">
-                                    <button class="w-1/8 bg-green-500 text-white" mat-flat-button
-                                            [matTooltip]="'Create Tire Item'"
-                                            (click)="openTierUpgradeForm()">
-                                        Add New
-                                    </button>
-                                </div>
+                                <button class="w-1/8"
+                                        mat-stroked-button
+                                        [matTooltip]="'Create Tire Upgrade Item'"
+                                        (click)="openTierUpgradeForm()">
+                                    <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                                    <span class="ml-2 mr-1">Add</span>
+                                </button>
                             </div>
 
                             <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
