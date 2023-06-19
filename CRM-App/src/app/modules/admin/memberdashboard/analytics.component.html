@@ -10,7 +10,6 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full mt-8">
-
             <!-- Total Members -->
             <div class="card h-40">
                 <div class="card-header card-header-primary">
@@ -26,53 +25,22 @@
                 </div>
             </div>
 
-
-            <!-- Total Silver Members-->
-            <div class="card h-40">
-                <div class="card-header card-header-warning">
-                    <h4 class="card-title">{{ silverName }}</h4>
-                    <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalSilverCount | number:'1.0-0'}}</p>
-                </div>
-                <div class="card-body">
-                    <div style="border: 1px solid #ccc;"></div>
-                    <div class="mt-2" style="cursor:pointer;color: gray !important;"
-                         (click)="detailTierList(silverId)">
-                        See More Details
+            <ng-container *ngFor="let getLevel of getRegisteredLevel; let i = index" >
+                <!-- Get Registered Level Member-->
+                <div class="card h-40">
+                    <div class="card-header card-header-style" [style.background]='colors[i]'>
+                        <h4 class="card-title">{{ getLevel.name }}</h4>
+                        <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{getLevel.count | number:'1.0-0'}}</p>
+                    </div>
+                    <div class="card-body">
+                        <div style="border: 1px solid #ccc;"></div>
+                        <div class="mt-2" style="cursor:pointer;color: gray !important;"
+                            (click)="detailTierList(getLevel.id)">
+                            See More Details
+                        </div>
                     </div>
                 </div>
-            </div>
-
-
-            <!-- Total Gold Members -->
-            <div class="card h-40">
-                <div class="card-header card-header-twittercolor">
-                    <h4 class="card-title">{{ goldName }}</h4>
-                    <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalGoldCount | number:'1.0-0'}}</p>
-                </div>
-                <div class="card-body">
-                    <div style="border: 1px solid #ccc;"></div>
-                    <div class="mt-2" style="cursor:pointer;color: gray !important;"
-                         (click)="detailTierList(goldId)">
-                        See More Details
-                    </div>
-                </div>
-            </div>
-
-            <!-- Total Platinum Members -->
-            <div class="card h-40">
-                <div class="card-header card-header-success">
-                    <h4 class="card-title">{{ platinumName }}</h4>
-                    <p class="card-category text-4xl font-bold tracking-tighter leading-tight">{{totalPlatinumCount | number:'1.0-0'}}</p>
-                </div>
-                <div class="card-body">
-                    <div style="border: 1px solid #ccc;"></div>
-                    <div class="mt-2" style="cursor:pointer;color: gray !important;"
-                         (click)="detailTierList(platinumId)">
-                        See More Details
-                    </div>
-                </div>
-            </div>
-
+            </ng-container>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 w-full mt-5">

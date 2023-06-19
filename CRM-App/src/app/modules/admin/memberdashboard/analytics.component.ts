@@ -11,7 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { Moment } from 'moment';
 import moment from 'moment';
-import { Stores, Channel, Tiers, ActivePoint, ExpiredPoint, DateParameter, EarnPoint , RegisteredMember} from 'app/modules/admin/memberdashboard/analytics.types';
+import { Stores, Channel, Tiers, ActivePoint, ExpiredPoint, DateParameter, EarnPoint , RegisteredMember, RegisteredLevel} from 'app/modules/admin/memberdashboard/analytics.types';
 import { AnalyticsService } from 'app/modules/admin/memberdashboard/analytics.service';
 
 @Component({
@@ -24,13 +24,7 @@ import { AnalyticsService } from 'app/modules/admin/memberdashboard/analytics.se
 export class AnalyticsComponent implements OnInit, OnDestroy {
     chartAge: ApexOptions;
     totalMembers: number;
-    getRegisteredLevel: any;
-    silverName: string;
-    goldName: string;
-    platinumName: string;
-    totalSilverCount: number;
-    totalGoldCount: number;
-    totalPlatinumCount: number;
+    getRegisteredLevel: RegisteredLevel;
     startDate = new Date();
     startYear = new Date();
     registerMember: number;
@@ -50,9 +44,6 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     expiredSelectedValue: string;
     totalAmount: number;
     transactionAmountByStore: number;
-    silverId: number;
-    goldId: number;
-    platinumId: number;
     totalActivePoint: number;
     totalActiveDollar: number;
     totalExpiredPoint: number;
@@ -119,7 +110,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         enddate: '',
         tier: 'all'
     };
-
+    colors = ['linear-gradient(60deg,#ffa726,#fb8c00)', 'linear-gradient(60deg,#26c6da,#00acc1)', 'linear-gradient(60deg,#66bb6a,#43a047)', 'linear-gradient(60deg, #F50057, #FF8A80)', 'linear-gradient(60deg, #FFD700, #FFCA29)'];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     private readonly onDestroy = new Subject<void>();
 
@@ -133,14 +124,6 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         // Get the data
-        this._analyticsService.memberTiers$
-            .subscribe((response: any) => {
-                this.tiers$ = response.data ? response.data : null;
-                this.silverId = response.data ? response.data[0].id : 0;
-                this.goldId = response.data ? response.data[1].id : 0;
-                this.platinumId = response.data ? response.data[2].id : 0;
-            });
-
         this._analyticsService.channel$
         .subscribe((response: any) => {
             this.channel$ = response.data ? response.data : '';
@@ -156,12 +139,6 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         this._analyticsService.getRegisteredLevel$
         .subscribe((response: any) => {
             this.getRegisteredLevel = response.data ? response.data : null;
-            this.silverName = response.data ? response.data[0].name : '';
-            this.goldName = response.data ? response.data[1].name : '';
-            this.platinumName = response.data ? response.data[2].name : '';
-            this.totalSilverCount = response.data ? response.data[0].count : 0;
-            this.totalGoldCount = response.data ? response.data[1].count : 0;
-            this.totalPlatinumCount = response.data ? response.data[2].count : 0;
         });
         this._analyticsService.totalRegisterMember$
             .subscribe((response: any) => {
@@ -398,8 +375,6 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
 
     };
 
-
-
     /*
     * Total Active Point
     */
@@ -458,7 +433,6 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
             this._changeDetectorRef.markForCheck();
         });
     }
-
 
     /*
     * Total Expired Point

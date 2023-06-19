@@ -15,7 +15,6 @@ export class AnalyticsService
     private _totalTransactionCounts: BehaviorSubject<any> = new BehaviorSubject(null);
     private _totalActivePoints: BehaviorSubject<any> = new BehaviorSubject(null);
     private _totalExpiredPoints: BehaviorSubject<any> = new BehaviorSubject(null);
-    private _tiers: BehaviorSubject<any> = new BehaviorSubject(null);
     private _stores: BehaviorSubject<any> = new BehaviorSubject(null);
     private _channel: BehaviorSubject<any> = new BehaviorSubject(null);
     private _totalEarnPoints: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -41,9 +40,6 @@ export class AnalyticsService
     get totalTransactionCounts$(): Observable<any> {
         return this._totalTransactionCounts.asObservable();
     }
-    get memberTiers$(): Observable<any> {
-        return this._tiers.asObservable();
-    }
     get totalActivePoints$(): Observable<any> {
         return this._totalActivePoints.asObservable();
     }
@@ -62,16 +58,6 @@ export class AnalyticsService
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
-
-    getMemberTiers(): Observable<any> {
-        return this._httpClient.get<any>(`${this._apiurl}/items/member_tier`, {
-        })
-            .pipe(
-                tap((response) => {
-                    this._tiers.next(response);
-                })
-            );
-    }
 
     getTotalMember(): Observable<any>
     {
