@@ -30,7 +30,6 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     registerMember: number;
     stores$: Stores;
     channel$: Channel;
-    tiers$: Tiers;
     filterDate: string;
     isLoading: boolean = false;
     filterStartDate: string;
