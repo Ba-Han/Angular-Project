@@ -77,18 +77,6 @@ export class TotalTransactionCount implements Resolve<any>
 @Injectable({
     providedIn: 'root'
 })
-export class MemberTiers implements Resolve<any>
-{
-    constructor(private _analyticsService: AnalyticsService) {
-    }
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        return this._analyticsService.getMemberTiers();
-    }
-}
-
-@Injectable({
-    providedIn: 'root'
-})
 export class Stores implements Resolve<any>
 {
     constructor(private _analyticsService: AnalyticsService) {
@@ -135,8 +123,6 @@ export class TotalActivePoints implements Resolve<any>
     }
 }
 
-
-
 @Injectable({
     providedIn: 'root'
 })
@@ -161,8 +147,6 @@ export class TotalExpiredPoints implements Resolve<any>
         return this._analyticsService.getTotalExpeiredPoint(dateParameter);
     }
 }
-
-
 
 @Injectable({
     providedIn: 'root'
