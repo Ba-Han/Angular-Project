@@ -10,7 +10,6 @@ import { MatSort } from '@angular/material/sort';
 import { MatDrawer } from '@angular/material/sidenav';
 import { UserService } from 'app/core/user/user.service';
 
-
 @Component({
     selector: 'user-detail',
     templateUrl: './detail.component.html',
@@ -115,9 +114,13 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     canEdit: boolean = false;
     isSuccess: boolean = false;
     isUpadteUserSuccess: boolean = false;
-    checkboxChecked: boolean = true;
-    errorMessage: string | null = null;
-    successMessage: string | null = null;
+    viewAllChecked: boolean = false;
+    editAllChecked: boolean = false;
+    deleteAllChecked: boolean = false;
+    errorMessage: string | '' = '';
+    successMessage: string | '' = '';
+    userErrorMessage: string | '' = '';
+    userSuccessMessage: string | null = null;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     private passwordStrength: 0;
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -146,13 +149,13 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
         this.UserEditForm = this._formBuilder.group({
             id: [''],
-            status: ['', Validators.required],
-            first_name: ['', Validators.required],
-            last_name: ['', Validators.required],
-            email: ['', [Validators.required, Validators.email]],
-            password: ['', Validators.required],
-            role:['', Validators.required],
-            page_roles:['', Validators.required]
+            status: [''],
+            first_name: [''],
+            last_name: [''],
+            email: [''],
+            password: [''],
+            role:[''],
+            page_roles:['']
         });
 
         this._crmUserService.user$
@@ -244,13 +247,12 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
     proceedPopup(): void {
         this._crmUserService.updateQRCode().subscribe(() => {
-            this.successMessage = 'Update Successfully!';
-            this.isSuccess = true;
-            this._changeDetectorRef.markForCheck();
         },
             (response) => {
                 if (response.status === 200) {
                     // Successful response
+                    this.successMessage = 'Update Successfully!';
+                    this.isSuccess = true;
                     this._changeDetectorRef.markForCheck();
                 } else {
                     // Error response
@@ -296,17 +298,16 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
         // Update the contact on the server
         this._crmUserService.updatePermission(user.id, this.updatedPagePermission).subscribe(() => {
-            this.successMessage = 'Update Successfully!';
-            this.toogleUpdateUserDetailMode(true);
-            this._changeDetectorRef.markForCheck();
         },
             (response) => {
                 if (response.status === 200) {
                     // Successful response
+                    this.userSuccessMessage = 'Update Successfully!';
+                    this.toogleUpdateUserDetailMode(true);
                     this._changeDetectorRef.markForCheck();
                 } else {
                     // Error response
-                    this.errorMessage = response.error.message;
+                    this.userErrorMessage = response.error.message;
                     this._changeDetectorRef.markForCheck();
                 }
             }
@@ -315,5 +316,50 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
     onStrengthChanged(value): void {
         this.passwordStrength = value;
+    }
+
+    isViewFewSelected(): boolean {
+        return this.page_roles.filter((t: { can_view: boolean }) => t.can_view).length > 0 && !this.viewAllChecked;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    setViewAll(canView: boolean) {
+        this.viewAllChecked = canView;
+        this.page_roles.forEach((t: { can_view: boolean }) => t.can_view = canView);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    updateViewAllComplete() {
+        this.viewAllChecked = this.page_roles != null && this.page_roles.every((t: { can_view: boolean }) => t.can_view);
+    }
+
+    isEditFewSelected(): boolean {
+        return this.page_roles.filter((t: { can_edit: boolean }) => t.can_edit).length > 0 && !this.editAllChecked;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    setEditAll(canEdit: boolean) {
+        this.editAllChecked = canEdit;
+        this.page_roles.forEach((t: { can_edit: boolean }) => t.can_edit = canEdit);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    updateEditAllComplete() {
+        this.editAllChecked = this.page_roles != null && this.page_roles.every((t: { can_edit: boolean }) => t.can_edit);
+    }
+
+    isDeleteFewSelected(): boolean {
+        return this.page_roles.filter((t: { can_delete: boolean }) => t.can_delete).length > 0 && !this.deleteAllChecked;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    setDeleteAll(canDelete: boolean) {
+        this.deleteAllChecked = canDelete;
+        this.page_roles.forEach((t: { can_delete: boolean }) => t.can_delete = canDelete);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    updateDeleteAllComplete() {
+        this.deleteAllChecked = this.page_roles != null && this.page_roles.every((t: { can_delete: boolean }) => t.can_delete);
     }
 }

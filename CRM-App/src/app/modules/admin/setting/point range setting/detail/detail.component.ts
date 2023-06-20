@@ -18,49 +18,6 @@ import { UserService } from 'app/core/user/user.service';
            .custom-layout {
                background-color:#FFF;
             }
-
-            .pointrange_reset_popup {
-                position: fixed !important;
-                top: 50% !important;
-                left: 50% !important;
-                transform: translate(-50%, -50%) !important;
-                width: 30% !important;
-                height: 32% !important;
-                border-radius: 8px;
-            }
-
-            .pointrange_parent_popup {
-                display: grid;
-                align-items: center !important;
-                justify-content: center !important;
-                height: 27vh;
-            }
-
-            .pointrange_child_btn {
-                display: flex;
-                gap: 10px;
-            }
-
-            .pointrange_successMessage_scss {
-                position: unset;
-                text-align: center;
-                color: rgb(0, 128, 0);
-                padding: 3rem;
-                font-size: 16px;
-            }
-
-            .pointrange_errorMessage_scss {
-                position: unset;
-                text-align: center;
-                color: rgb(255, 49, 49);
-                padding: 3rem;
-                font-size: 16px;
-            }
-
-            .pointrange_delete_scss {
-                position: relative;
-                top: 2rem;
-            }
         `
     ]
 })
@@ -75,17 +32,12 @@ export class PointRangeDetailComponent implements OnInit, OnDestroy {
     PointRangeEditForm: FormGroup;
     editMode: boolean = false;
     canEdit: boolean = false;
-    canDelete: boolean = false;
-    DeleteMode: boolean = false;
     isSuccess: boolean = false;
-    selectedId: number | null = null;
-    successMessage: string | '' = '';
     errorMessage: string | '' = '';
-    popUpErrorMessage: string | '' = '';
+    successMessage: string | '' = '';
     pointranges$: Observable<PointRange>;
     startTypeValue: number;
     startDayTypeValue: number = 0;
-    isUpdateSuccess: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -123,7 +75,6 @@ export class PointRangeDetailComponent implements OnInit, OnDestroy {
             });
 
         this.canEdit = this._userService.getEditUserPermissionByNavId('pointrangesetting');
-        this.canDelete = this._userService.getDeleteUserPermissionByNavId('pointrangesetting');
     }
 
     ngOnDestroy(): void {
@@ -136,60 +87,11 @@ export class PointRangeDetailComponent implements OnInit, OnDestroy {
         return item.id || index;
     }
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    toogleDeleteMode(DeleteMode: boolean | null = null): void {
-        if (DeleteMode === null) {
-            this.DeleteMode = !this.DeleteMode;
-        }
-        else {
-            this.DeleteMode = DeleteMode;
-        }
-        this._changeDetectorRef.markForCheck();
-    }
-
-    cancelPopup(): void {
-        this.isSuccess = false;
-        this.toogleDeleteMode(false);
-        this.matDrawer.close();
-        this._changeDetectorRef.markForCheck();
-    }
-
-    proceedPopup(): void {
-        this._pointRangeService.getDeletePointRange(this.selectedId)
-        .subscribe(() => {
-            },
-            (response) => {
-                if (response.status === 200) {
-                    // Successful response
-                    this.successMessage = 'Deleted Successfully.';
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
-                    this.isSuccess = true;
-                    this._changeDetectorRef.markForCheck();
-                } else {
-                    // Error response
-                    this.popUpErrorMessage = response.error.message;
-                    this.isSuccess = true;
-                    this._changeDetectorRef.markForCheck();
-                }
-            }
-        );
-        this._changeDetectorRef.markForCheck();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    DeleteDrawer(id: number): void {
-        this.selectedId = id;
-        this.toogleDeleteMode(true);
-        this.matDrawer.open();
-        this._changeDetectorRef.markForCheck();
-    }
-
     updatePointRange(): void {
         const pointrange = this.PointRangeEditForm.getRawValue();
         this._pointRangeService.updatePointRange(pointrange.id, pointrange).subscribe(() => {
-            window.location.reload();
+            this.successMessage = 'Update Successfully.';
+            this._changeDetectorRef.markForCheck();
         },
             (response) => {
                 if (response.status === 200) {
