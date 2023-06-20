@@ -117,24 +117,12 @@ export class CRMUserService {
 
     updateQRCode(): Observable<any> {
         return this._httpClient.patch(`${this._apiurl}/users/resetqrcode`, {
-        }, {responseType: 'text'})
-        .pipe(
-            map(() => true),
-            catchError((error) => {
-                console.error(error);
-                return of(false);
-            }));
+        }, {observe: 'response'});
     }
 
     updatePermission(id: string, updatedPagePermission: any): Observable<any> {
         return this._httpClient.patch(`${this._apiurl}/users/updatepermission/${id}`, {
             'page_roles': updatedPagePermission
-        }, {responseType: 'text'})
-        .pipe(
-            map(() => true),
-            catchError((error) => {
-                console.error(error);
-                return of(false);
-            }));
+        }, {observe: 'response'});
     }
 }
