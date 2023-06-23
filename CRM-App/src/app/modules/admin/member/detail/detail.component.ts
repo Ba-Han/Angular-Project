@@ -151,19 +151,6 @@ import { MemberService } from 'app/modules/admin/member/member.service';
                 left: 1rem;
             }
 
-            .generate-btn-memberdetial {
-                display: inline-flex !important;
-                align-items: center;
-                justify-content: center;
-                height: 40px;
-                line-height: 1 !important;
-                padding: 0 20px !important;
-                border-radius: 9999px !important;
-                border: 1px solid #e2e8f0;
-                background-color: #8e24aa;
-                color: #FFFFFF !important;
-            }
-
             .success_text_danger {
                 position: relative;
                 color: green;
@@ -173,6 +160,11 @@ import { MemberService } from 'app/modules/admin/member/member.service';
             .see_all_member_log {
                 justify-content: end;
                 align-items: end;
+            }
+
+            .icon_image__size {
+                min-width: 3rem !Important;
+                min-height: 3rem !important;
             }
         `
     ],
