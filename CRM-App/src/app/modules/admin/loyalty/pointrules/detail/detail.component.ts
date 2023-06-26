@@ -187,6 +187,10 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     isPointRuleProductSuccess: boolean = false;
     selectedPointRuleProductIndex: number | null = null;
     pointRuleProductSccessMessage: string | '' = '';
+
+    offerApplyValue: number;
+    offerTypeValue: number;
+    offerApplyMonthValue: number;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -232,7 +236,12 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             new_member_point_amount: [''],
             priority: [''],
             stop_further: [''],
-            point_rule_products: new FormControl(this.selectedPointRuleProduct)
+            point_rule_products: new FormControl(this.selectedPointRuleProduct),
+            offer_apply: [''],
+            offer_type: [''],
+            no_of_orders: [''],
+            offer_apply_month: [''],
+            offer_apply_date: ['']
         });
 
         this._pointRuleService.pointRule$
@@ -246,6 +255,9 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             this.priorityValue = pointrule.priority;
             this.showNewMemberPointAmount = pointrule.new_member_to_earn_points;
             this.stopFurtherValue = pointrule.stop_further;
+            this.offerApplyValue = pointrule.offer_apply;
+            this.offerTypeValue = pointrule.offer_type;
+            this.offerApplyMonthValue = pointrule.offer_apply_month;
             this.pointRule.point_basketName = pointrule.point_basket?.name;
             this.selectedPointRuleProduct = pointrule.point_rule_products;
             for( let i=0; i < this.selectedPointRuleProduct.length; i++)

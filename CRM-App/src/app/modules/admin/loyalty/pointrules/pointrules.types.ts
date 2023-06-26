@@ -31,6 +31,11 @@ export interface PointRule {
     "stop_further": boolean;
     "point_rule_products": [];
     "point_rule_products_Fullname": string;
+    "offer_apply": number;
+    "offer_type": number;
+    "no_of_orders": number;
+    "offer_apply_month": number;
+    "offer_apply_date": string;
 }
 
 export interface PointBasket {
