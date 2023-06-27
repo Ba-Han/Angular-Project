@@ -1150,14 +1150,11 @@
                                                 class="hidden sm:flex icon-size-5"
                                                 [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
                                             <input matInput
-                                                [min]="minDate"
-                                                [matDatepicker]="offerApplyDate"
+                                                type="date"
+                                                [min]="currentDate"
+                                                [(ngModel)]="selectedDate"
                                                 [formControlName]="'offer_apply_date'"
                                                 [placeholder]="'Special Date'">
-                                            <mat-datepicker-toggle matSuffix
-                                                                [for]="offerApplyDate">
-                                            </mat-datepicker-toggle>
-                                        <mat-datepicker #offerApplyDate></mat-datepicker>
                                     </mat-form-field>
                                 </div>
     

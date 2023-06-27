@@ -225,6 +225,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     isSuccess: boolean = false;
     selectedPointRuleProductIndex: number | null = null;
     pointRuleProductSccessMessage: string | '' = '';
+    currentDate: string;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -239,6 +240,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     ) {
         const today = new Date();
         this.minDate = today.toISOString().slice(0, 16);
+        this.currentDate = today.toISOString().split('T')[0];
     }
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks

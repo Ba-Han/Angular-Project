@@ -191,6 +191,9 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     offerApplyValue: number;
     offerTypeValue: number;
     offerApplyMonthValue: number;
+    specialDate: string;
+    selectedDate: string;
+    currentDate: string;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -205,6 +208,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     ) {
         const today = new Date();
         this.minDate = today.toISOString().slice(0, 16);
+        this.currentDate = today.toISOString().split('T')[0];
     }
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -257,6 +261,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             this.stopFurtherValue = pointrule.stop_further;
             this.offerApplyValue = pointrule.offer_apply;
             this.offerTypeValue = pointrule.offer_type;
+            this.specialDate = pointrule.offer_apply_date;
+            this.selectedDate = this.specialDate.split('T')[0];
             this.offerApplyMonthValue = pointrule.offer_apply_month;
             this.pointRule.point_basketName = pointrule.point_basket?.name;
             this.selectedPointRuleProduct = pointrule.point_rule_products;
