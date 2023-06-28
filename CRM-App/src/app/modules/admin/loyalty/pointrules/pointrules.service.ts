@@ -211,10 +211,6 @@ export class PointRuleService {
     }
 
     createPointRule(pointrule: PointRule): Observable<PointRule> {
-        /**
-         * Fix date issue in derectus.
-         * Need to add time greater than 12.00 PM.
-         */
         const startDateValue = !pointrule.start_date ? null : pointrule.start_date;
         const endDateValue = !pointrule.end_date ? null : pointrule.end_date;
         const dollarValue = !pointrule.dollar_value ? 0 : pointrule.dollar_value;
@@ -229,6 +225,11 @@ export class PointRuleService {
         const priority = !pointrule.priority ? 0 : pointrule.priority;
         const stopFurther = !pointrule.stop_further ? '' : pointrule.stop_further;
         const stopFurtherValue = Boolean(stopFurther);
+        const offerApply = !pointrule.offer_apply ? 0 : pointrule.offer_apply;
+        const offerType = !pointrule.offer_type ? 0 : pointrule.offer_type;
+        const offerApplyMonth = !pointrule.offer_apply_month ? 0 : pointrule.offer_apply_month;
+        const offerApplyDate = !pointrule.offer_apply_date ? null : pointrule.offer_apply_date;
+        const numberOfOrders = !pointrule.no_of_orders ? 0 : pointrule.no_of_orders;
 
         return this.pointRules$.pipe(
             take(1),
@@ -256,7 +257,12 @@ export class PointRuleService {
                 "new_member_point_amount": newMemberPointAamount,
                 "priority": priority,
                 "stop_further": stopFurtherValue,
-                "point_rule_products": pointrule.point_rule_products
+                "point_rule_products": pointrule.point_rule_products,
+                "offer_apply": offerApply,
+                "offer_type": offerType,
+                "no_of_orders": numberOfOrders,
+                "offer_apply_month": offerApplyMonth,
+                "offer_apply_date": offerApplyDate
             }).pipe(
                 map((newPointRule) => {
                     this._pointRules.next([newPointRule.data, ...pointrules]);
@@ -267,10 +273,6 @@ export class PointRuleService {
     }
 
     updatePointRule(id: number, pointrule: PointRule): Observable<PointRule> {
-        /**
-         * Fix date issue in derectus.
-         * Need to add time greater than 12.00 PM.
-         */
         const startDateValue = !pointrule.start_date ? null : pointrule.start_date;
         const endDateValue = !pointrule.end_date ? null : pointrule.end_date;
         const dollarValue = !pointrule.dollar_value ? 0 : pointrule.dollar_value;
@@ -285,6 +287,11 @@ export class PointRuleService {
         const priority = !pointrule.priority ? 0 : pointrule.priority;
         const stopFurther = !pointrule.stop_further ? '' : pointrule.stop_further;
         const stopFurtherValue = Boolean(stopFurther);
+        const offerApply = !pointrule.offer_apply ? 0 : pointrule.offer_apply;
+        const offerType = !pointrule.offer_type ? 0 : pointrule.offer_type;
+        const offerApplyMonth = !pointrule.offer_apply_month ? 0 : pointrule.offer_apply_month;
+        const offerApplyDate = !pointrule.offer_apply_date ? null : pointrule.offer_apply_date;
+        const numberOfOrders = !pointrule.no_of_orders ? 0 : pointrule.no_of_orders;
 
         return this._httpClient.patch<PointRule>(`${this._apiurl}/items/point_rule/${id}`,
             {
@@ -312,7 +319,12 @@ export class PointRuleService {
                 "new_member_point_amount": newMemberPointAamount,
                 "priority": priority,
                 "stop_further": stopFurtherValue,
-                "point_rule_products": pointrule.point_rule_products
+                "point_rule_products": pointrule.point_rule_products,
+                "offer_apply": offerApply,
+                "offer_type": offerType,
+                "no_of_orders": numberOfOrders,
+                "offer_apply_month": offerApplyMonth,
+                "offer_apply_date": offerApplyDate
             }
         ).pipe(
             map(createPointRule => createPointRule)

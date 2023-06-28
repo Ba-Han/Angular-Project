@@ -225,6 +225,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     isSuccess: boolean = false;
     selectedPointRuleProductIndex: number | null = null;
     pointRuleProductSccessMessage: string | '' = '';
+    currentDate: string;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -239,6 +240,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     ) {
         const today = new Date();
         this.minDate = today.toISOString().slice(0, 16);
+        this.currentDate = today.toISOString().split('T')[0];
     }
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -272,7 +274,12 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             new_member_point_amount: [''],
             priority: [''],
             stop_further: [''],
-            point_rule_products: new FormControl(this.selectedPointRuleProduct)
+            point_rule_products: new FormControl(this.selectedPointRuleProduct),
+            offer_apply: [''],
+            offer_type: [''],
+            no_of_orders: [''],
+            offer_apply_month: [''],
+            offer_apply_date: ['']
         });
 
         this.PointRuleProductForm = this._formBuilder.group({

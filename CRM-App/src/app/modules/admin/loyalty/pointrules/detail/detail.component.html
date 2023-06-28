@@ -422,7 +422,7 @@
                             <ng-container *ngIf="pointRule.type === 2">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Type: </div>
-                                    <div class="ml-6 leading-6">Birthday Event</div>
+                                    <div class="ml-6 leading-6">Birthday</div>
                                 </div>
                             </ng-container>
 
@@ -430,6 +430,13 @@
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Type: </div>
                                     <div class="ml-6 leading-6">Referral Rule</div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="pointRule.type === 4">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Type: </div>
+                                    <div class="ml-6 leading-6">Monthly Event</div>
                                 </div>
                             </ng-container>
 
@@ -470,9 +477,16 @@
                                         <div class="ml-6 leading-6">{{pointRule.min_expense}}</div>
                                     </div>
                                 </ng-container>
+
+                                <ng-container *ngIf="pointRule.no_of_orders">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Number of Orders: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.no_of_orders}}</div>
+                                    </div>
+                                </ng-container>
                             </ng-container>
 
-                            <ng-container *ngIf="pointRule.type === 0 || pointRule.type === 1 || pointRule.type === 2">
+                            <ng-container *ngIf="pointRule.type === 0 || pointRule.type === 1">
                                 <ng-container *ngIf="pointRule.dollar_value">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Dollar Value: </div>
@@ -514,7 +528,228 @@
                                         <div class="ml-6 leading-6">High</div>
                                     </div>
                                 </ng-container>
-                            </ng-container>                      
+                            </ng-container>
+                            
+                            <ng-container *ngIf="pointRule.type === 2">
+                                <ng-container *ngIf="pointRule.offer_apply === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Offer Apply: </div>
+                                        <div class="ml-6 leading-6">Across Month</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_apply === 2">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Offer Apply: </div>
+                                        <div class="ml-6 leading-6">Birthday Day</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_type === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Offer Type: </div>
+                                        <div class="ml-6 leading-6">Once</div>
+                                    </div>
+
+                                    <ng-container *ngIf="pointRule.point_amount">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Point Aamount: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.point_amount}}</div>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_type === 2">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Offer Type: </div>
+                                        <div class="ml-6 leading-6">Order Base</div>
+                                    </div>
+
+                                    <ng-container *ngIf="pointRule.dollar_value">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Dollar Value: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.dollar_value}}</div>
+                                        </div>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="pointRule.point_value">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Point Value: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.point_value}}</div>
+                                        </div>
+                                    </ng-container>
+    
+                                    <ng-container *ngIf="pointRule.min_expense">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Minimum Order Expense: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.min_expense}}</div>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="pointRule.no_of_orders">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Number of Orders: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.no_of_orders}}</div>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+
+                            <ng-container *ngIf="pointRule.type === 4">
+                                <ng-container *ngIf="pointRule.offer_apply === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Offer Apply: </div>
+                                        <div class="ml-6 leading-6">Across Month</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_apply === 3">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Offer Apply: </div>
+                                        <div class="ml-6 leading-6">Special Date</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_apply_month === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Month: </div>
+                                        <div class="ml-6 leading-6">January</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_apply_month === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Month: </div>
+                                        <div class="ml-6 leading-6">January</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_apply_month === 3">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Month: </div>
+                                        <div class="ml-6 leading-6">March</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_apply_month === 4">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Month: </div>
+                                        <div class="ml-6 leading-6">April</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_apply_month === 5">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Month: </div>
+                                        <div class="ml-6 leading-6">May</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_apply_month === 6">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Month: </div>
+                                        <div class="ml-6 leading-6">June</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_apply_month === 7">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Month: </div>
+                                        <div class="ml-6 leading-6">July</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_apply_month === 8">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Month: </div>
+                                        <div class="ml-6 leading-6">August</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_apply_month === 9">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Month: </div>
+                                        <div class="ml-6 leading-6">September</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_apply_month === 10">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Month: </div>
+                                        <div class="ml-6 leading-6">October</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_apply_month === 11">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Month: </div>
+                                        <div class="ml-6 leading-6">November</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_apply_month === 12">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Month: </div>
+                                        <div class="ml-6 leading-6">December</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_apply_date">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Special Date: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.offer_apply_date | date:'MMM dd, y'}}</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_type === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Offer Type: </div>
+                                        <div class="ml-6 leading-6">Once</div>
+                                    </div>
+
+                                    <ng-container *ngIf="pointRule.point_amount">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Point Aamount: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.point_amount}}</div>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.offer_type === 2">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Offer Type: </div>
+                                        <div class="ml-6 leading-6">Order Base</div>
+                                    </div>
+
+                                    <ng-container *ngIf="pointRule.dollar_value">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Dollar Value: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.dollar_value}}</div>
+                                        </div>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="pointRule.point_value">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Point Value: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.point_value}}</div>
+                                        </div>
+                                    </ng-container>
+    
+                                    <ng-container *ngIf="pointRule.min_expense">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Minimum Order Expense: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.min_expense}}</div>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="pointRule.no_of_orders">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Number of Orders: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.no_of_orders}}</div>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
 
                             <ng-container *ngIf="pointRule.store_selection_type === 0">
                                 <div class="flex sm:items-center">
@@ -659,13 +894,14 @@
                                     <mat-select [formControlName]="'type'" [(ngModel)]="typeRuleValue">
                                         <mat-option [value]="0">Basic Rule</mat-option>
                                         <mat-option [value]="1">Event Rule</mat-option>
-                                        <mat-option [value]="2">Birthday Event</mat-option>
+                                        <mat-option [value]="2">Birthday</mat-option>
                                         <mat-option [value]="3">Referral Rule</mat-option>
+                                        <mat-option [value]="4">Monthly Event</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
 
-                            <ng-container *ngIf="typeRuleValue === 0 || typeRuleValue === 1 || typeRuleValue === 2">
+                            <ng-container *ngIf="typeRuleValue === 0 || typeRuleValue === 1">
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
                                         <mat-label>Dollar Value</mat-label>
@@ -719,6 +955,92 @@
                                         Stop Further
                                     </label>
                                 </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="typeRuleValue === 2">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Offer Apply</mat-label>
+                                        <mat-select [formControlName]="'offer_apply'" [(ngModel)]="offerApplyValue">
+                                            <mat-option [value]="1">Across Month</mat-option>
+                                            <mat-option [value]="2">Birthday Day</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+    
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Offer Type</mat-label>
+                                        <mat-select [formControlName]="'offer_type'" [(ngModel)]="offerTypeValue">
+                                            <mat-option [value]="1">Once</mat-option>
+                                            <mat-option [value]="2">Order Base</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <ng-container *ngIf="offerTypeValue === 1">
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>Point Amount</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'point_amount'"
+                                                [placeholder]="'Point Amount'">
+                                        </mat-form-field>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="offerTypeValue === 2">
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
+                                            <mat-label>Dollar Value</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'dollar_value'"
+                                                [placeholder]="'Dollar Value'">
+                                        </mat-form-field>
+        
+                                        <mat-label>To</mat-label>
+        
+                                        <mat-form-field class="fuse-mat-no-subscript w-1/3 ml-4">
+                                            <mat-label>Point Value</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'point_value'"
+                                                [placeholder]="'Point Value'">
+                                        </mat-form-field>
+                                    </div>
+                                    
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>Minimum Order Expense</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'min_expense'"
+                                                [placeholder]="'Minimum Order Expense'">
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>Number of Orders</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'no_of_orders'"
+                                                [placeholder]="'Number of Orders'">
+                                        </mat-form-field>
+                                    </div>
+                                </ng-container>
                             </ng-container>
 
                             <ng-container *ngIf="typeRuleValue === 3">
@@ -776,6 +1098,139 @@
                                             [placeholder]="'Minimum Order Expense'">
                                     </mat-form-field>
                                 </div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Number of Orders</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'no_of_orders'"
+                                            [placeholder]="'Number of Orders'">
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="typeRuleValue === 4">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Offer Apply</mat-label>
+                                        <mat-select [formControlName]="'offer_apply'" [(ngModel)]="offerApplyValue">
+                                            <mat-option [value]="1">Across Month</mat-option>
+                                            <mat-option [value]="3">Special Date</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+    
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Month</mat-label>
+                                        <mat-select [formControlName]="'offer_apply_month'" [(ngModel)]="offerApplyMonthValue">
+                                            <mat-option [value]="1">January</mat-option>
+                                            <mat-option [value]="2">February</mat-option>
+                                            <mat-option [value]="3">March</mat-option>
+                                            <mat-option [value]="4">April</mat-option>
+                                            <mat-option [value]="5">May</mat-option>
+                                            <mat-option [value]="6">June</mat-option>
+                                            <mat-option [value]="7">July</mat-option>
+                                            <mat-option [value]="8">August</mat-option>
+                                            <mat-option [value]="9">September</mat-option>
+                                            <mat-option [value]="10">October</mat-option>
+                                            <mat-option [value]="11">November</mat-option>
+                                            <mat-option [value]="12">December</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+    
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Speical Date</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                            <input matInput
+                                                type="date"
+                                                [min]="currentDate"
+                                                [(ngModel)]="selectedDate"
+                                                [formControlName]="'offer_apply_date'"
+                                                [placeholder]="'Special Date'">
+                                    </mat-form-field>
+                                </div>
+    
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Offer Type</mat-label>
+                                        <mat-select [formControlName]="'offer_type'" [(ngModel)]="offerTypeValue">
+                                            <mat-option [value]="1">Once</mat-option>
+                                            <mat-option [value]="2">Order Base</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+    
+                                <ng-container *ngIf="offerTypeValue === 1">
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>Point Amount</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'point_amount'"
+                                                [placeholder]="'Point Amount'">
+                                        </mat-form-field>
+                                    </div>
+                                </ng-container>
+    
+                                <ng-container *ngIf="offerTypeValue === 2">
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
+                                            <mat-label>Dollar Value</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'dollar_value'"
+                                                [placeholder]="'Dollar Value'">
+                                        </mat-form-field>
+        
+                                        <mat-label>To</mat-label>
+        
+                                        <mat-form-field class="fuse-mat-no-subscript w-1/3 ml-4">
+                                            <mat-label>Point Value</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'point_value'"
+                                                [placeholder]="'Point Value'">
+                                        </mat-form-field>
+                                    </div>
+                                    
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>Minimum Order Expense</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'min_expense'"
+                                                [placeholder]="'Minimum Order Expense'">
+                                        </mat-form-field>
+                                    </div>
+    
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>Number of Orders</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'no_of_orders'"
+                                                [placeholder]="'Number of Orders'">
+                                        </mat-form-field>
+                                    </div>
+                                </ng-container>
                             </ng-container>
 
                             <div class="mt-8">

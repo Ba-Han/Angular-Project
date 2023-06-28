@@ -133,6 +133,10 @@ import { UserService } from 'app/core/user/user.service';
                 left: 25rem;
             }
 
+            .text_1xl {
+                font-size: 1rem !important;
+            }
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -494,7 +498,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
                 .pipe(takeUntil(this._unsubscribeAll))
                 .subscribe((tierupgrade: any) => {
                     const edittier = tierupgrade.data;
-                    edittier.upgrade_tier = edittier.upgrade_tier.id;
+                    edittier.upgrade_tier = edittier.upgrade_tier_id;
                     this.TierUpgradeForm.patchValue(edittier);
                     this.isLoading = false;
                     this.toogleTierUpgradeFormMode(true);
