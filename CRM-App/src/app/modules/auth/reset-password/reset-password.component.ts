@@ -111,7 +111,7 @@ export class AuthResetPasswordComponent implements OnInit
         }
     }
 
-    onStrengthChanged(value):void {
+    onStrengthChanged(value): void {
         this.passwordStrength = value;
     }
 }

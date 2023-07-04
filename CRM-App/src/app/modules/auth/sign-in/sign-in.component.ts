@@ -76,7 +76,6 @@ export class AuthSignInComponent implements OnInit
 
         // Disable the form
         this.signInForm.disable();
-        
         if (!this.isOptNeed) {
             delete this.signInForm.value.otp;
         }
@@ -91,17 +90,16 @@ export class AuthSignInComponent implements OnInit
                     // to the correct page after a successful sign in. This way, that url can be set via
                     // routing file and we don't have to touch here.
                     const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
-                    
                     if (this._tfaEnableInApp /*&& !this.isOptNeed*/) {
-                        let password: string = this.signInForm.value.password;
-                        let token: string = ((response.data && response.data.access_token) ? response.data.access_token : "");
+                        const password: string = this.signInForm.value.password;
+                        const token: string = ((response.data && response.data.access_token) ? response.data.access_token : "");
                         this.generateTwoFactorSecret(token,password);
                     }
                     this.getUser(redirectURL);
 
                 },
                 (response) => {
-                    let errorCode:string =  ((response.error.errors && response.error.errors[0].extensions) ? response.error.errors[0].extensions.code : "");
+                    const errorCode: string =  ((response.error.errors && response.error.errors[0].extensions) ? response.error.errors[0].extensions.code : "");
                     // Re-enable the form
                     this.signInForm.enable();
 
@@ -134,20 +132,20 @@ export class AuthSignInComponent implements OnInit
     }
 
     /**
-     * 
-     * @param token 
-     * @param password 
+     *
+     * @param token
+     * @param password
      */
      generateTwoFactorSecret(token: string, password: string): void {
         this._authService.generateTwoFactorSecret(token, password).subscribe((response: any) => {
             const redirectURL =  '/sign-in';
             if (response.data && response.data.secret) {
+                // eslint-disable-next-line @typescript-eslint/no-shadow
                 const redirectURL =  '/tfa';
                 this._router.navigateByUrl(redirectURL);
             } else {
                 this._router.navigateByUrl(redirectURL);
             }
-           
         },
         (response) => {
             // Set the alert
@@ -156,19 +154,19 @@ export class AuthSignInComponent implements OnInit
                 message: 'Somthing went wrong!'
             };
             return response;
-        }); 
+        });
     }
 
         /**
-     * 
-     * @param token 
-     * @param password 
+     *
+     * @param token
+     * @param password
      */
      getUser(redirectURL): void {
         this._userService.getUser().subscribe((response: any) => {
             // Navigate to the redirect url
             this._router.navigateByUrl(redirectURL);
-            if (this._authService.otpAuthUrl != "") {
+            if (this._authService.otpAuthUrl !== '') {
                 this.updateOptAuthUrl(this._authService.otpAuthUrl);
             }
             return response;
@@ -180,13 +178,11 @@ export class AuthSignInComponent implements OnInit
                 message: 'Somthing went wrong!'
             };
             return response;
-        }); 
+        });
     }
 
     updateOptAuthUrl(otpUrl: string): void {
-        this._userService.updateOptAuthUrl(otpUrl).subscribe((response: any) => {
-            return response;
-        },
+        this._userService.updateOptAuthUrl(otpUrl).subscribe((response: any) => response,
         (response) => {
             // Set the alert
             this.alert = {
@@ -194,10 +190,10 @@ export class AuthSignInComponent implements OnInit
                 message: 'Somthing went wrong!'
             };
             return response;
-        }); 
+        });
     }
 
-    sendQRCodeLink():void {
+    sendQRCodeLink(): void {
         this.showAlert = false;
         this._authService.sendQRCodeLink(this.signInForm.value.email).subscribe((response: any) => {
             this.showAlert = true;

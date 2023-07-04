@@ -262,7 +262,9 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             this.offerApplyValue = pointrule.offer_apply;
             this.offerTypeValue = pointrule.offer_type;
             this.specialDate = pointrule.offer_apply_date;
-            this.selectedDate = this.specialDate.split('T')[0];
+            if (this.specialDate !== null) {
+                this.selectedDate = this.specialDate.split('T')[0];
+            }
             this.offerApplyMonthValue = pointrule.offer_apply_month;
             this.pointRule.point_basketName = pointrule.point_basket?.name;
             this.selectedPointRuleProduct = pointrule.point_rule_products;
