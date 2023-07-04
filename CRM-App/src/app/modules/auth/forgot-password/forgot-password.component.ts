@@ -89,7 +89,7 @@ export class AuthForgotPasswordComponent implements OnInit
                     // Set the alert
                     this.alert = {
                         type   : 'success',
-                        message: "Password resend link had sent to your email! You'll recive an email if you had registered in our System"
+                        message: 'Password resend link had sent to your email! You\'ll recive an email if you had registered in our System'
                     };
                 },
                 (response) => {

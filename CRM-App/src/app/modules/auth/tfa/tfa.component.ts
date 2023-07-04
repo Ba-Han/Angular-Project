@@ -21,6 +21,7 @@ export class AuthTfaComponent implements OnInit {
     };
     tfaForm: FormGroup;
     showAlert: boolean = false;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     public otpauth_url: string = null;
     /**
      * Constructor
