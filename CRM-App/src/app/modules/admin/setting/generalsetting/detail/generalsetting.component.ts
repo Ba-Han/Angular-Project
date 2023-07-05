@@ -75,6 +75,10 @@ import { UserService } from 'app/core/user/user.service';
                 border-radius: 10px;
                 color: white;
             }
+
+            .text_1xl {
+                font-size: 1rem !important;
+            }
         `
     ],
     encapsulation: ViewEncapsulation.None,

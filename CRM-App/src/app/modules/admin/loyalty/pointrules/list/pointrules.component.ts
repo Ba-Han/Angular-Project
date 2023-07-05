@@ -165,6 +165,10 @@ import { UserService } from 'app/core/user/user.service';
                 top: 2rem;
             }
 
+            .text_1xl {
+                font-size: 1rem !important;
+            }
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
