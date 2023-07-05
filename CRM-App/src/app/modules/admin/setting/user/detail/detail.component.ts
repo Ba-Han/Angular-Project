@@ -87,7 +87,12 @@ import { UserService } from 'app/core/user/user.service';
             tr,td {
                 border: 1px solid rgba(203,213,225,var(--tw-border-opacity))!important;
                 height: 2rem;
-              }
+            }
+
+            .text_1xl {
+                font-size: 1rem !important;
+                font-weight: 700;
+            }
 
         `
     ]

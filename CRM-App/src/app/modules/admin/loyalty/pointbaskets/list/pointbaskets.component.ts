@@ -96,6 +96,10 @@ import { UserService } from 'app/core/user/user.service';
                 padding: 12px !important;
                 min-width: 5px !important;
             }
+
+            .text_1xl {
+                font-size: 1rem !important;
+            }
         `
     ],
     encapsulation: ViewEncapsulation.None,

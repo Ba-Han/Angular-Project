@@ -18,6 +18,10 @@ import { UserService } from 'app/core/user/user.service';
            .custom-layout {
                background-color:#FFF;
             }
+
+            .text_1xl {
+                font-size: 1rem !important;
+            }
         `
     ]
 })

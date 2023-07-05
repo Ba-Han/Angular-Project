@@ -31,7 +31,7 @@
                         </div>
     
                         <div class="mt-8">
-                            <div class="mt-3 text-2xl w-full font-bold truncate">Earning</div>
+                            <div class="mt-3 text_1xl w-full font-bold truncate">Earning</div>
                         </div>
     
     
@@ -48,7 +48,7 @@
     
 
                         <div class="mt-8">
-                            <div class="mt-3 text-2xl w-full font-bold truncate">Member Group</div>
+                            <div class="mt-3 text_1xl w-full font-bold truncate">Member Group</div>
                             <mat-form-field appearance="fill" class="fuse-mat-no-subscript w-full">
                                    <mat-select [formControl]="memberform.controls['memberGroupCtrl']" multiple>
                                        <mat-option *ngFor="let memberGroup of memberGroups" [value]="memberGroup">
@@ -59,7 +59,7 @@
                         </div>
 
                         <div class="mt-8">
-                            <div class="mt-3 text-2xl w-full font-bold truncate">User Group</div>
+                            <div class="mt-3 text_1xl w-full font-bold truncate">User Group</div>
                             <mat-form-field appearance="fill" class="fuse-mat-no-subscript w-full">
                                 <mat-select [formControl]="userform.controls['userGroupCtrl']" multiple>
                                     <mat-option *ngFor="let userGroup of userGroups" [value]="userGroup">
@@ -70,7 +70,7 @@
                         </div>
 
                         <div class="mt-8">
-                            <div class="mt-3 text-2xl w-full font-bold truncate">Default Member Tier</div>
+                            <div class="mt-3 text_1xl w-full font-bold truncate">Default Member Tier</div>
                             <mat-form-field class="fuse-mat-no-subscript w-full">
                                 <mat-select [formControlName]="'default_member_tier'">
                                     <ng-container *ngFor="let tier of memberTiers">

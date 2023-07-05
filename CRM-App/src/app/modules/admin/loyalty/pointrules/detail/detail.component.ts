@@ -110,6 +110,10 @@ import { UserService } from 'app/core/user/user.service';
                 left: 25rem;
             }
 
+            .text_1xl {
+                font-size: 1rem !important;
+            }
+
         `
     ],
     encapsulation: ViewEncapsulation.None,
