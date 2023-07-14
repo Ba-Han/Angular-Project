@@ -33,6 +33,10 @@ import { UserService } from 'app/core/user/user.service';
                     grid-template-columns: 150px 150px auto 120px 120px 120px;
                 }
             }
+
+            .hover-download_template {
+                text-decoration: underline;
+            }
         `
     ],
     encapsulation: ViewEncapsulation.None,
@@ -72,6 +76,7 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
     proccedErrorMessage: string | '' = '';
     isUploadDisabled: boolean = true;
     fileNotAcceptedErrorMessage: string | '' = '';
+    isHovered: boolean;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
