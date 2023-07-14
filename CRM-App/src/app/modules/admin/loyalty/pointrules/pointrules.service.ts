@@ -218,6 +218,7 @@ export class PointRuleService {
         const pointAmount = !pointrule.point_amount ? 0 : pointrule.point_amount;
         const minimumExpense = !pointrule.min_expense ? 0 : pointrule.min_expense;
         const pointRewardedAt = !pointrule.point_rewarded_at ? 0 : pointrule.point_rewarded_at;
+        const storeSelectionType = !pointrule.store_selection_type ? 0 : pointrule.store_selection_type;
         const storeCodes = !pointrule.store_codes ? '' : pointrule.store_codes.toString();
         const newMemberToEarnPoints = !pointrule.new_member_to_earn_points ? '' : pointrule.new_member_to_earn_points;
         const newMemberToEarnPointsValue = Boolean(newMemberToEarnPoints);
@@ -251,7 +252,7 @@ export class PointRuleService {
                 "basket_id": pointrule.basket_id,
                 "point_basket": pointrule.point_basket,
                 "validity_type": pointrule.validity_type,
-                "store_selection_type": pointrule.store_selection_type,
+                "store_selection_type": storeSelectionType,
                 "store_codes": storeCodes,
                 "new_member_to_earn_points": newMemberToEarnPointsValue,
                 "new_member_point_amount": newMemberPointAamount,
@@ -280,6 +281,7 @@ export class PointRuleService {
         const pointAmount = !pointrule.point_amount ? 0 : pointrule.point_amount;
         const minimumExpense = !pointrule.min_expense ? 0 : pointrule.min_expense;
         const pointRewardedAt = !pointrule.point_rewarded_at ? 0 : pointrule.point_rewarded_at;
+        const storeSelectionType = !pointrule.store_selection_type ? 0 : pointrule.store_selection_type;
         const storeCodes = !pointrule.store_codes ? '' : pointrule.store_codes.toString();
         const newMemberToEarnPoints = !pointrule.new_member_to_earn_points ? '' : pointrule.new_member_to_earn_points;
         const newMemberToEarnPointsValue = Boolean(newMemberToEarnPoints);
@@ -313,7 +315,7 @@ export class PointRuleService {
                 "basket_id": pointrule.basket_id,
                 "point_basket": pointrule.point_basket,
                 "validity_type": pointrule.validity_type,
-                "store_selection_type": pointrule.store_selection_type,
+                "store_selection_type": storeSelectionType,
                 "store_codes": storeCodes,
                 "new_member_to_earn_points": newMemberToEarnPointsValue,
                 "new_member_point_amount": newMemberPointAamount,
