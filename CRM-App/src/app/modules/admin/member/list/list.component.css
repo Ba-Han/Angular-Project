@@ -34,7 +34,7 @@
 .advancedSearch-gird {
     grid-template-columns: 150px 150px 150px 100px 100px auto;
 }
-.custom-paging {
+.custom-paging-memberview {
     position: fixed !important;
     margin-bottom: 55px;
     padding-left: 280px;

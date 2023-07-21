@@ -20,18 +20,18 @@ import { UserService } from 'app/core/user/user.service';
     styles         : [
         `
             .memberpoint-grid {
-                grid-template-columns: 150px 150px 100px 100px 150px 180px;
+                grid-template-columns: 180px 130px 130px 130px 130px;
 
                 @screen sm {
-                    grid-template-columns: 150px 150px 100px 100px 150px 180px;
+                    grid-template-columns: 180px 130px 130px 130px 130px;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 150px 100px 100px 150px 180px;
+                    grid-template-columns: 180px 130px 130px 130px 130px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 150px 100px 100px 150px 180px;
+                    grid-template-columns: 180px 130px 130px 130px 130px;
                 }
             }
             .membercustom-paging {
