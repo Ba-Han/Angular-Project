@@ -1,5 +1,5 @@
 <mat-drawer-container class="flex flex-col w-full">
-    <mat-drawer class="reset_QR_popup dark:bg-gray-900"
+    <mat-drawer class="user_reset_popup dark:bg-gray-900"
                 [mode]="'over'"
                 [opened]="false"
                 [disableClose]="true"
@@ -19,21 +19,21 @@
                     </div>
                 </div>
                 <div class="mt-8">
-                    <div *ngIf="successMessage" class="update_scss">
+                    <div *ngIf="successMessage" class="user_successMessage_scss">
                         {{ successMessage }}
                     </div>
-                    <div *ngIf="errorMessage" class="errorMessage_scss">
+                    <div *ngIf="errorMessage" class="user_errorMessage_scss">
                         {{ errorMessage }}
                     </div>
                 </div>
             </ng-container>
             <ng-container *ngIf="!isSuccess">
-                <div class="parent_popup">
+                <div class="user_parent_popup">
                     <div>
-                        <div> Are you sure want to reset your QR code? </div>
+                        <div class="user_delete_scss"> Are you sure want to reset your QR code? </div>
                     </div>    
-                    <div class="child_btn">
-                        <button class="ml-2"
+                    <div class="user_child_btn">
+                        <button
                                 mat-flat-button
                                 [color]="'primary'"
                                 [matTooltip]="'Cancel'"
@@ -42,7 +42,7 @@
                             Cancel
                         </button>
     
-                        <button class="ml-2"
+                        <button
                                 mat-flat-button
                                 [color]="'primary'"
                                 [matTooltip]="'Proceed'"
@@ -69,10 +69,10 @@
                     </div>
                 </div>
                 <div class="mt-8">
-                    <div *ngIf="userSuccessMessage" class="update_scss">
+                    <div *ngIf="userSuccessMessage" class="user_successMessage_scss">
                         {{ userSuccessMessage }}
                     </div>
-                    <div *ngIf="userErrorMessage" class="errorMessage_scss">
+                    <div *ngIf="userErrorMessage" class="user_errorMessage_scss">
                         {{ userErrorMessage }}
                     </div>
                 </div>
