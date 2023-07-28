@@ -40,38 +40,39 @@ import { UserService } from 'app/core/user/user.service';
                 padding-left: 2rem !important;
             }
 
-            .reset_QR_popup {
-                position: fixed;
-                top: 50%;
-                left: 50%;
+            .user_reset_popup {
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
                 transform: translate(-50%, -50%) !important;
                 width: 30% !important;
-                height: 34% !important;
+                height: 32% !important;
                 border-radius: 8px;
             }
 
-            .parent_popup {
-                position: fixed;
+            .user_parent_popup {
                 display: grid;
+                align-items: center !important;
+                justify-content: center !important;
+                height: 27vh;
+            }
+
+            .user_child_btn {
+                display: flex;
+                gap: 10px;
+                align-items: center;
                 justify-content: center;
-                padding: 4rem;
             }
 
-            .child_btn {
-                padding-left: 1.5rem;
-                position: relative;
-                margin-top: 1rem !important;
-            }
-
-            .update_scss {
+            .user_successMessage_scss {
                 position: unset;
                 text-align: center;
                 color: rgb(0, 128, 0);
-                padding: 4rem;
+                padding: 3rem;
                 font-size: 16px;
             }
 
-            .errorMessage_scss {
+            .user_errorMessage_scss {
                 position: unset;
                 text-align: center;
                 color: rgb(255, 49, 49);
@@ -79,9 +80,9 @@ import { UserService } from 'app/core/user/user.service';
                 font-size: 16px;
             }
 
-            .updaeuser_scss {
-                font-size: 16px;
-                color: rgb(0, 128, 0);
+            .user_delete_scss {
+                position: relative;
+                top: 2rem;
             }
 
             tr,td {
