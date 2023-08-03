@@ -244,19 +244,23 @@
                                 </div>
                             </ng-container> -->
 
-                            <div class="flex sm:items-center mt-3">
-                                <div class="w-full text_1xl font-bold">Upgrade</div>
-                            </div>
+                            <ng-container *ngIf="memberTier.condition_type === 0 || memberTier.condition_type === 1">
+                                <div class="flex sm:items-center mt-3">
+                                    <div class="w-full text_1xl font-bold">Upgrade</div>
+                                </div>
+                            </ng-container>
 
                             <ng-container *ngIf="memberTier.condition_type === 0">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Condition Type: </div>
                                     <div class="ml-6 leading-6">Amount</div>
                                 </div>
-
-                                <div class="flex sm:items-center mt-3">
-                                    <div class="w-full text_1xl font-bold">Order Value</div>
-                                </div>
+                                
+                                <ng-container *ngIf="memberTier.min_condition_amount || memberTier.max_condition_amount || memberTier.calculation_type === 0 || memberTier.calculation_type === 1">  
+                                    <div class="flex sm:items-center mt-3">
+                                        <div class="w-full text_1xl font-bold">Order Value</div>
+                                    </div>
+                                </ng-container>
 
                                 <ng-container *ngIf="memberTier.min_condition_amount">
                                     <div class="flex sm:items-center">
@@ -286,9 +290,11 @@
                                     </div>
                                 </ng-container>
 
-                                <div class="flex sm:items-center mt-3">
-                                    <div class="w-full text_1xl font-bold">Total Order Value for Period</div>
-                                </div>
+                                <ng-container *ngIf="memberTier.total_min_amount || memberTier.total_max_amount">
+                                    <div class="flex sm:items-center mt-3">
+                                        <div class="w-full text_1xl font-bold">Total Order Value for Period</div>
+                                    </div>
+                                </ng-container>
 
                                 <ng-container *ngIf="memberTier.total_min_amount">
                                     <div class="flex sm:items-center">
@@ -304,9 +310,11 @@
                                     </div>
                                 </ng-container>
 
-                                <div class="flex sm:items-center mt-3">
-                                    <div class="w-full text_1xl font-bold">Order Value Period</div>
-                                </div>
+                                <ng-container *ngIf="memberTier.condition_period === 1 || memberTier.condition_period === 2 || memberTier.condition_period === 3 || memberTier.condition_period_value">
+                                    <div class="flex sm:items-center mt-3">
+                                        <div class="w-full text_1xl font-bold">Order Value Period</div>
+                                    </div>
+                                </ng-container>
                                 
                                 <ng-container *ngIf="memberTier.condition_period === 1">
                                     <div class="flex sm:items-center">
