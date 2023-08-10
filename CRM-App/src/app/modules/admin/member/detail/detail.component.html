@@ -209,13 +209,14 @@
                             </div>
                             <!-- Actions -->
                             <div class="flex items-center h-20 ml-5 mb-1">
-        
-                                <button mat-stroked-button
+                                <ng-container *ngIf="canEdit">
+                                    <button mat-stroked-button
                                         (click)="toggleEditMode(true)">
-                                    <mat-icon class="icon-size-5"
-                                              [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
-                                    <span class="ml-2">Edit</span>
-                                </button>
+                                        <mat-icon class="icon-size-5"
+                                                [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                                        <span class="ml-2">Edit</span>
+                                    </button>
+                                </ng-container>
                             </div>
 
                             <div class="flex imageCode">
@@ -398,15 +399,17 @@
                                             </div>
                                         </ng-container>
                                         
-                                        <div style="margin-top: 0 !important;" >
-                                            <div class="flex w-full ">
-                                                <button class="w-1/8"
-                                                    mat-stroked-button
-                                                    (click)="openGernerateVoucherForm()">
-                                                    Generate Voucher
-                                                </button>
+                                        <ng-container *ngIf="canEdit">
+                                            <div style="margin-top: 0 !important;" >
+                                                <div class="flex w-full ">
+                                                    <button class="w-1/8"
+                                                        mat-stroked-button
+                                                        (click)="openGernerateVoucherForm()">
+                                                        Generate Voucher
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </ng-container>
                                     </div>
                                 </div>
                                 <div class="fpx-5 bg-card shadow rounded-2xl overflow-hidden" style="margin-bottom:10px;width:50%;height:100%;float:right">
@@ -1236,83 +1239,18 @@
                             </div>
         
                             <!-- Member Tier -->
-                            <ng-container *ngIf="isManagerRole">
-                                <div class="mt-8">
-                                    <mat-form-field class="fuse-mat-no-subscript w-full">
-                                        <mat-label>Member Tier</mat-label>
-                                        <mat-select [formControlName]="'member_tier'">
-                                            <ng-container *ngFor="let tier of memberTiers">
-                                                <mat-option [value]="tier.id">
-                                                    {{tier.name}}
-                                                </mat-option>
-                                            </ng-container>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-                            </ng-container>
-        
-                            <ng-container *ngIf="!isManagerRole">
-                                <div class="mt-8 hidden">
-                                    <mat-form-field class="fuse-mat-no-subscript w-full">
-                                        <mat-label>Member Tier</mat-label>
-                                        <input matInput
-                                               [formControlName]="'member_tier'">
-                                    </mat-form-field>
-                                </div>
-                            </ng-container>
-                            
-                            <!--<div class="flex sm:items-center mt-4">
-                                <div class="w-full text-3xl font-bold">Address Information</div>
-                            </div>
-        
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
-                                    <mat-label>Address 1</mat-label>
-                                    <mat-icon matPrefix
-                                              class="hidden sm:flex icon-size-5"
-                                              [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
-                                    <input matInput
-                                           [formControlName]="'address_line_1'"
-                                           [placeholder]="'Address 1'">
+                                    <mat-label>Member Tier</mat-label>
+                                    <mat-select [formControlName]="'member_tier_id'">
+                                        <ng-container *ngFor="let tier of memberTiers">
+                                            <mat-option [value]="tier.id">
+                                                {{tier.name}}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
                                 </mat-form-field>
                             </div>
-                            <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-full">
-                                    <mat-label>Address 2</mat-label>
-                                    <mat-icon matPrefix
-                                              class="hidden sm:flex icon-size-5"
-                                              [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
-                                    <input matInput
-                                           [formControlName]="'address_line_2'"
-                                           [placeholder]="'Address 2'">
-                                </mat-form-field>
-                            </div>
-        
-                          
-                            <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-full">
-                                    <mat-label>Postal Code</mat-label>
-                                    <mat-icon matPrefix
-                                              class="hidden sm:flex icon-size-5"
-                                              [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
-                                    <input matInput
-                                           [formControlName]="'postal_code'"
-                                           [placeholder]="'Postal Code'">
-                                </mat-form-field>
-                            </div>
-        
-                          
-                            <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-full">
-                                    <mat-label>City</mat-label>
-                                    <mat-icon matPrefix
-                                              class="hidden sm:flex icon-size-5"
-                                              [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
-                                    <input matInput
-                                           [formControlName]="'city'"
-                                           [placeholder]="'City'">
-                                </mat-form-field>
-                            </div>-->
         
                             <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                                 <button class="ml-2" style="width: 6rem;"

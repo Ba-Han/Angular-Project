@@ -158,13 +158,13 @@ export class MemberService
                 //const modifyBirthDate = new Date(date.setDate(date.getDate() + Number(1)));
                 const modifyBirthDate = new Date(date.setDate(date.getDate()));
                 member.member[0].date_of_birth = modifyBirthDate;
-                // eslint-disable-next-line max-len
+                // eslint-disable-next-line max-len, @typescript-eslint/naming-convention
                 member.earning = member.earning != null ? member.earning : { totalPoint: 0, earning_valid_from: '', earning_valid_to: '' , spending_valid_from: '', spending_valid_to: '' };
                 member.earning.earning_valid_from = member.earning.earning_valid_from ? new Date(member.earning.earning_valid_from).toDateString() : '';
                 member.earning.earning_valid_to = member.earning.earning_valid_to ? new Date(member.earning.earning_valid_to).toDateString() : '';
                 member.earning.spending_valid_from = member.earning.spending_valid_from ? new Date(member.earning.spending_valid_from).toDateString() : '';
                 member.earning.spending_valid_to = member.earning.spending_valid_to ? new Date(member.earning.spending_valid_to).toDateString() : '';
-                // eslint-disable-next-line max-len
+                // eslint-disable-next-line max-len, @typescript-eslint/naming-convention
                 member.spending = member.spending != null ? member.spending : { totalPoint: 0, earning_valid_from: '', earning_valid_to: '' , spending_valid_from: '', spending_valid_to: '' };
                 member.spending.earning_valid_from = member.spending.earning_valid_from ? new Date(member.spending.earning_valid_from).toDateString() : '';
                 member.spending.earning_valid_to = member.spending.earning_valid_to ? new Date(member.spending.earning_valid_to).toDateString() : '';
@@ -296,6 +296,7 @@ export class MemberService
             //"postal_code": member.postal_code,
             //"city": member.city,
             "member_tier": member.member_tier,
+            "member_tier_id": member.member_tier_id,
             "accept_email": member.accept_email,
             "accept_mobile_sms": member.accept_mobile_sms
         }).pipe(

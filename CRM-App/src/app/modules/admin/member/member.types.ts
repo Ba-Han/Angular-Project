@@ -188,6 +188,7 @@ export interface MemberInfo {
     'member_code': string;
     'member_photo': string;
     'member_tier': number;
+    'member_tier_id': number;
     'mobile_phone': string;
     'postal_code': string;
     'referral_code': string;

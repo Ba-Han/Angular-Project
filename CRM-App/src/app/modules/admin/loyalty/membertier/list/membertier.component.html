@@ -342,6 +342,8 @@
                                                   class="hidden sm:flex icon-size-5"
                                                   [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
                                         <input matInput type="number"
+                                               [(ngModel)]="maxAmount"
+                                               (input)="maxAmountChange($event)"
                                                [formControlName]="'max_condition_amount'"
                                                [placeholder]="'Max Amount'">
                                     </mat-form-field>
@@ -375,6 +377,8 @@
                                                   class="hidden sm:flex icon-size-5"
                                                   [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
                                         <input matInput type="number"
+                                               [(ngModel)]="totalMaxAmount"
+                                               (input)="totalMaxAmountChange($event)"
                                                [formControlName]="'total_max_amount'"
                                                [placeholder]="'Max Amount'">
                                     </mat-form-field>

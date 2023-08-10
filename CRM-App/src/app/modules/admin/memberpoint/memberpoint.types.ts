@@ -21,6 +21,7 @@ export interface MemberPoint {
     member_code: string;
     member: number;
     point_basket: number;
+    transaction_id: number;
     transaction: {
         "id": number;
         "real_amount": number;

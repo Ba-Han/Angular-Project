@@ -101,6 +101,7 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
     filterActiveAndExpirePoint: string = 'all';
     getFilterValue: any;
     pageIndex: number = 0;
+    canEdit: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor( private _activatedRoute: ActivatedRoute,
@@ -173,6 +174,8 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
                  this.isLoading = false;
              })
          ).subscribe();
+
+         this.canEdit = this._userService.getEditUserPermissionByNavId('member');
     }
 
     ngAfterViewInit(): void

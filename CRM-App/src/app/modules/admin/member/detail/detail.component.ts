@@ -18,6 +18,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { fuseAnimations } from '@fuse/animations';
 import { Member, MemberPoint, Transaction, MemberTier, MemberInfo, MemberDocument, MemberDocumentPagination, MemberVoucher } from 'app/modules/admin/member/member.types';
 import { MemberService } from 'app/modules/admin/member/member.service';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector       : 'member-details',
@@ -128,20 +129,18 @@ import { MemberService } from 'app/modules/admin/member/member.service';
             }
 
             .base64QrCodeImageData {
-                width: auto !important;
                 height: 5rem !important;
             }
 
             .base64BarCodeImageData {
-                width: 10rem !important;
                 height: 4rem !important;
             }
 
             .imageCode {
                 gap: 1rem;
-                margin-left: 12rem;
-                margin-bottom: 0rem;
-                justify-content: center;
+                position: absolute;
+                padding-left: 27rem;
+                justify-content: space-between;
                 align-items: center;
             }
 
@@ -234,7 +233,6 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     uploadData: any;
     uploadId: number;
     _apiurl: string;
-    isManagerRole: boolean = false;
     phoneValidateError: boolean = true;
     memberId: number;
     comment: string | '' = '';
@@ -266,6 +264,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     getPointConversionRate: any;
     isUploadDisabled: boolean = true;
     fileNotAcceptedErrorMessage: string | '' = '';
+    canEdit: boolean = false;
     // private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -287,13 +286,11 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         private _httpClient: HttpClient,
         private _viewContainerRef: ViewContainerRef,
         private datePipe: DatePipe,
+        private _userService: UserService,
         private decimalPipe: DecimalPipe
     )
     {
         this._apiurl = environment.apiurl;
-    }
-    get userRole(): string {
-        return localStorage.getItem('userRoleName') ?? null;
     }
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -304,8 +301,6 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
      */
     ngOnInit(): void
     {
-        this.isManagerRole = this.userRole === 'CRM APP Manager' ? true : false;
-
         this._activatedRoute.url.subscribe((param) => {
             if (param != null) {
                 this.memberId = Number(param[0].path);
@@ -342,9 +337,10 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             last_name       : ['', Validators.required],
             mobile_phone    : ['', Validators.required],
             gender          : [''],
-            date_of_birth: ['', Validators.required],
-            member_tier : [''],
-            accept_email : [''],
+            date_of_birth   : ['', Validators.required],
+            member_tier_id  : [''],
+            member_tier     : [''],
+            accept_email    : [''],
             accept_mobile_sms : ['']
         });
 
@@ -389,7 +385,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
 
                 // Patch values to the form
                 this.memberForm.patchValue(member.member[0]);
-                if (member.member[0].member_tier != null) {
+                if (member.member[0].member_tier !== null) {
                     const tierId = this.memberTiers.find(x => x.id === member.member[0].member_tier_id);
                     this.memberForm.get('member_tier').setValue(tierId);
                 }
@@ -453,6 +449,8 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         .subscribe((generatevouchers) => {
             this.getPointConversionRate = generatevouchers;
         });
+
+        this.canEdit = this._userService.getEditUserPermissionByNavId('member');
     }
 
      ngAfterViewInit(): void
