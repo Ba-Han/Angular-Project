@@ -139,6 +139,8 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
     errorMessage: string | '' = '';
     conditionPeriodValue: number = 0;
     downgradeConditionPeriodTypeValue: number = 0;
+    maxAmount: number | null = null;
+    totalMaxAmount: number | null = null;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -488,5 +490,39 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
                 });
         }
 
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    maxAmountChange(event: Event) {
+        const maxInputElement = event.target as HTMLInputElement;
+        const maxinputValue = maxInputElement.value;
+
+        // Remove non-digit characters
+        const maxNumericValue = maxinputValue.replace(/\D/g, '');
+
+        // Limit to 6 digits
+        const maxLength = 6;
+        const maxTruncatedValue = maxNumericValue.substring(0, maxLength);
+
+        // Update the model and input element
+        this.maxAmount = parseInt(maxTruncatedValue, 10);
+        maxInputElement.value = maxTruncatedValue;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    totalMaxAmountChange(event: Event) {
+        const totalMaxInputElement = event.target as HTMLInputElement;
+        const totalMaxInputValue = totalMaxInputElement.value;
+
+        // Remove non-digit characters
+        const totalMaxNumericValue = totalMaxInputValue.replace(/\D/g, '');
+
+        // Limit to 6 digits
+        const maxLength = 6;
+        const toalMaxTruncatedValue = totalMaxNumericValue.substring(0, maxLength);
+
+        // Update the model and input element
+        this.totalMaxAmount = parseInt(toalMaxTruncatedValue, 10);
+        totalMaxInputElement.value = toalMaxTruncatedValue;
     }
 }
