@@ -44,7 +44,6 @@ import {
 } from 'app/modules/admin/member/member.types';
 import { MemberService } from 'app/modules/admin/member/member.service';
 import { MemberTierService } from 'app/modules/admin/loyalty/membertier/membertier.service';
-import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'member-list',
@@ -106,8 +105,7 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
         @Inject(DOCUMENT) private _document: any,
         private _router: Router,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
-        private _memberTierService: MemberTierService,
-        private _userService: UserService
+        private _memberTierService: MemberTierService
     ) {
         this.getTierList();
     }
@@ -168,7 +166,6 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
                 })
             )
             .subscribe();
-            this.canEdit = this._userService.getEditUserPermissionByNavId('member');
     }
 
     ngAfterViewInit(): void {

@@ -62,12 +62,14 @@
                                 mat-stroked-button>
                             </button>
 
-                            <button class="ml-4"
+                            <ng-container *ngIf="canEdit">
+                                <button class="ml-4"
                                     mat-stroked-button
                                     (click)="tooglepointAddFormMode(true)">
-                                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                                <span class="ml-2 mr-1">Add</span>
-                            </button>
+                                    <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                                    <span class="ml-2 mr-1">Add</span>
+                                </button>
+                            </ng-container>
                         </div>
                     </div>
     

@@ -50,9 +50,7 @@ export class CRMUserService {
      */
     getAppUsers(page: number = 0, limit: number = 10, sort: string = 'username', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: UserPagination; users: User[] }> {
-        const role = localStorage.getItem('userRoleName');
-        const filterUserListByRole = role === 'Admin' ? '?fields=*,role.*&filter[role][name][_contains]=CRM APP' : '?fields=*,role.*&filter[role][name][_eq]=CRM APP User';
-        return this._httpClient.get(`${this._apiurl}/users${filterUserListByRole}`, {
+        return this._httpClient.get(`${this._apiurl}/users`, {
                 params: {
                     meta: 'filter_count',
                     page: page + 1,
