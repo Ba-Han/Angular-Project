@@ -39,9 +39,9 @@
                             <mat-form-field class="fuse-mat-no-subscript w-full">
                                 <mat-label>Transaction Rounding</mat-label>
                                 <mat-select [formControlName]="'transaction_rounding'">
-                                    <mat-option value="round_up">Round up</mat-option>
-                                    <mat-option value="round_down">Round down</mat-option>
-                                    <mat-option value="nearest">Nearest</mat-option>
+                                    <mat-option [value]="0">Round up</mat-option>
+                                    <mat-option [value]="1">Round down</mat-option>
+                                    <mat-option [value]="2">Nearest</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>

@@ -661,7 +661,7 @@
                                         <ng-container mat-cell *matCellDef="let memberVouchers">
                                             <td mat-cell [routerLink]="['./voucher', memberVouchers.id]" style="cursor:pointer;">
                                                 <span class="pr-6 whitespace-nowrap">
-                                                    {{memberVouchers.conversion_rate| number : '1.2-2'}}
+                                                    {{memberVouchers.conversion_rate}}
                                                 </span>
                                             </td>
                                         </ng-container>
@@ -676,7 +676,22 @@
                                         <ng-container mat-cell *matCellDef="let memberVouchers">
                                             <td mat-cell [routerLink]="['./voucher', memberVouchers.id]" style="cursor:pointer;">
                                                 <span class="pr-6 whitespace-nowrap">
-                                                    {{memberVouchers.amount| number : '1.2-2'}}
+                                                    {{memberVouchers.amount}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+
+                                    <!-- Amount -->
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell
+                                            *matHeaderCellDef style="background:#e2e8f0;">
+                                            Balance
+                                        </th>
+                                        <ng-container mat-cell *matCellDef="let memberVouchers">
+                                            <td mat-cell [routerLink]="['./voucher', memberVouchers.id]" style="cursor:pointer;">
+                                                <span class="pr-6 whitespace-nowrap">
+                                                    {{memberVouchers.balance}}
                                                 </span>
                                             </td>
                                         </ng-container>
@@ -1113,7 +1128,7 @@
                         <div class="mt-3 text-4xl w-full font-bold truncate">Edit Member Information</div>
                         <button mat-icon-button style="background: #ccc;"
                                 [matTooltip]="'Close'"
-                                [routerLink]="['../']">
+                                (click)="toggleEditMode(false)">
                             <mat-icon class="text-white"
                                       [svgIcon]="'heroicons_outline:x'"></mat-icon>
                         </button>
@@ -1366,11 +1381,11 @@
                 </div>
 
                 <!-- Member Documents Upload Form -->
-                <div class="col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 mt-10 overflow-hidden" style="position: relative; margin-bottom: 3rem; margin-left: 6rem !important; margin-right: 6rem !important;">
+                <div class="col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 mt-10 overflow-hidden" style="position: relative; margin: 3rem 6rem !important;">
                     <div style="border-radius: 10px; border: 1px dashed black; margin: 1rem;">
                         <div class="mb-5"> <span class="text-lg font-medium justify-center" style="position: relative; top: 1rem; left: 1rem; border-bottom: 1px solid black;"> Select File And Upload </span></div>
                         
-                            <div class="w-full h-50 flex items-center justify-center" style="cursor:pointer; border-radius: 3px;">
+                            <div class="w-full h-20 flex items-center justify-center" style="cursor:pointer; border-radius: 3px;">
                                 <div style="border-bottom: 1px solid black;">
                                     <input class="ng-hide mr-9" #fileInput multiple type="file" (change)="onFileSelected($event)" accept=".csv,.xlsx,.pdf,.jpg,.jpeg,.png,.docx" style="margin-bottom: 9px;" />
                                     <button mat-icon-button [matTooltip]="'Clear'" *ngIf="fileToUpload" (click)="clearFileToUpload()" style="width: 35px; height: 35px; border-radius: 9999px !important; border: 1px solid #4f46e5; top: 1px;">
@@ -1378,29 +1393,29 @@
                                     </button>
                                 </div>
                             </div>
-                            <div *ngIf="uploadData" style="position: relative; bottom: 4.3rem; text-align: center; color: green;">
+                            <div *ngIf="uploadData" style="position: relative; bottom: 0.5rem; text-align: center; color: green;">
                                 Upload Successfully.
                             </div>
 
-                            <div *ngIf="fileNotAcceptedErrorMessage" style="position: relative; bottom: 4.3rem; text-align: center; color: red;">
+                            <div *ngIf="fileNotAcceptedErrorMessage" style="position: relative; bottom: 0.5rem; text-align: center; color: red;">
                                 {{ fileNotAcceptedErrorMessage }}
                             </div>
 
-                            <div *ngIf="errorMessage" style="position: relative; bottom: 4.3rem; text-align: center; color: red;">
+                            <div *ngIf="errorMessage" style="position: relative; bottom: 0.5rem; text-align: center; color: red;">
                                 {{ errorMessage }}
                             </div>
 
-                            <div style="position: relative; bottom: 3.4rem; text-align: justify; display: grid; line-height: 1; justify-content: center;">
-                                <span>Accept File Types!</span> <br/>
+                            <div style="display: grid; align-items: center; justify-content: center;">
+                                <span>Accept File Types!</span>
                                 <span>* .xlsx, .docx, .pdf, .csv, images (.jpg, .png and .jpeg)</span>
                             </div>
-
-                            <label for="comment" style="display: flex; font-weight: 500; position: relative; bottom: 2rem; padding-right: 17rem; justify-content: center;">Comment:</label>
-                            <div class="w-full h-50 flex items-center justify-center" style="position: relative; bottom: 5rem;">
+                            <br/>
+                            <label for="comment" style="display: flex; font-weight: 500; padding-right: 17rem; justify-content: center;">Comment:</label>
+                            <div class="w-full flex items-center justify-center">
                                 <textarea id="comment" [(ngModel)]="comment" required placeholder="Enter your comment" style="border-radius: 5px; padding: 5px; padding-left: 6px; border: 1px dashed black; width: 21rem; height: 6rem;"></textarea>
                             </div>
 
-                            <div style="position: relative; text-align: end; bottom: 2rem;right: 3rem;">
+                            <div style="display: grid; align-items: end; justify-content: end; margin: 2rem 2rem;">
                                 <button style="width: 6rem !important;"
                                     [disabled]="isUploadDisabled"
                                     mat-flat-button
