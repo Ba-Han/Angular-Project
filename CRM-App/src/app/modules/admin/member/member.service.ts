@@ -24,7 +24,6 @@ export class MemberService
     private _generateVouchers: BehaviorSubject<any> = new BehaviorSubject(null);
     private _points: BehaviorSubject<any> = new BehaviorSubject(null);
     private _memberDocuments: BehaviorSubject<MemberDocument[] | null> = new BehaviorSubject(null);
-    private _memberDocument: BehaviorSubject<any> = new BehaviorSubject(null);
     private _memberDocumentpagination: BehaviorSubject<MemberDocumentPagination | null> = new BehaviorSubject(null);
     private _memberPoint: BehaviorSubject<MemberPoint> = new BehaviorSubject(null);
     private _memberPoints: BehaviorSubject<MemberPoint[]> = new BehaviorSubject(null);
@@ -84,11 +83,6 @@ export class MemberService
     get memberDocuments$(): Observable<MemberDocument[]>
     {
         return this._memberDocuments.asObservable();
-    }
-
-    get memberDocument$(): Observable<any>
-    {
-        return this._memberDocument.asObservable();
     }
 
     get memberDocumentpagination$(): Observable<MemberDocumentPagination>
@@ -218,18 +212,7 @@ export class MemberService
             );
     }
 
-    getMemberDocumentsById(id: number): Observable<MemberDocument> {
-        return this._httpClient.get<any>(`${this._apiurl}/member/${id}/documents`, {
-            params: { limit: 5, sort: 'uploaded_on', order: 'desc' }
-        })
-            .pipe(
-                tap((response) => {
-                    this._memberDocument.next(response.data);
-                })
-            );
-    }
-
-    getMemberDocuments(id: number, page: number = 0, limit: number = 10, sort: string = 'uploaded_on', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+    getMemberDocuments(id: number, page: number = 0, limit: number = 5, sort: string = 'uploaded_on', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ memberDocumentpagination: MemberDocumentPagination; memberDocuments: MemberDocument[] }> {
             return this._httpClient.get(`${this._apiurl}/member/${id}/documents`, {
             params: {

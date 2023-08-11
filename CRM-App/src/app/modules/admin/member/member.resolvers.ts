@@ -137,18 +137,6 @@ export class MemberPointsRecentResolver implements Resolve<any>
 @Injectable({
     providedIn: 'root'
 })
-export class MemberDocumentRecentResolver implements Resolve<any>
-{
-    constructor(private _memberService: MemberService) {
-    }
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        return this._memberService.getMemberDocumentsById(Number(route.paramMap.get('id')));
-    }
-}
-
-@Injectable({
-    providedIn: 'root'
-})
 export class MemberDocumentsResolver implements Resolve<any>
 {
     constructor(private _memberService: MemberService)
