@@ -193,7 +193,6 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
 
     memberPoints$: Observable<MemberPoint[]>;
     transactions$: Observable<Transaction[]>;
-    memberDocument$: Observable<MemberDocument[]>;
     memberDocuments$: Observable<MemberDocument[]>;
     memberDocumentPagination: MemberDocumentPagination;
     memberPoint: MemberPoint;
@@ -224,7 +223,6 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     deleteErrorMessage: string | '' = '';
     validFileMessage: string | '' = '';
     invalidFileMessage: string | '' = '';
-    memberDocuments: any;
     memberDocument: any;
     memberDocumentsForm: FormGroup;
     GenerateVoucherForm: FormGroup;
@@ -417,20 +415,12 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             this.recentMemberVouchersDataSource.data = membervouchers;
         });
 
-        //memberDocuments
-        this._memberService.memberDocument$
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((memberdocuments) => {
-            this.memberDocuments = memberdocuments;
-            // Store the table data
-            this.memberDocumentsDataSource.data = memberdocuments;
-        });
-
-        //memberDocuments in Edit Mode
+        //Member Documents
         this._memberService.memberDocuments$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((memberdocument: MemberDocument[]) => {
             this.memberDocument = memberdocument;
+            this.memberDocumentsDataSource.data = memberdocument;
             this._changeDetectorRef.markForCheck();
         });
 
