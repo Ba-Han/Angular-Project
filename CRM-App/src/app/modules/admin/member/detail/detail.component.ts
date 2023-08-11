@@ -246,7 +246,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     memberDocumentsDataSource: MatTableDataSource<any> = new MatTableDataSource();
     memberDocumentsTableColumns: string[] = ['document_name', 'uploaded_on', 'comment', 'file_path', 'uploaded_by_name'];
     recentMemberVouchersDataSource: MatTableDataSource<any> = new MatTableDataSource();
-    recentMemberVouchersTableColumns: string[] = ['voucher_code', 'points_used', 'conversion_rate', 'amount'];
+    recentMemberVouchersTableColumns: string[] = ['voucher_code', 'points_used', 'conversion_rate', 'amount', 'balance'];
     searchInputControl: FormControl = new FormControl();
     selectedTier: number;
     isAscending: boolean = true;

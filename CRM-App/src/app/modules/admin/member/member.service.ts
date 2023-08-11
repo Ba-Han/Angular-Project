@@ -187,7 +187,7 @@ export class MemberService
 
     getRecentMemberVouchersById(id: number): Observable<MemberVoucher> {
         return this._httpClient.get<any>(`${this._apiurl}/items/voucher/memberid/${id}`, {
-            params: { limit: 5, sort: 'date_created', order: 'desc' }
+            params: { limit: 5, sort: 'date_created' }
         })
             .pipe(
                 tap((response) => {
