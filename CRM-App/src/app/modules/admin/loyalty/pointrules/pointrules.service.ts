@@ -231,6 +231,7 @@ export class PointRuleService {
         const offerApplyMonth = !pointrule.offer_apply_month ? 0 : pointrule.offer_apply_month;
         const offerApplyDate = !pointrule.offer_apply_date ? null : pointrule.offer_apply_date;
         const numberOfOrders = !pointrule.no_of_orders ? 0 : pointrule.no_of_orders;
+        const validityType = !pointrule.validity_type ? 0 : pointrule.validity_type;
 
         return this.pointRules$.pipe(
             take(1),
@@ -251,7 +252,7 @@ export class PointRuleService {
                 "point_rewarded_at": pointRewardedAt,
                 "basket_id": pointrule.basket_id,
                 "point_basket": pointrule.point_basket,
-                "validity_type": pointrule.validity_type,
+                "validity_type": validityType,
                 "store_selection_type": storeSelectionType,
                 "store_codes": storeCodes,
                 "new_member_to_earn_points": newMemberToEarnPointsValue,
@@ -294,6 +295,7 @@ export class PointRuleService {
         const offerApplyMonth = !pointrule.offer_apply_month ? 0 : pointrule.offer_apply_month;
         const offerApplyDate = !pointrule.offer_apply_date ? null : pointrule.offer_apply_date;
         const numberOfOrders = !pointrule.no_of_orders ? 0 : pointrule.no_of_orders;
+        const validityType = !pointrule.validity_type ? 0 : pointrule.validity_type;
 
         return this._httpClient.patch<PointRule>(`${this._apiurl}/items/point_rule/${id}`,
             {
@@ -314,7 +316,7 @@ export class PointRuleService {
                 "point_rewarded_at": pointRewardedAt,
                 "basket_id": pointrule.basket_id,
                 "point_basket": pointrule.point_basket,
-                "validity_type": pointrule.validity_type,
+                "validity_type": validityType,
                 "store_selection_type": storeSelectionType,
                 "store_codes": storeCodes,
                 "new_member_to_earn_points": newMemberToEarnPointsValue,

@@ -169,7 +169,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     name: string;
     description: string;
     spendingType: string;
-    validitytypeValue: string;
+    validitytypeValue: number;
     minDate: string;
     timeoutId: any;
     timeOutUpId: any;
@@ -234,7 +234,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             point_amount: [''],
             min_expense: [''],
             point_rewarded_at: [''],
-            validity_type: ['', [Validators.required]],
+            validity_type: [''],
             basket_id: [''],
             point_basket: ['', [Validators.required]],
             point_basketName: ['', [Validators.required]],

@@ -80,6 +80,7 @@ export const appRoutes: Route[] = [
             { path: 'memberpoint', loadChildren: () => import('app/modules/admin/memberpoint/memberpoint.module').then(m => m.MemberPointModule) },
             { path: 'voucher', loadChildren: () => import('app/modules/admin/membervouchers/membervouchers.module').then(m => m.MemberVoucherModule) },
             { path: 'memberlog', loadChildren: () => import('app/modules/admin/memberlogs/memberlogs.module').then(m => m.MemberLogsModule) },
+            { path: 'log', loadChildren: () => import('app/modules/admin/log/log.module').then(m => m.LogModule) },
             { path: 'country', loadChildren: () => import('app/modules/admin/setting/country/country.module').then(m => m.CountryModule) },
             { path: 'channel', loadChildren: () => import('app/modules/admin/setting/channel/channel.module').then(m => m.ChannelModule) },
             { path: 'store', loadChildren: () => import('app/modules/admin/setting/store/store.module').then(m => m.StoreModule) },

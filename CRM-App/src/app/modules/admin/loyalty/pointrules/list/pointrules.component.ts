@@ -268,7 +268,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             point_amount: [''],
             min_expense: [''],
             point_rewarded_at: [''],
-            validity_type: ['', [Validators.required]],
+            validity_type: [''],
             basket_id: [''],
             point_basket: ['', [Validators.required]],
             point_basketName: ['', [Validators.required]],

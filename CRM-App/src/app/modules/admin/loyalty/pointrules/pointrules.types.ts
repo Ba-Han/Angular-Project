@@ -20,7 +20,7 @@ export interface PointRule {
     "point_rewarded_at": number;
     "basket_id": number;
     "point_basket": {name: string};
-    "validity_type": string;
+    "validity_type": number;
     "point_basketName": string;
     "store_selection_type": number;
     "store_codes": string;
