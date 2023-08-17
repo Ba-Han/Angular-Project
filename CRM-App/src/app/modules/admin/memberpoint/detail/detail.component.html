@@ -69,14 +69,14 @@
                         </div>
                     </ng-container> 
 
-                    <ng-container *ngIf="memberPoint.point_type_int === 0">
+                    <ng-container *ngIf="memberPoint.point_type_int === 1">
                         <div class="flex sm:items-center">
                             <div class="w-1/4">Adjustment Type: </div>
                             <div class="ml-6 leading-6">add</div>
                         </div>
                     </ng-container>
 
-                    <ng-container *ngIf="memberPoint.point_type_int === 1">
+                    <ng-container *ngIf="memberPoint.point_type_int === 2">
                         <div class="flex sm:items-center">
                             <div class="w-1/4">Adjustment Type: </div>
                             <div class="ml-6 leading-6">reduce</div>
@@ -150,8 +150,8 @@
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Point Type Int</mat-label>
                             <mat-select [formControlName]="'point_type_int'">
-                                <mat-option [value]="0">Add</mat-option>
-                                <mat-option [value]="1">Reduce</mat-option>
+                                <mat-option [value]="1">Add</mat-option>
+                                <mat-option [value]="2">Reduce</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
