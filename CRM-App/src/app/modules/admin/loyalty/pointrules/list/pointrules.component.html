@@ -755,39 +755,43 @@
                                     </mat-form-field>
                                 </div>
     
-                                <div class="mt-8">
-                                    <mat-form-field class="fuse-mat-no-subscript w-full">
-                                        <mat-label>Month</mat-label>
-                                        <mat-select [formControlName]="'offer_apply_month'" [(ngModel)]="offerApplyMonthValue">
-                                            <mat-option [value]="1">January</mat-option>
-                                            <mat-option [value]="2">February</mat-option>
-                                            <mat-option [value]="3">March</mat-option>
-                                            <mat-option [value]="4">April</mat-option>
-                                            <mat-option [value]="5">May</mat-option>
-                                            <mat-option [value]="6">June</mat-option>
-                                            <mat-option [value]="7">July</mat-option>
-                                            <mat-option [value]="8">August</mat-option>
-                                            <mat-option [value]="9">September</mat-option>
-                                            <mat-option [value]="10">October</mat-option>
-                                            <mat-option [value]="11">November</mat-option>
-                                            <mat-option [value]="12">December</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
+                                <ng-container *ngIf="offerApplyValue === 1">
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>Month</mat-label>
+                                            <mat-select [formControlName]="'offer_apply_month'" [(ngModel)]="offerApplyMonthValue">
+                                                <mat-option [value]="1">January</mat-option>
+                                                <mat-option [value]="2">February</mat-option>
+                                                <mat-option [value]="3">March</mat-option>
+                                                <mat-option [value]="4">April</mat-option>
+                                                <mat-option [value]="5">May</mat-option>
+                                                <mat-option [value]="6">June</mat-option>
+                                                <mat-option [value]="7">July</mat-option>
+                                                <mat-option [value]="8">August</mat-option>
+                                                <mat-option [value]="9">September</mat-option>
+                                                <mat-option [value]="10">October</mat-option>
+                                                <mat-option [value]="11">November</mat-option>
+                                                <mat-option [value]="12">December</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </ng-container>
     
-                                <div class="mt-8">
-                                    <mat-form-field class="fuse-mat-no-subscript w-full">
-                                        <mat-label>Speical Date</mat-label>
-                                        <mat-icon matPrefix
-                                                class="hidden sm:flex icon-size-5"
-                                                [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
-                                            <input matInput
-                                                type="date"
-                                                [min]="currentDate"
-                                                [formControlName]="'offer_apply_date'"
-                                                [placeholder]="'Special Date'">
-                                    </mat-form-field>
-                                </div>
+                                <ng-container *ngIf="offerApplyValue === 3">
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>Speical Date</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                                <input matInput
+                                                    type="date"
+                                                    [min]="currentDate"
+                                                    [formControlName]="'offer_apply_date'"
+                                                    [placeholder]="'Special Date'">
+                                        </mat-form-field>
+                                    </div>
+                                </ng-container>
     
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
@@ -958,56 +962,58 @@
                                     <mat-icon matSuffix svgIcon="heroicons_outline:external-link" style="cursor:pointer"></mat-icon>
                                 </mat-form-field>
                             </div>
-                            
-                            <div class="flex sm:items-center mt-8">
-                                <div class="w-full text_1xl font-bold">Validity</div>
-                            </div>
 
-                            <!--addValidityValue-->
-                            <div class="mt-8">
-                                <mat-form-field class="fuse-mat-no-subscript w-full">
-                                    <mat-label>Validity Type</mat-label>
-                                    <mat-select [formControlName]="'validity_type'" [(ngModel)]="validitytypeValue">
-                                        <mat-option [value]="1">No Range</mat-option>
-                                        <mat-option [value]="2">Custom</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-
-                            <ng-container *ngIf="validitytypeValue === 2">
+                            <ng-container *ngIf="typeRuleValue === 0 || typeRuleValue === 1 || typeRuleValue === 3 ">
+                                <div class="flex sm:items-center mt-8">
+                                    <div class="w-full text_1xl font-bold">Validity</div>
+                                </div>
+    
+                                <!--addValidityValue-->
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
-                                        <mat-label>Start Date</mat-label>
-                                        <mat-icon matPrefix
-                                                class="hidden sm:flex icon-size-5"
-                                                [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
-                                        <input matInput type="datetime-local"
-                                            [min]="minDate"
-                                            [formControlName]="'start_date'"
-                                            [placeholder]="'Start Date'">
-                                        <!-- <mat-datepicker-toggle matSuffix
-                                                            [for]="startDatepicker">
-                                        </mat-datepicker-toggle> -->
-                                        <mat-datepicker #startDatepicker></mat-datepicker>
+                                        <mat-label>Validity Type</mat-label>
+                                        <mat-select [formControlName]="'validity_type'" [(ngModel)]="validitytypeValue">
+                                            <mat-option [value]="1">No Range</mat-option>
+                                            <mat-option [value]="2">Custom</mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </div>
-
-                                <div class="mt-8">
-                                    <mat-form-field class="fuse-mat-no-subscript w-full">
-                                        <mat-label>End Date</mat-label>
-                                        <mat-icon matPrefix
-                                                class="hidden sm:flex icon-size-5"
-                                                [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
-                                        <input matInput type="datetime-local"
-                                            [min]="minDate"
-                                            [formControlName]="'end_date'"
-                                            [placeholder]="'End Date'">
-                                        <!-- <mat-datepicker-toggle matSuffix
-                                                            [for]="endDatepicker">
-                                        </mat-datepicker-toggle> -->
-                                        <mat-datepicker #endDatepicker></mat-datepicker>
-                                    </mat-form-field>
-                                </div>
+    
+                                <ng-container *ngIf="validitytypeValue === 2">
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>Start Date</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                            <input matInput type="datetime-local"
+                                                [min]="minDate"
+                                                [formControlName]="'start_date'"
+                                                [placeholder]="'Start Date'">
+                                            <!-- <mat-datepicker-toggle matSuffix
+                                                                [for]="startDatepicker">
+                                            </mat-datepicker-toggle> -->
+                                            <mat-datepicker #startDatepicker></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+    
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>End Date</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                            <input matInput type="datetime-local"
+                                                [min]="minDate"
+                                                [formControlName]="'end_date'"
+                                                [placeholder]="'End Date'">
+                                            <!-- <mat-datepicker-toggle matSuffix
+                                                                [for]="endDatepicker">
+                                            </mat-datepicker-toggle> -->
+                                            <mat-datepicker #endDatepicker></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                </ng-container>
                             </ng-container>
 
                             <mat-form-field class="fuse-mat-no-subscript w-full hidden">
@@ -1016,7 +1022,7 @@
                             </mat-form-field>
 
                             <!-- Point Rule Product table -->
-                            <div class="flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+                            <div class="hidden flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
                                     
                                 <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 border-b">
                                     <div class="absolute inset-x-0 bottom-0"

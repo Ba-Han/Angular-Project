@@ -377,7 +377,7 @@
                                         <div class="text-lg font-mediu text-blue-600 dark:text-blue-500">Current/Redeemable Points</div>
                                         <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints > 0">
                                             <div class="items-baseline justify-center w-full mt-4 text-secondary">
-                                                <div class="flex justify-center truncate w-full font-bold" style="font-size: 14px;">Points to expire soon</div>
+                                                <!-- <div class="flex justify-center truncate w-full font-bold" style="font-size: 14px;">Points to expire soon</div> -->
                                                 <div class="text-md font-medium flex justify-center truncate" style="font-size: 12px;">Expire Points:
                                                     <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints > 0">
                                                         <div class="ml-1.5 font-semibold" style="font-size: 12px;">{{member.soonExpiredPoint.soonExpiredPoints}}</div>
@@ -388,7 +388,7 @@
                                                     <div class="ml-1.5 font-semibold">-</div>
                                                 </ng-container>
                                             </div>
-                                            <div class="flex items-baseline justify-center w-full text-secondary">
+                                            <!-- <div class="flex items-baseline justify-center w-full text-secondary">
                                                 <div class="text-md font-medium truncate" style="font-size: 12px;">Expire Date:</div>
                                                 <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints > 0">
                                                     <div class="ml-1.5 font-semibold" style="font-size: 12px;">{{member.soonExpiredPoint.soonExpiredDate | date:'MMM dd, yyyy'}}</div>
@@ -396,7 +396,7 @@
                                                 <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints === 0">
                                                     <div class="ml-1.5 font-semibold">-</div>
                                                 </ng-container>
-                                            </div>
+                                            </div> -->
                                         </ng-container>
                                         
                                         <ng-container *ngIf="canEdit">
@@ -421,7 +421,7 @@
                                     <div class="flex flex-col items-center mt-2 justify-center h-40">
                                         <div class="text-7xl sm:text-4xl font-bold tracking-tight leading-none text-blue-500">${{member.spending.dollerValueSpending | number : '1.2-2'}}</div>
                                         <div class="text-lg font-medium text-blue-600 dark:text-blue-500">Current/Redeemable Dollar</div>
-                                        <ng-container *ngIf="member.soonExpiredPoint.soonExpiredDollars > 0">
+                                        <!-- <ng-container *ngIf="member.soonExpiredPoint.soonExpiredDollars > 0">
                                             <div class="items-baseline justify-center w-full mt-4 text-secondary">
                                                 <div class="flex justify-center truncate w-full font-bold" style="font-size: 14px;">Dollars to expire soon</div>
                                                 <div class="text-md font-medium flex justify-center truncate" style="font-size: 12px;">Expire Dollars:
@@ -442,7 +442,7 @@
                                                 <div class="ml-1.5 font-semibold">-</div>
                                             </ng-container>
                                         </div>
-                                        </ng-container>
+                                        </ng-container> -->
                                     </div>
                                 </div>
                             </div>
