@@ -141,6 +141,7 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
     downgradeConditionPeriodTypeValue: number = 0;
     maxAmount: number | null = null;
     totalMaxAmount: number | null = null;
+    conditionTypeValue: number = 0;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
