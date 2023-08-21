@@ -272,6 +272,8 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
         this._channelService.createChnnel(channel)
             .subscribe(() => {
                 this.tooglepointAddFormMode(false);
+                this.ChannelAddForm.reset();
+                this._changeDetectorRef.markForCheck();
             },
                 (response) => {
                     if (response.status === 200) {

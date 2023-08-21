@@ -293,6 +293,8 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
         const store = this.StoreAddForm.getRawValue();
         this._storeService.createStore(store).subscribe(() => {
             this.toogleStoreAddFormMode(false);
+            this.StoreAddForm.reset();
+            this._changeDetectorRef.markForCheck();
         },
             (response) => {
                 if (response.status === 200) {

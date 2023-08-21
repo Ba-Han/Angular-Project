@@ -262,6 +262,8 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         const product = this.ProductAddForm.getRawValue();
         this._productService.createProduct(product).subscribe(() => {
             this.tooglepointAddFormMode(false);
+            this.ProductAddForm.reset();
+            this._changeDetectorRef.markForCheck();
         },
             (response) => {
                 if (response.status === 200) {

@@ -412,6 +412,8 @@ export class MemberTierListComponent implements OnInit, AfterViewInit, OnDestroy
         this._memberTierService.createMemberTier(memberTier)
         .subscribe(() => {
             this.tooglepointAddFormMode(false);
+            this.memberTierAddForm.reset();
+            this._changeDetectorRef.markForCheck();
         },
             (response) => {
                 if (response.status === 200) {

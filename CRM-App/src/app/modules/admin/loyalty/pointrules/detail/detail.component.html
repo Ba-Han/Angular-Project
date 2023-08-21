@@ -808,38 +808,36 @@
                                 </div>
                             </ng-container>
 
-                            <ng-container *ngIf="pointRule.type === 0 || pointRule.type === 1 || pointRule.type === 3 ">
-                                <div class="flex sm:items-center mt-3">
-                                    <div class="w-full text_1xl font-bold">Validity</div>
+                            <div class="flex sm:items-center mt-3">
+                                <div class="w-full text_1xl font-bold">Validity</div>
+                            </div>
+
+                            <ng-container *ngIf="pointRule.validity_type === 1">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Validity Type: </div>
+                                    <div class="ml-6 leading-6">No Range</div>
                                 </div>
-    
-                                <ng-container *ngIf="pointRule.validity_type === 1">
+                            </ng-container>
+
+                            <ng-container *ngIf="pointRule.validity_type === 2">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Validity Type: </div>
+                                    <div class="ml-6 leading-6">Custom</div>
+                                </div>
+
+                                <ng-container *ngIf="pointRule.start_date">
                                     <div class="flex sm:items-center">
-                                        <div class="w-1/4">Validity Type: </div>
-                                        <div class="ml-6 leading-6">No Range</div>
+                                        <div class="w-1/4">Start Date: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.start_date | date:'MMM dd, y'}}</div>
                                     </div>
                                 </ng-container>
     
-                                <ng-container *ngIf="pointRule.validity_type === 2">
+                                <ng-container *ngIf="pointRule.end_date">
                                     <div class="flex sm:items-center">
-                                        <div class="w-1/4">Validity Type: </div>
-                                        <div class="ml-6 leading-6">Custom</div>
+                                        <div class="w-1/4">End Date: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.end_date | date:'MMM dd, y'}}</div>
                                     </div>
-    
-                                    <ng-container *ngIf="pointRule.start_date">
-                                        <div class="flex sm:items-center">
-                                            <div class="w-1/4">Start Date: </div>
-                                            <div class="ml-6 leading-6">{{pointRule.start_date | date:'MMM dd, y'}}</div>
-                                        </div>
-                                    </ng-container>
-        
-                                    <ng-container *ngIf="pointRule.end_date">
-                                        <div class="flex sm:items-center">
-                                            <div class="w-1/4">End Date: </div>
-                                            <div class="ml-6 leading-6">{{pointRule.end_date | date:'MMM dd, y'}}</div>
-                                        </div>
-                                    </ng-container>
-                            </ng-container>
+                                </ng-container>
                             </ng-container>
                         </div>
                     </div>
@@ -1053,6 +1051,24 @@
                                                 [formControlName]="'no_of_orders'"
                                                 [placeholder]="'Number of Orders'">
                                         </mat-form-field>
+                                    </div>
+
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>Priority</mat-label>
+                                            <mat-select [formControlName]="'priority'" [(ngModel)]="priorityValue">
+                                                <mat-option [value]="1">Low</mat-option>
+                                                <mat-option [value]="2">Medium</mat-option>
+                                                <mat-option [value]="3">High</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+    
+                                    <div class="mt-8">
+                                        <label class="new_checkbox_00">
+                                            <input class="new_checkbox_01" type="checkbox" [formControlName]="'stop_further'" [(ngModel)]="stopFurtherValue">
+                                            Stop Further
+                                        </label>
                                     </div>
 
                                     <div class="mt-8">
@@ -1278,6 +1294,24 @@
 
                                     <div class="mt-8">
                                         <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>Priority</mat-label>
+                                            <mat-select [formControlName]="'priority'" [(ngModel)]="priorityValue">
+                                                <mat-option [value]="1">Low</mat-option>
+                                                <mat-option [value]="2">Medium</mat-option>
+                                                <mat-option [value]="3">High</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+    
+                                    <div class="mt-8">
+                                        <label class="new_checkbox_00">
+                                            <input class="new_checkbox_01" type="checkbox" [formControlName]="'stop_further'" [(ngModel)]="stopFurtherValue">
+                                            Stop Further
+                                        </label>
+                                    </div>
+
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
                                             <mat-label>Store Selection Type</mat-label>
                                             <mat-select [formControlName]="'store_selection_type'" [(ngModel)]="storeSelectionTypeValue">
                                                 <mat-option [value]="0">All</mat-option>
@@ -1372,57 +1406,55 @@
                                 </mat-form-field>
                             </div>
                             
-                            <ng-container *ngIf="typeRuleValue === 0 || typeRuleValue === 1 || typeRuleValue === 3 ">
-                                <div class="flex sm:items-center mt-8">
-                                    <div class="w-full text_1xl font-bold">Validity</div>
-                                </div>
-    
-                                <!--addValidityValue-->
+                            <div class="flex sm:items-center mt-8">
+                                <div class="w-full text_1xl font-bold">Validity</div>
+                            </div>
+
+                            <!--addValidityValue-->
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Validity Type</mat-label>
+                                    <mat-select [formControlName]="'validity_type'" [(ngModel)]="validitytypeValue">
+                                        <mat-option [value]="1">No Range</mat-option>
+                                        <mat-option [value]="2">Custom</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <ng-container *ngIf="validitytypeValue === 2">
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
-                                        <mat-label>Validity Type</mat-label>
-                                        <mat-select [formControlName]="'validity_type'" [(ngModel)]="validitytypeValue">
-                                            <mat-option [value]="1">No Range</mat-option>
-                                            <mat-option [value]="2">Custom</mat-option>
-                                        </mat-select>
+                                        <mat-label>Start Date</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                        <input matInput type="datetime-local"
+                                            [min]="minDate"
+                                            [formControlName]="'start_date'"
+                                            [placeholder]="'Start Date'">
+                                        <!-- <mat-datepicker-toggle matSuffix
+                                                            [for]="startDatepicker">
+                                        </mat-datepicker-toggle> -->
+                                        <mat-datepicker #startDatepicker></mat-datepicker>
                                     </mat-form-field>
                                 </div>
-    
-                                <ng-container *ngIf="validitytypeValue === 2">
-                                    <div class="mt-8">
-                                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                                            <mat-label>Start Date</mat-label>
-                                            <mat-icon matPrefix
-                                                    class="hidden sm:flex icon-size-5"
-                                                    [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
-                                            <input matInput type="datetime-local"
-                                                [min]="minDate"
-                                                [formControlName]="'start_date'"
-                                                [placeholder]="'Start Date'">
-                                            <!-- <mat-datepicker-toggle matSuffix
-                                                                [for]="startDatepicker">
-                                            </mat-datepicker-toggle> -->
-                                            <mat-datepicker #startDatepicker></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-    
-                                    <div class="mt-8">
-                                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                                            <mat-label>End Date</mat-label>
-                                            <mat-icon matPrefix
-                                                    class="hidden sm:flex icon-size-5"
-                                                    [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
-                                            <input matInput type="datetime-local"
-                                                [min]="minDate"
-                                                [formControlName]="'end_date'"
-                                                [placeholder]="'End Date'">
-                                            <!-- <mat-datepicker-toggle matSuffix
-                                                                [for]="endDatepicker">
-                                            </mat-datepicker-toggle> -->
-                                            <mat-datepicker #endDatepicker></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                </ng-container>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>End Date</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                        <input matInput type="datetime-local"
+                                            [min]="minDate"
+                                            [formControlName]="'end_date'"
+                                            [placeholder]="'End Date'">
+                                        <!-- <mat-datepicker-toggle matSuffix
+                                                            [for]="endDatepicker">
+                                        </mat-datepicker-toggle> -->
+                                        <mat-datepicker #endDatepicker></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
                             </ng-container>
 
                             <mat-form-field class="fuse-mat-no-subscript w-full hidden">

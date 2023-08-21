@@ -650,6 +650,24 @@
 
                                     <div class="mt-8">
                                         <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>Priority</mat-label>
+                                            <mat-select [formControlName]="'priority'" [(ngModel)]="priorityValue">
+                                                <mat-option [value]="1">Low</mat-option>
+                                                <mat-option [value]="2">Medium</mat-option>
+                                                <mat-option [value]="3">High</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+    
+                                    <div class="mt-8">
+                                        <label class="new_checkbox_00">
+                                            <input class="new_checkbox_01" type="checkbox" [formControlName]="'stop_further'" [(ngModel)]="stopFurtherValue">
+                                            Stop Further
+                                        </label>
+                                    </div>
+
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
                                             <mat-label>Store Selection Type</mat-label>
                                             <mat-select [formControlName]="'store_selection_type'" [(ngModel)]="storeSelectionTypeValue">
                                                 <mat-option [value]="0">All</mat-option>
@@ -870,6 +888,24 @@
 
                                     <div class="mt-8">
                                         <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>Priority</mat-label>
+                                            <mat-select [formControlName]="'priority'" [(ngModel)]="priorityValue">
+                                                <mat-option [value]="1">Low</mat-option>
+                                                <mat-option [value]="2">Medium</mat-option>
+                                                <mat-option [value]="3">High</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+    
+                                    <div class="mt-8">
+                                        <label class="new_checkbox_00">
+                                            <input class="new_checkbox_01" type="checkbox" [formControlName]="'stop_further'" [(ngModel)]="stopFurtherValue">
+                                            Stop Further
+                                        </label>
+                                    </div>
+
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
                                             <mat-label>Store Selection Type</mat-label>
                                             <mat-select [formControlName]="'store_selection_type'" [(ngModel)]="storeSelectionTypeValue">
                                                 <mat-option [value]="0">All</mat-option>
@@ -965,57 +1001,55 @@
                                 </mat-form-field>
                             </div>
 
-                            <ng-container *ngIf="typeRuleValue === 0 || typeRuleValue === 1 || typeRuleValue === 3 ">
-                                <div class="flex sm:items-center mt-8">
-                                    <div class="w-full text_1xl font-bold">Validity</div>
-                                </div>
-    
-                                <!--addValidityValue-->
+                            <div class="flex sm:items-center mt-8">
+                                <div class="w-full text_1xl font-bold">Validity</div>
+                            </div>
+
+                            <!--addValidityValue-->
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Validity Type</mat-label>
+                                    <mat-select [formControlName]="'validity_type'" [(ngModel)]="validitytypeValue">
+                                        <mat-option [value]="1">No Range</mat-option>
+                                        <mat-option [value]="2">Custom</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <ng-container *ngIf="validitytypeValue === 2">
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
-                                        <mat-label>Validity Type</mat-label>
-                                        <mat-select [formControlName]="'validity_type'" [(ngModel)]="validitytypeValue">
-                                            <mat-option [value]="1">No Range</mat-option>
-                                            <mat-option [value]="2">Custom</mat-option>
-                                        </mat-select>
+                                        <mat-label>Start Date</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                        <input matInput type="datetime-local"
+                                            [min]="minDate"
+                                            [formControlName]="'start_date'"
+                                            [placeholder]="'Start Date'">
+                                        <!-- <mat-datepicker-toggle matSuffix
+                                                            [for]="startDatepicker">
+                                        </mat-datepicker-toggle> -->
+                                        <mat-datepicker #startDatepicker></mat-datepicker>
                                     </mat-form-field>
                                 </div>
-    
-                                <ng-container *ngIf="validitytypeValue === 2">
-                                    <div class="mt-8">
-                                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                                            <mat-label>Start Date</mat-label>
-                                            <mat-icon matPrefix
-                                                    class="hidden sm:flex icon-size-5"
-                                                    [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
-                                            <input matInput type="datetime-local"
-                                                [min]="minDate"
-                                                [formControlName]="'start_date'"
-                                                [placeholder]="'Start Date'">
-                                            <!-- <mat-datepicker-toggle matSuffix
-                                                                [for]="startDatepicker">
-                                            </mat-datepicker-toggle> -->
-                                            <mat-datepicker #startDatepicker></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-    
-                                    <div class="mt-8">
-                                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                                            <mat-label>End Date</mat-label>
-                                            <mat-icon matPrefix
-                                                    class="hidden sm:flex icon-size-5"
-                                                    [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
-                                            <input matInput type="datetime-local"
-                                                [min]="minDate"
-                                                [formControlName]="'end_date'"
-                                                [placeholder]="'End Date'">
-                                            <!-- <mat-datepicker-toggle matSuffix
-                                                                [for]="endDatepicker">
-                                            </mat-datepicker-toggle> -->
-                                            <mat-datepicker #endDatepicker></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                </ng-container>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>End Date</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                        <input matInput type="datetime-local"
+                                            [min]="minDate"
+                                            [formControlName]="'end_date'"
+                                            [placeholder]="'End Date'">
+                                        <!-- <mat-datepicker-toggle matSuffix
+                                                            [for]="endDatepicker">
+                                        </mat-datepicker-toggle> -->
+                                        <mat-datepicker #endDatepicker></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
                             </ng-container>
 
                             <mat-form-field class="fuse-mat-no-subscript w-full hidden">
