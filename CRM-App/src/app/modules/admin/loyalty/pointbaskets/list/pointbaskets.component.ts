@@ -324,6 +324,8 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
         const pointbasket = this.PointBasketAddForm.getRawValue();
         this._pointBasketService.createPointBasket(pointbasket).subscribe(() => {
             this.toogleStoreAddFormMode(false);
+            this.PointBasketAddForm.reset();
+            this._changeDetectorRef.markForCheck();
         },
         (response) => {
                 if (response.status === 200) {

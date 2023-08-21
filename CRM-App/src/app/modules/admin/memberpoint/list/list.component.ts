@@ -311,6 +311,7 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
         const newmemberPoint = this.memberPointAddForm.getRawValue();
         this._memberPointService.createMemberPoint(newmemberPoint).subscribe(() => {
             this.tooglepointAddFormMode(false);
+            this.memberPointAddForm.reset();
             this._changeDetectorRef.markForCheck();
         });
     }

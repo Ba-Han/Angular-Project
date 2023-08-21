@@ -268,7 +268,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             point_amount: [''],
             min_expense: [''],
             point_rewarded_at: [''],
-            validity_type: [''],
+            validity_type: ['', [Validators.required]],
             basket_id: [''],
             point_basket: ['', [Validators.required]],
             point_basketName: ['', [Validators.required]],
@@ -649,6 +649,8 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         pointrule.point_rule_products = this.selectedPointRuleProduct;
         this._pointRuleService.createPointRule(pointrule).subscribe(() => {
             this.tooglePointRuleAddFormMode(false);
+            this.PointRuleAddForm.reset();
+            this._changeDetectorRef.markForCheck();
         },
             (response) => {
                 if (response.status === 200) {

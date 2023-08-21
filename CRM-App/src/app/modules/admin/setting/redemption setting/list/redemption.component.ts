@@ -260,6 +260,7 @@ export class RedemptionSettingListComponent implements OnInit, AfterViewInit,  O
         const redemption = this.RedemptionSettingAddForm.getRawValue();
         this._redemptionService.createRedemption(redemption.id, redemption).subscribe(() => {
             this.toogleRedemptionSettingAddFormMode(false);
+            this.RedemptionSettingAddForm.reset();
             this._changeDetectorRef.markForCheck();
         },
             (response) => {
