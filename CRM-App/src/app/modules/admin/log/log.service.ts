@@ -44,13 +44,14 @@ export class LogService
      * Get data
      */
     // eslint-disable-next-line max-len
-    postWithTodayDate(date: string = '', method: string, page: number = 0, limit: number = 10, sort: string = 'request_on', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+    postWithTodayDate(logSearch: string = '', date: string = '', method: string, page: number = 0, limit: number = 10, sort: string = 'request_on', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: LogPagination; log: Log[] }>
     {
         const requestMethod = method;
         if(requestMethod !== null) {
             return this._httpClient.post(`${this._apiurl}/utility/logs/${date}?limit=${limit}&order=${order}&sort=request_on&page=${page + 1}`, {
-                'request_method': requestMethod
+                'request_method': requestMethod,
+                'search': logSearch
             }).pipe(
                 tap((response: any) => {
                     const totalLength = response.filter_count;

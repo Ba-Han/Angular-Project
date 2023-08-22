@@ -81,12 +81,14 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
     log: Log;
     isLoading: boolean = false;
     pagination: LogPagination;
+    logSearchInputControl: FormControl = new FormControl();
     searchInputControl: FormControl = new FormControl();
     isAscending: boolean = true;
     requestedMethod: string = 'post';
     todayDate: string;
     errorMessage: string;
     logData: any;
+    getLogInputData: string;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor( private _activatedRoute: ActivatedRoute,
@@ -125,7 +127,23 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
             this._changeDetectorRef.markForCheck();
         });
 
+        // search Log Data
+        this.logSearchInputControl.valueChanges
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(300),
+            switchMap((query) => {
+                this.isLoading = true;
+                return this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, 0, 10, 'request_on', 'asc', query);
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        )
+        .subscribe();
+
         this.setupValueChangesSubscription();
+        this._changeDetectorRef.markForCheck();
     }
 
     ngAfterViewInit(): void
@@ -199,7 +217,7 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
                 switchMap(() => {
                     this.isLoading = true;
                     // eslint-disable-next-line max-len
-                    return this._logService.postWithTodayDate(this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    return this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
                 }),
                 map(() => {
                     this.isLoading = false;
@@ -223,7 +241,7 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
              debounceTime(300),
              switchMap((query) => {
                  this.isLoading = true;
-                 return this._logService.postWithTodayDate(this.todayDate, this.requestedMethod, 0, 10, 'request_on', 'asc', query);
+                 return this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, 0, 10, 'request_on', 'asc', query);
                 }),
              map(() => {
                  this.isLoading = false;
@@ -243,16 +261,18 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onPageChange() {
-        this._logService.postWithTodayDate(this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+        // eslint-disable-next-line max-len
+        this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
             switchMap(() => {
                 this.isLoading = true;
                 // eslint-disable-next-line max-len
-                return this._logService.postWithTodayDate(this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                return this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
             }),
             map(() => {
                 this.isLoading = false;
             })
         ).subscribe();
+        this._changeDetectorRef.markForCheck();
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -271,7 +291,7 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     requestMethodList(selectedMethod: string) {
         this.requestedMethod = selectedMethod;
-        this._logService.postWithTodayDate(this.todayDate, this.requestedMethod, 0, 10, 'request_on', 'asc')
+        this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, 0, 10, 'request_on', 'asc')
           .subscribe(
             () => {
               // Do something on success if needed
@@ -280,6 +300,7 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
               console.error(error);
             }
           );
+          this._changeDetectorRef.markForCheck();
       }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

@@ -25,8 +25,16 @@
                     <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
                         <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
                             <mat-icon class="icon-size-5"
-                                      matPrefix
-                                      [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                    matPrefix
+                                    [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                            <input matInput
+                                [formControl]="logSearchInputControl"
+                                [(ngModel)]="getLogInputData"
+                                [autocomplete]="'off'"
+                                [placeholder]="'Search Log Data'">
+                        </mat-form-field>
+                        
+                        <mat-form-field class="ml-4 fuse-mat-no-subscript log-2-sort">
                             <input matInput
                                    type="date"
                                    [(ngModel)]="todayDate"

@@ -16,8 +16,9 @@ export class LogResolver implements Resolve<any>
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         const currentDate = new Date();
         const date = currentDate.toISOString().split('T')[0];
+        const getLogInputData = route.paramMap.get('getLogInputData');
         const requestMethod = route.paramMap.get('requestedMethod');
-        return this._logService.postWithTodayDate(date, requestMethod, 0, 10, 'request_on', 'asc');
+        return this._logService.postWithTodayDate(getLogInputData, date, requestMethod, 0, 10, 'request_on', 'asc');
     }
 }
 
