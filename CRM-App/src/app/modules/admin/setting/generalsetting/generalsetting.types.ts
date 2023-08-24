@@ -7,7 +7,7 @@ export interface GeneralSetting
     //member_groupsName: string;
     user_groups: string;
     //user_groupsName: string;
-    default_member_tier: string,
+    default_member_tier: number;
     //default_member_tierName: string,
     user_updated: string;
     date_updated: string;

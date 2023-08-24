@@ -134,18 +134,26 @@ export class StoreService {
     }
 
     createStore(store: Store): Observable<Store> {
+
+        const addressLine1 = store.address_line_1 === null ? '' : store.address_line_1;
+        const addressLine2 = store.address_line_2 === null ? '' : store.address_line_2;
+        const city = store.city === null ? '' : store.city;
+        const state = store.state === null ? '' : store.state;
+        const postalCode = store.postal_code === null ? '' : store.postal_code;
+        const region = store.region === null ? '' : store.region;
+
         return this.stores$.pipe(
             take(1),
             switchMap(stores => this._httpClient.post<any>(`${this._apiurl}/items/store`, {
                 "code": store.code,
                 "status": store.status,
                 "name": store.name,
-                "address_line_1": store.address_line_1,
-                "address_line_2": store.address_line_2,
-                "city": store.city,
-                "state": store.state,
-                "postal_code": store.postal_code,
-                "region": store.region,
+                "address_line_1": addressLine1,
+                "address_line_2": addressLine2,
+                "city": city,
+                "state": state,
+                "postal_code": postalCode,
+                "region": region,
                 "country": store.country,
                 "channel_code": store.channel_code
             }).pipe(
@@ -159,16 +167,24 @@ export class StoreService {
     }
 
     updateStore(code: string, store: Store): Observable<Store> {
+
+        const addressLine1 = store.address_line_1 === null ? '' : store.address_line_1;
+        const addressLine2 = store.address_line_2 === null ? '' : store.address_line_2;
+        const city = store.city === null ? '' : store.city;
+        const state = store.state === null ? '' : store.state;
+        const postalCode = store.postal_code === null ? '' : store.postal_code;
+        const region = store.region === null ? '' : store.region;
+
         return this._httpClient.patch<Store>(`${this._apiurl}/items/store/${code}`, {
             'code': code,
             'name': store.name,
             'status': store.status,
-            'address_line_1': store.address_line_1,
-            'address_line_2': store.address_line_2,
-            'city': store.city,
-            'state': store.state,
-            'postal_code': store.postal_code,
-            'region': store.region,
+            'address_line_1': addressLine1,
+            'address_line_2': addressLine2,
+            'city': city,
+            'state': state,
+            'postal_code': postalCode,
+            'region': region,
             'country': store.country,
             'channel_code': store.channel_code
         }).pipe(
