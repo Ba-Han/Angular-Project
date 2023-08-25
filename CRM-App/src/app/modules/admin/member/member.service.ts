@@ -181,7 +181,7 @@ export class MemberService
 
     getRecentMemberVouchersById(id: number): Observable<MemberVoucher> {
         return this._httpClient.get<any>(`${this._apiurl}/items/voucher/memberid/${id}`, {
-            params: { limit: 5, sort: 'date_created' }
+            params: { limit: 5, sort: 'voucher_code' }
         })
             .pipe(
                 tap((response) => {
@@ -192,7 +192,7 @@ export class MemberService
 
     getRecentTransactionsById(id: number): Observable<Transaction> {
         return this._httpClient.get<any>(`${this._apiurl}/member/${id}/transactions`, {
-            params: { limit: 5, sort: 'date_created' }
+            params: { limit: 5, sort: 'document_no' }
         })
             .pipe(
                 tap((response) => {
@@ -203,7 +203,7 @@ export class MemberService
 
     getRecentPointsById(id: number): Observable<MemberPoint> {
         return this._httpClient.get<any>(`${this._apiurl}/member/${id}/points`, {
-            params: { limit: 5, sort: 'date_created' }
+            params: { limit: 5, sort: 'transaction_document_no' }
         })
             .pipe(
                 tap((response) => {
