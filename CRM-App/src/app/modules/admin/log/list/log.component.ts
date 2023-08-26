@@ -18,18 +18,18 @@ import { Log, LogPagination } from 'app/modules/admin/log/log.types';
     styles         : [
         `
             .log-grid {
-                grid-template-columns: 100px 200px 100px 200px 100px 300px 200px 200px 100px 100px;
+                grid-template-columns: 150px 150px 150px 250px 100px 350px 200px 200px 100px;
 
                 @screen sm {
-                    grid-template-columns: 100px 200px 100px 200px 100px 300px 200px 200px 100px 100px;
+                    grid-template-columns: 150px 150px 150px 250px 100px 350px 200px 200px 100px;
                 }
 
                 @screen md {
-                    grid-template-columns: 100px 200px 100px 200px 100px 300px 200px 200px 100px 100px;
+                    grid-template-columns: 150px 150px 150px 250px 100px 350px 200px 200px 100px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 100px 200px 100px 200px 100px 300px 200px 200px 100px 100px;
+                    grid-template-columns: 150px 150px 150px 250px 100px 350px 200px 200px 100px;
                 }
             }
 
@@ -75,7 +75,9 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+    @ViewChild('drawerOne', { static: true }) drawerOne: MatDrawer;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @ViewChild('drawerTwo', { static: true }) drawerTwo: MatDrawer;
 
     log$: Observable<Log[]>;
     log: Log;
@@ -89,6 +91,8 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
     errorMessage: string;
     logData: any;
     getLogInputData: string;
+    logDataFormMode: boolean = false;
+    getDetailsLogData: any;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor( private _activatedRoute: ActivatedRoute,
@@ -110,9 +114,6 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
 
     ngOnInit(): void
     {
-        // Get the data
-        //this.log$ = this._logService.Log$;
-
         this._logService.Log$
         .subscribe((response: any) => {
             this.logData = response;
@@ -233,6 +234,30 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
         this._unsubscribeAll.complete();
     }
 
+    trackByFn(index: number, item: any): any
+    {
+        return item.id || index;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    toogleLogDataFormMode(logDataFormMode: boolean | null = null) {
+        if (logDataFormMode === null) {
+            this.logDataFormMode = !this.logDataFormMode;
+        }
+        else {
+            this.logDataFormMode = logDataFormMode;
+        }
+
+        this._changeDetectorRef.markForCheck();
+    }
+
+    openLogDetailsForm(log: any): void {
+        this.getDetailsLogData = log;
+        this.toogleLogDataFormMode(true);
+        this.drawerOne.open();
+        this._changeDetectorRef.markForCheck();
+    }
+
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     setupValueChangesSubscription() {
         this.searchInputControl.valueChanges
@@ -274,19 +299,6 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
         ).subscribe();
         this._changeDetectorRef.markForCheck();
     }
-
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    /* requestMethodList() {
-        if ( this.requestedMethod === 'post') {
-            this.ngAfterViewInit();
-        } else if ( this.requestedMethod === 'get' ) {
-            this.ngAfterViewInit();
-        } else if ( this.requestedMethod === 'patch' ) {
-            this.ngAfterViewInit();
-        } else if ( this.requestedMethod === 'delete' ) {
-            this.ngAfterViewInit();
-        }
-    } */
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     requestMethodList(selectedMethod: string) {
@@ -331,10 +343,5 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
             this.ngAfterViewInit();
             this.onPageChange();
         }
-    }
-
-    trackByFn(index: number, item: any): any
-    {
-        return item.id || index;
     }
 }

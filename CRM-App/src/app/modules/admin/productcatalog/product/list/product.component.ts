@@ -19,18 +19,18 @@ import { UserService } from 'app/core/user/user.service';
         /* language=SCSS */
         `
             .product-grid {
-                grid-template-columns: 150px 150px 150px 150px;
+                grid-template-columns: 150px 250px 150px;
 
                 @screen sm {
-                    grid-template-columns: 150px 200px 150px 150px;
+                    grid-template-columns: 150px 250px 150px;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 200px 150px 150px;
+                    grid-template-columns: 150px 250px 150px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 200px 150px 150px;
+                    grid-template-columns: 150px 250px 150px;
                 }
             }
 
