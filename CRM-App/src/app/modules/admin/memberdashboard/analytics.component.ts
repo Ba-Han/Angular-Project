@@ -110,7 +110,11 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         tier: 'all'
     };
     colors = ['linear-gradient(60deg,#ffa726,#fb8c00)', 'linear-gradient(60deg,#26c6da,#00acc1)', 'linear-gradient(60deg,#66bb6a,#43a047)', 'linear-gradient(60deg, #F50057, #FF8A80)', 'linear-gradient(60deg, #FFD700, #FFCA29)'];
-    selectedDate: Date;
+    selectedMemberRegistrationDate: Date;
+    selectedTransactionDate: Date;
+    selectedActivePointDate: Date;
+    selectedExpiredPointDate: Date;
+    selectedEarnPointDate: Date;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     private readonly onDestroy = new Subject<void>();
 
@@ -195,10 +199,10 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         this.filterRegister.type = type;
         this.filterRegister.day = filterDate.date();
         this.filterRegister.month = filterDate.month() + 1;
-        this.selectedDate = new Date();
-        this.selectedDate.setMonth(this.filterRegister.month - 1);
+        this.selectedMemberRegistrationDate = new Date();
+        this.selectedMemberRegistrationDate.setMonth(this.filterRegister.month - 1);
         this.filterRegister.year = filterDate.year();
-        this.selectedDate.setFullYear(this.filterRegister.year);
+        this.selectedMemberRegistrationDate.setFullYear(this.filterRegister.year);
 
         this._analyticsService.getTotalRegistrationMemberCount(this.filterRegister)
         .pipe(takeUntil(this._unsubscribeAll))
@@ -269,10 +273,10 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         this.filterTrans.type = type;
         this.filterTrans.day = filterDate.date();
         this.filterTrans.month = filterDate.month() + 1;
-        this.selectedDate = new Date();
-        this.selectedDate.setMonth(this.filterTrans.month - 1);
+        this.selectedTransactionDate = new Date();
+        this.selectedTransactionDate.setMonth(this.filterTrans.month - 1);
         this.filterTrans.year = filterDate.year();
-        this.selectedDate.setFullYear(this.filterTrans.year);
+        this.selectedTransactionDate.setFullYear(this.filterTrans.year);
 
         this._analyticsService.getAllTransactoinCount(this.filterTrans)
         .pipe(
@@ -406,10 +410,10 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         this.filterActivePoint.type = type;
         this.filterActivePoint.day = filterDate.date();
         this.filterActivePoint.month = filterDate.month() + 1;
-        this.selectedDate = new Date();
-        this.selectedDate.setMonth(this.filterActivePoint.month - 1);
+        this.selectedActivePointDate = new Date();
+        this.selectedActivePointDate.setMonth(this.filterActivePoint.month - 1);
         this.filterActivePoint.year = filterDate.year();
-        this.selectedDate.setFullYear(this.filterActivePoint.year);
+        this.selectedActivePointDate.setFullYear(this.filterActivePoint.year);
 
         this._analyticsService.getTotalActivePoint(this.filterActivePoint)
         .pipe(takeUntil(this._unsubscribeAll))
@@ -467,10 +471,10 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         this.filterExpiredPoint.type = type;
         this.filterExpiredPoint.day = filterDate.date();
         this.filterExpiredPoint.month = filterDate.month() + 1;
-        this.selectedDate = new Date();
-        this.selectedDate.setMonth(this.filterExpiredPoint.month - 1);
+        this.selectedExpiredPointDate = new Date();
+        this.selectedExpiredPointDate.setMonth(this.filterExpiredPoint.month - 1);
         this.filterExpiredPoint.year = filterDate.year();
-        this.selectedDate.setFullYear(this.filterExpiredPoint.year);
+        this.selectedExpiredPointDate.setFullYear(this.filterExpiredPoint.year);
 
         this._analyticsService.getTotalExpeiredPoint(this.filterExpiredPoint)
         .pipe(takeUntil(this._unsubscribeAll))
@@ -544,10 +548,10 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         this.earnPoint.type = type;
         this.earnPoint.day = filterDate.date();
         this.earnPoint.month = filterDate.month() + 1;
-        this.selectedDate = new Date();
-        this.selectedDate.setMonth(this.earnPoint.month - 1);
+        this.selectedEarnPointDate = new Date();
+        this.selectedEarnPointDate.setMonth(this.earnPoint.month - 1);
         this.earnPoint.year = filterDate.year();
-        this.selectedDate.setFullYear(this.earnPoint.year);
+        this.selectedEarnPointDate.setFullYear(this.earnPoint.year);
 
         this._analyticsService.getAllEarnPoint(this.earnPoint)
         .pipe(takeUntil(this._unsubscribeAll))

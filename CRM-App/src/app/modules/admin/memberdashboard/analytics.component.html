@@ -389,7 +389,7 @@
     </div>
 </div>
 
-<!--Date Range Picker-->
+<!--Member Registration Date Picker-->
 <div>
     <mat-form-field appearance="fill" class="hidden">
         <mat-date-range-input [rangePicker]="rangePicker">
@@ -408,14 +408,14 @@
     
     <!-- Month Picker -->
     <mat-form-field class="hidden" appearance="fill">
-        <input class="hiddenfield" matInput [matDatepicker]="monthpicker" [(ngModel)]="selectedDate">
+        <input class="hiddenfield" matInput [matDatepicker]="monthpicker" [(ngModel)]="selectedMemberRegistrationDate">
         <mat-datepicker-toggle matSuffix [for]="monthpicker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #monthpicker startView="year" [startAt]="startDate" (monthSelected)="registeredMemberByDate('month',$event, monthpicker)"></mat-datepicker>
     </mat-form-field>
     
     <!-- Year -->
     <mat-form-field class="hidden" appearance="fill">
-        <input matInput [matDatepicker]="yearpicker" [(ngModel)]="selectedDate">
+        <input matInput [matDatepicker]="yearpicker" [(ngModel)]="selectedMemberRegistrationDate">
         <mat-datepicker-toggle matSuffix [for]="monthpicker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #yearpicker startView="multi-year" [startAt]="startYear" (yearSelected)="registeredMemberByDate('year',$event, yearpicker)"></mat-datepicker>
     </mat-form-field>
@@ -447,14 +447,14 @@
     
     <!-- Month Picker -->
     <mat-form-field class="hidden" appearance="fill">
-        <input class="hiddenfield" matInput [matDatepicker]="tranmonthpicker" [(ngModel)]="selectedDate">
+        <input class="hiddenfield" matInput [matDatepicker]="tranmonthpicker" [(ngModel)]="selectedTransactionDate">
         <mat-datepicker-toggle matSuffix [for]="tranmonthpicker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #tranmonthpicker startView="year" [startAt]="startDate" (monthSelected)="transactionByDate('month',$event, tranmonthpicker)"></mat-datepicker>
     </mat-form-field>
     
     <!-- Year -->
     <mat-form-field class="hidden" appearance="fill">
-        <input matInput [matDatepicker]="tranyearpicker" [(ngModel)]="selectedDate">
+        <input matInput [matDatepicker]="tranyearpicker" [(ngModel)]="selectedTransactionDate">
         <mat-datepicker-toggle matSuffix [for]="tranyearpicker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #tranyearpicker startView="multi-year" [startAt]="startYear" (yearSelected)="transactionByDate('year',$event, tranyearpicker)"></mat-datepicker>
     </mat-form-field>
@@ -486,14 +486,14 @@
     
     <!-- Month Picker -->
     <mat-form-field class="hidden" appearance="fill">
-        <input class="hiddenfield" matInput [matDatepicker]="activepointmonthpicker" [(ngModel)]="selectedDate">
+        <input class="hiddenfield" matInput [matDatepicker]="activepointmonthpicker" [(ngModel)]="selectedActivePointDate">
         <mat-datepicker-toggle matSuffix [for]="activepointmonthpicker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #activepointmonthpicker startView="year" [startAt]="startDate" (monthSelected)="totalActivePointByDate('month',$event, activepointmonthpicker)"></mat-datepicker>
     </mat-form-field>
     
     <!-- Year -->
     <mat-form-field class="hidden" appearance="fill">
-        <input matInput [matDatepicker]="activepointyearpicker" [(ngModel)]="selectedDate">
+        <input matInput [matDatepicker]="activepointyearpicker" [(ngModel)]="selectedActivePointDate">
         <mat-datepicker-toggle matSuffix [for]="activepointyearpicker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #activepointyearpicker startView="multi-year" [startAt]="startYear" (yearSelected)="totalActivePointByDate('year',$event, activepointyearpicker)"></mat-datepicker>
     </mat-form-field>
@@ -525,14 +525,14 @@
     
     <!-- Month Picker -->
     <mat-form-field class="hidden" appearance="fill">
-        <input class="hiddenfield" matInput [matDatepicker]="expiredpointmonthpicker" [(ngModel)]="selectedDate">
+        <input class="hiddenfield" matInput [matDatepicker]="expiredpointmonthpicker" [(ngModel)]="selectedExpiredPointDate">
         <mat-datepicker-toggle matSuffix [for]="expiredpointmonthpicker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #expiredpointmonthpicker startView="year" [startAt]="startDate" (monthSelected)="totalExpiredPointByDate('month',$event, expiredpointmonthpicker)"></mat-datepicker>
     </mat-form-field>
     
     <!-- Year -->
     <mat-form-field class="hidden" appearance="fill">
-        <input matInput [matDatepicker]="expiredpointyearpicker" [(ngModel)]="selectedDate">
+        <input matInput [matDatepicker]="expiredpointyearpicker" [(ngModel)]="selectedExpiredPointDate">
         <mat-datepicker-toggle matSuffix [for]="expiredpointyearpicker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #expiredpointyearpicker startView="multi-year" [startAt]="startYear" (yearSelected)="totalExpiredPointByDate('year',$event, expiredpointyearpicker)"></mat-datepicker>
     </mat-form-field>
@@ -545,7 +545,7 @@
     </mat-form-field>
 </div>
 
-<!-- Earn Point Date Picker -->
+<!-- Generated Point Date Picker -->
 <div>
     <mat-form-field appearance="fill" class="hidden">
         <mat-date-range-input [rangePicker]="earnrangePicker">
@@ -564,14 +564,14 @@
     
     <!-- Month Picker -->
     <mat-form-field class="hidden" appearance="fill">
-        <input class="hiddenfield" matInput [matDatepicker]="earnmonthpicker" [(ngModel)]="selectedDate">
+        <input class="hiddenfield" matInput [matDatepicker]="earnmonthpicker" [(ngModel)]="selectedEarnPointDate">
         <mat-datepicker-toggle matSuffix [for]="earnmonthpicker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #earnmonthpicker startView="year" [startAt]="startDate" (monthSelected)="totalEarnedPointByDate('month',$event, earnmonthpicker)"></mat-datepicker>
     </mat-form-field>
     
     <!-- Year -->
     <mat-form-field class="hidden" appearance="fill">
-        <input matInput [matDatepicker]="earnyearpicker" [(ngModel)]="selectedDate">
+        <input matInput [matDatepicker]="earnyearpicker" [(ngModel)]="selectedEarnPointDate">
         <mat-datepicker-toggle matSuffix [for]="earnyearpicker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #earnyearpicker startView="multi-year" [startAt]="startYear" (yearSelected)="totalEarnedPointByDate('year',$event, earnyearpicker)"></mat-datepicker>
     </mat-form-field>
