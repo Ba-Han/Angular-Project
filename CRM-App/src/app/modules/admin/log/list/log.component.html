@@ -34,7 +34,7 @@
                         <ng-container *ngIf="getDetailsLogData.request_path">
                             <div class="grid grid-cols-2 sm:items-center">
                                 <div>Request Path: </div>
-                                <div class="leading-6">{{ getDetailsLogData.request_path }}</div>
+                                <div class="leading-6 log_long_text">{{ getDetailsLogData.request_path }}</div>
                             </div>
                         </ng-container>
         
@@ -80,10 +80,17 @@
                             </div>
                         </ng-container>
         
-                        <ng-container *ngIf="getDetailsLogData.is_error">
+                        <ng-container *ngIf="getDetailsLogData.is_error === false">
                             <div class="grid grid-cols-2 sm:items-center">
                                 <div>Is Error: </div>
-                                <div class="leading-6">{{ getDetailsLogData.is_error }}</div>
+                                <div class="leading-6"> false </div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="getDetailsLogData.is_error === true">
+                            <div class="grid grid-cols-2 sm:items-center">
+                                <div>Is Error: </div>
+                                <div class="leading-6"> true </div>
                             </div>
                         </ng-container>
 
@@ -210,7 +217,7 @@
                                                         {{log.request_method}}
                                                     </div>
         
-                                                    <div class="truncate log_long_text">
+                                                    <div class="truncate">
                                                         {{log.request_path}}
                                                     </div>
         

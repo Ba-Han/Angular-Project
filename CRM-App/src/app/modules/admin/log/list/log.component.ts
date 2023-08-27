@@ -18,18 +18,18 @@ import { Log, LogPagination } from 'app/modules/admin/log/log.types';
     styles         : [
         `
             .log-grid {
-                grid-template-columns: 150px 150px 150px 250px 100px 350px 200px 200px 100px;
+                grid-template-columns: 150px 200px 150px 250px 100px 350px 200px 200px 100px;
 
                 @screen sm {
-                    grid-template-columns: 150px 150px 150px 250px 100px 350px 200px 200px 100px;
+                    grid-template-columns: 150px 200px 150px 250px 100px 350px 200px 200px 100px;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 150px 150px 250px 100px 350px 200px 200px 100px;
+                    grid-template-columns: 150px 200px 150px 250px 100px 350px 200px 200px 100px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 150px 150px 250px 100px 350px 200px 200px 100px;
+                    grid-template-columns: 150px 200px 150px 250px 100px 350px 200px 200px 100px;
                 }
             }
 
@@ -92,7 +92,7 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
     logData: any;
     getLogInputData: string;
     logDataFormMode: boolean = false;
-    getDetailsLogData: any;
+    getDetailsLogData: any[] = [];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor( private _activatedRoute: ActivatedRoute,
