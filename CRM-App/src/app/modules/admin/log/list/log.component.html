@@ -1,6 +1,6 @@
 
 <mat-drawer-container class="flex flex-col w-full">
-    <mat-drawer #drawerOne class="w-2/4 dark:bg-gray-900"
+    <mat-drawer #drawerOne class="w-3/4 dark:bg-gray-900"
                 [mode]="'over'"
                 [opened]="false"
                 [position]="'end'"
@@ -48,7 +48,7 @@
                         <ng-container *ngIf="getDetailsLogData.request_body">
                             <div class="grid grid-cols-2 sm:items-center">
                                 <div>Request Body: </div>
-                                <div class="leading-6 log_long_text">{{ getDetailsLogData.request_body }}</div>
+                                <div class="leading-6">{{ getDetailsLogData.request_body | json }}</div>
                             </div>
                         </ng-container>
         
@@ -62,7 +62,7 @@
                         <ng-container *ngIf="getDetailsLogData.response_body_text">
                             <div class="grid grid-cols-2 sm:items-center">
                                 <div>Response Body Text: </div>
-                                <div class="leading-6 log_long_text">{{ getDetailsLogData.response_body_text }}</div>
+                                <div class="leading-6">{{ getDetailsLogData.response_body_text | json }}</div>
                             </div>
                         </ng-container>
         
@@ -225,7 +225,7 @@
                                                         {{log.request_query_string}}
                                                     </div>
         
-                                                    <div class="truncate log_long_text">
+                                                    <div class="truncate">
                                                         {{log.request_body}}
                                                     </div>
         
@@ -233,7 +233,7 @@
                                                         {{log.response_status_code}}
                                                     </div>
         
-                                                    <div class="truncate log_long_text">
+                                                    <div class="truncate">
                                                         {{log.response_body_text}}
                                                     </div>
         

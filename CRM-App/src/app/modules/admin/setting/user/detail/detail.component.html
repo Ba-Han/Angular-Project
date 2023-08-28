@@ -145,7 +145,7 @@
                         </div>
         
                         <div class="flex items-center reset-rq-btn-scss -mx-6 sm:-mx-12 pr-4 pl-1 sm:pr-12 reset-qr-btn" style="gap: 1rem;">
-                            <button class="ml-2"
+                            <button *ngIf="canEdit" class="ml-2"
                                     mat-flat-button
                                     [color]="'primary'"
                                     [matTooltip]="'Reset QR Code'"

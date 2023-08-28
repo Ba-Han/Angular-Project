@@ -48,7 +48,7 @@
                                 mat-stroked-button>
                             </button>                                                         
 
-                            <button class="ml-4"
+                            <button *ngIf="canEdit" class="ml-4"
                                     mat-stroked-button
                                     (click)="tooglepointAddFormMode(true)">
                                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
