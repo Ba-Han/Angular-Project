@@ -168,7 +168,7 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
              debounceTime(300),
              switchMap((query) => {
                  this.isLoading = true;
-                 return this._memberPointService.getData(Number(this.memberId),0, 10, 'date_created', 'desc', 'all', query);
+                 return this._memberPointService.getData(Number(this.memberId),0, 10, 'transaction_document_no', 'asc', 'all', query);
              }),
              map(() => {
                  this.isLoading = false;

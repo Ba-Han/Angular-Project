@@ -280,7 +280,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
                 id : (key),
                 selected : this.UserEditForm.value[key]
             }));
-
+        this.updatedPagePermission = [];
         this.page_roles.forEach((pr: { id: any }) =>
             {
                 console.log(pr.id);

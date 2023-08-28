@@ -67,8 +67,10 @@ export class GeneralSettingService {
         return this._httpClient.get<any>(`${this._apiurl}/items/general_settings`)
             .pipe(
                 tap((response) => {
-                    const setting = response.data;
-                    this._setting.next(setting);
+                    if(response.data !== null  ) {
+                        const setting = response.data;
+                        this._setting.next(setting);
+                    }
                 })
             );
     }
@@ -100,15 +102,6 @@ export class GeneralSettingService {
                     startIndex: begin,
                     endIndex: end - 1
                 };
-                //bh test
-                // const memberTier = response.data;
-
-                // for (var i = 0; i < response.data.length; i++) {
-                //    response.data[i]["point_ruleFullname"] = response.data[i].point_rule.name;
-                //    response.data[i].point_rule = response.data[i].point_rule.id;
-
-                // }
-                //bh test end
                 this._memberGroupspagination.next(pagination);
                 this._memberGroups.next(response.data);
             })
@@ -142,15 +135,6 @@ export class GeneralSettingService {
                     startIndex: begin,
                     endIndex: end - 1
                 };
-                //bh test
-                // const memberTier = response.data;
-
-                // for (var i = 0; i < response.data.length; i++) {
-                //    response.data[i]["point_ruleFullname"] = response.data[i].point_rule.name;
-                //    response.data[i].point_rule = response.data[i].point_rule.id;
-
-                // }
-                //bh test end
                 this._userGroupspagination.next(pagination);
                 this._userGroups.next(response.data);
             })
@@ -192,19 +176,23 @@ export class GeneralSettingService {
     }
 
     updateSetting(id: number, setting: GeneralSetting, selectedMemberGroupValue: MemberGroup[], selectedUserGroupValue: UserGroup[]): Observable<GeneralSetting> {
+
+        const getIdValue = setting.id.toString() === '' ? 0 : setting.id;
+        const defaultMemberTier = setting.default_member_tier.toString() === '' ? 0 : setting.default_member_tier;
+
         //let memberGroup = setting.member_groups;
-        let strMemberGroup = selectedMemberGroupValue.map(x=>x.id).join(',');
+        const strMemberGroup = selectedMemberGroupValue.map(x=>x.id).join(',');
 
         //let userGroup = setting.user_groups;
-        let strUserGroup = selectedUserGroupValue.map(x=>x.id).join(',');
+        const strUserGroup = selectedUserGroupValue.map(x=>x.id).join(',');
 
         if ((strMemberGroup) && (strUserGroup)) {
             return this._httpClient.patch<any>(`${this._apiurl}/items/general_settings`, {
-                'id': setting.id,
+                'id': getIdValue,
                 'transaction_rounding': setting.transaction_rounding,
                 'member_groups': strMemberGroup,
                 'user_groups': strUserGroup,
-                'default_member_tier': setting.default_member_tier,
+                'default_member_tier': defaultMemberTier,
             }).pipe(
                 map(updateSetting => updateSetting)
             );

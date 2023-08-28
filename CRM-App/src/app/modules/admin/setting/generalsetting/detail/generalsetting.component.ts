@@ -128,6 +128,8 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
     memberTiers: any;
 
     setting$: Observable<GeneralSetting>;
+    successMessage: string;
+    errorMessage: string;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -224,9 +226,22 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
         this._settingService.updateSetting(setting.id, setting, selectedMemberGroupOptions, selectedUserGroupOptions).pipe(
             map(() => {
                 this.isLoading = false;
-                //this.isSuccess = true;
             })
-        ).subscribe();
+        ).subscribe(() => {
+            this.successMessage = 'Update Successfully.';
+            this._changeDetectorRef.markForCheck();
+        },
+            (response) => {
+                if (response.status === 200) {
+                    // Successful response
+                    this._changeDetectorRef.markForCheck();
+                } else {
+                    // Error response
+                    this.errorMessage = response.error.message;
+                    this._changeDetectorRef.markForCheck();
+                }
+            }
+        );
         this.isSuccess = true;
     }
 }

@@ -155,7 +155,7 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
              debounceTime(300),
              switchMap((query) => {
                  this.isLoading = true;
-                 return this._memberVoucherService.getMemberVoucher(Number(this.memberId),0, 10, 'date_created', 'asc', query);
+                 return this._memberVoucherService.getMemberVoucher(Number(this.memberId),0, 10, 'voucher_code', 'asc', query);
              }),
              map(() => {
                  this.isLoading = false;
