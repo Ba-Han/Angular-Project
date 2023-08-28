@@ -37,7 +37,7 @@
                     </div>
                     <div style="position: relative; bottom: 3.4rem; text-align: justify; display: grid; line-height: 1; justify-content: center;">
                         <span>* MemberCode or Email column is required.</span> <br/>
-                        <span>* ExpiryDate or BasketName column is required.</span> <br/>
+                        <span>* ExpiryDate(MM/dd/yyyy) or BasketName column is required.</span> <br/>
                         <span>* Point column is required.</span>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                          <div> Name  </div>
                          <div> Email </div>
                          <div> Tier </div>
-                         <div> Date </div>
+                         <div> Created Date </div>
                          <div> Points </div>
                     </div>
     
@@ -115,7 +115,6 @@
                         style="width: 6rem !important;"
                         mat-flat-button
                         [color] = "'primary'"
-                        *ngIf="!uploadSuccess"
                         class="h-10 md-button md-raised md-primary"
                         (click)="proceedUploadFile()">
                     Proceed
