@@ -3,7 +3,7 @@
 
         <div class="flex w-full mt-3 w-full justify-center">
             <div class="text-3xl font-bold">Member Point Upload</div>
-            <div class="ml-3 flex items-center" (mouseenter)="isHovered = true" (mouseleave)="isHovered = false" [class.hover-download_template]="isHovered"><a href="assets/downloads/memberpoint.csv" download style="color:blue;">Download Template</a></div>
+            <div class="ml-3 flex items-center" *ngIf="canEdit" (mouseenter)="isHovered = true" (mouseleave)="isHovered = false" [class.hover-download_template]="isHovered"><a href="assets/downloads/memberpoint.csv" download style="color:blue;">Download Template</a></div>
         </div>
 
         <div class="w-full mt-5">
@@ -11,14 +11,14 @@
                 <div class="w-full" style="border: 1px dashed black; border-radius: 10px">
                     <div class="mb-5"> <span class="text-2xl font-bold justify-center" style="position: relative; top: 1rem; left: 1rem; border-bottom: 1px solid black;"> Select File And Upload </span></div>
                     <div class="w-full h-50 flex items-center justify-center" style="cursor:pointer; border-radius: 3px;">
-                        <div style="border-bottom: 1px solid black;">
+                        <div *ngIf="canEdit" style="border-bottom: 1px solid black;">
                             <input class="ng-hide mr-9" #fileInput multiple type="file" accept=".csv" (change)="onFileSelect($event)" style="margin-bottom: 9px;" />
                             <button mat-icon-button [matTooltip]="'Clear'" *ngIf="fileToUpload" (click)="clearFileToUpload()" style="width: 35px; height: 35px; border-radius: 9999px !important; border: 1px solid #4f46e5; top: 1px;">
                                 <span>x</span>
                             </button>
                         </div>
 
-                        <button for="input-file-id" 
+                        <button *ngIf="canEdit" for="input-file-id" 
                             class="h-10 md-button md-raised md-primary"
                             (click)="uploadFile()"
                             style="width: 6rem !important;"
