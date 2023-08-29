@@ -25,70 +25,70 @@
                     <div class="flex flex-col pt-6 space-y-3">
 
                         <ng-container *ngIf="getDetailsLogData.request_method">
-                            <div class="grid grid-cols-2 sm:items-center">
+                            <div class="grid grid-cols-2 sm:items-center log-css">
                                 <div>Request Method: </div>
                                 <div class="leading-6">{{ getDetailsLogData.request_method }}</div>
                             </div>
                         </ng-container>
         
                         <ng-container *ngIf="getDetailsLogData.request_path">
-                            <div class="grid grid-cols-2 sm:items-center">
+                            <div class="grid grid-cols-2 sm:items-center log-css">
                                 <div>Request Path: </div>
-                                <div class="leading-6 log_long_text">{{ getDetailsLogData.request_path }}</div>
+                                <div class="leading-6">{{ getDetailsLogData.request_path }}</div>
                             </div>
                         </ng-container>
         
                         <ng-container *ngIf="getDetailsLogData.request_query_string">
-                            <div class="grid grid-cols-2 sm:items-center">
+                            <div class="grid grid-cols-2 sm:items-center log-css">
                                 <div>Request Query String: </div>
-                                <div class="leading-6">{{ getDetailsLogData.request_query_string }}</div>
+                                <div class="leading-6 log_long_text">{{ getDetailsLogData.request_query_string }}</div>
                             </div>
                         </ng-container>
         
                         <ng-container *ngIf="getDetailsLogData.request_body">
-                            <div class="grid grid-cols-2 sm:items-center">
+                            <div class="grid grid-cols-2 sm:items-center log-css">
                                 <div>Request Body: </div>
-                                <div class="leading-6">{{ getDetailsLogData.request_body | json }}</div>
+                                <div class="leading-6 log_long_text">{{ getDetailsLogData.request_body }}</div>
                             </div>
                         </ng-container>
         
                         <ng-container *ngIf="getDetailsLogData.response_status_code">
-                            <div class="grid grid-cols-2 sm:items-center">
+                            <div class="grid grid-cols-2 sm:items-center log-css">
                                 <div>Response Status Code: </div>
                                 <div class="leading-6">{{ getDetailsLogData.response_status_code }}</div>
                             </div>
                         </ng-container>
         
                         <ng-container *ngIf="getDetailsLogData.response_body_text">
-                            <div class="grid grid-cols-2 sm:items-center">
+                            <div class="grid grid-cols-2 sm:items-center log-css">
                                 <div>Response Body Text: </div>
-                                <div class="leading-6">{{ getDetailsLogData.response_body_text | json }}</div>
+                                <div class="leading-6 log_long_text">{{ getDetailsLogData.response_body_text }}</div>
                             </div>
                         </ng-container>
         
                         <ng-container *ngIf="getDetailsLogData.request_on">
-                            <div class="grid grid-cols-2 sm:items-center">
+                            <div class="grid grid-cols-2 sm:items-center log-css">
                                 <div>Request On: </div>
                                 <div class="leading-6">{{ getDetailsLogData.request_on | date:'MMM dd, y HH:mm:ss' }}</div>
                             </div>
                         </ng-container>
         
                         <ng-container *ngIf="getDetailsLogData.response_on">
-                            <div class="grid grid-cols-2 sm:items-center">
+                            <div class="grid grid-cols-2 sm:items-center log-css">
                                 <div>Response On: </div>
                                 <div class="leading-6">{{ getDetailsLogData.response_on | date:'MMM dd, y HH:mm:ss' }}</div>
                             </div>
                         </ng-container>
         
                         <ng-container *ngIf="getDetailsLogData.is_error === false">
-                            <div class="grid grid-cols-2 sm:items-center">
+                            <div class="grid grid-cols-2 sm:items-center log-css">
                                 <div>Is Error: </div>
                                 <div class="leading-6"> false </div>
                             </div>
                         </ng-container>
 
                         <ng-container *ngIf="getDetailsLogData.is_error === true">
-                            <div class="grid grid-cols-2 sm:items-center">
+                            <div class="grid grid-cols-2 sm:items-center log-css">
                                 <div>Is Error: </div>
                                 <div class="leading-6"> true </div>
                             </div>
