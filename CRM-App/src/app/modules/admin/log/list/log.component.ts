@@ -62,11 +62,11 @@ import { Log, LogPagination } from 'app/modules/admin/log/log.types';
             }
 
             .log_long_text {
-                white-space: nowrap !important;
+                white-space: pre-line !important;
             }
 
             .log-css {
-                width: 30rem;
+                width: 25rem;
             }
         `
     ],
