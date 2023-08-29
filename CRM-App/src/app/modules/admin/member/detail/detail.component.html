@@ -378,7 +378,7 @@
                                         <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints > 0">
                                             <div class="items-baseline justify-center w-full mt-4 text-secondary">
                                                 <!-- <div class="flex justify-center truncate w-full font-bold" style="font-size: 14px;">Points to expire soon</div> -->
-                                                <div class="text-md font-medium flex justify-center truncate" style="font-size: 12px;">Expire Points:
+                                                <div class="font-medium flex justify-center truncate" style="font-size: 12px;">Expire Points:
                                                     <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints > 0">
                                                         <div class="ml-1.5 font-semibold" style="font-size: 12px;">{{member.soonExpiredPoint.soonExpiredPoints}}</div>
                                                     </ng-container>
@@ -388,15 +388,15 @@
                                                     <div class="ml-1.5 font-semibold">-</div>
                                                 </ng-container>
                                             </div>
-                                            <!-- <div class="flex items-baseline justify-center w-full text-secondary">
-                                                <div class="text-md font-medium truncate" style="font-size: 12px;">Expire Date:</div>
+                                            <div class="flex items-baseline justify-center w-full text-secondary">
+                                                <div class="font-medium truncate" style="font-size: 12px;">Next Expire Points Date:</div>
                                                 <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints > 0">
                                                     <div class="ml-1.5 font-semibold" style="font-size: 12px;">{{member.soonExpiredPoint.soonExpiredDate | date:'MMM dd, yyyy'}}</div>
                                                 </ng-container>
                                                 <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints === 0">
                                                     <div class="ml-1.5 font-semibold">-</div>
                                                 </ng-container>
-                                            </div> -->
+                                            </div>
                                         </ng-container>
                                         
                                         <ng-container *ngIf="canEdit">
