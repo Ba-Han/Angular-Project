@@ -89,10 +89,16 @@
                                             Point Type
                                         </div>
                                         <div class="hidden md:block">
-                                            Points
+                                            Total Points
+                                        </div>
+                                        <div class="hidden md:block">
+                                            Balance
                                         </div>
                                         <div class="hidden md:block">
                                             Order Total
+                                        </div>
+                                        <div class="hidden md:block">
+                                            Expire At
                                         </div>
                                         <div class="hidden md:block">
                                             Date
@@ -122,7 +128,15 @@
                                                     </div>
 
                                                     <div class="hidden md:block truncate">
+                                                        {{memberPoint.balance}}
+                                                    </div>
+
+                                                    <div class="hidden md:block truncate">
                                                         {{memberPoint.order_total}}
+                                                    </div>
+
+                                                    <div class="hidden md:block truncate">
+                                                        {{memberPoint.spending_valid_to | date:'MMM dd, y'}}
                                                     </div>
 
                                                     <div class="hidden md:block truncate">

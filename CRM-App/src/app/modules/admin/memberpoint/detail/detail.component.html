@@ -67,7 +67,28 @@
                             <div class="w-1/4">Point Type: </div>
                             <div class="ml-6 leading-6">{{memberPoint.point_type}}</div>
                         </div>
-                    </ng-container> 
+                    </ng-container>
+
+                    <ng-container *ngIf="memberPoint.point">
+                        <div class="flex sm:items-center">
+                            <div class="w-1/4">Total Points: </div>
+                            <div class="ml-6 leading-6">{{memberPoint.point}}</div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="memberPoint.balance">
+                        <div class="flex sm:items-center">
+                            <div class="w-1/4">Balance: </div>
+                            <div class="ml-6 leading-6">{{memberPoint.balance}}</div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="memberPoint.spending_valid_to">
+                        <div class="flex sm:items-center">
+                            <div class="w-1/4">Expire At: </div>
+                            <div class="ml-6 leading-6">{{memberPoint.spending_valid_to | date:'MMM dd, y'}}</div>
+                        </div>
+                    </ng-container>
 
                     <ng-container *ngIf="memberPoint.point_type_int === 1">
                         <div class="flex sm:items-center">
