@@ -555,7 +555,7 @@
                                     <!-- Point -->
                                     <ng-container matColumnDef="point">
                                         <th mat-header-cell
-                                            *matHeaderCellDef style="background:#e2e8f0;">
+                                            *matHeaderCellDef style="background:#e2e8f0; white-space: nowrap; padding-right: 0.3rem;">
                                             Total Points
                                         </th>
                                         <td mat-cell [routerLink]="['./memberpoint', point.id]" style="cursor:pointer;"
@@ -569,7 +569,7 @@
                                     <!-- Balance -->
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell
-                                            *matHeaderCellDef style="background:#e2e8f0;">
+                                            *matHeaderCellDef style="background:#e2e8f0; padding-left: 0.3rem;">
                                             Balance
                                         </th>
                                         <td mat-cell [routerLink]="['./memberpoint', point.id]" style="cursor:pointer;"

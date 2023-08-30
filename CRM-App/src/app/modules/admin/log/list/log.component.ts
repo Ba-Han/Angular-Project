@@ -18,18 +18,18 @@ import { Log, LogPagination } from 'app/modules/admin/log/log.types';
     styles         : [
         `
             .log-grid {
-                grid-template-columns: 150px 200px 150px 250px 100px 350px 200px 200px 100px;
+                grid-template-columns: 100px 250px 200px 250px 100px 350px 200px 200px 100px;
 
                 @screen sm {
-                    grid-template-columns: 150px 200px 150px 250px 100px 350px 200px 200px 100px;
+                    grid-template-columns: 100px 250px 200px 250px 100px 350px 200px 200px 100px;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 200px 150px 250px 100px 350px 200px 200px 100px;
+                    grid-template-columns: 100px 250px 200px 250px 100px 350px 200px 200px 100px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 200px 150px 250px 100px 350px 200px 200px 100px;
+                    grid-template-columns: 100px 250px 200px 250px 100px 350px 200px 200px 100px;
                 }
             }
 
