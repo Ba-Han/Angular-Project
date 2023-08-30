@@ -538,7 +538,7 @@
                                         </td>
                                     </ng-container>
                                      
-                                    <!-- Type -->
+                                    <!-- Point Type -->
                                     <ng-container matColumnDef="point_type">
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0;">
@@ -556,12 +556,40 @@
                                     <ng-container matColumnDef="point">
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0;">
-                                            Points
+                                            Total Points
                                         </th>
                                         <td mat-cell [routerLink]="['./memberpoint', point.id]" style="cursor:pointer;"
                                             *matCellDef="let point">
                                             <span class="pr-6 font-medium whitespace-nowrap">
                                                 {{point.point}}
+                                            </span>
+                                        </td>
+                                    </ng-container>
+
+                                    <!-- Balance -->
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell
+                                            *matHeaderCellDef style="background:#e2e8f0;">
+                                            Balance
+                                        </th>
+                                        <td mat-cell [routerLink]="['./memberpoint', point.id]" style="cursor:pointer;"
+                                            *matCellDef="let point">
+                                            <span class="pr-6 font-medium whitespace-nowrap">
+                                                {{point.balance}}
+                                            </span>
+                                        </td>
+                                    </ng-container>
+
+                                    <!-- Expire At -->
+                                    <ng-container matColumnDef="spending_valid_to">
+                                        <th mat-header-cell
+                                            *matHeaderCellDef style="background:#e2e8f0; padding-left: 0.5rem;">
+                                            Expire At
+                                        </th>
+                                        <td mat-cell [routerLink]="['./memberpoint', point.id]" style="cursor:pointer;"
+                                            *matCellDef="let point">
+                                            <span class="pr-6 font-medium whitespace-nowrap">
+                                                {{point.spending_valid_to | date:'MMM dd, y'}}
                                             </span>
                                         </td>
                                     </ng-container>
@@ -572,7 +600,7 @@
                                             <td class="py-6 px-0 border-0"
                                                 mat-footer-cell
                                                 *matFooterCellDef
-                                                colspan="4">
+                                                colspan="5">
                                                 <button mat-stroked-button
                                                         [routerLink]="['./memberpoint']">
                                                     See All Member Points
@@ -586,7 +614,7 @@
                                             <td class="py-6 px-0 border-0"
                                                 mat-footer-cell
                                                 *matFooterCellDef
-                                                colspan="4"
+                                                colspan="5"
                                                 style="color:grey;">
                                                 No Member Points
                                                 <!-- <button mat-stroked-button
@@ -1080,7 +1108,7 @@
                                             <td class="py-6 px-0 border-0"
                                                 mat-footer-cell
                                                 *matFooterCellDef
-                                                colspan="6">
+                                                colspan="4">
                                                 <button mat-stroked-button (click)="toggleEditMode(true)">See All Member Documents</button>
                                             </td>
                                         </ng-container>
@@ -1091,7 +1119,7 @@
                                             <td class="py-6 px-0 border-0"
                                                 mat-footer-cell
                                                 *matFooterCellDef
-                                                colspan="6"
+                                                colspan="4"
                                                 style="color:grey;">
                                                 No Member Documents
                                             </td>
