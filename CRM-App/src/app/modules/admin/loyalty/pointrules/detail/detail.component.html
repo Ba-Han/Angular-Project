@@ -1416,7 +1416,7 @@
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Validity Type</mat-label>
-                                    <mat-select [formControlName]="'validity_type'" [(ngModel)]="validitytypeValue">
+                                    <mat-select [formControlName]="'validity_type'" [(ngModel)]="validitytypeValue" (selectionChange)="onDropdownChangeValidityValue()">
                                         <mat-option [value]="1">No Range</mat-option>
                                         <mat-option [value]="2">Custom</mat-option>
                                     </mat-select>

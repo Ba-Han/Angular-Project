@@ -519,6 +519,15 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         this._changeDetectorRef.markForCheck();
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    onDropdownChangeValidityValue(): void {
+        if( this.validitytypeValue ===  1) {
+            this.PointRuleEditForm.get('start_date').setValue(null);
+            this.PointRuleEditForm.get('end_date').setValue(null);
+            this._changeDetectorRef.markForCheck();
+        }
+    }
+
     updatePointRule(): void {
         const pointrule = this.PointRuleEditForm.getRawValue();
         pointrule.point_rule_products = this.selectedPointRuleProduct;
