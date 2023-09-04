@@ -46,6 +46,11 @@ import { Log, LogPagination } from 'app/modules/admin/log/log.types';
                 width: 13rem !important;
             }
 
+            .log-date{
+                position: static;
+                width: 9rem !important;
+            }
+
             .log-sort-btn-01 {
                 border-radius: 3px !important;
                 padding: 12px !important;

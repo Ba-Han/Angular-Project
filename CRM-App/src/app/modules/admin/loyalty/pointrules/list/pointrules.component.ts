@@ -230,6 +230,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     selectedPointRuleProductIndex: number | null = null;
     pointRuleProductSccessMessage: string | '' = '';
     currentDate: string;
+    validitytypeValue: number;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -641,6 +642,15 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             this.ngAfterViewInit();
         } else if ( !this.isAscending && this.selectedCoulumn === 'enddate' ) {
             this.ngAfterViewInit();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    onDropdownChangeValidityValue(): void {
+        if( this.validitytypeValue ===  1) {
+            this.PointRuleAddForm.get('start_date').setValue(null);
+            this.PointRuleAddForm.get('end_date').setValue(null);
+            this._changeDetectorRef.markForCheck();
         }
     }
 
