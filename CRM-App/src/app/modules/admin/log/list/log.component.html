@@ -131,7 +131,7 @@
                             <input matInput
                                    type="date"
                                    [(ngModel)]="todayDate"
-                                   (change)="setupValueChangesSubscription()"
+                                   (ngModelChange)="setupValueChangesSubscription()"
                                    [formControl]="searchInputControl"
                                    [autocomplete]="'off'"
                                    [placeholder]="''">
