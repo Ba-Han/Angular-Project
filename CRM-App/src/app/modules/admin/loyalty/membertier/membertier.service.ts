@@ -66,10 +66,9 @@ export class MemberTierService {
      */
     getMemberTiers(page: number = 0, limit: number = 10, sort: string = 'level', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: MemberTierPagination; memberTiers: MemberTier[] }> {
-        return this._httpClient.get<any>(`${this._apiurl}/items/member_tier?fields=*,point_rule.*`, {
+        return this._httpClient.get<any>(`${this._apiurl}/items/member_tier`, {
             params: {
                 meta: 'filter_count',
-                fields: ['*.*'],
                 page: page+1,
                 limit: limit,
                 sort,
@@ -103,7 +102,7 @@ export class MemberTierService {
      * Get memberTier by id
      */
     getMemberTierById(id: number): Observable<MemberTier> {
-        return this._httpClient.get(`${this._apiurl}/items/member_tier/${id}?fields=*,tier_upgrade_items.*,point_rule.*`
+        return this._httpClient.get(`${this._apiurl}/items/member_tier/${id}`
         ).pipe(
             tap((response: any) => this._memberTier.next(response.data))
         );
@@ -143,7 +142,7 @@ export class MemberTierService {
     }
 
     getTierUpgradeById(id: number): Observable<MemberTierUpgrade> {
-        return this._httpClient.get(`${this._apiurl}/items/member_tier_upgrade/${id}?fields=*,upgrade_tier.*`
+        return this._httpClient.get(`${this._apiurl}/items/member_tier_upgrade/${id}`
         ).pipe(
             tap((response: any) => response.data)
         );

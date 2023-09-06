@@ -94,12 +94,12 @@ export class MemberService
     // -----------------------------------------------------------------------------------------------------
 
     // eslint-disable-next-line max-len, @typescript-eslint/no-shadow
-    getMembers(page: number = 0, limit: number = 10, sort: string = 'member_code', order: 'asc' | 'desc' | '' = 'asc', search: string = '', filter: string = '', fields: string = ''):
+    getMembers(page: number = 0, limit: number = 10, sort: string = 'member_code', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: MemberPagination; members: Member[] }>
     {
         return this._httpClient.get<any>(`${this._apiurl}/items/member`, {
             params: {
-                filter:filter,
+                meta:'filter_count',
                 page: page+1,
                 limit: limit,
                 sort: sort,

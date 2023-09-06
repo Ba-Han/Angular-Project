@@ -6,7 +6,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatSort } from '@angular/material/sort';
-import { debounceTime, map, merge, filter, fromEvent, Observable, Subject, switchMap, takeUntil } from 'rxjs';
+import { debounceTime, map, merge, filter, fromEvent, Observable, Subject, switchMap, takeUntil, of } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MemberPointService } from 'app/modules/admin/memberpoint/memberpoint.service';
@@ -20,18 +20,18 @@ import { UserService } from 'app/core/user/user.service';
     styles         : [
         `
             .memberpoint-grid {
-                grid-template-columns: 180px 110px 110px 110px 110px 110px 110px;
+                grid-template-columns: 160px 100px 100px 100px 100px 110px 110px 110px;
 
                 @screen sm {
-                    grid-template-columns: 180px 110px 110px 110px 110px 110px 110px;
+                    grid-template-columns: 160px 100px 100px 100px 100px 110px 110px 110px;
                 }
 
                 @screen md {
-                    grid-template-columns: 180px 110px 110px 110px 110px 110px 110px;
+                    grid-template-columns: 160px 100px 100px 100px 100px 110px 110px 110px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 180px 110px 110px 110px 110px 110px 110px;
+                    grid-template-columns: 160px 100px 100px 100px 100px 110px 110px 110px;
                 }
             }
             .membercustom-paging {
@@ -173,7 +173,9 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
              map(() => {
                  this.isLoading = false;
              })
-         ).subscribe();
+         ).subscribe(() => {
+            this._changeDetectorRef.markForCheck();
+         });
 
          this.canEdit = this._userService.getEditUserPermissionByNavId('member');
     }
@@ -244,17 +246,22 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
                     this._paginator.pageIndex = 0;
                 });
 
-            // Get products if sort or page changes
+            // Get memberpoint if sort or page changes
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
-                    this.isLoading = true;
-                    // eslint-disable-next-line max-len
-                    return this._memberPointService.getData(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.getFilterValue);
+                    if(this.isLoading === true) {
+                        // eslint-disable-next-line max-len
+                        return this._memberPointService.getData(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.getFilterValue);
+                    } else {
+                        return of(null);
+                    }
                 }),
                 map(() => {
                     this.isLoading = false;
                 })
-            ).subscribe();
+            ).subscribe(() => {
+                this._changeDetectorRef.markForCheck();
+            });
         }
     }
 
@@ -271,16 +278,40 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
          this._changeDetectorRef.markForCheck();
      }
 
+     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    onPageChange() {
+        // eslint-disable-next-line max-len
+        this._memberPointService.getData(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.getFilterValue).pipe(
+            switchMap(() => {
+                if ( this.isLoading === true ) {
+                    // eslint-disable-next-line max-len
+                    return this._memberPointService.getData(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.getFilterValue);
+                } else {
+                    return of(null);
+                }
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        ).subscribe(() => {
+            this._changeDetectorRef.markForCheck();
+        });
+    }
+
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingColumnList() {
         if ( this.selectedCoulumn === 'documentno') {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'pointtype' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'points' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'date' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         }
     }
 
@@ -289,20 +320,28 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'documentno' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'documentno' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'pointtype' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'pointtype' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'points' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'points' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'date' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'date' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         }
     }
 

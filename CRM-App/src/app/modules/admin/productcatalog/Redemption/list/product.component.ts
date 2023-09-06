@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, ActivatedRouteSnapshot } from '@angular/router'
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDrawer } from '@angular/material/sidenav';
-import { debounceTime, map, merge, Observable, Subject, switchMap, takeUntil } from 'rxjs';
+import { debounceTime, map, merge, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { Product, ProductPagination } from 'app/modules/admin/productcatalog/Redemption/product.types';
@@ -142,7 +142,10 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.isLoading = false;
                 })
             )
-            .subscribe();
+            .subscribe(() => {
+                this._changeDetectorRef.markForCheck();
+            });
+
             this.canEdit = this._userService.getEditUserPermissionByNavId('redemption');
     }
 
@@ -197,17 +200,21 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
                     this._paginator.pageIndex = 0;
                 });
 
-            // Get channels if sort or page changes
+            // Get redemption if sort or page changes
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
-                    this.isLoading = true;
-                    //const sort = this._sort.direction == "desc" ? "-" + this._sort.active : this._sort.active;
-                    return this._productService.getProducts(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    if(this.isLoading === true) {
+                        return this._productService.getProducts(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    } else {
+                        return of(null);
+                    }
                 }),
                 map(() => {
                     this.isLoading = false;
                 })
-            ).subscribe();
+            ).subscribe(() => {
+                this._changeDetectorRef.markForCheck();
+            });
         }
     }
 
@@ -235,13 +242,36 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    onPageChange() {
+        // eslint-disable-next-line max-len
+        this._productService.getProducts(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+            switchMap(() => {
+                if ( this.isLoading === true ) {
+                    // eslint-disable-next-line max-len
+                    return this._productService.getProducts(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                } else {
+                    return of(null);
+                }
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        ).subscribe(() => {
+            this._changeDetectorRef.markForCheck();
+        });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingColumnList() {
         if ( this.selectedCoulumn === 'sku') {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'name' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'status' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         }
     }
 
@@ -250,16 +280,22 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'sku' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'sku' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'name' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'name' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'status' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'status' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         }
     }
 

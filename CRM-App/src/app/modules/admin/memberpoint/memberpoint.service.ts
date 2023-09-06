@@ -114,7 +114,7 @@ export class MemberPointService
 
     getMemberPointById(id: number): Observable<MemberPoint>
     {
-    return this._httpClient.get<any>(`${this._apiurl}/items/member_point/${id}?fields=*,member.*,point_basket.*`)
+    return this._httpClient.get<any>(`${this._apiurl}/items/member_point/${id}`)
         .pipe(
             tap((response) => {
                 const memberPoint = response.data;

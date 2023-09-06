@@ -92,6 +92,7 @@
                                            [pageIndex]="pagination.page"
                                            [pageSize]="pagination.limit"
                                            [pageSizeOptions]="[10, 25, 50, 100]"
+                                           (page)="onPageChange($event)"
                                            [showFirstLastButtons]="true"></mat-paginator>
                         </ng-container>
 

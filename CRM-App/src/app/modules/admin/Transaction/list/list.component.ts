@@ -6,7 +6,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatSort } from '@angular/material/sort';
-import { debounceTime, map, merge, filter, fromEvent, Observable, Subject, switchMap, takeUntil } from 'rxjs';
+import { debounceTime, map, merge, filter, fromEvent, Observable, Subject, switchMap, takeUntil, of } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
@@ -148,7 +148,9 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
                     this.isLoading = false;
                 })
             )
-            .subscribe();
+            .subscribe(() => {
+                this._changeDetectorRef.markForCheck();
+            });
     }
 
     ngAfterViewInit(): void {
@@ -203,16 +205,22 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
                     this._paginator.pageIndex = 0;
                 });
 
-            // Get products if sort or page changes
+            // Get transaction if sort or page changes
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
-                    this.isLoading = true;
-                    return this._transactionService.getData(Number(this.memberId), this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    if(this.isLoading === true) {
+                        // eslint-disable-next-line max-len
+                        return this._transactionService.getData(Number(this.memberId), this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    } else {
+                        return of(null);
+                    }
                 }),
                 map(() => {
                     this.isLoading = false;
                 })
-            ).subscribe();
+            ).subscribe(() => {
+                this._changeDetectorRef.markForCheck();
+            });
         }
     }
 
@@ -257,13 +265,36 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    onPageChange() {
+        // eslint-disable-next-line max-len
+        this._transactionService.getData(Number(this.memberId), this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+            switchMap(() => {
+                if ( this.isLoading === true ) {
+                    // eslint-disable-next-line max-len
+                    return this._transactionService.getData(Number(this.memberId), this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                } else {
+                    return of(null);
+                }
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        ).subscribe(() => {
+            this._changeDetectorRef.markForCheck();
+        });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingColumnList() {
         if ( this.selectedCoulumn === 'orderno') {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'amount' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'date' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         }
     }
 
@@ -272,16 +303,22 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'orderno' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'orderno' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'amount' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'amount' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'date' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'date' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         }
     }
 

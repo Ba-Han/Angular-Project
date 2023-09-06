@@ -38,118 +38,8 @@
                     [ngClass]="{'sort-asc': isAscending, 'sort-desc': !isAscending}"
                     mat-stroked-button>
                 </button>
-
-                <!-- <button class="ml-4"
-                        mat-flat-button
-                        [color]="'primary'"
-                        (click)="openAdvancedSearch(panel)">
-                    <mat-icon svgIcon="heroicons_outline:filter"></mat-icon>
-                    <span class="ml-2 mr-1">Advanced Search</span>
-                </button> -->
             </div>
         </div>
-
-        <!--  Advanced Search -->
-        <mat-accordion class="example-headers-align" multi>
-            <mat-expansion-panel #panel hideToggle>
-                <!--<b style="position: absolute;margin-top: 89px;margin-left: 46px;z-index: 99999;">Advanced Search</b>-->
-                <div class="relative sm:items-center sm:justify-between py-3">
-                    <div>
-                        <div class="tracking-tight leading-none">
-                            <div class="grid">
-                                <form [formGroup]="searchForm">
-                                    <!-- Header -->
-                                    <div class="advancedSearch-gird z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5">
-                                        <!--<div></div>-->
-                                        <!-- <div class="sm:block">
-                                            <div>
-                                                <mat-form-field class="fuse-mat-no-subscript w-full">
-                                                    <mat-label>Search Field</mat-label>
-                                                    <mat-select [formControlName]="'field'"
-                                                                (selectionChange)="fieldChange($event)">
-                                                        <mat-option value="member_tier">Member Tier</mat-option>
-                                                        <mat-option value="member_code">Member Code</mat-option>
-                                                        <mat-option value="full_name">Full Name</mat-option>
-                                                        <mat-option value="first_name">First Name</mat-option>
-                                                        <mat-option value="last_name">Last Name</mat-option>
-                                                        <mat-option value="email">Email</mat-option>
-                                                        <mat-option value="mobile_phone">Mobile</mat-option>
-                                                        <mat-option value="status">Status</mat-option>
-                                                    </mat-select>
-                                                </mat-form-field>
-                                            </div>
-                                        </div> -->
-                                        <!-- <div class="sm:block">
-                                            <div>
-                                                <mat-form-field class="fuse-mat-no-subscript w-full">
-                                                    <mat-label>Option</mat-label>
-                                                    <mat-select [formControlName]="'option'">
-                                                        <ng-container *ngFor="let o of optionList">
-                                                            <mat-option [value]="o.value">
-                                                                {{o.name}}
-                                                            </mat-option>
-                                                        </ng-container>
-                                                    </mat-select>
-                                                </mat-form-field>
-                                            </div>
-                                        </div> -->
-                                        <!-- <div class="sm:block">
-                                            <div>
-                                                <mat-form-field class="fuse-mat-no-subscript w-full">
-                                                    <mat-label>Text</mat-label>
-                                                    <input matInput *ngIf="!selectTier"
-                                                           [formControlName]="'searchValue'"
-                                                           [autocomplete]="'off'">
-                                                    <mat-select [formControlName]="'searchTierValue'" *ngIf="selectTier">
-                                                        <ng-container *ngIf="selectTierType == 'member_tier'">
-                                                            <ng-container *ngFor="let t of memberTiers">
-                                                                <mat-option [value]="t.id">
-                                                                    {{t.name}}
-                                                                </mat-option>
-                                                            </ng-container>
-                                                        </ng-container>
-                                                        <ng-container *ngIf="selectTierType == 'status'">
-                                                            <mat-option value="active">Active</mat-option>
-                                                            <mat-option value="inactive">Inactive</mat-option>
-                                                        </ng-container>
-                                                    </mat-select>
-                                                </mat-form-field>
-                                            </div>
-                                        </div> -->
-                                        <!-- <div class="sm:block">
-                                            <button type="button" style="margin-top: 30px;" class="mat-primary" mat-flat-button
-                                                    (click)="clearSearch()">
-                                                <mat-icon svgIcon="heroicons_solid:x-circle"></mat-icon>
-                                                <span class="ml-2 mr-1">Clear</span>
-                                            </button>
-                                        </div> -->
-                                        <!-- <div class="sm:block">
-                                            <button class="w-1/8 text-white items-center mat-primary"
-                                                    mat-flat-button
-                                                    style="margin-top: 30px;"
-                                                    [formControl]="searchInputControl"
-                                                    (click)="advanceSearch()">
-                                                <mat-icon svgIcon="heroicons_solid:search"></mat-icon>
-                                                <span class="ml-2 mr-1">Search</span>
-                                            </button>
-                                        </div> -->
-                                        <!-- <div class="flex" style="justify-content: end; align-items: flex-start;">
-                                            <button mat-icon-button
-                                                    [matTooltip]="'Close'"
-                                                    (click)="closeAdvancedSearch(panel)" style="background:gray;">
-                                                <mat-icon class="text-white"
-                                                          [svgIcon]="'heroicons_outline:x'"></mat-icon>
-                                            </button>
-                                        </div> -->
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </mat-expansion-panel>
-        </mat-accordion>
 
         <!-- Members list -->
         <div class="flex flex-col flex-auto sm:mb-18 sm:overflow-y-auto" style="position:relative;">
@@ -240,6 +130,7 @@
                                    [pageIndex]="pagination.page"
                                    [pageSize]="pagination.limit"
                                    [pageSizeOptions]="[5, 10, 15, 25, 50]"
+                                   (page)="onPageChange($event)"
                                    [showFirstLastButtons]="true"></mat-paginator>
 
                 </ng-container>
