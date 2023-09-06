@@ -30,7 +30,10 @@ export class MemberResolverByTier implements Resolve<any>
     }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ pagination: MemberPagination; members: Member[] }> {
-        return this._memberService.getMembers();
+        const searchFilterTierId = route.paramMap.get('membertierid');
+        const searchFilter = '{"member_tier":{"_eq":"' + searchFilterTierId + '"}}';
+
+        return this._memberService.getMembers(0, 10, 'member_code', 'asc', '', searchFilter);
     }
 }
 

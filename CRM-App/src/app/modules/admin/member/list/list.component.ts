@@ -72,6 +72,8 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
     selectedMember: Member | null = null;
     isAscending: boolean = true;
     selectedCoulumn = 'membercode';
+    searchFilter: string;
+    searchValue: string;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -88,6 +90,7 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _memberTierService: MemberTierService
     ) {
+
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -95,6 +98,8 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
     // -----------------------------------------------------------------------------------------------------
 
     ngOnInit(): void {
+        const searchFilterTierId = this._activatedRoute.snapshot.paramMap.get('membertierid');
+        this.searchFilter = searchFilterTierId ? '{"member_tier":{"_eq":"' + searchFilterTierId + '"}}' : '';
         this.members$ = this._memberService.members$;
         this._memberService.members$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -126,7 +131,9 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
                 debounceTime(300),
                 switchMap((query) => {
                     this.isLoading = true;
-                    return this._memberService.getMembers(0, 10, 'member_code', 'asc', query);
+
+                    this.searchValue = query;
+                    return this._memberService.getMembers(0, 10, 'member_code', 'asc', query, this.searchFilter);
                 }),
                 map(() => {
                     this.isLoading = false;
@@ -246,7 +253,9 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
                                 this._paginator.pageIndex,
                                 this._paginator.pageSize,
                                 this._sort.active,
-                                this._sort.direction
+                                this._sort.direction,
+                                this.searchValue,
+                                this.searchFilter
                             );
                         } else {
                             return of(null);
@@ -287,11 +296,11 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onPageChange() {
         // eslint-disable-next-line max-len
-        this._memberService.getMembers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+        this._memberService.getMembers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue, this.searchFilter).pipe(
             switchMap(() => {
                 if ( this.isLoading === true ) {
                     // eslint-disable-next-line max-len
-                    return this._memberService.getMembers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    return this._memberService.getMembers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction,this.searchValue, this.searchFilter);
                 } else {
                     return of(null);
                 }
