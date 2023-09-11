@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, ActivatedRouteSnapshot } from '@angular/router'
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDrawer } from '@angular/material/sidenav';
-import { debounceTime, map,tap, merge, Observable, Subject, switchMap, takeUntil } from 'rxjs';
+import { debounceTime, map,tap, merge, Observable, Subject, switchMap, takeUntil, of } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { Channel, ChannelPagination } from 'app/modules/admin/setting/channel/channel.types';
@@ -145,7 +145,10 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.isLoading = false;
                 })
             )
-            .subscribe();
+            .subscribe(() => {
+                this._changeDetectorRef.markForCheck();
+            });
+
             this.canEdit = this._userService.getEditUserPermissionByNavId('channel');
     }
 
@@ -203,14 +206,18 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
             // Get channels if sort or page changes
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
-                    this.isLoading = true;
-                    //const sort = this._sort.direction == "desc" ? "-" + this._sort.active : this._sort.active;
-                    return this._channelService.getChannels(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    if(this.isLoading === true) {
+                        return this._channelService.getChannels(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    } else {
+                        return of(null);
+                    }
                 }),
                 map(() => {
                     this.isLoading = false;
                 })
-            ).subscribe();
+            ).subscribe(() => {
+                this._changeDetectorRef.markForCheck();
+            });
         }
     }
 
@@ -238,13 +245,36 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    onPageChange() {
+        // eslint-disable-next-line max-len
+        this._channelService.getChannels(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+            switchMap(() => {
+                if ( this.isLoading === true ) {
+                    // eslint-disable-next-line max-len
+                    return this._channelService.getChannels(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                } else {
+                    return of(null);
+                }
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        ).subscribe(() => {
+            this._changeDetectorRef.markForCheck();
+        });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingColumnList() {
         if ( this.selectedCoulumn === 'channelcode') {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'channelname' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'status' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         }
     }
 
@@ -253,16 +283,22 @@ export class ChannelListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'channelcode' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'channelcode' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'channelname' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'channelname' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'status' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'status' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         }
     }
 

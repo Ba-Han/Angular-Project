@@ -6,7 +6,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatSort } from '@angular/material/sort';
-import { debounceTime, map, merge, filter, fromEvent, Observable, Subject, switchMap, takeUntil } from 'rxjs';
+import { debounceTime, map, merge, filter, Observable, Subject, switchMap, takeUntil, of, skip } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { LogService } from 'app/modules/admin/log/log.service';
@@ -137,11 +137,12 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
             this._changeDetectorRef.markForCheck();
         });
 
-        // search Log Data
+        // search Log Request Path
         this.logSearchInputControl.valueChanges
         .pipe(
             takeUntil(this._unsubscribeAll),
             debounceTime(300),
+            skip(1),
             switchMap((query) => {
                 this.isLoading = true;
                 return this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, 0, 10, 'request_on', 'asc', query);
@@ -149,11 +150,9 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
             map(() => {
                 this.isLoading = false;
             })
-        )
-        .subscribe();
-
-        this.setupValueChangesSubscription();
-        this._changeDetectorRef.markForCheck();
+        ).subscribe(() => {
+            this._changeDetectorRef.markForCheck();
+        });
     }
 
     ngAfterViewInit(): void
@@ -225,9 +224,12 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
             // Get products if sort or page changes
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
-                    this.isLoading = true;
-                    // eslint-disable-next-line max-len
-                    return this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    if ( this.isLoading === true ) {
+                        // eslint-disable-next-line max-len
+                        return this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    } else {
+                        return of(null);
+                    }
                 }),
                 map(() => {
                     this.isLoading = false;
@@ -269,19 +271,8 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     setupValueChangesSubscription() {
-        this.searchInputControl.valueChanges
-         .pipe(
-             takeUntil(this._unsubscribeAll),
-             debounceTime(300),
-             switchMap((query) => {
-                 this.isLoading = true;
-                 return this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, 0, 10, 'request_on', 'asc', query);
-                }),
-             map(() => {
-                 this.isLoading = false;
-             })
+        this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, 0, 10, 'request_on', 'asc', this.searchInputControl.value
          ).subscribe(() => {
-            this.ngOnInit();
             this.isLoading = false;
             this.errorMessage = null;
             this._changeDetectorRef.markForCheck();
@@ -298,15 +289,19 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
         // eslint-disable-next-line max-len
         this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
             switchMap(() => {
-                this.isLoading = true;
-                // eslint-disable-next-line max-len
-                return this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                if ( this.isLoading === true ) {
+                    // eslint-disable-next-line max-len
+                    return this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                } else {
+                    return of(null);
+                }
             }),
             map(() => {
                 this.isLoading = false;
             })
-        ).subscribe();
-        this._changeDetectorRef.markForCheck();
+        ).subscribe(() => {
+            this._changeDetectorRef.markForCheck();
+        });
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

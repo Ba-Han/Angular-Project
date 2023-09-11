@@ -26,6 +26,7 @@ import {
     switchMap,
     takeUntil,
     finalize,
+    of,
 } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
@@ -109,8 +110,6 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
     selectedCoulumn = 'username';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     private passwordStrength: 0;
-    roles: any;
-    selectedRole: string;
 
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
@@ -165,7 +164,10 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.isLoading = false;
                 })
             )
-            .subscribe();
+            .subscribe(() => {
+                this._changeDetectorRef.markForCheck();
+            });
+
         this.canEdit = this._userService.getEditUserPermissionByNavId('loginuser');
     }
 
@@ -235,24 +237,24 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
             merge(this._sort.sortChange, this._paginator.page)
                 .pipe(
                     switchMap(() => {
-                        this.isLoading = true;
-                        /* const sort =
-                            this._sort.direction === 'desc'
-                                ? '-' + this._sort.active
-                                : this._sort.active; */
-                        return this._crmUserService.getAppUsers(
-                            this._paginator.pageIndex,
-                            this._paginator.pageSize,
-                            this._sort.active,
-                            this._sort.direction
-
-                        );
+                        if(this.isLoading === true) {
+                            return this._crmUserService.getAppUsers(
+                                this._paginator.pageIndex,
+                                this._paginator.pageSize,
+                                this._sort.active,
+                                this._sort.direction
+                            );
+                        } else {
+                            return of(null);
+                        }
                     }),
                     map(() => {
                         this.isLoading = false;
                     })
                 )
-                .subscribe();
+                .subscribe(() => {
+                    this._changeDetectorRef.markForCheck();
+                });
         }
     }
 
@@ -279,15 +281,39 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    onPageChange() {
+        // eslint-disable-next-line max-len
+        this._crmUserService.getAppUsers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+            switchMap(() => {
+                if ( this.isLoading === true ) {
+                    // eslint-disable-next-line max-len
+                    return this._crmUserService.getAppUsers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                } else {
+                    return of(null);
+                }
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        ).subscribe(() => {
+            this._changeDetectorRef.markForCheck();
+        });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingColumnList() {
         if ( this.selectedCoulumn === 'username') {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'firstname' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'lastname' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'email' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         }
     }
 
@@ -296,20 +322,28 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'username' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'username' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'firstname' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'firstname' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'lastname' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'lastname' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'email' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'email' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         }
     }
 

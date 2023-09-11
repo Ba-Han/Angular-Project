@@ -99,6 +99,7 @@ export class MemberService
     {
         return this._httpClient.get<any>(`${this._apiurl}/items/member`, {
             params: {
+                meta: 'filter_count',
                 filter:filter,
                 page: page+1,
                 limit: limit,

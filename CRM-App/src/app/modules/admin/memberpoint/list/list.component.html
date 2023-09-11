@@ -51,7 +51,7 @@
                                 <mat-select [(ngModel)]="selectedCoulumn" (selectionChange)="sortingColumnList()">
                                     <mat-option value="documentno">Document No</mat-option>
                                     <mat-option value="pointtype">Point Type</mat-option>
-                                    <mat-option value="points">Points</mat-option>
+                                    <mat-option value="points">Total Points</mat-option>
                                     <mat-option value="date">Date</mat-option>
                                 </mat-select>
                             </mat-form-field>
@@ -88,19 +88,22 @@
                                         <div class="sm:block">
                                             Point Type
                                         </div>
-                                        <div class="hidden md:block">
+                                        <div class="sm:block">
                                             Total Points
                                         </div>
-                                        <div class="hidden md:block">
+                                        <div class="sm:block">
                                             Balance
                                         </div>
-                                        <div class="hidden md:block">
+                                        <div class="sm:block">
                                             Order Total
                                         </div>
-                                        <div class="hidden md:block">
+                                        <div class="sm:block">
+                                            Reward Code
+                                        </div>
+                                        <div class="sm:block">
                                             Expire At
                                         </div>
-                                        <div class="hidden md:block">
+                                        <div class="sm:block">
                                             Date
                                         </div>
                                     </div>
@@ -123,23 +126,27 @@
                                                         {{memberPoint.point_type}}
                                                     </div>
     
-                                                    <div class="hidden md:block truncate">
+                                                    <div class="sm:block truncate">
                                                         {{memberPoint.point}}
                                                     </div>
 
-                                                    <div class="hidden md:block truncate">
+                                                    <div class="sm:block truncate">
                                                         {{memberPoint.balance}}
                                                     </div>
 
-                                                    <div class="hidden md:block truncate">
+                                                    <div class="sm:block truncate">
                                                         {{memberPoint.order_total}}
                                                     </div>
 
-                                                    <div class="hidden md:block truncate">
+                                                    <div class="sm:block truncate">
+                                                        {{memberPoint.reward_code}}
+                                                    </div>
+
+                                                    <div class="sm:block truncate">
                                                         {{memberPoint.spending_valid_to | date:'MMM dd, y'}}
                                                     </div>
 
-                                                    <div class="hidden md:block truncate">
+                                                    <div class="sm:block truncate">
                                                         {{memberPoint.date_created | date:'MMM dd, y'}}
                                                     </div>
                                                 </div>
@@ -153,6 +160,7 @@
                                                [pageIndex]="pagination.page"
                                                [pageSize]="pagination.limit"
                                                [pageSizeOptions]="[5, 10, 15, 25, 50]"
+                                               (page)="onPageChange($event)"
                                                [showFirstLastButtons]="true"></mat-paginator>
                             </ng-container>
     

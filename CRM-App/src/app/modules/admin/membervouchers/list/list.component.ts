@@ -6,7 +6,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatSort } from '@angular/material/sort';
-import { debounceTime, map, merge, filter, fromEvent, Observable, Subject, switchMap, takeUntil } from 'rxjs';
+import { debounceTime, map, merge, filter, fromEvent, Observable, Subject, switchMap, takeUntil, of } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MemberVoucherService } from 'app/modules/admin/membervouchers/membervouchers.service';
@@ -160,7 +160,9 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
              map(() => {
                  this.isLoading = false;
              })
-         ).subscribe();
+         ).subscribe(() => {
+            this._changeDetectorRef.markForCheck();
+         });
     }
 
     ngAfterViewInit(): void
@@ -229,17 +231,22 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
                     this._paginator.pageIndex = 0;
                 });
 
-            // Get products if sort or page changes
+            // Get membervouchers if sort or page changes
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
-                    this.isLoading = true;
-                    // eslint-disable-next-line max-len
-                    return this._memberVoucherService.getMemberVoucher(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    if(this.isLoading === true) {
+                        // eslint-disable-next-line max-len
+                        return this._memberVoucherService.getMemberVoucher(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    } else {
+                        return of(null);
+                    }
                 }),
                 map(() => {
                     this.isLoading = false;
                 })
-            ).subscribe();
+            ).subscribe(() => {
+                this._changeDetectorRef.markForCheck();
+            });
         }
     }
 
@@ -256,16 +263,40 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
          this._changeDetectorRef.markForCheck();
      }
 
+     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    onPageChange() {
+        // eslint-disable-next-line max-len
+        this._memberVoucherService.getMemberVoucher(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+            switchMap(() => {
+                if ( this.isLoading === true ) {
+                    // eslint-disable-next-line max-len
+                    return this._memberVoucherService.getMemberVoucher(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                } else {
+                    return of(null);
+                }
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        ).subscribe(() => {
+            this._changeDetectorRef.markForCheck();
+        });
+    }
+
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingColumnList() {
         if ( this.selectedCoulumn === 'vouchercode') {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'pointused' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'conversionrate' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'amount' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         }
     }
 
@@ -274,20 +305,28 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'vouchercode' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'vouchercode' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'pointused' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'pointused' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'conversionrate' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'conversionrate' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'amount' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'amount' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         }
     }
 

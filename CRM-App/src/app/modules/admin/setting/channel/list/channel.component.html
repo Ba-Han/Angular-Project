@@ -74,10 +74,6 @@
                                             <div> Channel Code </div>
                                             <div> Channel Name </div>
                                             <div> Status </div>
-        
-                                            <!-- <div [mat-sort-header]="'code'"> Channel Code </div>
-                                            <div [mat-sort-header]="'name'"> Channel Name </div>
-                                            <div [mat-sort-header]="'status'"> Status </div> -->
                                         </div>
 
                                         <!-- Rows -->
@@ -96,18 +92,6 @@
                                                         <div class="truncate">
                                                             {{channel.name}}
                                                         </div>
-        
-                                                        <!-- Status -->
-                                                        <!--<div class="hidden lg:block">
-                                                            <ng-container *ngIf="channel.status == 'active'">
-                                                                <mat-icon class="text-green-400 icon-size-5"
-                                                                            [svgIcon]="'heroicons_solid:check'"></mat-icon>
-                                                            </ng-container>
-                                                            <ng-container *ngIf="channel.status == 'inactive'">
-                                                                <mat-icon class="text-gray-400 icon-size-5"
-                                                                            [svgIcon]="'heroicons_solid:x'"></mat-icon>
-                                                            </ng-container>
-                                                        </div>-->
         
                                                         <ng-container *ngIf="channel.status === 'active'">
                                                             <div class="truncate">
@@ -132,6 +116,7 @@
                                                     [pageIndex]="pagination.page"
                                                     [pageSize]="pagination.size"
                                                     [pageSizeOptions]="[10, 25, 100]"
+                                                    (page)="onPageChange($event)"
                                                     [showFirstLastButtons]="true"></mat-paginator>
         
                                 </ng-container>

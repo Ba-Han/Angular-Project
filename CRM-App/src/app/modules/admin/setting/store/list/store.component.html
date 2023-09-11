@@ -77,11 +77,6 @@
                                             <div> Store Code </div>
                                             <div>  Country </div>
                                             <div>  Status </div>
-
-                                            <!-- <div [mat-sort-header]="'name'"> Store Name </div>
-                                            <div [mat-sort-header]="'code'"> Store Code </div>
-                                            <div [mat-sort-header]="'country'">  Country </div>
-                                            <div [mat-sort-header]="'status'">  Status </div> -->
                                         </div>
         
                                         <!-- Rows -->
@@ -127,6 +122,7 @@
                                                    [pageIndex]="pagination.page"
                                                    [pageSize]="pagination.size"
                                                    [pageSizeOptions]="[10, 25, 100]"
+                                                   (page)="onPageChange($event)"
                                                    [showFirstLastButtons]="true"></mat-paginator>
         
                                 </ng-container>

@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { FuseAlertType } from '@fuse/components/alert';
 import { MatDrawer } from '@angular/material/sidenav';
-import { debounceTime, merge, map, switchMap, Subject, takeUntil, Observable, finalize } from 'rxjs';
+import { debounceTime, merge, map, switchMap, Subject, takeUntil, Observable, finalize, of } from 'rxjs';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { DatePipe, DecimalPipe } from '@angular/common';
@@ -491,10 +491,12 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             // Get memberDocuments if sort or page changes
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
-                    this.isLoading = true;
-                    //const sort = this._sort.direction === 'desc' ? '-' + this._sort.active : this._sort.active;
-                    // eslint-disable-next-line max-len
-                    return this._memberService.getMemberDocuments(this.memberId, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    if(this.isLoading === true) {
+                        // eslint-disable-next-line max-len
+                        return this._memberService.getMemberDocuments(this.memberId, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    } else {
+                        return of(null);
+                    }
                 }),
                 map(() => {
                     this.isLoading = false;
@@ -551,9 +553,12 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     onPageChange() {
         this._memberService.getMemberDocuments(this.memberId, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
             switchMap(() => {
-                this.isLoading = true;
-                // eslint-disable-next-line max-len
-                return this._memberService.getMemberDocuments(this.memberId, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                if( this.isLoading === true) {
+                    // eslint-disable-next-line max-len
+                    return this._memberService.getMemberDocuments(this.memberId, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                } else {
+                    return of(null);
+                }
             }),
             map(() => {
                 this.isLoading = false;
@@ -565,9 +570,12 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     fistUploadFileToTable() {
         this._memberService.getMemberDocuments(this.memberId).pipe(
             switchMap(() => {
-                this.isLoading = true;
-                // eslint-disable-next-line max-len
-                return this._memberService.getMemberDocuments(this.memberId);
+                if(this.isLoading === true) {
+                    // eslint-disable-next-line max-len
+                    return this._memberService.getMemberDocuments(this.memberId);
+                } else {
+                    return of(null);
+                }
             }),
             map(() => {
                 this.isLoading = false;
@@ -582,6 +590,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
             this.onPageChange();
         } else if ( this.selectedCoulumn === 'uploadeddate' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         }
     }
 
@@ -590,10 +599,13 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         this.isAscending = !this.isAscending;
         if ( this.isAscending && this.selectedCoulumn === 'documentname' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'documentname' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'uploadeddate' ) {
             this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'uploadeddate' ) {
             this.ngAfterViewInit();
             this.onPageChange();
