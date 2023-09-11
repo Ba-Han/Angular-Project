@@ -24,6 +24,17 @@ import { TransactionService } from 'app/modules/admin/transaction/transaction.se
             .detaildiscount_table{
                 grid-template-columns: 150px 480px 120px;
             }
+
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            th, td {
+                padding: 8px;
+                text-align: left;
+                border-bottom: 1px solid #E2E8F0;
+            }
         `
 
     ],
@@ -73,6 +84,9 @@ export class TransactionDetailComponent implements OnInit, AfterViewInit, OnDest
             .subscribe((transaction: Transaction) => {
                 this.transaction = transaction[0];
                 this.transaction.real_amount = (transaction[0].total_amount - transaction[0].delivery_amount) - transaction[0].vat_amount;
+                if( this.transaction.real_amount < 0 ) {
+                    this.transaction.real_amount = 0;
+                }
                 this._changeDetectorRef.markForCheck();
             });
     }
