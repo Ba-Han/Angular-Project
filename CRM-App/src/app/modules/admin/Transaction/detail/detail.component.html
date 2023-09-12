@@ -129,7 +129,7 @@
 
         <div class="flex w-full max-w-3xl mx-auto pt-2">
             <div class="flex sm:items-center w-full">
-                <div class="w-full mt-2">
+                <div class="w-full mb-4">
                     <div class="w-full text-2xl font-bold"> Total Summary </div>
                     <div class="flex">
                         <div class="leading-6">  Net Amount (Excl GST) : </div>
@@ -151,7 +151,7 @@
             </div>
             <!--display transaction tender table-->
             <ng-container *ngIf="transaction.transaction_tenders.length > 0">
-                <div class="w-full mt-2">
+                <div class="w-full mt-2" style="overflow-y: auto; height: 10rem;">
                     <table>
                         <tr class="text-2xl font-bold">
                             <th>Tender Type</th>
