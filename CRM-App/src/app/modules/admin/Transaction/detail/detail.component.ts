@@ -31,7 +31,7 @@ import { TransactionService } from 'app/modules/admin/transaction/transaction.se
             }
 
             th, td {
-                padding: 8px;
+                padding: 2px;
                 text-align: left;
                 border-bottom: 1px solid #E2E8F0;
             }

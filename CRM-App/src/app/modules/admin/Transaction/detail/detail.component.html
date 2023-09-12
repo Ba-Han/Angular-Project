@@ -127,9 +127,9 @@
 
     <div class="relative flex items-center w-full p-6 pt-0 sm:p-12 sm:pt-0 mt-4">
 
-        <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
+        <div class="flex w-full max-w-3xl mx-auto pt-2">
             <div class="flex sm:items-center w-full">
-                <div class="w-full mt-4">
+                <div class="w-full mt-2">
                     <div class="w-full text-2xl font-bold"> Total Summary </div>
                     <div class="flex">
                         <div class="leading-6">  Net Amount (Excl GST) : </div>
@@ -149,18 +149,20 @@
                     </div>
                 </div>
             </div>
-            <!--transaction tender table-->
+            <!--display transaction tender table-->
             <ng-container *ngIf="transaction.transaction_tenders.length > 0">
-                <div class="w-full">
+                <div class="w-full mt-2">
                     <table>
                         <tr class="text-2xl font-bold">
-                          <th>Tender Type</th>
-                          <th>Amount</th>
+                            <th>Tender Type</th>
+                            <th>Amount</th>
                         </tr>
-                        <tr>
-                          <td> {{ transaction.transaction_tenders[0].tender_type }} </td>
-                          <td> {{ transaction.transaction_tenders[0].total_amount }} </td>
-                        </tr>
+                        <ng-container *ngFor="let tr of transaction.transaction_tenders">
+                            <tr>
+                                <td> {{ tr.tender_type }} </td>
+                                <td> {{ tr.total_amount }} </td>
+                            </tr>
+                        </ng-container>
                     </table>
                 </div>
             </ng-container>
