@@ -18,18 +18,18 @@ import { Log, LogPagination } from 'app/modules/admin/log/log.types';
     styles         : [
         `
             .log-grid {
-                grid-template-columns: 100px 250px 200px 250px 100px 350px 200px 200px 100px;
+                grid-template-columns: 200px 100px 250px 200px 250px 100px 350px 200px 100px;
 
                 @screen sm {
-                    grid-template-columns: 100px 250px 200px 250px 100px 350px 200px 200px 100px;
+                    grid-template-columns: 200px 100px 250px 200px 250px 100px 350px 200px 100px;
                 }
 
                 @screen md {
-                    grid-template-columns: 100px 250px 200px 250px 100px 350px 200px 200px 100px;
+                    grid-template-columns: 200px 100px 250px 200px 250px 100px 350px 200px 100px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 100px 250px 200px 250px 100px 350px 200px 200px 100px;
+                    grid-template-columns: 200px 100px 250px 200px 250px 100px 350px 200px 100px;
                 }
             }
 
@@ -162,49 +162,49 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
             // Set the initial sort
             if (this.isAscending && this.requestedMethod === 'post') {
                 this._sort.sort({
-                    id: 'request_method',
+                    id: 'request_on',
                     start: 'asc',
                     disableClear: true
                 });
             } else if (!this.isAscending && this.requestedMethod === 'post') {
                 this._sort.sort({
-                    id: 'request_method',
+                    id: 'request_on',
                     start: 'desc',
                     disableClear: true
                 });
             } else if (this.isAscending && this.requestedMethod === 'get') {
                 this._sort.sort({
-                    id: 'request_method',
+                    id: 'request_on',
                     start: 'asc',
                     disableClear: true
                 });
             } else if (!this.isAscending && this.requestedMethod === 'get') {
                 this._sort.sort({
-                    id: 'request_method',
+                    id: 'request_on',
                     start: 'desc',
                     disableClear: true
                 });
             } else if (this.isAscending && this.requestedMethod === 'patch') {
                 this._sort.sort({
-                    id: 'request_method',
+                    id: 'request_on',
                     start: 'asc',
                     disableClear: true
                 });
             } else if (!this.isAscending && this.requestedMethod === 'patch') {
                 this._sort.sort({
-                    id: 'request_method',
+                    id: 'request_on',
                     start: 'desc',
                     disableClear: true
                 });
             } else if (this.isAscending && this.requestedMethod === 'delete') {
                 this._sort.sort({
-                    id: 'request_method',
+                    id: 'request_on',
                     start: 'asc',
                     disableClear: true
                 });
             } else if (!this.isAscending && this.requestedMethod === 'delete') {
                 this._sort.sort({
-                    id: 'request_method',
+                    id: 'request_on',
                     start: 'desc',
                     disableClear: true
                 });
