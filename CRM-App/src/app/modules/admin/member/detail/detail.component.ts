@@ -227,7 +227,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     memberDocumentsForm: FormGroup;
     GenerateVoucherForm: FormGroup;
     generateVoucherFormMode: boolean = false;
-    fileToUpload: File;
+    fileToUpload: File[] = [];
     uploadData: any;
     uploadId: number;
     _apiurl: string;
@@ -261,7 +261,9 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     getPointConversionRate: any;
     isUploadDisabled: boolean = true;
     fileNotAcceptedErrorMessage: string | '' = '';
+    fileAcceptedSuccessMessage: string | '' = '';
     canEdit: boolean = false;
+    showClearButton: boolean = false;
     // private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -667,53 +669,67 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    onFileSelected(event) {
-        if (event.target.files.length > 0) {
-            this.fileToUpload = event.target.files[0];
-            const fileType: string = this.fileToUpload.type;
-            // List of accepted file types
-            const acceptedTypes: string[] = [
-                'text/csv', // .csv
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-                'application/pdf', // .pdf
-                'image/jpeg', // .jpg, .jpeg
-                'image/png', // .png
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // .docx
-            ];
-            // If not accepted file types, then disabled upload button
-            if (acceptedTypes.includes(fileType)) {
-                this.isUploadDisabled = false;
-            } else {
-                this.fileNotAcceptedErrorMessage = 'Not invalid file type!';
-                this.isUploadDisabled = true;
-            }
-            this.memberDocumentsForm.get('upload').setValue(this.fileToUpload);
+    onFileSelected(event: Event) {
+        const inputElement = event.target as HTMLInputElement;
+
+        if (inputElement.files && inputElement.files.length > 0) {
+          const files: FileList = inputElement.files;
+
+          // List of accepted file types
+          const acceptedTypes: string[] = [
+            'text/csv', // .csv
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+            'application/pdf', // .pdf
+            'image/jpeg', // .jpg, .jpeg
+            'image/png', // .png
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // .docx
+          ];
+
+          // Check if any of the selected files are not of an accepted type
+          const invalidFiles: File[] = Array.from(files).filter(file => !acceptedTypes.includes(file.type));
+
+          if (invalidFiles.length > 0) {
+            this.fileNotAcceptedErrorMessage = 'Invalid file types: ' + invalidFiles.map(file => file.name).join(', ');
+            this.showClearButton = true;
+            this.isUploadDisabled = true;
             this._changeDetectorRef.markForCheck();
+          } else {
+            // Store the selected files in an array
+            this.fileToUpload = Array.from(files);
+            this.showClearButton = true;
+            this.isUploadDisabled = false;
+            this._changeDetectorRef.markForCheck();
+          }
+          this._changeDetectorRef.markForCheck();
         }
-        this._changeDetectorRef.markForCheck();
     }
 
     clearFileToUpload(): void {
         this.fileInput.nativeElement.value = '';
         this.uploadData = '';
         this.fileNotAcceptedErrorMessage = '';
+        this.fileAcceptedSuccessMessage = '';
         this.isUploadDisabled = true;
+        this.showClearButton = false;
         this.fileToUpload = null;
         this._changeDetectorRef.markForCheck();
     }
 
     uploadMemberDocumentsFile(): void {
         const formData = new FormData();
-        formData.append('file', this.fileToUpload);
+        // Append all selected files to the FormData
+        for (const file of this.fileToUpload) {
+            formData.append('file', file);
+        }
         formData.append('member_id', this.memberId.toString());
         formData.append('comment', this.comment);
-        //const upload = this.memberDocumentsForm.getRawValue();
 
         this._httpClient.post(`${this._apiurl}/items/member_document`, formData).subscribe(
             (response: any) => {
                 this.uploadData = response.data;
                 this.fistUploadFileToTable();
                 this.comment = '';
+                this.fileAcceptedSuccessMessage = 'Upload Successfully.';
                 this._changeDetectorRef.markForCheck();
             },
             (error) => {

@@ -176,10 +176,9 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
             if (acceptedTypes.includes(fileType)) {
                 this.isUploadDisabled = false;
             } else {
-                this.fileNotAcceptedErrorMessage = 'Only csv file type is allowed.';
+                this.fileNotAcceptedErrorMessage = 'Only .csv file type is allowed!';
                 this.isUploadDisabled = true;
             }
-            this.memberUploadForm.get('upload').setValue(this.fileToUpload);
             this._changeDetectorRef.markForCheck();
         }
         this._changeDetectorRef.markForCheck();
@@ -197,7 +196,6 @@ export class ImportComponent implements OnInit, AfterViewInit, OnDestroy {
 
     uploadFile(): void {
         const formData = new FormData();
-        //const upload = this.memberUploadForm.getRawValue();
         formData.append('file', this.fileToUpload);
         this._httpClient.post(`${this._apiurl}/manualupload/memberpoint`, formData).subscribe(
             (response: any) => {
