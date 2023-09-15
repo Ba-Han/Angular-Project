@@ -376,8 +376,8 @@
                                         <div class="text-7xl sm:text-4xl font-bold tracking-tight leading-none text-blue-500">{{member.spending.totalPoint}}</div>
                                         <div class="text-lg font-medium text-blue-600 dark:text-blue-500">Current/Redeemable Points</div>
                                         <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints > 0">
-                                            <div class="items-baseline justify-center w-full mt-4 text-secondary">
-                                                <!-- <div class="flex justify-center truncate w-full font-bold" style="font-size: 14px;">Points to expire soon</div> -->
+                                            <div class="items-baseline justify-center w-full mt-3 text-secondary">
+                                                <div class="flex justify-center truncate w-full font-bold" style="font-size: 14px;">Points to expire soon</div>
                                                 <div class="font-medium flex justify-center truncate" style="font-size: 12px;">Expire Points:
                                                     <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints > 0">
                                                         <div class="ml-1.5 font-semibold" style="font-size: 12px;">{{member.soonExpiredPoint.soonExpiredPoints}}</div>
@@ -389,7 +389,7 @@
                                                 </ng-container>
                                             </div>
                                             <div class="flex items-baseline justify-center w-full text-secondary">
-                                                <div class="font-medium truncate" style="font-size: 12px;">Next Expire Points Date:</div>
+                                                <div class="font-medium truncate" style="font-size: 12px;">Expire Date:</div>
                                                 <ng-container *ngIf="member.soonExpiredPoint.soonExpiredPoints > 0">
                                                     <div class="ml-1.5 font-semibold" style="font-size: 12px;">{{member.soonExpiredPoint.soonExpiredDate | date:'MMM dd, yyyy'}}</div>
                                                 </ng-container>
@@ -400,7 +400,7 @@
                                         </ng-container>
                                         
                                         <ng-container *ngIf="canEdit">
-                                            <div style="margin-top: 12px !important;" >
+                                            <div style="margin-top: 0px !important;" >
                                                 <div class="flex w-full ">
                                                     <button class="w-1/8"
                                                         mat-stroked-button
@@ -421,8 +421,8 @@
                                     <div class="flex flex-col items-center mt-2 h-40">
                                         <div class="text-7xl sm:text-4xl font-bold tracking-tight leading-none text-blue-500">${{member.spending.dollerValueSpending | number : '1.2-2'}}</div>
                                         <div class="text-lg font-medium text-blue-600 dark:text-blue-500">Current/Redeemable Dollar</div>
-                                        <!-- <ng-container *ngIf="member.soonExpiredPoint.soonExpiredDollars > 0">
-                                            <div class="items-baseline justify-center w-full mt-4 text-secondary">
+                                        <ng-container *ngIf="member.soonExpiredPoint.soonExpiredDollars > 0">
+                                            <div class="items-baseline justify-center w-full mt-3 text-secondary">
                                                 <div class="flex justify-center truncate w-full font-bold" style="font-size: 14px;">Dollars to expire soon</div>
                                                 <div class="text-md font-medium flex justify-center truncate" style="font-size: 12px;">Expire Dollars:
                                                     <ng-container *ngIf="member.soonExpiredPoint.soonExpiredDollars > 0">
@@ -434,15 +434,15 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-baseline justify-center w-full text-secondary">
-                                            <div class="text-md font-medium truncate" style="font-size: 12px;">Expire Date:</div>
-                                            <ng-container *ngIf="member.soonExpiredPoint.soonExpiredDollars > 0">
-                                                <div class="ml-1.5 font-semibold" style="font-size: 12px;">{{member.soonExpiredPoint.soonExpiredDate | date:'MMM dd, y'}}</div>
-                                            </ng-container>
-                                            <ng-container *ngIf="member.soonExpiredPoint.soonExpiredDollars === 0">
-                                                <div class="ml-1.5 font-semibold">-</div>
-                                            </ng-container>
-                                        </div>
-                                        </ng-container> -->
+                                                <div class="text-md font-medium truncate" style="font-size: 12px;">Expire Date:</div>
+                                                    <ng-container *ngIf="member.soonExpiredPoint.soonExpiredDollars > 0">
+                                                        <div class="ml-1.5 font-semibold" style="font-size: 12px;">{{member.soonExpiredPoint.soonExpiredDate | date:'MMM dd, y'}}</div>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="member.soonExpiredPoint.soonExpiredDollars === 0">
+                                                        <div class="ml-1.5 font-semibold">-</div>
+                                                    </ng-container>
+                                            </div>
+                                        </ng-container>
                                     </div>
                                 </div>
                             </div>

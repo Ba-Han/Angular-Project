@@ -22,18 +22,18 @@ import { UserService } from 'app/core/user/user.service';
             }
 
             .redemptionsetting-grid {
-                grid-template-columns: 150px 150px 150px 150px 150px;
+                grid-template-columns: 150px 150px 150px 150px 150px 150px;
 
                 @screen sm {
-                    grid-template-columns: 150px 150px 150px 150px 150px;
+                    grid-template-columns: 150px 150px 150px 150px 150px 150px;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 150px 150px 150px 150px;
+                    grid-template-columns: 150px 150px 150px 150px 150px 150px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 150px 150px 150px 150px;
+                    grid-template-columns: 150px 150px 150px 150px 150px 150px;
                 }
             }
 
@@ -117,7 +117,8 @@ export class RedemptionSettingListComponent implements OnInit, AfterViewInit,  O
             date_from: [''],
             date_to: [''],
             member_tier: ['', [Validators.required]],
-            point_conversion: ['', [Validators.required]]
+            point_conversion: ['', [Validators.required]],
+            voucher_valid_days: ['']
         });
 
         this.redemptions$ = this._redemptionService.redemptions$;

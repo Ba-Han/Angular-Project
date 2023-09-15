@@ -125,6 +125,13 @@
                                     <div class="ml-6 leading-6">{{redemption.point_conversion}}</div>
                                 </div>
                             </ng-container>
+
+                            <ng-container *ngIf="redemption.voucher_valid_days">
+                                <div class="flex sm:items-center">
+                                    <div class="w-1/4">Voucher Valid Days: </div>
+                                    <div class="ml-6 leading-6">{{redemption.voucher_valid_days}}</div>
+                                </div>
+                            </ng-container>
                         </div>
                     </div>
                 </div>
@@ -228,6 +235,17 @@
                                         [placeholder]="'Point Conversion'">
                                 </mat-form-field>
                             </div>
+
+                            <ng-container *ngIf="typeValue === 2">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Valid Days</mat-label>
+                                        <input matInput type="number"
+                                            [formControlName]="'voucher_valid_days'"
+                                            [placeholder]="'Voucher Valid Days'">
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
                             
                             <div class="flex items-center justify-end mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                                 <div *ngIf="errorMessage" style="color: red">
