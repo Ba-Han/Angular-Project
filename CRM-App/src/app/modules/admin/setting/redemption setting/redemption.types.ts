@@ -12,6 +12,7 @@ export interface Redemption
     member_tier: number;
     member_tier_full_name: string;
     point_conversion: number;
+    voucher_valid_days: number;
 }
 
 export interface RedemptionPagination {

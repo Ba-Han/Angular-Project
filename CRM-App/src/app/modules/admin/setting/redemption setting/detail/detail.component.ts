@@ -140,7 +140,8 @@ export class RedemptionSettingDetailComponent implements OnInit, OnDestroy {
             date_from: [''],
             date_to: [''],
             member_tier: ['', [Validators.required]],
-            point_conversion: ['', [Validators.required]]
+            point_conversion: ['', [Validators.required]],
+            voucher_valid_days: ['']
         });
 
         this._redemptionService.redemption$

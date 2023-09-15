@@ -117,6 +117,7 @@ export class RedemptionService {
         const redemptionId = !redemption.id ? 0 : redemption.id;
         const dateFrom = !redemption.date_from ? null : redemption.date_from;
         const dateTo = !redemption.date_to ? null : redemption.date_to;
+        const voucherValidDays = !redemption.voucher_valid_days ? 0 : redemption.voucher_valid_days;
 
         return this.redemptions$.pipe(
             take(1),
@@ -128,7 +129,8 @@ export class RedemptionService {
                 'date_to': dateTo,
                 'member_tier': redemption.member_tier,
                 'member_tier_full_name': redemption.member_tier_full_name,
-                'point_conversion': redemption.point_conversion
+                'point_conversion': redemption.point_conversion,
+                'voucher_valid_days': voucherValidDays
             }).pipe(
                 map((newRedemptionSetting) => {
                     this._redemptions.next([newRedemptionSetting.data, ...redemptionsettings]);
@@ -142,6 +144,7 @@ export class RedemptionService {
         const redemptionId = !redemption.id ? 0 : redemption.id;
         const dateFrom = !redemption.date_from ? null : redemption.date_from;
         const dateTo = !redemption.date_to ? null : redemption.date_to;
+        const voucherValidDays = !redemption.voucher_valid_days ? 0 : redemption.voucher_valid_days;
 
         return this._httpClient.patch<any>(`${this._apiurl}/items/redemption_settings`, {
             'id': redemptionId,
@@ -151,7 +154,8 @@ export class RedemptionService {
             'date_to': dateTo,
             'member_tier': redemption.member_tier,
             'member_tier_full_name': redemption.member_tier_full_name,
-            'point_conversion': redemption.point_conversion
+            'point_conversion': redemption.point_conversion,
+            'voucher_valid_days': voucherValidDays
         }).pipe(
             map(updateRedemption => updateRedemption)
         );
