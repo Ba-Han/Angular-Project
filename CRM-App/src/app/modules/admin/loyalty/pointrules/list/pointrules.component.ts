@@ -231,6 +231,8 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     pointRuleProductSccessMessage: string | '' = '';
     currentDate: string;
     validitytypeValue: number;
+    selectedStartDateTime: string;
+    selectedEndDateTime: string;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -246,6 +248,18 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         const today = new Date();
         this.minDate = today.toISOString().slice(0, 16);
         this.currentDate = today.toISOString().split('T')[0];
+
+        // Initialize with 12:01 AM for the start date
+        const startDate = new Date();
+        startDate.setHours(0, 1, 0, 0);
+
+        // Initialize with 11:59 PM for the end date
+        const endDate = new Date();
+        endDate.setHours(23, 59, 0, 0);
+
+        // Format for the dates 'yyyy-MM-ddTHH:mm' format expected by datetime-local
+        this.selectedStartDateTime = this.formatDateTime(startDate);
+        this.selectedEndDateTime = this.formatDateTime(endDate);
     }
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -581,6 +595,17 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             this.DeletePointRuleProductMode = DeletePointRuleProductMode;
         }
         this._changeDetectorRef.markForCheck();
+    }
+
+    // Helper function to format a Date object as 'yyyy-MM-ddTHH:mm'
+    formatDateTime(date: Date): string {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

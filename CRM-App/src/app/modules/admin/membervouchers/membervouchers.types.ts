@@ -12,6 +12,7 @@ export interface MemberVoucher {
     status: string;
     balance: number;
     redeemed_order: string;
+    expire_date: string;
 }
 
 export interface MemberVoucherPagination {

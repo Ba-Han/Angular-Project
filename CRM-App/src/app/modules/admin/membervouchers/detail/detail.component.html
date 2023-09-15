@@ -54,7 +54,21 @@
                             <div class="w-1/4">Amount: </div>
                             <div class="ml-6 leading-6">{{memberVoucher.amount}}</div>
                         </div>
-                    </ng-container> 
+                    </ng-container>
+                    
+                    <ng-container *ngIf="memberVoucher.balance">
+                        <div class="flex sm:items-center">
+                            <div class="w-1/4">Balance: </div>
+                            <div class="ml-6 leading-6">{{memberVoucher.balance}}</div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="memberVoucher.expire_date">
+                        <div class="flex sm:items-center">
+                            <div class="w-1/4">Expire Date: </div>
+                            <div class="ml-6 leading-6">{{memberVoucher.expire_date | date:'MMM dd, y HH:mm:ss'}}</div>
+                        </div>
+                    </ng-container>
 
                     <!-- <ng-container *ngIf="memberVoucher.status">
                         <div class="flex sm:items-center">
