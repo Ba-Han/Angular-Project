@@ -1028,6 +1028,7 @@
                                                 [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
                                         <input matInput type="datetime-local"
                                             [min]="minDate"
+                                            [(ngModel)]="selectedStartDateTime"
                                             [formControlName]="'start_date'"
                                             [placeholder]="'Start Date'">
                                         <!-- <mat-datepicker-toggle matSuffix
@@ -1045,6 +1046,7 @@
                                                 [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
                                         <input matInput type="datetime-local"
                                             [min]="minDate"
+                                            [(ngModel)]="selectedEndDateTime"
                                             [formControlName]="'end_date'"
                                             [placeholder]="'End Date'">
                                         <!-- <mat-datepicker-toggle matSuffix

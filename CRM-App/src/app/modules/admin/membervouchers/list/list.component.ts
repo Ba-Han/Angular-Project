@@ -18,18 +18,18 @@ import { MemberVoucher, MemberVoucherPagination } from 'app/modules/admin/member
     styles         : [
         `
             .membervoucher-grid {
-                grid-template-columns: 150px 150px 150px 100px 100px 100px;
+                grid-template-columns: 150px 100px 120px 100px 100px 150px 100px;
 
                 @screen sm {
-                    grid-template-columns: 150px 150px 150px 100px 100px 100px;
+                    grid-template-columns: 150px 100px 120px 100px 100px 150px 100px;
                 }
 
                 @screen md {
-                    grid-template-columns: 150px 150px 150px 100px 100px 100px;
+                    grid-template-columns: 150px 100px 120px 100px 100px 150px 100px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 150px 150px 150px 100px 100px 100px;
+                    grid-template-columns: 150px 100px 120px 100px 100px 150px 100px;
                 }
             }
             .membercustom-paging {
@@ -218,6 +218,18 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
                     start: 'desc',
                     disableClear: true
                 });
+            } else if (this.isAscending && this.selectedCoulumn === 'expiredate') {
+                this._sort.sort({
+                    id: 'expire_date',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'expiredate') {
+                this._sort.sort({
+                    id: 'expire_date',
+                    start: 'desc',
+                    disableClear: true
+                });
             }
 
             // Mark for check
@@ -297,6 +309,9 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
         } else if ( this.selectedCoulumn === 'amount' ) {
             this.ngAfterViewInit();
             this.onPageChange();
+        } else if ( this.selectedCoulumn === 'expiredate' ) {
+            this.ngAfterViewInit();
+            this.onPageChange();
         }
     }
 
@@ -325,6 +340,12 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
             this.ngAfterViewInit();
             this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'amount' ) {
+            this.ngAfterViewInit();
+            this.onPageChange();
+        } else if ( this.isAscending && this.selectedCoulumn === 'expiredate' ) {
+            this.ngAfterViewInit();
+            this.onPageChange();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'expiredate' ) {
             this.ngAfterViewInit();
             this.onPageChange();
         }

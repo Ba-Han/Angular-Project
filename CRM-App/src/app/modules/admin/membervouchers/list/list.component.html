@@ -44,6 +44,7 @@
                                     <mat-option value="pointused">Point Used</mat-option>
                                     <mat-option value="conversionrate">Conversion Rate</mat-option>
                                     <mat-option value="amount">Amount</mat-option>
+                                    <mat-option value="expiredate">Expire Date</mat-option>
                                 </mat-select>
                             </mat-form-field>
                             <!--sorting button-->
@@ -87,6 +88,9 @@
                                         <div class="hidden md:block">
                                             Balance
                                         </div>
+                                        <div class="hidden md:block">
+                                            Expire Date
+                                        </div>
                                         <!-- <div class="hidden md:block">
                                             Redeemed Order
                                         </div> -->
@@ -121,6 +125,10 @@
 
                                                     <div class="hidden md:block truncate">
                                                         {{memberVoucher.balance}}
+                                                    </div>
+
+                                                    <div class="hidden md:block truncate">
+                                                        {{memberVoucher.expire_date | date:'MMM dd, y HH:mm:ss'}}
                                                     </div>
 
                                                     <div class="hidden md:block truncate">
