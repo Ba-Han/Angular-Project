@@ -746,17 +746,19 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         member.date_of_birth = this.datePipe.transform(member.date_of_birth, 'yyyy-MM-dd');
         const sameUserPhone = member.mobile_phone === this.member.member[0].mobile_phone ? true : false;
         //let showHideError = this.phoneValidateError ? false : true;
-        this._memberService.checkMemberPhone(member.mobile_phone)
+        this._memberService.checkMemberPhone(member.mobile_phone, this.memberId)
         .pipe(
             takeUntil(this._unsubscribeAll),
             finalize(() => {
                 if(sameUserPhone){
                     this.updateMemberInfo(member.id, member);
                     this.phoneValidateError = true;
+                    this._changeDetectorRef.markForCheck();
                 }
                 else{
                     if(this.phoneValidateError){
                         this.updateMemberInfo(member.id, member);
+                        this._changeDetectorRef.markForCheck();
                     }
                     else{
                         this.phoneValidateError = false;
