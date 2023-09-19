@@ -258,9 +258,11 @@ export class MemberService
         );
     }
 
-    checkMemberPhone(phno: string): Observable<any>{
+    checkMemberPhone(phno: string, memberId: number): Observable<any>{
         return this._httpClient.get<any>(`${this._apiurl}/utility/checkmobile`, {
-            params: { mobile : phno}
+            params: { mobile : phno,
+                      member : memberId
+                    }
         })
         .pipe(
             tap(response => response)

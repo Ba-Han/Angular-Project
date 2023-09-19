@@ -27,14 +27,14 @@
                         <ng-container *ngIf="getDetailsLogData.request_on">
                             <div class="grid grid-cols-2 log-css">
                                 <div>Request On: </div>
-                                <div class="leading-6">{{ getDetailsLogData.request_on | date:'MMM dd, y HH:mm:ss.SSSSSSS' }}</div>
+                                <div class="leading-6">{{ getDetailsLogData.request_on | date:'MMM dd, y HH:mm:ss.SSS' }}</div>
                             </div>
                         </ng-container>
         
                         <ng-container *ngIf="getDetailsLogData.response_on">
                             <div class="grid grid-cols-2 log-css">
                                 <div>Response On: </div>
-                                <div class="leading-6">{{ getDetailsLogData.response_on | date:'MMM dd, y HH:mm:ss.SSSSSSS' }}</div>
+                                <div class="leading-6">{{ getDetailsLogData.response_on | date:'MMM dd, y HH:mm:ss.SSS' }}</div>
                             </div>
                         </ng-container>
 
@@ -215,11 +215,11 @@
                                                 <div class="log-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
                                                     
                                                     <div class="truncate">
-                                                        {{ log.request_on | date:'MMM dd, y HH:mm:ss.SSSSSSS' }}
+                                                        {{ log.request_on | date:'MMM dd, y HH:mm:ss.SSS' }}
                                                     </div>
         
                                                     <div class="truncate">
-                                                        {{ log.response_on | date:'MMM dd, y HH:mm:ss.SSSSSSS' }}
+                                                        {{ log.response_on | date:'MMM dd, y HH:mm:ss.SSS' }}
                                                     </div>
                                                     
                                                     <div class="truncate">

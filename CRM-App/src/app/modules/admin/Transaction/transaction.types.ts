@@ -24,6 +24,7 @@ export interface Transaction {
     point_amount: number;
     point_type: string;
     point_id: number;
+    store_name: string;
     transaction_channel: {
         'code': number;
         'name': string | null;
@@ -48,7 +49,7 @@ export interface Transaction {
         "transaction": number;
     }];
     transaction_tenders: [{
-        "id": 8;
+        "id": number;
         "date_created": string;
         "date_updated": string;
         "tender_type": string;
