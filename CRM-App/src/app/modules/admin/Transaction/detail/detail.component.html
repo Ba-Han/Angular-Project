@@ -30,7 +30,7 @@
 
         <div class="flex items-center w-full max-w-3xl mx-auto pt-2">
             <div class="flex sm:items-center w-full">
-                <div class="w-2/4 pr-2">Store : {{transaction.store}}</div>
+                <div class="w-2/4 pr-2">Store : {{transaction.store_name}}</div>
                 <ng-container *ngIf ="transaction.transaction_channel !== null">
                     <div class="w-2/4 pl-2">Channel : {{transaction.transaction_channel.name}}</div>
                 </ng-container>
