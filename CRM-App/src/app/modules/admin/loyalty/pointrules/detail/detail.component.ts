@@ -215,6 +215,11 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         const today = new Date();
         this.minDate = today.toISOString().slice(0, 16);
         this.currentDate = today.toISOString().split('T')[0];
+    }
+    // -----------------------------------------------------------------------------------------------------
+    // @ Lifecycle hooks
+    // -----------------------------------------------------------------------------------------------------
+    ngOnInit(): void {
 
         // Initialize with 12:01 AM for the start date
         const startDate = new Date();
@@ -227,11 +232,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         // Format for the dates 'yyyy-MM-ddTHH:mm' format expected by datetime-local
         this.selectedStartDateTime = this.formatDateTime(startDate);
         this.selectedEndDateTime = this.formatDateTime(endDate);
-    }
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-    ngOnInit(): void {
+
         this.PointRuleEditForm = this._formBuilder.group({
             id: [''],
             name: ['', [Validators.required]],
@@ -280,10 +281,20 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             this.offerApplyValue = pointrule.offer_apply;
             this.offerTypeValue = pointrule.offer_type;
             this.specialDate = pointrule.offer_apply_date;
+
             if (this.specialDate !== null) {
                 this.selectedDate = this.specialDate.split('T')[0];
             }
+
             this.offerApplyMonthValue = pointrule.offer_apply_month;
+            this.selectedStartDateTime = pointrule.start_date;
+            this.selectedEndDateTime = pointrule.end_date;
+
+            if ( this.selectedStartDateTime === null && this.selectedEndDateTime === null ) {
+                        this.selectedStartDateTime = this.formatDateTime(startDate);
+                        this.selectedEndDateTime = this.formatDateTime(endDate);
+            }
+
             this.pointRule.point_basketName = pointrule.point_basket?.name;
             this.selectedPointRuleProduct = pointrule.point_rule_products;
             for( let i=0; i < this.selectedPointRuleProduct.length; i++)
