@@ -411,9 +411,10 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         //Member Vouchers
         this._memberService.memberVouchers$
         .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((membervouchers) => {
+        .subscribe((membervouchers: MemberVoucher[]) => {
             this.memberVouchers = membervouchers;
             this.recentMemberVouchersDataSource.data = membervouchers;
+            this._changeDetectorRef.markForCheck();
         });
 
         //Member Documents
@@ -569,7 +570,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    fistUploadFileToTable() {
+    firstUploadFileToTable() {
         this._memberService.getMemberDocuments(this.memberId).pipe(
             switchMap(() => {
                 if(this.isLoading === true) {
@@ -727,7 +728,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         this._httpClient.post(`${this._apiurl}/items/member_document`, formData).subscribe(
             (response: any) => {
                 this.uploadData = response.data;
-                this.fistUploadFileToTable();
+                this.firstUploadFileToTable();
                 this.comment = '';
                 this.fileAcceptedSuccessMessage = 'Upload Successfully.';
                 this._changeDetectorRef.markForCheck();

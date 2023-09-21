@@ -73,6 +73,11 @@
                                     <div class="sm:block">
                                         Channel
                                     </div>
+
+                                    <div class="sm:block">
+                                        Earned Points
+                                    </div>
+
                                     <div class="sm:block">
                                         Earned Points
                                     </div>
@@ -80,6 +85,7 @@
                                     <div class="sm:block">
                                         Point Type
                                     </div>
+
                                     <div class="sm:block">
                                         Date
                                     </div>
@@ -116,7 +122,11 @@
                                                     </ng-container>
         
                                                     <div class="sm:block truncate">
-                                                        {{transaction.point}}
+                                                        {{transaction.earning_point}}
+                                                    </div>
+
+                                                    <div class="sm:block truncate">
+                                                        {{transaction.spending_point}}
                                                     </div>
         
                                                     <div class="sm:block truncate" style="text-transform:capitalize;">
@@ -151,12 +161,16 @@
                                                     </ng-container>
             
                                                     <div class="sm:block truncate">
-                                                        {{transaction.point}}
+                                                        {{transaction.earning_point}}
+                                                    </div>
+
+                                                    <div class="sm:block truncate">
+                                                        {{transaction.spending_point}}
                                                     </div>
             
-                                                    <div class="sm:block truncate">
+                                                    <!-- <div class="sm:block truncate">
                                                         ${{transaction.point_amount | number : '1.2-2'}}
-                                                    </div>
+                                                    </div> -->
             
                                                     <div class="sm:block truncate" style="text-transform:capitalize;">
                                                         {{transaction.point_type}}
