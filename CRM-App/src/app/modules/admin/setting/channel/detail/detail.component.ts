@@ -78,6 +78,7 @@ export class ChannelDetailComponent implements OnInit, OnDestroy {
     ChannelEditForm: FormGroup;
     selectedChannel: Channel | null = null;
     editMode: boolean = false;
+    canEdit: boolean = false;
     canDelete: boolean = false;
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
@@ -114,6 +115,7 @@ export class ChannelDetailComponent implements OnInit, OnDestroy {
                 this._changeDetectorRef.markForCheck();
             });
 
+        this.canEdit = this._userService.getEditUserPermissionByNavId('channel');
         this.canDelete = this._userService.getDeleteUserPermissionByNavId('channel');
     }
 

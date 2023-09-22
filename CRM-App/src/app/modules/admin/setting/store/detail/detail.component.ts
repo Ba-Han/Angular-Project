@@ -77,6 +77,7 @@ export class StoreDetailComponent implements OnInit, OnDestroy {
     isLoading: boolean = false;
     selectedCountry: Store | null = null;
     editMode: boolean = false;
+    canEdit: boolean = false;
     canDelete: boolean = false;
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
@@ -130,6 +131,7 @@ export class StoreDetailComponent implements OnInit, OnDestroy {
             this.getChannelData = channel;
         });
 
+        this.canEdit = this._userService.getEditUserPermissionByNavId('store');
         this.canDelete = this._userService.getDeleteUserPermissionByNavId('store');
     }
 

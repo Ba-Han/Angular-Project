@@ -101,6 +101,7 @@ export class PointBasketDetailComponent implements OnInit, AfterViewInit, OnDest
     AddMode: boolean = false;
     PointBasketEditForm: FormGroup;
     code: string;
+    canEdit: boolean = false;
     canDelete: boolean = false;
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
@@ -215,6 +216,7 @@ export class PointBasketDetailComponent implements OnInit, AfterViewInit, OnDest
                 this._changeDetectorRef.markForCheck();
             });
 
+            this.canEdit = this._userService.getEditUserPermissionByNavId('point-baskets');
             this.canDelete = this._userService.getDeleteUserPermissionByNavId('point-baskets');
     }
 

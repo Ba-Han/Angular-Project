@@ -83,7 +83,7 @@
                                         <ng-container *ngIf="(stores$ | async) as stores">
                                             <ng-container *ngFor="let store of stores; trackBy: trackByFn">
                                                 <a class=" cursor-pointer hover:bg-gray-100 dark:hover:bg-hover"
-                                                   [routerLink]="canEdit ? ['./', store.code] : null">
+                                                   [routerLink]="['./', store.code]">
         
                                                     <div class="store-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
         
