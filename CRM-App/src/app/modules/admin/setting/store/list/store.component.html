@@ -76,6 +76,7 @@
                                             <div> Store Name </div>
                                             <div> Store Code </div>
                                             <div>  Country </div>
+                                            <div>  Channel </div>
                                             <div>  Status </div>
                                         </div>
         
@@ -97,6 +98,10 @@
         
                                                         <div class="truncate">
                                                             {{store.country}}
+                                                        </div>
+
+                                                        <div class="truncate">
+                                                            {{store.channel.name}}
                                                         </div>
         
                                                         <ng-container *ngIf="store.status === 'active'">
