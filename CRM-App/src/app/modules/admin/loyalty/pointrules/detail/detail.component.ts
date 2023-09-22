@@ -156,6 +156,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     pointBasketSearchInputControl: FormControl = new FormControl();
     AddMode: boolean = false;
     PointRuleEditForm: FormGroup;
+    canEdit: boolean = false;
     canDelete: boolean = false;
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
@@ -398,6 +399,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         )
         .subscribe();
 
+        this.canEdit = this._userService.getEditUserPermissionByNavId('point-rules');
         this.canDelete = this._userService.getDeleteUserPermissionByNavId('point-rules');
     }
 

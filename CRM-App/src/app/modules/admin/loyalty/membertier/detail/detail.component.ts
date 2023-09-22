@@ -154,6 +154,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
     memberTiers$: Observable<MemberTier[]>;
     memberTier: MemberTier;
     memberTierId: number;
+    canEdit: boolean = false;
     canDelete: boolean = false;
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
@@ -295,6 +296,7 @@ export class MemberTierDetailComponent implements OnInit, AfterViewInit, OnDestr
             this.dwMemberGroups = dw;
         });
 
+        this.canEdit = this._userService.getEditUserPermissionByNavId('member-tier');
         this.canDelete = this._userService.getDeleteUserPermissionByNavId('member-tier');
     }
 

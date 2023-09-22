@@ -77,6 +77,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     ProductEditForm: FormGroup;
     selectedChannel: Product | null = null;
     editMode: boolean = false;
+    canEdit: boolean = false;
     canDelete: boolean = false;
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
@@ -114,6 +115,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 this._changeDetectorRef.markForCheck();
             });
 
+        this.canEdit = this._userService.getEditUserPermissionByNavId('redemption');
         this.canDelete = this._userService.getDeleteUserPermissionByNavId('redemption');
     }
 

@@ -20,7 +20,7 @@ export class MemberService
     private _transactions: BehaviorSubject<any> = new BehaviorSubject(null);
     private _transaction: BehaviorSubject<any> = new BehaviorSubject(null);
     private _membertransactions: BehaviorSubject<any> = new BehaviorSubject(null);
-    private _memberVouchers: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _memberVouchers: BehaviorSubject<MemberVoucher[] | null> = new BehaviorSubject(null);
     private _generateVouchers: BehaviorSubject<any> = new BehaviorSubject(null);
     private _points: BehaviorSubject<any> = new BehaviorSubject(null);
     private _memberDocuments: BehaviorSubject<MemberDocument[] | null> = new BehaviorSubject(null);
@@ -180,7 +180,7 @@ export class MemberService
             );
     }
 
-    getRecentMemberVouchersById(id: number): Observable<MemberVoucher> {
+    getRecentMemberVouchersById(id: number): Observable<MemberVoucher[]> {
         return this._httpClient.get<any>(`${this._apiurl}/items/voucher/memberid/${id}`, {
             params: { limit: 5, sort: 'voucher_code' }
         })

@@ -80,7 +80,7 @@
                                         <ng-container *ngIf="(channels$ | async) as channels">
                                             <ng-container *ngFor="let channel of channels; trackBy: trackByFn">
                                                 <a class=" cursor-pointer hover:bg-gray-100 dark:hover:bg-hover"
-                                                    [routerLink]="canEdit ? ['./', channel.code] : null">
+                                                    [routerLink]="['./', channel.code]">
         
                                                     <div class="channel-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
                                                         <!-- Channel Code -->

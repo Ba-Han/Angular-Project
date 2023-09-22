@@ -101,4 +101,7 @@
     background: #fff !important;
     border-radius: 99999px !important;
 }
-
+.custom-overflow {
+    white-space: nowrap;
+    overflow: auto;
+}

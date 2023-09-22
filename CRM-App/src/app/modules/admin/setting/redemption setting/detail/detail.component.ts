@@ -98,6 +98,7 @@ export class RedemptionSettingDetailComponent implements OnInit, OnDestroy {
     redemption: Redemption;
     editMode: boolean = false;
     RedemptionSettingEditForm: FormGroup;
+    canEdit: boolean = false;
     canDelete: boolean = false;
     DeleteMode: boolean = false;
     isSuccess: boolean = false;
@@ -160,6 +161,7 @@ export class RedemptionSettingDetailComponent implements OnInit, OnDestroy {
             this.memberTiers = tier;
         });
 
+        this.canEdit = this._userService.getEditUserPermissionByNavId('redemptionsetting');
         this.canDelete = this._userService.getDeleteUserPermissionByNavId('redemptionsetting');
     }
 
