@@ -862,14 +862,14 @@
                                             <ng-container *ngIf="transaction.point_type !== 'adjustment'">
                                                 <td mat-cell [routerLink]="['./transaction', transaction.id]" style="cursor:pointer;">
                                                     <span class="pr-6 whitespace-nowrap">
-                                                        {{transaction.point}}
+                                                        {{transaction.earning_point}}
                                                     </span>
                                                 </td>
                                             </ng-container>
                                             <ng-container *ngIf="transaction.point_type === 'adjustment'">
                                                 <td mat-cell>
                                                     <span class="pr-6 whitespace-nowrap">
-                                                        {{transaction.point}}
+                                                        {{transaction.earning_point}}
                                                     </span>
                                                 </td>
                                             </ng-container>

@@ -30,7 +30,7 @@ import { TransactionService } from 'app/modules/admin/transaction/transaction.se
                 width: 100%;
             }
 
-            th, td {
+            .transaction-tender {
                 padding: 6px;
                 text-align: left;
                 border-bottom: 1px solid #E2E8F0;
