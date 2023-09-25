@@ -154,13 +154,13 @@
                 <div class="w-full mt-2" style="overflow-y: auto; height: 10rem;">
                     <table>
                         <tr class="text-2xl font-bold">
-                            <th>Tender Type</th>
-                            <th>Amount</th>
+                            <th class="transaction-tender">Tender Type</th>
+                            <th class="transaction-tender">Amount</th>
                         </tr>
                         <ng-container *ngFor="let tr of transaction.transaction_tenders">
                             <tr>
-                                <td> {{ tr.tender_type }} </td>
-                                <td> {{ tr.total_amount }} </td>
+                                <td class="transaction-tender"> {{ tr.tender_type }} </td>
+                                <td class="transaction-tender"> {{ tr.total_amount }} </td>
                             </tr>
                         </ng-container>
                     </table>

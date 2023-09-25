@@ -725,28 +725,17 @@
                                     </ng-container>
         
                                     <!-- Footer -->
-                                    <ng-container *ngIf="memberVouchers.length > 0">
-                                        <ng-container matColumnDef="recentMemberVouchersTableFooter">
-                                            <td class="py-6 px-0 border-0"
-                                                mat-footer-cell
-                                                *matFooterCellDef
-                                                colspan="6">
+                                    <ng-container matColumnDef="recentMemberVouchersTableFooter">
+                                        <td class="py-6 px-0 border-0" mat-footer-cell *matFooterCellDef colspan="6">
+                                            <ng-container *ngIf="memberVouchers.length > 0 || createGeneateVoucherSuccessfully">
                                                 <button mat-stroked-button [routerLink]="['./voucher']">See All Member Vouchers</button>
-                                            </td>
-                                        </ng-container>
+                                            </ng-container>
+                                            <ng-container *ngIf="!(memberVouchers.length > 0 || createGeneateVoucherSuccessfully)">
+                                                <span style="color: grey;">No Member Vouchers</span>
+                                            </ng-container>
+                                        </td>
                                     </ng-container>
-        
-                                    <ng-container *ngIf="memberVouchers.length === 0">
-                                        <ng-container matColumnDef="recentMemberVouchersTableFooter">
-                                            <td class="py-6 px-0 border-0"
-                                                mat-footer-cell
-                                                *matFooterCellDef
-                                                colspan="6"
-                                                style="color:grey;">
-                                                No Member Vouchers
-                                            </td>
-                                        </ng-container>
-                                    </ng-container>
+                                    
         
                                     <tr mat-header-row
                                         *matHeaderRowDef="recentMemberVouchersTableColumns"></tr>
@@ -873,14 +862,14 @@
                                             <ng-container *ngIf="transaction.point_type !== 'adjustment'">
                                                 <td mat-cell [routerLink]="['./transaction', transaction.id]" style="cursor:pointer;">
                                                     <span class="pr-6 whitespace-nowrap">
-                                                        {{transaction.point}}
+                                                        {{transaction.earning_point}}
                                                     </span>
                                                 </td>
                                             </ng-container>
                                             <ng-container *ngIf="transaction.point_type === 'adjustment'">
                                                 <td mat-cell>
                                                     <span class="pr-6 whitespace-nowrap">
-                                                        {{transaction.point}}
+                                                        {{transaction.earning_point}}
                                                     </span>
                                                 </td>
                                             </ng-container>

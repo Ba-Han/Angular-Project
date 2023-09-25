@@ -21,18 +21,18 @@ import { UserService } from 'app/core/user/user.service';
         /* language=SCSS */
         `
             .transaction-grid {
-                grid-template-columns: 180px 130px 130px 130px 130px 130px 130px;
+                grid-template-columns: 180px 130px 130px 130px 130px 130px;
 
                 @screen sm {
-                    grid-template-columns: 180px 130px 130px 130px 130px 130px 130px;
+                    grid-template-columns: 180px 130px 130px 130px 130px 130px;
                 }
 
                 @screen md {
-                    grid-template-columns: 180px 130px 130px 130px 130px 130px 130px;
+                    grid-template-columns: 180px 130px 130px 130px 130px 130px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 180px 130px 130px 130px 130px 130px 130px;
+                    grid-template-columns: 180px 130px 130px 130px 130px 130px;
                 }
             }
             .custom-paging {
