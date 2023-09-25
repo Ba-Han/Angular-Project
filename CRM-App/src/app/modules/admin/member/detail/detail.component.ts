@@ -793,8 +793,8 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                     this.member.spending = this.member.spending;
                     const bathDatestring = response.data[0] != null ? response.data[0].date_of_birth : '';
                     const date = new Date(bathDatestring);
-                    const modifyBirthDate = new Date(date.setDate(date.getDate() + Number(1)));
-                    //const modifyBirthDate = new Date(date.setDate(date.getDate()));
+                    //const modifyBirthDate = new Date(date.setDate(date.getDate() + Number(1)));
+                    const modifyBirthDate = new Date(date.setDate(date.getDate()));
                     //response.data[0].member_tier = this.memberTiers.find(x => x.id === response.data[0].member_tier.name);
                     response.data.member_tier = this.memberTiers.find(x => x.id === response.data[0].member_tier.name);
                     response.data[0].date_of_birth = modifyBirthDate;
