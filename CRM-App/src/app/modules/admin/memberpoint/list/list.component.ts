@@ -20,18 +20,18 @@ import { UserService } from 'app/core/user/user.service';
     styles         : [
         `
             .memberpoint-grid {
-                grid-template-columns: 180px 100px 100px 100px 100px 110px 110px 110px;
+                grid-template-columns: 180px 100px 100px 100px 100px 150px 110px 110px 110px;
 
                 @screen sm {
-                    grid-template-columns: 180px 100px 100px 100px 100px 110px 110px 110px;
+                    grid-template-columns: 180px 100px 100px 100px 100px 150px 110px 110px 110px;
                 }
 
                 @screen md {
-                    grid-template-columns: 180px 100px 100px 100px 100px 110px 110px 110px;
+                    grid-template-columns: 180px 100px 100px 100px 100px 150px 110px 110px 110px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 180px 100px 100px 100px 100px 110px 110px 110px;
+                    grid-template-columns: 180px 100px 100px 100px 100px 150px 110px 110px 110px;
                 }
             }
             .membercustom-paging {
@@ -221,6 +221,54 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
                     start: 'desc',
                     disableClear: true
                 });
+            } else if (this.isAscending && this.selectedCoulumn === 'balance') {
+                this._sort.sort({
+                    id: 'balance',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'balance') {
+                this._sort.sort({
+                    id: 'balance',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'rewardcode') {
+                this._sort.sort({
+                    id: 'reward_code',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'rewardcode') {
+                this._sort.sort({
+                    id: 'reward_code',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'validfrom') {
+                this._sort.sort({
+                    id: 'earning_valid_from',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'validfrom') {
+                this._sort.sort({
+                    id: 'earning_valid_from',
+                    start: 'desc',
+                    disableClear: true
+                });
+            } else if (this.isAscending && this.selectedCoulumn === 'validto') {
+                this._sort.sort({
+                    id: 'spending_valid_to',
+                    start: 'asc',
+                    disableClear: true
+                });
+            } else if (!this.isAscending && this.selectedCoulumn === 'validto') {
+                this._sort.sort({
+                    id: 'spending_valid_to',
+                    start: 'desc',
+                    disableClear: true
+                });
             } else if (this.isAscending && this.selectedCoulumn === 'date') {
                 this._sort.sort({
                     id: 'date_created',
@@ -309,6 +357,18 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
         } else if ( this.selectedCoulumn === 'points' ) {
             this.ngAfterViewInit();
             this.onPageChange();
+        } else if ( this.selectedCoulumn === 'balance' ) {
+            this.ngAfterViewInit();
+            this.onPageChange();
+        } else if ( this.selectedCoulumn === 'rewardcode' ) {
+            this.ngAfterViewInit();
+            this.onPageChange();
+        } else if ( this.selectedCoulumn === 'validfrom' ) {
+            this.ngAfterViewInit();
+            this.onPageChange();
+        } else if ( this.selectedCoulumn === 'validto' ) {
+            this.ngAfterViewInit();
+            this.onPageChange();
         } else if ( this.selectedCoulumn === 'date' ) {
             this.ngAfterViewInit();
             this.onPageChange();
@@ -334,6 +394,30 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
             this.ngAfterViewInit();
             this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'points' ) {
+            this.ngAfterViewInit();
+            this.onPageChange();
+        } else if ( this.isAscending && this.selectedCoulumn === 'balance' ) {
+            this.ngAfterViewInit();
+            this.onPageChange();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'balance' ) {
+            this.ngAfterViewInit();
+            this.onPageChange();
+        } else if ( this.isAscending && this.selectedCoulumn === 'rewardcode' ) {
+            this.ngAfterViewInit();
+            this.onPageChange();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'rewardcode' ) {
+            this.ngAfterViewInit();
+            this.onPageChange();
+        } else if ( this.isAscending && this.selectedCoulumn === 'validfrom' ) {
+            this.ngAfterViewInit();
+            this.onPageChange();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'validfrom' ) {
+            this.ngAfterViewInit();
+            this.onPageChange();
+        } else if ( this.isAscending && this.selectedCoulumn === 'validto' ) {
+            this.ngAfterViewInit();
+            this.onPageChange();
+        } else if ( !this.isAscending && this.selectedCoulumn === 'validto' ) {
             this.ngAfterViewInit();
             this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'date' ) {
