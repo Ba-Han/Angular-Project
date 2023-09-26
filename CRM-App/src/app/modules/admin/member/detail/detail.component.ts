@@ -239,7 +239,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     recentTransactionsDataSource: MatTableDataSource<any> = new MatTableDataSource();
     recentTransactionsTableColumns: string[] = ['document_no', 'total_amount', 'channel_name', 'point', 'point_type', 'purchase_date'];
     recentPointsDataSource: MatTableDataSource<any> = new MatTableDataSource();
-    recentPointsTableColumns: string[] = ['transaction_document_no', 'point_type', 'point', 'balance', 'spending_valid_to'];
+    recentPointsTableColumns: string[] = ['transaction_document_no', 'point_type', 'point', 'balance', 'earning_valid_from', 'spending_valid_to'];
     memberDocumentsDataSource: MatTableDataSource<any> = new MatTableDataSource();
     memberDocumentsTableColumns: string[] = ['document_name', 'uploaded_on', 'comment', 'file_path', 'uploaded_by_name'];
     recentMemberVouchersDataSource: MatTableDataSource<any> = new MatTableDataSource();
