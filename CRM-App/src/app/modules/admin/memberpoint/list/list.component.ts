@@ -247,13 +247,13 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
                 });
             } else if (this.isAscending && this.selectedCoulumn === 'validfrom') {
                 this._sort.sort({
-                    id: 'earning_valid_from',
+                    id: 'spending_valid_from',
                     start: 'asc',
                     disableClear: true
                 });
             } else if (!this.isAscending && this.selectedCoulumn === 'validfrom') {
                 this._sort.sort({
-                    id: 'earning_valid_from',
+                    id: 'spending_valid_from',
                     start: 'desc',
                     disableClear: true
                 });

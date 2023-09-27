@@ -580,7 +580,7 @@
                                     </ng-container>
 
                                     <!-- Valid From -->
-                                    <ng-container matColumnDef="earning_valid_from">
+                                    <ng-container matColumnDef="spending_valid_from">
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0; padding-left: 0.5rem;">
                                             Valid From
@@ -588,7 +588,7 @@
                                         <td mat-cell [routerLink]="['./memberpoint', point.id]" style="cursor:pointer;"
                                             *matCellDef="let point">
                                             <span class="pr-6 font-medium whitespace-nowrap">
-                                                {{point.earning_valid_from | date:'MMM dd, y'}}
+                                                {{point.spending_valid_from | date:'MMM dd, y'}}
                                             </span>
                                         </td>
                                     </ng-container>
