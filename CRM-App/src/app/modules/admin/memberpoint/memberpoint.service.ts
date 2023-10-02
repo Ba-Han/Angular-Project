@@ -165,7 +165,8 @@ export class MemberPointService
                 'point_type_int': memberPoint.point_type_int,
                 'reward_code': memberPoint.reward_code,
                 'point': memberPoint.point,
-                'expiry_date': memberPoint.expiry_date,
+                'valid_from': memberPoint.valid_from,
+                'valid_to': memberPoint.valid_to,
                 'member': memberPoint.member,
                 'comment': memberPoint.comment,
             }).pipe(
@@ -190,7 +191,8 @@ export class MemberPointService
                 'point_type_int': memberPoint.point_type_int,
                 'reward_code': memberPoint.reward_code,
                 'point': memberPoint.point,
-                'earning_valid_to': memberPoint.earning_valid_to,
+                'valid_from': memberPoint.valid_from,
+                'valid_to': memberPoint.valid_to,
                 'member': memberPoint.member,
                 'comment': memberPoint.comment,
             }).pipe(

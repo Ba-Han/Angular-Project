@@ -14,7 +14,8 @@ export interface MemberPoint {
     comment: string;
     earning_valid_from: string;
     earning_valid_to: string;
-    expiry_date: string;
+    valid_from: string;
+    valid_to: string;
     spending_valid_from: string;
     spending_valid_to: string;
     transaction_document_no: string;

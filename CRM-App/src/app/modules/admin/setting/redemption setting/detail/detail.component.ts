@@ -109,6 +109,8 @@ export class RedemptionSettingDetailComponent implements OnInit, OnDestroy {
     minDate: string;
     typeValue: number;
     memberTiers: any;
+    selectedStartDateTime: string;
+    selectedEndDateTime: string;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -134,6 +136,19 @@ export class RedemptionSettingDetailComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
+
+        // Initialize with 12:01 AM for the start date
+        const startDate = new Date();
+        startDate.setHours(0, 1, 0, 0);
+
+        // Initialize with 11:59 PM for the end date
+        const endDate = new Date();
+        endDate.setHours(23, 59, 0, 0);
+
+        // Format for the dates 'yyyy-MM-ddTHH:mm' format expected by datetime-local
+        this.selectedStartDateTime = this.formatDateTime(startDate);
+        this.selectedEndDateTime = this.formatDateTime(endDate);
+
         //Member Tier Edit Form
         this.RedemptionSettingEditForm = this._formBuilder.group({
             id: [''],
@@ -150,6 +165,15 @@ export class RedemptionSettingDetailComponent implements OnInit, OnDestroy {
         .subscribe((redemption: Redemption) => {
             this.redemption = redemption;
             this.typeValue = redemption.type;
+
+            this.selectedStartDateTime = redemption.date_from;
+            this.selectedEndDateTime = redemption.date_to;
+
+            if ( this.selectedStartDateTime === null && this.selectedEndDateTime === null ) {
+                    this.selectedStartDateTime = this.formatDateTime(startDate);
+                    this.selectedEndDateTime = this.formatDateTime(endDate);
+            }
+
             this.RedemptionSettingEditForm.patchValue(redemption);
             this._changeDetectorRef.markForCheck();
         });
@@ -232,6 +256,17 @@ export class RedemptionSettingDetailComponent implements OnInit, OnDestroy {
         this.toogleDeleteMode(true);
         this.drawerOne.open();
         this._changeDetectorRef.markForCheck();
+    }
+
+    // Helper function to format a Date object as 'yyyy-MM-ddTHH:mm'
+    formatDateTime(date: Date): string {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
 
     updateRedemption(): void {
