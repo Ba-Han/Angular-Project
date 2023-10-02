@@ -173,7 +173,7 @@
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Type</mat-label>
-                                    <mat-select [formControlName]="'type'" [(ngModel)]="typeValue">
+                                    <mat-select [formControlName]="'type'" [(ngModel)]="typeValue" (selectionChange)="onDropdownChangeValue()">
                                         <mat-option [value]="0">Base</mat-option>
                                         <mat-option [value]="1">Special</mat-option>
                                         <mat-option [value]="2">Voucher</mat-option>
@@ -190,6 +190,7 @@
                                                 [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
                                         <input matInput type="datetime-local"
                                             [min]="minDate"
+                                            [(ngModel)]="selectedStartDateTime"
                                             [formControlName]="'date_from'"
                                             [placeholder]="'Date From'">
                                         <!-- <mat-datepicker-toggle matSuffix
@@ -205,6 +206,7 @@
                                                 [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
                                         <input matInput type="datetime-local"
                                             [min]="minDate"
+                                            [(ngModel)]="selectedEndDateTime"
                                             [formControlName]="'date_to'"
                                             [placeholder]="'Date To'">
                                         <!-- <mat-datepicker-toggle matSuffix

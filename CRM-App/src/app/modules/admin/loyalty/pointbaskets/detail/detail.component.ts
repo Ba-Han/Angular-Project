@@ -115,12 +115,14 @@ export class PointBasketDetailComponent implements OnInit, AfterViewInit, OnDest
     minDate: string;
     timeoutId: any;
     timeOutUpId: any;
-    spendingtypeValue = 0;
-    totypeValue = 0;
-    toendTypeValue = 0;
-    fromtypeValue = 0;
-    fromstarttypeValue = 0;
+    spendingtypeValue: number = 0;
+    totypeValue: number = 0;
+    toendTypeValue: number = 0;
+    fromtypeValue: number = 0;
+    fromstarttypeValue: number = 0;
     isButtonDisabled: boolean = true;
+    selectedStartDateTime: string;
+    selectedEndDateTime: string;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
 
@@ -143,6 +145,19 @@ export class PointBasketDetailComponent implements OnInit, AfterViewInit, OnDest
 
 
     ngOnInit(): void {
+
+        // Initialize with 12:01 AM for the start date
+        const startDate = new Date();
+        startDate.setHours(0, 1, 0, 0);
+
+        // Initialize with 11:59 PM for the end date
+        const endDate = new Date();
+        endDate.setHours(23, 59, 0, 0);
+
+        // Format for the dates 'yyyy-MM-ddTHH:mm' format expected by datetime-local
+        this.selectedStartDateTime = this.formatDateTime(startDate);
+        this.selectedEndDateTime = this.formatDateTime(endDate);
+
         this.PointBasketEditForm = this._formBuilder.group({
             id: [''],
             name: ['',[Validators.required]],
@@ -168,6 +183,15 @@ export class PointBasketDetailComponent implements OnInit, AfterViewInit, OnDest
                 this.toendTypeValue = pointbasket.to_end_type;
                 this.fromtypeValue= pointbasket.from_type;
                 this.fromstarttypeValue = pointbasket.from_start_type;
+
+                this.selectedStartDateTime = pointbasket.from_start_date;
+                this.selectedEndDateTime = pointbasket.to_end_date;
+
+                if ( this.selectedStartDateTime === null && this.selectedEndDateTime === null ) {
+                            this.selectedStartDateTime = this.formatDateTime(startDate);
+                            this.selectedEndDateTime = this.formatDateTime(endDate);
+                }
+
                 //this.pointRule.point_basket = pointrule.name;
                 //this.pointRule.point_basketName = pointrule.point_basket?.name;
                 this.PointBasketEditForm.patchValue(pointbasket);
@@ -311,6 +335,17 @@ export class PointBasketDetailComponent implements OnInit, AfterViewInit, OnDest
             }
         );
         this._changeDetectorRef.markForCheck();
+    }
+
+    // Helper function to format a Date object as 'yyyy-MM-ddTHH:mm'
+    formatDateTime(date: Date): string {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention

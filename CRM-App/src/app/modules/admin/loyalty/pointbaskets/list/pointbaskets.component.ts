@@ -30,22 +30,9 @@ import { UserService } from 'app/core/user/user.service';
                 }
 
                 @screen lg {
-                    grid-template-columns: 160px 160px 150px 150px 150px 150px;
+                    grid-template-columns: 250px 250px 200px 150px;
                 }
             }
-
-            .point_rule_tier_grid {
-                grid-template-columns: 60px 100px;
-                     @screen sm {
-                         grid-template-columns: 60px 100px 100px;
-                     }
-                     @screen md {
-                         grid-template-columns: 60px 150px 150px;
-                     }
-                     @screen lg {
-                         grid-template-columns: 35px 200px 200px;
-                     }
-                }
 
             .membercustom-paging {
                    position: fixed !important;
@@ -129,14 +116,16 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
     minDate: string;
     timeoutId: any;
     timeOutUpId: any;
-    spendingtypeValue = 0;
-    totypeValue = 0;
-    toendTypeValue = 0;
-    fromtypeValue = 0;
-    fromstarttypeValue = 0;
+    spendingtypeValue: number = 0;
+    totypeValue: number = 0;
+    toendTypeValue: number = 0;
+    fromtypeValue: number = 0;
+    fromstarttypeValue: number = 0;
     isAscending: boolean = true;
     selectedCoulumn = 'name';
     errorMessage: string | '' = '';
+    selectedStartDateTime: string;
+    selectedEndDateTime: string;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -149,6 +138,18 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
     ) {
         const today = new Date();
         this.minDate = today.toISOString().slice(0, 16);
+
+        // Initialize with 12:01 AM for the start date
+        const startDate = new Date();
+        startDate.setHours(0, 1, 0, 0);
+
+        // Initialize with 11:59 PM for the end date
+        const endDate = new Date();
+        endDate.setHours(23, 59, 0, 0);
+
+        // Format for the dates 'yyyy-MM-ddTHH:mm' format expected by datetime-local
+        this.selectedStartDateTime = this.formatDateTime(startDate);
+        this.selectedEndDateTime = this.formatDateTime(endDate);
     }
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -323,6 +324,17 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
         ).subscribe(() => {
             this._changeDetectorRef.markForCheck();
         });
+    }
+
+    // Helper function to format a Date object as 'yyyy-MM-ddTHH:mm'
+    formatDateTime(date: Date): string {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

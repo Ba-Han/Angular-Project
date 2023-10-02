@@ -248,17 +248,36 @@
                             <mat-form-field class="fuse-mat-no-subscript w-full hidden">
                                 <input matInput [formControlName]="'member'" />
                             </mat-form-field>
-    
+                            
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
-                                    <mat-label>Expiry Date</mat-label>
+                                    <mat-label>Valid From</mat-label>
                                     <mat-icon matPrefix
                                               class="hidden sm:flex icon-size-5"
                                               [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
                                     <input matInput type="datetime-local"
                                            [min]="minDate"
-                                           [formControlName]="'expiry_date'"
-                                           [placeholder]="'Expiry Date'">
+                                           [(ngModel)]="selectedStartDateTime"
+                                           [formControlName]="'valid_from'"
+                                           [placeholder]="'Valid From'">
+                                    <!-- <mat-datepicker-toggle matSuffix
+                                                           [for]="earningvalidToDatepicker">
+                                    </mat-datepicker-toggle> -->
+                                    <mat-datepicker #earningvalidToDatepicker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Valid To</mat-label>
+                                    <mat-icon matPrefix
+                                              class="hidden sm:flex icon-size-5"
+                                              [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                                    <input matInput type="datetime-local"
+                                           [min]="minDate"
+                                           [(ngModel)]="selectedEndDateTime"
+                                           [formControlName]="'valid_to'"
+                                           [placeholder]="'Valid To'">
                                     <!-- <mat-datepicker-toggle matSuffix
                                                            [for]="earningvalidToDatepicker">
                                     </mat-datepicker-toggle> -->
