@@ -338,6 +338,39 @@ export class PointBasketListComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    toTypeChangeValueOne(): void {
+        if( this.totypeValue ===  1 || this.totypeValue === 2 || this.totypeValue === 3 ) {
+            this.PointBasketAddForm.get('to_end_date').setValue(null);
+        } else if ( this.totypeValue === 4 ) {
+            this.PointBasketAddForm.get('to_number').setValue(0);
+            this.PointBasketAddForm.get('to_end_type').setValue(0);
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    toTypeChangeValueTwo(): void {
+        if( this.totypeValue ===  1 || this.totypeValue === 2 || this.totypeValue === 3 ) {
+            this.PointBasketAddForm.get('to_end_date').setValue(null);
+        } else if ( this.totypeValue === 4 ) {
+            this.PointBasketAddForm.get('to_number').setValue(0);
+            this.PointBasketAddForm.get('to_end_type').setValue(0);
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    fromTypeChangeValue(): void {
+        if( this.fromtypeValue ===  1 || this.fromtypeValue === 2 || this.fromtypeValue === 3 ) {
+            this.PointBasketAddForm.get('from_start_date').setValue(null);
+        } else if ( this.fromtypeValue === 4 ) {
+            this.PointBasketAddForm.get('from_number').setValue(0);
+            this.PointBasketAddForm.get('from_start_type').setValue(0);
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     sortingColumnList() {
         if ( this.selectedCoulumn === 'name') {
             this.ngAfterViewInit();

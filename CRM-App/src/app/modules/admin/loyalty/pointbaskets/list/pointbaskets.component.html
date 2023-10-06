@@ -181,7 +181,7 @@
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Spending Validity Type</mat-label>
-                                        <mat-select [formControlName]="'to_type'" [(ngModel)]="totypeValue">
+                                        <mat-select [formControlName]="'to_type'" [(ngModel)]="totypeValue" (selectionChange)="toTypeChangeValueOne()">
                                             <mat-option [value]="0">Select</mat-option>
                                             <mat-option [value]="1">Day</mat-option>
                                             <mat-option [value]="2">Month</mat-option>
@@ -247,7 +247,7 @@
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Spending Validity Type</mat-label>
-                                        <mat-select [formControlName]="'from_type'" [(ngModel)]="fromtypeValue">
+                                        <mat-select [formControlName]="'from_type'" [(ngModel)]="fromtypeValue" (selectionChange)="fromTypeChangeValue()">
                                             <mat-option [value]="0">Select</mat-option>
                                             <mat-option [value]="1">Day</mat-option>
                                             <mat-option [value]="2">Month</mat-option>
@@ -310,7 +310,7 @@
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Spending Validity Type</mat-label>
-                                        <mat-select [formControlName]="'to_type'" [(ngModel)]="totypeValue">
+                                        <mat-select [formControlName]="'to_type'" [(ngModel)]="totypeValue" (selectionChange)="toTypeChangeValueTwo()">
                                             <mat-option [value]="0">Select</mat-option>
                                             <mat-option [value]="1">Day</mat-option>
                                             <mat-option [value]="2">Month</mat-option>

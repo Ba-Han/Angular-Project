@@ -348,6 +348,39 @@ export class PointBasketDetailComponent implements OnInit, AfterViewInit, OnDest
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    toTypeChangeValueOne(): void {
+        if( this.totypeValue ===  1 || this.totypeValue === 2 || this.totypeValue === 3 ) {
+            this.PointBasketEditForm.get('to_end_date').setValue(null);
+            this._changeDetectorRef.markForCheck();
+        } else if ( this.totypeValue === 4 ) {
+            this.PointBasketEditForm.get('to_number').setValue(0);
+            this.PointBasketEditForm.get('to_end_type').setValue(0);
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    toTypeChangeValueTwo(): void {
+        if( this.totypeValue ===  1 || this.totypeValue === 2 || this.totypeValue === 3 ) {
+            this.PointBasketEditForm.get('to_end_date').setValue(null);
+            this._changeDetectorRef.markForCheck();
+        } else if ( this.totypeValue === 4 ) {
+            this.PointBasketEditForm.get('to_number').setValue(0);
+            this.PointBasketEditForm.get('to_end_type').setValue(0);
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    fromTypeChangeValue(): void {
+        if( this.fromtypeValue ===  1 || this.fromtypeValue === 2 || this.fromtypeValue === 3 ) {
+            this.PointBasketEditForm.get('from_start_date').setValue(null);
+            this._changeDetectorRef.markForCheck();
+        } else if ( this.fromtypeValue === 4 ) {
+            this.PointBasketEditForm.get('from_number').setValue(0);
+            this.PointBasketEditForm.get('from_start_type').setValue(0);
+        }
+    }
+
     // eslint-disable-next-line @typescript-eslint/naming-convention
     DeleteDrawer(id: number): void {
         this.selectedId = id;
