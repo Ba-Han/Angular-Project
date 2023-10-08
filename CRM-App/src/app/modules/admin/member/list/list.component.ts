@@ -207,18 +207,6 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
                     start: 'desc',
                     disableClear: true
                 });
-            } else if (this.isAscending && this.selectedCoulumn === 'availablepoints') {
-                this._sort.sort({
-                    id: 'available_points',
-                    start: 'asc',
-                    disableClear: true
-                });
-            } else if (!this.isAscending && this.selectedCoulumn === 'availablepoints') {
-                this._sort.sort({
-                    id: 'available_points',
-                    start: 'desc',
-                    disableClear: true
-                });
             } else if (this.isAscending && this.selectedCoulumn === 'createddate') {
                 this._sort.sort({
                     id: 'date_created',
@@ -330,9 +318,6 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
         } else if ( this.selectedCoulumn === 'mobile' ) {
             this.ngAfterViewInit();
             this.onPageChange();
-        } else if ( this.selectedCoulumn === 'availablepoints' ) {
-            this.ngAfterViewInit();
-            this.onPageChange();
         } else if ( this.selectedCoulumn === 'createddate' ) {
             this.ngAfterViewInit();
             this.onPageChange();
@@ -370,12 +355,6 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
             this.ngAfterViewInit();
             this.onPageChange();
         } else if ( !this.isAscending && this.selectedCoulumn === 'mobile' ) {
-            this.ngAfterViewInit();
-            this.onPageChange();
-        } else if ( this.isAscending && this.selectedCoulumn === 'availablepoints' ) {
-            this.ngAfterViewInit();
-            this.onPageChange();
-        } else if ( !this.isAscending && this.selectedCoulumn === 'availablepoints' ) {
             this.ngAfterViewInit();
             this.onPageChange();
         } else if ( this.isAscending && this.selectedCoulumn === 'createddate' ) {
