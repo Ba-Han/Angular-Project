@@ -23,12 +23,10 @@
                     <span class="member_sort_by">Sort By:</span>
                     <mat-select [(ngModel)]="selectedCoulumn" (selectionChange)="sortingColumnList()">
                         <mat-option value="membercode">Member Code</mat-option>
-                        <!-- <mat-option value="rewardcode">Member Tier</mat-option> -->
                         <mat-option value="firstname">First Name</mat-option>
                         <mat-option value="lastname">Last Name</mat-option>
                         <mat-option value="email">Email</mat-option>
                         <mat-option value="mobile">Mobile</mat-option>
-                        <mat-option value="availablepoints">Available Points</mat-option>
                         <mat-option value="createddate">Created Date</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -70,9 +68,6 @@
                                 Mobile
                             </div>
                             <div class="sm:block" style="text-align: center;">
-                                Available Points
-                            </div>
-                            <div class="sm:block" style="text-align: center;">
                                 Created Date
                             </div>
                         </div>
@@ -106,9 +101,6 @@
                                         </div>
                                         <div class="hidden lg:block truncate" style="text-align: center;">
                                             {{member.mobile_phone}}
-                                        </div>
-                                        <div class="hidden lg:block truncate" style="text-align:center;">
-                                            {{member.available_points}}
                                         </div>
                                         <div class="hidden lg:block truncate" style="text-align:center;">
                                             {{member.date_created | date:'MMM dd, y'}}
