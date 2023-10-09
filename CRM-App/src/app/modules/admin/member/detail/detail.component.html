@@ -608,7 +608,7 @@
                                     </ng-container>
         
                                     <!-- Footer -->
-                                    <ng-container *ngIf="points.length > 0">
+                                    <ng-container *ngIf="points.length === 0 || points.length > 0">
                                         <ng-container matColumnDef="recentPointsTableFooter">
                                             <td class="py-6 px-0 border-0"
                                                 mat-footer-cell
@@ -618,22 +618,6 @@
                                                         [routerLink]="['./memberpoint']">
                                                     See All Member Points
                                                 </button>
-                                            </td>
-                                        </ng-container>
-                                    </ng-container>
-        
-                                    <ng-container *ngIf="points.length === 0">
-                                        <ng-container matColumnDef="recentPointsTableFooter">
-                                            <td class="py-6 px-0 border-0"
-                                                mat-footer-cell
-                                                *matFooterCellDef
-                                                colspan="5"
-                                                style="color:grey;">
-                                                No Member Points
-                                                <!-- <button mat-stroked-button
-                                                        [routerLink]="['./memberpoint']">
-                                                    See All Member Points
-                                                </button> -->
                                             </td>
                                         </ng-container>
                                     </ng-container>
