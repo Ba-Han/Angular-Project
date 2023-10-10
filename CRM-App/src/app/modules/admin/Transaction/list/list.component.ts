@@ -88,8 +88,8 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
     memberId: number;
     transactionlistMode: boolean = false;
     TransactionDetail: boolean = false;
-    isAscending: boolean = true;
-    selectedCoulumn = 'orderno';
+    isAscending: boolean = false;
+    selectedCoulumn: string = 'date';
     searchInputControl: FormControl = new FormControl();
     //selectedMemberPoint: Transaction | null = null;;
     private _unsubscribeAll: Subject<any> = new Subject<any>();

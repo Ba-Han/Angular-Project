@@ -96,8 +96,8 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
     pointAddFormMode: boolean = false;
     memberPointAddForm: FormGroup;
     searchInputControl: FormControl = new FormControl();
-    isAscending: boolean = true;
-    selectedCoulumn = 'documentno';
+    isAscending: boolean = false;
+    selectedCoulumn: string = 'date';
     filterActiveAndExpirePoint: string = 'all';
     getFilterValue: any;
     pageIndex: number = 0;

@@ -77,7 +77,7 @@ export class MemberPointService
      * Get data
      */
     // eslint-disable-next-line max-len
-    getData(id: number = 0, page: number = 0, limit: number = 10, sort: string = 'transaction_document_no', order: 'asc' | 'desc' | '' = 'asc', status: string = 'all', search: string = ''):
+    getData(id: number = 0, page: number = 0, limit: number = 10, sort: string = 'date_created', order: 'asc' | 'desc' | '' = 'desc', status: string = 'all', search: string = ''):
         Observable<{ pagination: MemberPointPagination; channels: MemberPoint[] }>
     {
         return this._httpClient.get(`${this._apiurl}/member/${id}/points`, {
