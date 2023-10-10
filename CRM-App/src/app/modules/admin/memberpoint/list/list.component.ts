@@ -183,7 +183,7 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
              debounceTime(300),
              switchMap((query) => {
                  this.isLoading = true;
-                 return this._memberPointService.getData(Number(this.memberId),0, 10, 'transaction_document_no', 'asc', 'all', query);
+                 return this._memberPointService.getData(Number(this.memberId),0, 10, 'date_created', 'desc', 'all', query);
              }),
              map(() => {
                  this.isLoading = false;
@@ -343,12 +343,13 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
 
      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onPageChange() {
+        const sortDirection = this._sort?.direction || 'desc';
         // eslint-disable-next-line max-len
-        this._memberPointService.getData(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.getFilterValue).pipe(
+        this._memberPointService.getData(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, sortDirection, this.getFilterValue).pipe(
             switchMap(() => {
                 if ( this.isLoading === true ) {
                     // eslint-disable-next-line max-len
-                    return this._memberPointService.getData(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.getFilterValue);
+                    return this._memberPointService.getData(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, sortDirection, this.getFilterValue);
                 } else {
                     return of(null);
                 }
@@ -488,7 +489,12 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
 
     activeAndExpirePointfieldChange(e: any): void {
         this.getFilterValue = e.value;
-        this._memberPointService.getData(Number(this.memberId), 0, 10, '', 'asc', this.getFilterValue)
+        const pageIndex = this._paginator?.pageIndex || 0;
+        const pageSize = this._paginator?.pageSize || 10;
+        const sortActive = this._sort?.active || 'date_created';
+        const sortDirection = this._sort?.direction || 'desc';
+
+        this._memberPointService.getData(Number(this.memberId), pageIndex, pageSize, sortActive, sortDirection, this.getFilterValue)
        .pipe(
         takeUntil(this._unsubscribeAll)
             )
