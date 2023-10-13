@@ -79,20 +79,6 @@
                                 <div class="leading-6 log_long_text">{{ getDetailsLogData.response_body_text }}</div>
                             </div>
                         </ng-container>
-        
-                        <ng-container *ngIf="getDetailsLogData.is_error === false">
-                            <div class="grid grid-cols-2 log-css">
-                                <div>Is Error: </div>
-                                <div class="leading-6"> false </div>
-                            </div>
-                        </ng-container>
-
-                        <ng-container *ngIf="getDetailsLogData.is_error === true">
-                            <div class="grid grid-cols-2 log-css">
-                                <div>Is Error: </div>
-                                <div class="leading-6"> true </div>
-                            </div>
-                        </ng-container>
 
                     </div>
                 </div>
@@ -127,6 +113,15 @@
                                 [placeholder]="'Search'">
                         </mat-form-field>
                         
+                        <label class="ml-4 fuse-mat-no-subscript">
+                            <mat-checkbox
+                                [(ngModel)]="isChecked"
+                                (ngModelChange)="setupValueChangesSubscription()"
+                                color="primary">
+                                Errors Only
+                            </mat-checkbox>
+                        </label>
+
                         <mat-form-field class="ml-4 fuse-mat-no-subscript log-date">
                             <input matInput
                                    type="date"
@@ -201,10 +196,6 @@
                                         <div class="sm:block">
                                             Response Body Text
                                         </div>
-    
-                                        <div class="sm:block">
-                                            Is Error
-                                        </div>
                                     </div>
     
                                     <!-- Rows -->
@@ -244,10 +235,6 @@
         
                                                     <div class="truncate">
                                                         {{ log.response_body_text }}
-                                                    </div>
-        
-                                                    <div class="truncate">
-                                                        {{ log.is_error }}
                                                     </div>
                                                 </div>
                                             </a>
