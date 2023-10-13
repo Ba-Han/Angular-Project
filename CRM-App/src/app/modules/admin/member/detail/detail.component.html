@@ -551,7 +551,7 @@
                                         </td>
                                     </ng-container>
         
-                                    <!-- Point -->
+                                    <!--Total Point -->
                                     <ng-container matColumnDef="point">
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0; white-space: nowrap; padding-right: 0.3rem;">
@@ -603,6 +603,20 @@
                                             *matCellDef="let point">
                                             <span class="pr-6 font-medium whitespace-nowrap">
                                                 {{point.spending_valid_to | date:'MMM dd, y'}}
+                                            </span>
+                                        </td>
+                                    </ng-container>
+
+                                    <!-- Date -->
+                                    <ng-container matColumnDef="date_created">
+                                        <th mat-header-cell
+                                            *matHeaderCellDef style="background:#e2e8f0; padding-left: 0.3rem;">
+                                            Date
+                                        </th>
+                                        <td mat-cell [routerLink]="['./memberpoint', point.id]" style="cursor:pointer;"
+                                            *matCellDef="let point">
+                                            <span class="pr-6 font-medium whitespace-nowrap">
+                                                {{point.date_created | date:'MMM dd, y'}}
                                             </span>
                                         </td>
                                     </ng-container>
@@ -761,7 +775,7 @@
                                        [trackBy]="trackByFn"
                                        #recentTransactionsTable>
         
-                                    <!-- Transaction ID -->
+                                    <!-- Order No -->
                                     <ng-container matColumnDef="document_no">
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0;">
@@ -811,7 +825,7 @@
         
                                     </ng-container>
         
-                                    <!-- Name -->
+                                    <!-- Channel -->
                                     <ng-container matColumnDef="channel_name">
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0;">
@@ -850,7 +864,7 @@
         
                                     </ng-container>
         
-                                    <!-- Points -->
+                                    <!-- Earned Points -->
                                     <ng-container matColumnDef="point">
                                         <th mat-header-cell
                                             *matHeaderCellDef style="background:#e2e8f0;">

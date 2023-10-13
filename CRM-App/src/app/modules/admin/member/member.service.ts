@@ -193,7 +193,7 @@ export class MemberService
 
     getRecentTransactionsById(id: number): Observable<Transaction> {
         return this._httpClient.get<any>(`${this._apiurl}/member/${id}/transactions`, {
-            params: { limit: 5, sort: 'document_no', order: 'desc' }
+            params: { limit: 5, sort: 'purchase_date', order: 'desc' }
         })
             .pipe(
                 tap((response) => {
@@ -204,7 +204,7 @@ export class MemberService
 
     getRecentPointsById(id: number): Observable<MemberPoint> {
         return this._httpClient.get<any>(`${this._apiurl}/member/${id}/points`, {
-            params: { limit: 5, sort: 'transaction_document_no', order: 'desc' }
+            params: { limit: 5, sort: 'date_created', order: 'desc' }
         })
             .pipe(
                 tap((response) => {

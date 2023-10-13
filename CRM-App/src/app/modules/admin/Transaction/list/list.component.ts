@@ -88,8 +88,8 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
     memberId: number;
     transactionlistMode: boolean = false;
     TransactionDetail: boolean = false;
-    isAscending: boolean = true;
-    selectedCoulumn = 'orderno';
+    isAscending: boolean = false;
+    selectedCoulumn: string = 'date';
     searchInputControl: FormControl = new FormControl();
     //selectedMemberPoint: Transaction | null = null;;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -142,7 +142,7 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
                 debounceTime(300),
                 switchMap((query) => {
                     this.isLoading = true;
-                    return this._transactionService.getData(Number(this.memberId), 0, 10, 'document_no', 'asc', query);
+                    return this._transactionService.getData(Number(this.memberId), 0, 10, 'transaction_date', 'desc', query);
                 }),
                 map(() => {
                     this.isLoading = false;
