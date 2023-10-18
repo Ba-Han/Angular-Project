@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import { PointRuleService } from 'app/modules/admin/loyalty/pointrules/pointrules.service';
-import { PointRule, PointRulePaginagion, PointBasketPagination, PointBasket, MemberTier, MemberTierPagination, StorePagination, Store } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
+import { PointRule, PointRulePaginagion, PointBasketPagination, PointBasket, MemberTier, MemberTierPagination, StorePagination, Store, ProductType, ProductTypeSelection, ProductTypeSelectionPagination } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 
 @Injectable({
     providedIn: 'root'
@@ -13,6 +13,31 @@ export class PointRulesResolver implements Resolve<any>
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ pagination: PointRulePaginagion; pointrules: PointRule[] }> {
         return this._pointRuleService.getPointRules();
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ProductTypeResolver implements Resolve<any>
+{
+    constructor(private _pointRuleService: PointRuleService) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ProductType[]> {
+        return this._pointRuleService.getProductType();
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ProductTypeSelectionResolver implements Resolve<any>
+{
+    constructor(private _pointRuleService: PointRuleService) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ pagination: ProductTypeSelectionPagination; productTypeSelection: ProductTypeSelection[] }> {
+        const getProductTypeValue = route.paramMap.get('productTypeValue');
+        return this._pointRuleService.getProductTypeSelection(getProductTypeValue);
     }
 }
 

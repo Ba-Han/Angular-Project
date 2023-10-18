@@ -36,6 +36,29 @@ export interface PointRule {
     "no_of_orders": number;
     "offer_apply_month": number;
     "offer_apply_date": string;
+    "product_type": number;
+    "product_type_selection": string;
+    "product_type_min_expense": number;
+}
+
+export interface ProductType {
+    value: string;
+    name: string;
+}
+
+export interface ProductTypeSelection {
+    value: string;
+    name: string;
+}
+
+export interface ProductTypeSelectionPagination
+{
+    length: number;
+    limit: number;
+    page: number;
+    lastPage: number;
+    startIndex: number;
+    endIndex: number;
 }
 
 export interface PointBasket {
