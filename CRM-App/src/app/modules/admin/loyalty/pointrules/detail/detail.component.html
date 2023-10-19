@@ -863,13 +863,26 @@
                                 </ng-container>
                             </ng-container>
 
-                            
-
                             <ng-container *ngIf="pointRule.type === 5">
+
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Type: </div>
                                     <div class="ml-6 leading-6">Product Base Rule</div>
                                 </div>
+                                
+                                <ng-container *ngIf="pointRule.dollar_value">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Dollar Value: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.dollar_value}}</div>
+                                    </div>
+                                </ng-container>
+    
+                                <ng-container *ngIf="pointRule.point_value">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Value: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.point_value}}</div>
+                                    </div>
+                                </ng-container>
 
                                 <ng-container *ngIf="pointRule.product_type === 1">
                                     <div class="flex sm:items-center">
@@ -1486,6 +1499,31 @@
                             </ng-container>
 
                             <ng-container *ngIf="typeRuleValue === 5">
+                                
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
+                                        <mat-label>Dollar Value</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'dollar_value'"
+                                            [placeholder]="'Dollar Value'">
+                                    </mat-form-field>
+    
+                                    <mat-label>To</mat-label>
+    
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/3 ml-4">
+                                        <mat-label>Point Value</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'point_value'"
+                                            [placeholder]="'Point Value'">
+                                    </mat-form-field>
+                                </div>
+                                
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Product Type</mat-label>

@@ -706,11 +706,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     pageSortAndPaging(): void {
         if (this._sort && this._paginator) {
             // Set the initial sort
-            /* this._sort.sort({
-                id: 'name',
-                start: 'asc',
-                disableClear: true
-            }); */
+            this._sort.active = 'name';
+            this._sort.direction = 'asc';
             this._changeDetectorRef.markForCheck();
 
             this._sort.sortChange
@@ -798,7 +795,6 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     // Function to check if a product type is selected
     isProductTypeSelected(value: string, name: string): boolean {
         return this.selectedProductTypes.some(item => item.value === value && item.name === name);
-
     }
 
     selectProdcutTypeSelection(value: string, name: string): void {
@@ -858,11 +854,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     pageSortAndBasketPaging(): void {
         if (this._sort && this._paginator) {
             // Set the initial sort
-            /* this._sort.sort({
-                id: 'name',
-                start: 'asc',
-                disableClear: true
-            }); */
+            this._sort.active = 'name';
+            this._sort.direction = 'asc';
             this._changeDetectorRef.markForCheck();
 
             this._sort.sortChange
