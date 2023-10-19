@@ -77,10 +77,6 @@ import { UserService } from 'app/core/user/user.service';
                     }
             }
 
-            .product_type_selection_search {
-                min-width: 17rem !important;
-            }
-
             .membercustom-paging {
                    position: fixed !important;
                     bottom: 57px;
@@ -583,6 +579,10 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     tooglePointRuleAddFormMode(AddMode: boolean | null = null): void {
+        this.MemberTierListMode = false;
+        this.PointBasketListMode = false;
+        this.ProductTypeSelectionListMode = false;
+        this.pointRuleProductFormMode = false;
         if (AddMode === null) {
             this.AddMode = !this.AddMode;
         }
@@ -639,6 +639,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     tooglePointRuleProductFormMode(pointRuleProductFormMode: boolean | null = null) {
         this.MemberTierListMode = false;
         this.PointBasketListMode = false;
+        this.ProductTypeSelectionListMode = false;
         if (pointRuleProductFormMode === null) {
             this.pointRuleProductFormMode = !this.pointRuleProductFormMode;
         }
@@ -651,6 +652,10 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     toogleDeletePointRuleProductMode(DeletePointRuleProductMode: boolean | null = null): void {
+        this.MemberTierListMode = false;
+        this.PointBasketListMode = false;
+        this.pointRuleProductFormMode = false;
+        this.ProductTypeSelectionListMode = false;
         if (DeletePointRuleProductMode === null) {
             this.DeletePointRuleProductMode = !this.DeletePointRuleProductMode;
         }

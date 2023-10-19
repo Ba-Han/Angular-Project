@@ -276,7 +276,7 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
         if (this.isChecked) {
             this.responseStatusCode = -200;
         } else {
-            this.responseStatusCode = 200;
+            this.responseStatusCode = null;
         }
         const sortDirection = this._sort?.direction || 'asc';
         // eslint-disable-next-line max-len
