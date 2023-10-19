@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError, delay, catchError } from 'rxjs';
-import { PointRule, PointRulePaginagion, PointBasket, MemberTier, MemberTierPagination, StorePagination, Store, PointRuleProduct } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
+import { PointRule, PointRulePaginagion, PointBasket, MemberTier, MemberTierPagination, StorePagination, Store, PointRuleProduct, ProductType, ProductTypeSelection, ProductTypeSelectionPagination } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 
 @Injectable({
     providedIn: 'root'
@@ -11,6 +11,9 @@ import { PointRule, PointRulePaginagion, PointBasket, MemberTier, MemberTierPagi
 export class PointRuleService {
     // Private
     private _pointRules: BehaviorSubject<PointRule[] | null> = new BehaviorSubject(null);
+    private _productType: BehaviorSubject<ProductType[] | null> = new BehaviorSubject(null);
+    private _productTypeSelection: BehaviorSubject<ProductTypeSelection[] | null> = new BehaviorSubject(null);
+    private _productTypeSelectionPagination: BehaviorSubject<ProductTypeSelectionPagination | null> = new BehaviorSubject(null);
     private _pointRule: BehaviorSubject<PointRule | null> = new BehaviorSubject(null);
     private _pagination: BehaviorSubject<PointRulePaginagion | null> = new BehaviorSubject(null);
     private _apiurl: string;
@@ -28,6 +31,18 @@ export class PointRuleService {
 
     get pointRules$(): Observable<PointRule[]> {
         return this._pointRules.asObservable();
+    }
+
+    get productType$(): Observable<ProductType[]> {
+        return this._productType.asObservable();
+    }
+
+    get productTypeSelection$(): Observable<ProductTypeSelection[]> {
+        return this._productTypeSelection.asObservable();
+    }
+
+    get productTypeSelectionPagination$(): Observable<ProductTypeSelectionPagination> {
+        return this._productTypeSelectionPagination.asObservable();
     }
 
     get pointRule$(): Observable<PointRule> {
@@ -97,6 +112,39 @@ export class PointRuleService {
                 };
                 this._pagination.next(pagination);
                 this._pointRules.next(response.data);
+            })
+        );
+    }
+
+    getProductTypeSelection(value: string, page: number = 0, limit: number = 25, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+        Observable<{ pagination: ProductTypeSelectionPagination; productTypeSelection: ProductTypeSelection[] }> {
+        return this._httpClient.get(`${this._apiurl}/items/ecomproducts/${value}`, {
+            params: {
+                meta: 'filter_count',
+                page: page + 1,
+                limit: limit,
+                sort: sort,
+                order,
+                search
+            }
+        }).pipe(
+            tap((response: any) => {
+                const totalLength = response.meta.filter_count;
+                const begin = page * limit;
+                const end = Math.min((limit * (page + 1)), totalLength);
+                const lastPage = Math.max(Math.ceil(totalLength / limit), 1);
+
+                // Prepare the pagination object
+                const pagination = {
+                    length: totalLength,
+                    limit: limit,
+                    page: page,
+                    lastPage: lastPage,
+                    startIndex: begin,
+                    endIndex: end - 1
+                };
+                this._productTypeSelectionPagination.next(pagination);
+                this._productTypeSelection.next(response.data);
             })
         );
     }
@@ -210,6 +258,15 @@ export class PointRuleService {
             );
     }
 
+    getProductType(): Observable<ProductType[]>
+    {
+        return this._httpClient.get<any>(`${this._apiurl}/items/point_rule/ecomproducttypes`).pipe(
+            tap((response: any) => {
+                this._productType.next(response);
+            })
+        );
+    }
+
     createPointRule(pointrule: PointRule): Observable<PointRule> {
         const startDateValue = !pointrule.start_date ? null : pointrule.start_date;
         const endDateValue = !pointrule.end_date ? null : pointrule.end_date;
@@ -232,6 +289,9 @@ export class PointRuleService {
         const offerApplyDate = !pointrule.offer_apply_date ? null : pointrule.offer_apply_date;
         const numberOfOrders = !pointrule.no_of_orders ? 0 : pointrule.no_of_orders;
         const validityType = !pointrule.validity_type ? 0 : pointrule.validity_type;
+        const productType = !pointrule.product_type ? 0 : Number(pointrule.product_type);
+        const productTypeSelection = !pointrule.product_type_selection ? '' : pointrule.product_type_selection;
+        const productTypeMinExpense = !pointrule.product_type_min_expense ? 0 : pointrule.product_type_min_expense;
 
         return this.pointRules$.pipe(
             take(1),
@@ -264,7 +324,10 @@ export class PointRuleService {
                 "offer_type": offerType,
                 "no_of_orders": numberOfOrders,
                 "offer_apply_month": offerApplyMonth,
-                "offer_apply_date": offerApplyDate
+                "offer_apply_date": offerApplyDate,
+                "product_type": productType,
+                "product_type_selection": productTypeSelection,
+                "product_type_min_expense": productTypeMinExpense
             }).pipe(
                 map((newPointRule) => {
                     this._pointRules.next([newPointRule.data, ...pointrules]);
@@ -296,6 +359,9 @@ export class PointRuleService {
         const offerApplyDate = !pointrule.offer_apply_date ? null : pointrule.offer_apply_date;
         const numberOfOrders = !pointrule.no_of_orders ? 0 : pointrule.no_of_orders;
         const validityType = !pointrule.validity_type ? 0 : pointrule.validity_type;
+        const productType = !pointrule.product_type ? 0 : Number(pointrule.product_type);
+        const productTypeSelection = !pointrule.product_type_selection ? '' : pointrule.product_type_selection;
+        const productTypeMinExpense = !pointrule.product_type_min_expense ? 0 : pointrule.product_type_min_expense;
 
         return this._httpClient.patch<PointRule>(`${this._apiurl}/items/point_rule/${id}`,
             {
@@ -328,7 +394,10 @@ export class PointRuleService {
                 "offer_type": offerType,
                 "no_of_orders": numberOfOrders,
                 "offer_apply_month": offerApplyMonth,
-                "offer_apply_date": offerApplyDate
+                "offer_apply_date": offerApplyDate,
+                "product_type": productType,
+                "product_type_selection": productTypeSelection,
+                "product_type_min_expense": productTypeMinExpense
             }
         ).pipe(
             map(createPointRule => createPointRule)

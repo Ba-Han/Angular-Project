@@ -196,7 +196,7 @@
                         <ng-container *ngIf="pointBaskets.length; else noPointBasket">
                             <div class="grid">
                                 <!-- Header -->
-                                <div class="point_rule_tier_grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                <div class="point_rule_product_type_grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
                                      matSort
                                      matSortDisableClear>
                                     <div></div>
@@ -208,7 +208,7 @@
                                 <!-- Rows -->
                                 <ng-container *ngIf="(pointBaskets$ | async) as pointBaskets">
                                     <ng-container *ngFor="let pointBasket of pointBaskets; trackBy: trackByFn">
-                                        <div class="point_rule_tier_grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                                        <div class="point_rule_product_type_grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
 
                                             <div>
                                                 <input type="radio" name="pointBasket" #pointBasket (click)="selectPointBasket(pointBasket.id,pointBasket.name)" />
@@ -235,6 +235,93 @@
                     </ng-container>
                     <ng-template #noPointBasket>
                         <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no point basket!</div>
+                    </ng-template>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- Product Type Selection List -->
+        <ng-container *ngIf="ProductTypeSelectionListMode">
+            <div class="flex justify-start w-full ng-tns-c188-34 p-5" style="margin-bottom: -2em;">
+                <div class="">
+                    <button mat-icon-button style="background-color:#ccc;"
+                            [matTooltip]="'Close'"
+                            (click)="closeProductTypeSelection()">
+                        <mat-icon class="text-white"
+                            [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+                <div class="text-4xl ml-12 font-extrabold tracking-tight leading-none"> Product Type Selection </div>
+            </div>          
+            <div class="flex-auto">
+                <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+                    <div>
+                        <!-- <div class="text-4xl font-extrabold tracking-tight leading-none"> Product Type Selection </div> -->
+                    </div>
+                    <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+                        
+                        <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+                            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded product_type_selection_search">
+                                <mat-icon class="icon-size-5"
+                                          matPrefix
+                                          [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                <input matInput
+                                       [formControl]="productTypeSelectionSearchInputControl"
+                                       [autocomplete]="'off'"
+                                       [placeholder]="'Search Product Type Selection'">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proudct Type Selection List -->
+                <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+                    <ng-container *ngIf="(productTypeSelection$ | async) as productTypeSelection">
+                        <ng-container *ngIf="productTypeSelection.length; else noProductTypeSelection">
+                            <div class="grid">
+                                <!-- Header -->
+                                <div class="point_rule_product_type_grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                                     matSort
+                                     matSortDisableClear>
+                                    <div></div>
+                                    <div class="sm:block">
+                                        Name
+                                    </div>
+                                </div>
+
+                                <!-- Rows -->
+                                <ng-container *ngIf="(productTypeSelection$ | async) as productTypeSelection">
+                                    <ng-container *ngFor="let productType of productTypeSelection; trackBy: trackByFn">
+                                        <div class="point_rule_product_type_grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+
+                                            <div>
+                                                <input type="checkbox" name="productType" #productType 
+                                                (click)="selectProdcutTypeSelection(productType.value,productType.name)"
+                                                [checked]="isProductTypeSelected(productType.value, productType.name)"
+                                                />
+                                            </div>
+
+                                            <div class=" truncate">
+                                                {{productType.name}}
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+
+                        <div class="">
+                            <mat-paginator class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                                [ngClass]="{'pointer-events-none': isLoading}"
+                                [length]="productTypeSelectionPagination.length"
+                                [pageIndex]="productTypeSelectionPagination.page"
+                                [pageSize]="productTypeSelectionPagination.limit"
+                                [pageSizeOptions]="[25, 50, 100]"
+                                [showFirstLastButtons]="true"></mat-paginator>
+                        </div>
+                    </ng-container>
+                    <ng-template #noProductTypeSelection>
+                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no proudct type selection!</div>
                     </ng-template>
                 </div>
             </div>
@@ -505,6 +592,7 @@
                                         <mat-option [value]="2">Birthday</mat-option>
                                         <mat-option [value]="3">Referral Rule</mat-option>
                                         <mat-option [value]="4">Monthly Event</mat-option>
+                                        <mat-option [value]="5">Product Base Rule</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
@@ -932,6 +1020,74 @@
                                         </div>
                                     </ng-container>
                                 </ng-container>
+                            </ng-container>
+                            
+                            <ng-container *ngIf="typeRuleValue === 5">
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
+                                        <mat-label>Dollar Value</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'dollar_value'"
+                                            [placeholder]="'Dollar Value'">
+                                    </mat-form-field>
+    
+                                    <mat-label>To</mat-label>
+    
+                                    <mat-form-field class="fuse-mat-no-subscript w-1/3 ml-4">
+                                        <mat-label>Point Value</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'point_value'"
+                                            [placeholder]="'Point Value'">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Product Type</mat-label>
+                                        <mat-select [formControlName]="'product_type'" [(ngModel)]="productTypeValue" (selectionChange)="getProductTypeValue($event.value)">
+                                            <ng-container *ngIf="(productType$ | async) as productType">
+                                                <ng-container *ngFor="let type of productType">
+                                                    <mat-option [value]="type.value">
+                                                        {{type.name}}
+                                                    </mat-option>
+                                                </ng-container>
+                                            </ng-container>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <mat-form-field class="fuse-mat-no-subscript w-full hidden ">
+                                    <input matInput [formControlName]="'product_type_value'" />
+                                </mat-form-field>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full" (click)="setProductTypeSelectionDrawer()">
+                                        <mat-label>Product Type Selection</mat-label>
+                                        <input matInput style="cursor:pointer" readonly
+                                            [formControlName]="'product_type_selection'"
+                                            placeholder="Select Product Type Selection">
+                                        <mat-icon matSuffix svgIcon="heroicons_outline:external-link" style="cursor:pointer"></mat-icon>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Product Type Minimum Expense</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'product_type_min_expense'"
+                                            [placeholder]="'Product Type Min Expense'">
+                                    </mat-form-field>
+                                </div>
                             </ng-container>
 
                             <ng-container *ngIf="typeRuleValue === 0 || typeRuleValue === 1 || typeRuleValue === 3">

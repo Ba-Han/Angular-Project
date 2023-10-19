@@ -18,7 +18,8 @@ export class LogResolver implements Resolve<any>
         const date = currentDate.toISOString().split('T')[0];
         const getLogInputData = route.paramMap.get('getLogInputData');
         const requestMethod = route.paramMap.get('requestedMethod');
-        return this._logService.postWithTodayDate(getLogInputData, date, requestMethod, 0, 10, 'request_on', 'asc');
+        const responseStatusCode = +route.paramMap.get('isChecked');
+        return this._logService.postWithTodayDate(responseStatusCode, getLogInputData, date, requestMethod, 0, 10, 'request_on', 'asc');
     }
 }
 

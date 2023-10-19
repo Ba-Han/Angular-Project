@@ -18,18 +18,18 @@ import { Log, LogPagination } from 'app/modules/admin/log/log.types';
     styles         : [
         `
             .log-grid {
-                grid-template-columns: 200px 200px 100px 250px 200px 250px 100px 350px 100px;
+                grid-template-columns: 200px 200px 100px 350px 200px 250px 100px 350px;
 
                 @screen sm {
-                    grid-template-columns: 200px 200px 100px 250px 200px 250px 100px 350px 100px;
+                    grid-template-columns: 200px 200px 100px 350px 200px 250px 100px 350px;
                 }
 
                 @screen md {
-                    grid-template-columns: 200px 200px 100px 250px 200px 250px 100px 350px 100px;
+                    grid-template-columns: 200px 200px 100px 350px 200px 250px 100px 350px;
                 }
 
                 @screen lg {
-                    grid-template-columns: 200px 200px 100px 250px 200px 250px 100px 350px 100px;
+                    grid-template-columns: 200px 200px 100px 350px 200px 250px 100px 350px;
                 }
             }
 
@@ -101,6 +101,8 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
     logData: any;
     getLogInputData: string;
     logDataFormMode: boolean = false;
+    isChecked: boolean = false;
+    responseStatusCode: number;
     getDetailsLogData: any[] = [];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -145,7 +147,7 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
             skip(1),
             switchMap((query) => {
                 this.isLoading = true;
-                return this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, 0, 10, 'request_on', 'asc', query);
+                return this._logService.postWithTodayDate(this.responseStatusCode, this.getLogInputData, this.todayDate, this.requestedMethod, 0, 10, 'request_on', 'asc', query);
             }),
             map(() => {
                 this.isLoading = false;
@@ -226,7 +228,7 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
                 switchMap(() => {
                     if ( this.isLoading === true ) {
                         // eslint-disable-next-line max-len
-                        return this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                        return this._logService.postWithTodayDate(this.responseStatusCode, this.getLogInputData, this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
                     } else {
                         return of(null);
                     }
@@ -271,7 +273,14 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     setupValueChangesSubscription() {
-        this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, 0, 10, 'request_on', 'asc', this.searchInputControl.value
+        if (this.isChecked) {
+            this.responseStatusCode = -200;
+        } else {
+            this.responseStatusCode = 200;
+        }
+        const sortDirection = this._sort?.direction || 'asc';
+        // eslint-disable-next-line max-len
+        this._logService.postWithTodayDate(this.responseStatusCode, this.getLogInputData, this.todayDate, this.requestedMethod, 0, 10, 'request_on', sortDirection, this.searchInputControl.value
          ).subscribe(() => {
             this.isLoading = false;
             this.errorMessage = null;
@@ -286,12 +295,13 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onPageChange() {
+        const sortDirection = this._sort?.direction || 'asc';
         // eslint-disable-next-line max-len
-        this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+        this._logService.postWithTodayDate(this.responseStatusCode, this.getLogInputData, this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, sortDirection).pipe(
             switchMap(() => {
                 if ( this.isLoading === true ) {
                     // eslint-disable-next-line max-len
-                    return this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    return this._logService.postWithTodayDate(this.responseStatusCode, this.getLogInputData, this.todayDate, this.requestedMethod, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, sortDirection);
                 } else {
                     return of(null);
                 }
@@ -306,8 +316,9 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     requestMethodList(selectedMethod: string) {
+        const sortDirection = this._sort?.direction || 'asc';
         this.requestedMethod = selectedMethod;
-        this._logService.postWithTodayDate(this.getLogInputData, this.todayDate, this.requestedMethod, 0, 10, 'request_on', 'asc')
+        this._logService.postWithTodayDate(this.responseStatusCode, this.getLogInputData, this.todayDate, this.requestedMethod, 0, 10, 'request_on', sortDirection)
           .subscribe(
             () => {
               // Do something on success if needed

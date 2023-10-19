@@ -9,7 +9,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { PointRule, PointRulePaginagion, PointBasket, PointBasketPagination, MemberTier, MemberTierPagination, Store, StorePagination, PointRuleProduct } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
+import { PointRule, PointRulePaginagion, PointBasket, PointBasketPagination, MemberTier, MemberTierPagination, Store, StorePagination, PointRuleProduct, ProductType, ProductTypeSelection, ProductTypeSelectionPagination } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 import { PointRuleService } from 'app/modules/admin/loyalty/pointrules/pointrules.service';
 import { UserService } from 'app/core/user/user.service';
 
@@ -32,6 +32,36 @@ import { UserService } from 'app/core/user/user.service';
                 @screen lg {
                     grid-template-columns: 150px 150px 150px 100px 100px;
                 }
+            }
+
+            .point_rule_tier_grid {
+                grid-template-columns: 60px 100px;
+                @screen sm {
+                    grid-template-columns: 60px 100px 100px;
+                }
+                @screen md {
+                    grid-template-columns: 60px 150px 150px;
+                }
+                @screen lg {
+                    grid-template-columns: 35px 200px 200px;
+                }
+            }
+
+            .point_rule_product_type_grid {
+                grid-template-columns: 60px 100px;
+                    @screen sm {
+                        grid-template-columns: 60px 100px 100px;
+                    }
+                    @screen md {
+                        grid-template-columns: 60px 150px 150px;
+                    }
+                    @screen lg {
+                        grid-template-columns: 35px auto;
+                    }
+            }
+
+            .product_type_selection_search {
+                min-width: 17rem !important;
             }
 
             .pointrule_reset_popup {
@@ -131,10 +161,13 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
 
     memberTiers$: Observable<MemberTier[]>;
     stores$: Observable<Store[]>;
+    productTypeSelection$: Observable<ProductTypeSelection[]>;
+    productTypeSelectionPagination: ProductTypeSelectionPagination;
     pointBasketPagination: PointBasketPagination;
     memberTierPagination: MemberTierPagination;
     MemberTierListMode: boolean = false;
     PointBasketListMode: boolean = false;
+    ProductTypeSelectionListMode: boolean = false;
     drawerMode: 'side' | 'over';
 
     newSegmentModel: PointBasket;
@@ -144,6 +177,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     pointbasketFormMode: boolean = false;
 
     pointRules$: Observable<PointRule[]>;
+    productType$: Observable<ProductType[]>;
     pointRule$: Observable<PointRule>;
     pointBaskets$: Observable<PointBasket[]>;
     pointBasket$: Observable<PointBasket>;
@@ -154,6 +188,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     searchInputControl: FormControl = new FormControl();
     memberTierSearchInputControl: FormControl = new FormControl();
     pointBasketSearchInputControl: FormControl = new FormControl();
+    productTypeSelectionSearchInputControl: FormControl = new FormControl();
     AddMode: boolean = false;
     PointRuleEditForm: FormGroup;
     canEdit: boolean = false;
@@ -201,6 +236,11 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     currentDate: string;
     selectedStartDateTime: string;
     selectedEndDateTime: string;
+    productTypeValue: string;
+    productTypeSelection: string;
+    getSelectedProductType: any;
+    selectedProductTypes: any[] = [];
+    productType: any;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -265,7 +305,17 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             offer_type: [''],
             no_of_orders: [''],
             offer_apply_month: [''],
-            offer_apply_date: ['']
+            offer_apply_date: [''],
+            product_type: [''],
+            product_type_selection: [''],
+            product_type_min_expense: [''],
+            product_type_value: ['']
+        });
+
+        this._pointRuleService.productType$
+        .subscribe((response: any) => {
+            this.productType = response;
+            this._changeDetectorRef.markForCheck();
         });
 
         this._pointRuleService.pointRule$
@@ -297,6 +347,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             }
 
             this.pointRule.point_basketName = pointrule.point_basket?.name;
+            this.productTypeValue = pointrule.product_type.toString();
+            this.productTypeSelection = pointrule.product_type_selection.toString();
             this.selectedPointRuleProduct = pointrule.point_rule_products;
             for( let i=0; i < this.selectedPointRuleProduct.length; i++)
                 {
@@ -399,8 +451,26 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         )
         .subscribe();
 
+        //Product Type Selection Search
+        this.productTypeSelectionSearchInputControl.valueChanges
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(300),
+            switchMap((query) => {
+                this.isLoading = true;
+                // Search
+                return this._pointRuleService.getProductTypeSelection(this.getSelectedProductType, 0, 25, 'name', 'asc', query);
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        )
+        .subscribe();
+
         this.canEdit = this._userService.getEditUserPermissionByNavId('point-rules');
         this.canDelete = this._userService.getDeleteUserPermissionByNavId('point-rules');
+
+        this.getProductTypeValue(this.productTypeValue);
     }
 
     ngAfterViewInit(): void {
@@ -459,6 +529,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     // eslint-disable-next-line @typescript-eslint/naming-convention
     toogleMemberTierListMode(MemberTierListMode: boolean | null = null): void {
         this.PointBasketListMode = false;
+        this.pointRuleProductFormMode = false;
+        this.ProductTypeSelectionListMode = false;
         if (MemberTierListMode === null) {
             this.MemberTierListMode = !this.MemberTierListMode;
         }
@@ -471,6 +543,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     // eslint-disable-next-line @typescript-eslint/naming-convention
     tooglePointBasketListMode(PointBasketListMode: boolean | null = null): void {
         this.MemberTierListMode = false;
+        this.pointRuleProductFormMode = false;
+        this.ProductTypeSelectionListMode = false;
         if (PointBasketListMode === null) {
             this.PointBasketListMode = !this.PointBasketListMode;
         }
@@ -494,6 +568,20 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         this._changeDetectorRef.markForCheck();
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    toogleProductTypeSelectionListMode(ProductTypeSelectionListMode: boolean | null = null): void {
+        this.MemberTierListMode = false;
+        this.pointRuleProductFormMode = false;
+        this.PointBasketListMode = false;
+        if (ProductTypeSelectionListMode === null) {
+            this.ProductTypeSelectionListMode = !this.ProductTypeSelectionListMode;
+        }
+        else {
+            this.ProductTypeSelectionListMode = ProductTypeSelectionListMode;
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     tooglePointRuleProductFormMode(pointRuleProductFormMode: boolean | null = null) {
         this.MemberTierListMode = false;
@@ -508,6 +596,24 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
 
         this._changeDetectorRef.markForCheck();
     }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    getProductTypeValue(selectedProductType: string) {
+        this.getSelectedProductType = selectedProductType;
+        this._pointRuleService.getProductTypeSelection(this.getSelectedProductType)
+          .subscribe(
+            () => {
+              // Do something on success if needed
+              this.closeProductTypeSelection();
+              //console.log('success');
+            },
+            (error) => {
+              console.error(error);
+            }
+          );
+        this._changeDetectorRef.markForCheck();
+    }
+
 
     // Helper function to format a Date object as 'yyyy-MM-ddTHH:mm'
     formatDateTime(date: Date): string {
@@ -600,11 +706,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     pageSortAndPaging(): void {
         if (this._sort && this._paginator) {
             // Set the initial sort
-            /* this._sort.sort({
-                id: 'name',
-                start: 'asc',
-                disableClear: true
-            }); */
+            this._sort.active = 'name';
+            this._sort.direction = 'asc';
             this._changeDetectorRef.markForCheck();
 
             this._sort.sortChange
@@ -640,6 +743,90 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         this.drawerTwo.close();
     }
 
+    setProductTypeSelectionDrawer(): void {
+        this.toogleProductTypeSelectionListMode(true);
+        this.productTypeSelection$ = this._pointRuleService.productTypeSelection$;
+        this._pointRuleService.productTypeSelectionPagination$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((pagination: ProductTypeSelectionPagination) => {
+                this.productTypeSelectionPagination = pagination;
+                this.drawerTwo.open();
+                this._changeDetectorRef.markForCheck();
+            });
+
+            setTimeout(() => {
+                this.pageSortAndProductTypeSelectionPaging();
+            }, 2000);
+        this._changeDetectorRef.markForCheck();
+    }
+
+    pageSortAndProductTypeSelectionPaging(): void {
+        if (this._sort && this._paginator) {
+            // Set the initial sort
+            this._sort.active = 'name';
+            this._sort.direction = 'asc';
+            this._changeDetectorRef.markForCheck();
+
+            this._sort.sortChange
+                .pipe(takeUntil(this._unsubscribeAll))
+                .subscribe(() => {
+                    this._paginator.pageIndex = 0;
+                    this.drawerTwo.open();
+                });
+            this._changeDetectorRef.markForCheck();
+
+            merge(this._sort.sortChange, this._paginator.page).pipe(
+                switchMap(() => {
+                    this.drawerTwo.open();
+                    this.isLoading = true;
+                    // eslint-disable-next-line max-len
+                    return this._pointRuleService.getProductTypeSelection(this.getSelectedProductType, this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                }),
+                map(() => {
+                    this.isLoading = false;
+                    this.drawerTwo.open();
+                })
+            ).subscribe();
+            this.drawerTwo.open();
+            this._changeDetectorRef.markForCheck();
+        }
+    }
+
+    // Function to check if a product type is selected
+    isProductTypeSelected(value: string, name: string): boolean {
+        return this.selectedProductTypes.some(item => item.value === value && item.name === name);
+    }
+
+    selectProdcutTypeSelection(value: string, name: string): void {
+        const index = this.selectedProductTypes.findIndex(item => item.value === value && item.name === name);
+
+        if (index === -1) {
+          this.selectedProductTypes.push({ value, name });
+        } else {
+          this.selectedProductTypes.splice(index, 1);
+        }
+
+        // Update the form
+        this.updateForm();
+        this.isLoading = false;
+        this.closeProductTypeSelection();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    updateForm(): void {
+        const productType = this.PointRuleEditForm.getRawValue();
+        productType.product_type_value = this.selectedProductTypes.map(item => item.value).join(', '); // Combine values
+        productType.product_type_selection = this.selectedProductTypes.map(item => item.name).join(', '); // Combine names
+        this.PointRuleEditForm.patchValue(productType);
+    }
+
+    closeProductTypeSelection(): void {
+        this.ProductTypeSelectionListMode = false;
+        this.drawerTwo.close();
+        this._changeDetectorRef.markForCheck();
+    }
+
     setPointBasketDrawer(): void {
         this.tooglePointBasketListMode(true);
         this.pointBaskets$ = this._pointRuleService.pointBaskets$;
@@ -667,11 +854,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     pageSortAndBasketPaging(): void {
         if (this._sort && this._paginator) {
             // Set the initial sort
-            /* this._sort.sort({
-                id: 'name',
-                start: 'asc',
-                disableClear: true
-            }); */
+            this._sort.active = 'name';
+            this._sort.direction = 'asc';
             this._changeDetectorRef.markForCheck();
 
             this._sort.sortChange
