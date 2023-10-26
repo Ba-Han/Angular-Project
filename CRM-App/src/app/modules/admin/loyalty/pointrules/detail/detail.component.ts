@@ -60,10 +60,6 @@ import { UserService } from 'app/core/user/user.service';
                     }
             }
 
-            .product_type_selection_search {
-                min-width: 17rem !important;
-            }
-
             .pointrule_reset_popup {
                 position: fixed !important;
                 top: 50% !important;
@@ -517,6 +513,10 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     tooglePointRuleAddFormMode(AddMode: boolean | null = null): void {
+        this.MemberTierListMode = false;
+        this.PointBasketListMode = false;
+        this.ProductTypeSelectionListMode = false;
+        this.pointRuleProductFormMode = false;
         if (AddMode === null) {
             this.AddMode = !this.AddMode;
         }
@@ -559,6 +559,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         this.MemberTierListMode = false;
         this.PointBasketListMode = false;
         this.pointRuleProductFormMode = false;
+        this.ProductTypeSelectionListMode = false;
         if (DeleteMode === null) {
             this.DeleteMode = !this.DeleteMode;
         }
@@ -586,6 +587,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     tooglePointRuleProductFormMode(pointRuleProductFormMode: boolean | null = null) {
         this.MemberTierListMode = false;
         this.PointBasketListMode = false;
+        this.ProductTypeSelectionListMode = false;
         this.DeleteMode = false;
         if (pointRuleProductFormMode === null) {
             this.pointRuleProductFormMode = !this.pointRuleProductFormMode;
@@ -894,6 +896,10 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     toogleDeletePointRuleProductMode(DeletePointRuleProductMode: boolean | null = null): void {
+        this.MemberTierListMode = false;
+        this.PointBasketListMode = false;
+        this.pointRuleProductFormMode = false;
+        this.ProductTypeSelectionListMode = false;
         if (DeletePointRuleProductMode === null) {
             this.DeletePointRuleProductMode = !this.DeletePointRuleProductMode;
         }
