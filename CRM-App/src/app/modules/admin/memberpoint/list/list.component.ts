@@ -176,23 +176,23 @@ export class MemberPointListComponent implements OnInit, AfterViewInit, OnDestro
             this._changeDetectorRef.markForCheck();
         });
 
-         // search
-         this.searchInputControl.valueChanges
-         .pipe(
-             takeUntil(this._unsubscribeAll),
-             debounceTime(300),
-             switchMap((query) => {
-                 this.isLoading = true;
-                 return this._memberPointService.getData(Number(this.memberId),0, 10, 'date_created', 'desc', 'all', query);
-             }),
-             map(() => {
-                 this.isLoading = false;
-             })
-         ).subscribe(() => {
-            this._changeDetectorRef.markForCheck();
-         });
+        // search
+        this.searchInputControl.valueChanges
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(300),
+            switchMap((query) => {
+                this.isLoading = true;
+                return this._memberPointService.getData(Number(this.memberId),0, 10, 'date_created', 'desc', 'all', query);
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        ).subscribe(() => {
+        this._changeDetectorRef.markForCheck();
+        });
 
-         this.canEdit = this._userService.getEditUserPermissionByNavId('member');
+        this.canEdit = this._userService.getEditUserPermissionByNavId('manual-upload');
     }
 
     ngAfterViewInit(): void
