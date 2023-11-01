@@ -237,6 +237,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     getSelectedProductType: any;
     selectedProductTypes: any[] = [];
     productType: any;
+    awardTypeValue: number;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -305,7 +306,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             product_type: [''],
             product_type_selection: [''],
             product_type_min_expense: [''],
-            product_type_value: ['']
+            product_type_value: [''],
+            award_type: ['']
         });
 
         this._pointRuleService.productType$
@@ -346,6 +348,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             this.productTypeValue = pointrule.product_type.toString();
             this.productTypeSelection = pointrule.product_type_selection.toString();
             this.selectedPointRuleProduct = pointrule.point_rule_products;
+            this.awardTypeValue = pointrule.award_type;
             for( let i=0; i < this.selectedPointRuleProduct.length; i++)
                 {
                     this.selectedPointRuleProduct[i].index = i;

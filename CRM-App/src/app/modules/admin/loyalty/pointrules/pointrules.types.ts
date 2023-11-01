@@ -39,6 +39,7 @@ export interface PointRule {
     "product_type": number;
     "product_type_selection": string;
     "product_type_min_expense": number;
+    "award_type": number;
 }
 
 export interface ProductType {

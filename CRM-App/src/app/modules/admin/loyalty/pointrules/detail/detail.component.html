@@ -569,18 +569,39 @@
                             </ng-container>
 
                             <ng-container *ngIf="pointRule.type === 0 || pointRule.type === 1">
-                                <ng-container *ngIf="pointRule.dollar_value">
+                                <ng-container *ngIf="pointRule.award_type === 0">
                                     <div class="flex sm:items-center">
-                                        <div class="w-1/4">Dollar Value: </div>
-                                        <div class="ml-6 leading-6">{{pointRule.dollar_value}}</div>
+                                        <div class="w-1/4">Award Type: </div>
+                                        <div class="ml-6 leading-6">Fixed</div>
                                     </div>
+
+                                    <ng-container *ngIf="pointRule.point_amount">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Point Amount: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.point_amount}}</div>
+                                        </div>
+                                    </ng-container>
                                 </ng-container>
-    
-                                <ng-container *ngIf="pointRule.point_value">
+
+                                <ng-container *ngIf="pointRule.award_type === 1">
                                     <div class="flex sm:items-center">
-                                        <div class="w-1/4">Point Value: </div>
-                                        <div class="ml-6 leading-6">{{pointRule.point_value}}</div>
+                                        <div class="w-1/4">Award Type: </div>
+                                        <div class="ml-6 leading-6">Order Base</div>
                                     </div>
+
+                                    <ng-container *ngIf="pointRule.dollar_value">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Dollar Value: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.dollar_value}}</div>
+                                        </div>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="pointRule.point_value">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Point Value: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.point_value}}</div>
+                                        </div>
+                                    </ng-container>
                                 </ng-container>
 
                                 <ng-container *ngIf="pointRule.min_expense">
@@ -870,18 +891,39 @@
                                     <div class="ml-6 leading-6">Product Base Rule</div>
                                 </div>
                                 
-                                <ng-container *ngIf="pointRule.dollar_value">
+                                <ng-container *ngIf="pointRule.award_type === 0">
                                     <div class="flex sm:items-center">
-                                        <div class="w-1/4">Dollar Value: </div>
-                                        <div class="ml-6 leading-6">{{pointRule.dollar_value}}</div>
+                                        <div class="w-1/4">Award Type: </div>
+                                        <div class="ml-6 leading-6">Fixed</div>
                                     </div>
+
+                                    <ng-container *ngIf="pointRule.point_amount">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Point Amount: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.point_amount}}</div>
+                                        </div>
+                                    </ng-container>
                                 </ng-container>
-    
-                                <ng-container *ngIf="pointRule.point_value">
+
+                                <ng-container *ngIf="pointRule.award_type === 1">
                                     <div class="flex sm:items-center">
-                                        <div class="w-1/4">Point Value: </div>
-                                        <div class="ml-6 leading-6">{{pointRule.point_value}}</div>
+                                        <div class="w-1/4">Award Type: </div>
+                                        <div class="ml-6 leading-6">Order Base</div>
                                     </div>
+
+                                    <ng-container *ngIf="pointRule.dollar_value">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Dollar Value: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.dollar_value}}</div>
+                                        </div>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="pointRule.point_value">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Point Value: </div>
+                                            <div class="ml-6 leading-6">{{pointRule.point_value}}</div>
+                                        </div>
+                                    </ng-container>
                                 </ng-container>
 
                                 <ng-container *ngIf="pointRule.product_type === 1">
@@ -1074,28 +1116,54 @@
 
                             <ng-container *ngIf="typeRuleValue === 0 || typeRuleValue === 1">
                                 <div class="mt-8">
-                                    <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
-                                        <mat-label>Dollar Value</mat-label>
-                                        <mat-icon matPrefix
-                                                class="hidden sm:flex icon-size-5"
-                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                        <input matInput type="number"
-                                            [formControlName]="'dollar_value'"
-                                            [placeholder]="'Dollar Value'">
-                                    </mat-form-field>
-    
-                                    <mat-label>To</mat-label>
-    
-                                    <mat-form-field class="fuse-mat-no-subscript w-1/3 ml-4">
-                                        <mat-label>Point Value</mat-label>
-                                        <mat-icon matPrefix
-                                                class="hidden sm:flex icon-size-5"
-                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                        <input matInput type="number"
-                                            [formControlName]="'point_value'"
-                                            [placeholder]="'Point Value'">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Award Type</mat-label>
+                                        <mat-select [formControlName]="'award_type'" [(ngModel)]="awardTypeValue">
+                                            <mat-option [value]="0">Fixed</mat-option>
+                                            <mat-option [value]="1">Order Base</mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </div>
+
+                                <ng-container *ngIf="awardTypeValue === 0">
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>Point Amount</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'point_amount'"
+                                                [placeholder]="'Point Amount'">
+                                        </mat-form-field>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="awardTypeValue === 1">
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
+                                            <mat-label>Dollar Value</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'dollar_value'"
+                                                [placeholder]="'Dollar Value'">
+                                        </mat-form-field>
+        
+                                        <mat-label>To</mat-label>
+        
+                                        <mat-form-field class="fuse-mat-no-subscript w-1/3 ml-4">
+                                            <mat-label>Point Value</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'point_value'"
+                                                [placeholder]="'Point Value'">
+                                        </mat-form-field>
+                                    </div>
+                                </ng-container>
 
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
@@ -1501,28 +1569,54 @@
                             <ng-container *ngIf="typeRuleValue === 5">
                                 
                                 <div class="mt-8">
-                                    <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
-                                        <mat-label>Dollar Value</mat-label>
-                                        <mat-icon matPrefix
-                                                class="hidden sm:flex icon-size-5"
-                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                        <input matInput type="number"
-                                            [formControlName]="'dollar_value'"
-                                            [placeholder]="'Dollar Value'">
-                                    </mat-form-field>
-    
-                                    <mat-label>To</mat-label>
-    
-                                    <mat-form-field class="fuse-mat-no-subscript w-1/3 ml-4">
-                                        <mat-label>Point Value</mat-label>
-                                        <mat-icon matPrefix
-                                                class="hidden sm:flex icon-size-5"
-                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
-                                        <input matInput type="number"
-                                            [formControlName]="'point_value'"
-                                            [placeholder]="'Point Value'">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Award Type</mat-label>
+                                        <mat-select [formControlName]="'award_type'" [(ngModel)]="awardTypeValue">
+                                            <mat-option [value]="0">Fixed</mat-option>
+                                            <mat-option [value]="1">Order Base</mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </div>
+
+                                <ng-container *ngIf="awardTypeValue === 0">
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-full">
+                                            <mat-label>Point Amount</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'point_amount'"
+                                                [placeholder]="'Point Amount'">
+                                        </mat-form-field>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="awardTypeValue === 1">
+                                    <div class="mt-8">
+                                        <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
+                                            <mat-label>Dollar Value</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'dollar_value'"
+                                                [placeholder]="'Dollar Value'">
+                                        </mat-form-field>
+        
+                                        <mat-label>To</mat-label>
+        
+                                        <mat-form-field class="fuse-mat-no-subscript w-1/3 ml-4">
+                                            <mat-label>Point Value</mat-label>
+                                            <mat-icon matPrefix
+                                                    class="hidden sm:flex icon-size-5"
+                                                    [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                            <input matInput type="number"
+                                                [formControlName]="'point_value'"
+                                                [placeholder]="'Point Value'">
+                                        </mat-form-field>
+                                    </div>
+                                </ng-container>
                                 
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">

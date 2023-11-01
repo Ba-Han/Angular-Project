@@ -323,7 +323,8 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             product_type: [''],
             product_type_selection: [''],
             product_type_min_expense: [''],
-            product_type_value: ['']
+            product_type_value: [''],
+            award_type: ['']
         });
 
         this.PointRuleProductForm = this._formBuilder.group({
