@@ -38,6 +38,7 @@ export interface PointRule {
     "offer_apply_date": string;
     "product_type": number;
     "product_type_selection": string;
+    "product_type_selection_name": string;
     "product_type_min_expense": number;
     "award_type": number;
 }

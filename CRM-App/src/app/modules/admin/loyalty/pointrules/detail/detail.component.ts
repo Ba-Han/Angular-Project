@@ -119,6 +119,11 @@ import { UserService } from 'app/core/user/user.service';
                 height: 24px;
             }
 
+            .product_type_checkbox {
+                width: 16px;
+                height: 16px;
+            }
+
             .pointrule_product {
                 display: grid;
                 grid-template-columns: repeat(2,minmax(0,1fr))!important;
@@ -306,7 +311,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             product_type: [''],
             product_type_selection: [''],
             product_type_min_expense: [''],
-            product_type_value: [''],
+            product_type_selection_name: [''],
             award_type: ['']
         });
 
@@ -346,7 +351,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
 
             this.pointRule.point_basketName = pointrule.point_basket?.name;
             this.productTypeValue = pointrule.product_type.toString();
-            this.productTypeSelection = pointrule.product_type_selection.toString();
+            this.productTypeSelection = pointrule.product_type_selection;
             this.selectedPointRuleProduct = pointrule.point_rule_products;
             this.awardTypeValue = pointrule.award_type;
             for( let i=0; i < this.selectedPointRuleProduct.length; i++)
@@ -605,12 +610,14 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getProductTypeValue(selectedProductType: string) {
         this.getSelectedProductType = selectedProductType;
+
+        this.selectedProductTypes = [];
+        this.updateForm();
+
         this._pointRuleService.getProductTypeSelection(this.getSelectedProductType)
           .subscribe(
             () => {
-              // Do something on success if needed
-              this.closeProductTypeSelection();
-              //console.log('success');
+              this.closeProductTypeSelection();;
             },
             (error) => {
               console.error(error);
@@ -814,15 +821,15 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         // Update the form
         this.updateForm();
         this.isLoading = false;
-        this.closeProductTypeSelection();
+        //this.closeProductTypeSelection();
         this._changeDetectorRef.markForCheck();
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     updateForm(): void {
         const productType = this.PointRuleEditForm.getRawValue();
-        productType.product_type_value = this.selectedProductTypes.map(item => item.value).join(', '); // Combine values
-        productType.product_type_selection = this.selectedProductTypes.map(item => item.name).join(', '); // Combine names
+        productType.product_type_selection = this.selectedProductTypes.map(item => item.value).join(', ');
+        productType.product_type_selection_name = this.selectedProductTypes.map(item => item.name).join(', ');
         this.PointRuleEditForm.patchValue(productType);
     }
 
