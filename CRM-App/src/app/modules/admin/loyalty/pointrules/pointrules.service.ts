@@ -291,6 +291,7 @@ export class PointRuleService {
         const validityType = !pointrule.validity_type ? 0 : pointrule.validity_type;
         const productType = !pointrule.product_type ? 0 : Number(pointrule.product_type);
         const productTypeSelection = !pointrule.product_type_selection ? '' : pointrule.product_type_selection;
+        const productTypeSelectionName = !pointrule.product_type_selection_name ? '' : pointrule.product_type_selection_name;
         const productTypeMinExpense = !pointrule.product_type_min_expense ? 0 : pointrule.product_type_min_expense;
         const awardType = !pointrule.award_type ? 0 : pointrule.award_type;
 
@@ -328,6 +329,7 @@ export class PointRuleService {
                 "offer_apply_date": offerApplyDate,
                 "product_type": productType,
                 "product_type_selection": productTypeSelection,
+                "product_type_selection_name": productTypeSelectionName,
                 "product_type_min_expense": productTypeMinExpense,
                 "award_type": awardType
             }).pipe(
@@ -363,6 +365,7 @@ export class PointRuleService {
         const validityType = !pointrule.validity_type ? 0 : pointrule.validity_type;
         const productType = !pointrule.product_type ? 0 : Number(pointrule.product_type);
         const productTypeSelection = !pointrule.product_type_selection ? '' : pointrule.product_type_selection;
+        const productTypeSelectionName = !pointrule.product_type_selection_name ? '' : pointrule.product_type_selection_name;
         const productTypeMinExpense = !pointrule.product_type_min_expense ? 0 : pointrule.product_type_min_expense;
         const awardType = !pointrule.award_type ? 0 : pointrule.award_type;
 
@@ -400,6 +403,7 @@ export class PointRuleService {
                 "offer_apply_date": offerApplyDate,
                 "product_type": productType,
                 "product_type_selection": productTypeSelection,
+                "product_type_selection_name": productTypeSelectionName,
                 "product_type_min_expense": productTypeMinExpense,
                 "award_type": awardType
             }

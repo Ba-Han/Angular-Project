@@ -343,7 +343,7 @@
                                         <div class="point_rule_product_type_grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
 
                                             <div>
-                                                <input type="checkbox" name="productType" #productType 
+                                                <input class="product_type_checkbox" type="checkbox" name="productType" #productType 
                                                 (click)="selectProdcutTypeSelection(productType.value,productType.name)"
                                                 [checked]="isProductTypeSelected(productType.value, productType.name)"
                                                 />
@@ -1632,14 +1632,14 @@
                                 </div>
 
                                 <mat-form-field class="fuse-mat-no-subscript w-full hidden ">
-                                    <input matInput [formControlName]="'product_type_value'" />
+                                    <input matInput [formControlName]="'product_type_selection'" />
                                 </mat-form-field>
 
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full" (click)="setProductTypeSelectionDrawer()">
                                         <mat-label>Product Type Selection</mat-label>
                                         <input matInput style="cursor:pointer" readonly
-                                            [formControlName]="'product_type_selection'"
+                                            [formControlName]="'product_type_selection_name'"
                                             [(ngModel)]="productTypeSelection"
                                             placeholder="Select Product Type Selection">
                                         <mat-icon matSuffix svgIcon="heroicons_outline:external-link" style="cursor:pointer"></mat-icon>

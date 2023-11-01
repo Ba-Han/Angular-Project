@@ -143,6 +143,11 @@ import { UserService } from 'app/core/user/user.service';
                 height: 24px;
             }
 
+            .product_type_checkbox {
+                width: 16px;
+                height: 16px;
+            }
+
             .pointrule_product_reset_popup {
                 position: fixed !important;
                 top: 50% !important;
@@ -323,7 +328,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             product_type: [''],
             product_type_selection: [''],
             product_type_min_expense: [''],
-            product_type_value: [''],
+            product_type_selection_name: [''],
             award_type: ['']
         });
 
@@ -669,12 +674,14 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getProductTypeValue(selectedProductType: string) {
         this.getSelectedProductType = selectedProductType;
+
+        this.selectedProductTypes = [];
+        this.updateForm();
+
         this._pointRuleService.getProductTypeSelection(this.getSelectedProductType)
           .subscribe(
             () => {
-              // Do something on success if needed
-              this.closeProductTypeSelection();
-              //console.log('success');
+                this.closeProductTypeSelection();
             },
             (error) => {
               console.error(error);
@@ -961,15 +968,15 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         // Update the form
         this.updateForm();
         this.isLoading = false;
-        this.closeProductTypeSelection();
+        //this.closeProductTypeSelection();
         this._changeDetectorRef.markForCheck();
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     updateForm(): void {
         const productType = this.PointRuleAddForm.getRawValue();
-        productType.product_type_value = this.selectedProductTypes.map(item => item.value).join(', '); // Combine values
-        productType.product_type_selection = this.selectedProductTypes.map(item => item.name).join(', '); // Combine names
+        productType.product_type_selection = this.selectedProductTypes.map(item => item.value).join(', ');
+        productType.product_type_selection_name = this.selectedProductTypes.map(item => item.name).join(', ');
         this.PointRuleAddForm.patchValue(productType);
     }
 
