@@ -292,6 +292,7 @@ export class PointRuleService {
         const productType = !pointrule.product_type ? 0 : Number(pointrule.product_type);
         const productTypeSelection = !pointrule.product_type_selection ? '' : pointrule.product_type_selection;
         const productTypeMinExpense = !pointrule.product_type_min_expense ? 0 : pointrule.product_type_min_expense;
+        const awardType = !pointrule.award_type ? 0 : pointrule.award_type;
 
         return this.pointRules$.pipe(
             take(1),
@@ -327,7 +328,8 @@ export class PointRuleService {
                 "offer_apply_date": offerApplyDate,
                 "product_type": productType,
                 "product_type_selection": productTypeSelection,
-                "product_type_min_expense": productTypeMinExpense
+                "product_type_min_expense": productTypeMinExpense,
+                "award_type": awardType
             }).pipe(
                 map((newPointRule) => {
                     this._pointRules.next([newPointRule.data, ...pointrules]);
@@ -362,6 +364,7 @@ export class PointRuleService {
         const productType = !pointrule.product_type ? 0 : Number(pointrule.product_type);
         const productTypeSelection = !pointrule.product_type_selection ? '' : pointrule.product_type_selection;
         const productTypeMinExpense = !pointrule.product_type_min_expense ? 0 : pointrule.product_type_min_expense;
+        const awardType = !pointrule.award_type ? 0 : pointrule.award_type;
 
         return this._httpClient.patch<PointRule>(`${this._apiurl}/items/point_rule/${id}`,
             {
@@ -397,7 +400,8 @@ export class PointRuleService {
                 "offer_apply_date": offerApplyDate,
                 "product_type": productType,
                 "product_type_selection": productTypeSelection,
-                "product_type_min_expense": productTypeMinExpense
+                "product_type_min_expense": productTypeMinExpense,
+                "award_type": awardType
             }
         ).pipe(
             map(createPointRule => createPointRule)
