@@ -43,6 +43,11 @@ export interface PointRule {
     "award_type": number;
 }
 
+export interface AwardType {
+    value: string;
+    name: string;
+}
+
 export interface ProductType {
     value: string;
     name: string;

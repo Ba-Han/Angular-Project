@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import { PointRuleService } from 'app/modules/admin/loyalty/pointrules/pointrules.service';
-import { PointRule, PointRulePaginagion, PointBasketPagination, PointBasket, MemberTier, MemberTierPagination, StorePagination, Store, ProductType, ProductTypeSelection, ProductTypeSelectionPagination } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
+import { PointRule, PointRulePaginagion, PointBasketPagination, PointBasket, MemberTier, MemberTierPagination, StorePagination, Store, ProductType, ProductTypeSelection, ProductTypeSelectionPagination, AwardType } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 
 @Injectable({
     providedIn: 'root'
@@ -25,6 +25,18 @@ export class ProductTypeResolver implements Resolve<any>
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ProductType[]> {
         return this._pointRuleService.getProductType();
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class AwardTypeResolver implements Resolve<any>
+{
+    constructor(private _pointRuleService: PointRuleService) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<AwardType[]> {
+        return this._pointRuleService.getAwardType();
     }
 }
 

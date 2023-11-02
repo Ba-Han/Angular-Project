@@ -9,7 +9,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { PointRule, PointRulePaginagion, PointBasket, PointBasketPagination, MemberTier, MemberTierPagination, Store, StorePagination, PointRuleProduct, ProductType, ProductTypeSelection, ProductTypeSelectionPagination } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
+import { PointRule, PointRulePaginagion, PointBasket, PointBasketPagination, MemberTier, MemberTierPagination, Store, StorePagination, PointRuleProduct, ProductType, ProductTypeSelection, ProductTypeSelectionPagination, AwardType } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 import { PointRuleService } from 'app/modules/admin/loyalty/pointrules/pointrules.service';
 import { UserService } from 'app/core/user/user.service';
 
@@ -259,6 +259,8 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     productTypeValue: number;
     getSelectedProductType: any;
     selectedProductTypes: any[] = [];
+    awardTypeValue: any;
+    awardType: any;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -350,6 +352,12 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         this.pointRules$ = this._pointRuleService.pointRules$;
         this.productType$ = this._pointRuleService.productType$;
 
+        this._pointRuleService.awardType$
+        .subscribe((response: any) => {
+            this.awardType = response;
+            this._changeDetectorRef.markForCheck();
+        });
+
         //Get the Stores []
         this._pointRuleService.stores$
         .pipe(takeUntil(this._unsubscribeAll))
@@ -375,33 +383,6 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         });
 
         this.canEdit = this._userService.getEditUserPermissionByNavId('point-rules');
-
-        //Drawer Mode
-        this.drawerTwo.openedChange.subscribe((opened) => {
-            if (!opened) {
-                // Remove the selected contact when drawer closed
-                //this.selectedMember = null;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            }
-        });
-
-        this._fuseMediaWatcherService.onMediaChange$
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe(({ matchingAliases }) => {
-
-            // Set the drawerMode if the given breakpoint is active
-            if (matchingAliases.includes('lg')) {
-                this.drawerMode = 'side';
-            }
-            else {
-                this.drawerMode = 'over';
-            }
-
-            // Mark for check
-            this._changeDetectorRef.markForCheck();
-        });
 
         //Member Tier Search
         this.memberTierSearchInputControl.valueChanges
@@ -626,7 +607,6 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         this._changeDetectorRef.markForCheck();
     }
 
-
     // eslint-disable-next-line @typescript-eslint/naming-convention
     toogleProductTypeSelectionListMode(ProductTypeSelectionListMode: boolean | null = null): void {
         this.MemberTierListMode = false;
@@ -669,6 +649,11 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             this.DeletePointRuleProductMode = DeletePointRuleProductMode;
         }
         this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    getAwardTypeValue(selectedValue: string) {
+        this.awardTypeValue = selectedValue;
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -822,6 +807,11 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         pointrule.point_rule_products = this.selectedPointRuleProduct;
         this._pointRuleService.createPointRule(pointrule).subscribe(() => {
             this.tooglePointRuleAddFormMode(false);
+            this.toogleMemberTierListMode(false);
+            this.tooglePointRuleProductFormMode(false);
+            this.tooglePointBasketListMode(false);
+            this.toogleProductTypeSelectionListMode(false);
+            this.toogleDeletePointRuleProductMode(false);
             this.PointRuleAddForm.reset();
             this._changeDetectorRef.markForCheck();
         },
@@ -975,8 +965,8 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     updateForm(): void {
         const productType = this.PointRuleAddForm.getRawValue();
-        productType.product_type_selection = this.selectedProductTypes.map(item => item.value).join(', ');
-        productType.product_type_selection_name = this.selectedProductTypes.map(item => item.name).join(', ');
+        productType.product_type_selection_name = this.selectedProductTypes.map(item => item.value).join(', ');
+        productType.product_type_selection = this.selectedProductTypes.map(item => item.name).join(', ');
         this.PointRuleAddForm.patchValue(productType);
     }
 

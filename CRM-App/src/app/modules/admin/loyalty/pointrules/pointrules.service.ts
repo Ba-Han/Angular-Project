@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError, delay, catchError } from 'rxjs';
-import { PointRule, PointRulePaginagion, PointBasket, MemberTier, MemberTierPagination, StorePagination, Store, PointRuleProduct, ProductType, ProductTypeSelection, ProductTypeSelectionPagination } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
+import { PointRule, PointRulePaginagion, PointBasket, MemberTier, MemberTierPagination, StorePagination, Store, PointRuleProduct, ProductType, ProductTypeSelection, ProductTypeSelectionPagination, AwardType } from 'app/modules/admin/loyalty/pointrules/pointrules.types';
 
 @Injectable({
     providedIn: 'root'
@@ -12,6 +12,7 @@ export class PointRuleService {
     // Private
     private _pointRules: BehaviorSubject<PointRule[] | null> = new BehaviorSubject(null);
     private _productType: BehaviorSubject<ProductType[] | null> = new BehaviorSubject(null);
+    private _awardType: BehaviorSubject<AwardType[] | null> = new BehaviorSubject(null);
     private _productTypeSelection: BehaviorSubject<ProductTypeSelection[] | null> = new BehaviorSubject(null);
     private _productTypeSelectionPagination: BehaviorSubject<ProductTypeSelectionPagination | null> = new BehaviorSubject(null);
     private _pointRule: BehaviorSubject<PointRule | null> = new BehaviorSubject(null);
@@ -35,6 +36,10 @@ export class PointRuleService {
 
     get productType$(): Observable<ProductType[]> {
         return this._productType.asObservable();
+    }
+
+    get awardType$(): Observable<AwardType[]> {
+        return this._awardType.asObservable();
     }
 
     get productTypeSelection$(): Observable<ProductTypeSelection[]> {
@@ -267,6 +272,15 @@ export class PointRuleService {
         );
     }
 
+    getAwardType(): Observable<AwardType[]>
+    {
+        return this._httpClient.get<any>(`${this._apiurl}/items/point_rule/awardtypes`).pipe(
+            tap((response: any) => {
+                this._awardType.next(response);
+            })
+        );
+    }
+
     createPointRule(pointrule: PointRule): Observable<PointRule> {
         const startDateValue = !pointrule.start_date ? null : pointrule.start_date;
         const endDateValue = !pointrule.end_date ? null : pointrule.end_date;
@@ -293,7 +307,7 @@ export class PointRuleService {
         const productTypeSelection = !pointrule.product_type_selection ? '' : pointrule.product_type_selection;
         const productTypeSelectionName = !pointrule.product_type_selection_name ? '' : pointrule.product_type_selection_name;
         const productTypeMinExpense = !pointrule.product_type_min_expense ? 0 : pointrule.product_type_min_expense;
-        const awardType = !pointrule.award_type ? 0 : pointrule.award_type;
+        const awardType = !pointrule.award_type ? 0 : Number(pointrule.award_type);
 
         return this.pointRules$.pipe(
             take(1),
@@ -367,7 +381,7 @@ export class PointRuleService {
         const productTypeSelection = !pointrule.product_type_selection ? '' : pointrule.product_type_selection;
         const productTypeSelectionName = !pointrule.product_type_selection_name ? '' : pointrule.product_type_selection_name;
         const productTypeMinExpense = !pointrule.product_type_min_expense ? 0 : pointrule.product_type_min_expense;
-        const awardType = !pointrule.award_type ? 0 : pointrule.award_type;
+        const awardType = !pointrule.award_type ? 0 : Number(pointrule.award_type);
 
         return this._httpClient.patch<PointRule>(`${this._apiurl}/items/point_rule/${id}`,
             {

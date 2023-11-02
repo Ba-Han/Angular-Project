@@ -238,11 +238,12 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     selectedStartDateTime: string;
     selectedEndDateTime: string;
     productTypeValue: string;
-    productTypeSelection: string;
+    productTypeSelection: any;
     getSelectedProductType: any;
     selectedProductTypes: any[] = [];
     productType: any;
-    awardTypeValue: number;
+    awardType: any;
+    awardTypeValue: any;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -321,6 +322,12 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             this._changeDetectorRef.markForCheck();
         });
 
+        this._pointRuleService.awardType$
+        .subscribe((response: any) => {
+            this.awardType = response;
+            this._changeDetectorRef.markForCheck();
+        });
+
         this._pointRuleService.pointRule$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((pointrule: PointRule) => {
@@ -351,9 +358,9 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
 
             this.pointRule.point_basketName = pointrule.point_basket?.name;
             this.productTypeValue = pointrule.product_type.toString();
-            this.productTypeSelection = pointrule.product_type_selection;
+            this.productTypeSelection = pointrule.product_type_selection.toString();
             this.selectedPointRuleProduct = pointrule.point_rule_products;
-            this.awardTypeValue = pointrule.award_type;
+            this.awardTypeValue = pointrule.award_type.toString();
             for( let i=0; i < this.selectedPointRuleProduct.length; i++)
                 {
                     this.selectedPointRuleProduct[i].index = i;
@@ -391,33 +398,6 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             })
         )
         .subscribe();
-
-            //Drawer Mode
-        this.drawerTwo.openedChange.subscribe((opened) => {
-            if (!opened) {
-                // Remove the selected contact when drawer closed
-                //this.selectedMember = null;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            }
-        });
-
-        this._fuseMediaWatcherService.onMediaChange$
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe(({ matchingAliases }) => {
-
-            // Set the drawerMode if the given breakpoint is active
-            if (matchingAliases.includes('lg')) {
-                this.drawerMode = 'side';
-            }
-            else {
-                this.drawerMode = 'over';
-            }
-
-            // Mark for check
-            this._changeDetectorRef.markForCheck();
-        });
 
         //Member Tier Search
         this.memberTierSearchInputControl.valueChanges
@@ -608,6 +588,11 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    getAwardTypeValue(selectedValue: string) {
+        this.awardTypeValue = selectedValue;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getProductTypeValue(selectedProductType: string) {
         this.getSelectedProductType = selectedProductType;
 
@@ -625,7 +610,6 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
           );
         this._changeDetectorRef.markForCheck();
     }
-
 
     // Helper function to format a Date object as 'yyyy-MM-ddTHH:mm'
     formatDateTime(date: Date): string {
@@ -689,6 +673,12 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         pointrule.point_rule_products = this.selectedPointRuleProduct;
         this._pointRuleService.updatePointRule(pointrule.id,pointrule).subscribe(() => {
             this._router.navigate(['/point-rules'], { relativeTo: this._activatedRoute });
+            this.toogleMemberTierListMode(false);
+            this.tooglePointBasketListMode(false);
+            this.toogleProductTypeSelectionListMode(false);
+            this.tooglePointRuleProductFormMode(false);
+            this.toogleDeleteMode(false);
+            this.toogleDeletePointRuleProductMode(false);
         });
     }
 
@@ -828,8 +818,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     updateForm(): void {
         const productType = this.PointRuleEditForm.getRawValue();
-        productType.product_type_selection = this.selectedProductTypes.map(item => item.value).join(', ');
-        productType.product_type_selection_name = this.selectedProductTypes.map(item => item.name).join(', ');
+        productType.product_type_selection_name = this.selectedProductTypes.map(item => item.value).join(', ');
+        productType.product_type_selection = this.selectedProductTypes.map(item => item.name).join(', ');
         this.PointRuleEditForm.patchValue(productType);
     }
 
