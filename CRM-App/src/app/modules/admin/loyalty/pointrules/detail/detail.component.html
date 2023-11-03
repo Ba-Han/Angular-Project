@@ -1118,14 +1118,17 @@
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Award Type</mat-label>
-                                        <mat-select [formControlName]="'award_type'" [(ngModel)]="awardTypeValue">
-                                            <mat-option [value]="0">Order Base</mat-option>
-                                            <mat-option [value]="1">Fixed</mat-option>
+                                        <mat-select [formControlName]="'award_type'" [(ngModel)]="awardTypeValue" (selectionChange)="getAwardTypeValue($event.value)">
+                                            <ng-container *ngFor="let aType of awardType">
+                                                <mat-option [value]="aType.value">
+                                                    {{aType.name}}
+                                                </mat-option>
+                                            </ng-container>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
 
-                                <ng-container *ngIf="awardTypeValue === 0">
+                                <ng-container *ngIf="awardTypeValue === '0'">
                                     <div class="mt-8">
                                         <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
                                             <mat-label>Dollar Value</mat-label>
@@ -1151,7 +1154,7 @@
                                     </div>
                                 </ng-container>
 
-                                <ng-container *ngIf="awardTypeValue === 1">
+                                <ng-container *ngIf="awardTypeValue === '1'">
                                     <div class="mt-8">
                                         <mat-form-field class="fuse-mat-no-subscript w-full">
                                             <mat-label>Point Amount</mat-label>
@@ -1571,14 +1574,17 @@
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Award Type</mat-label>
-                                        <mat-select [formControlName]="'award_type'" [(ngModel)]="awardTypeValue">
-                                            <mat-option [value]="0">Order Base</mat-option>
-                                            <mat-option [value]="1">Fixed</mat-option>
+                                        <mat-select [formControlName]="'award_type'" [(ngModel)]="awardTypeValue" (selectionChange)="getAwardTypeValue($event.value)">
+                                            <ng-container *ngFor="let aType of awardType">
+                                                <mat-option [value]="aType.value">
+                                                    {{aType.name}}
+                                                </mat-option>
+                                            </ng-container>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
 
-                                <ng-container *ngIf="awardTypeValue === 0">
+                                <ng-container *ngIf="awardTypeValue === '0'">
                                     <div class="mt-8">
                                         <mat-form-field class="fuse-mat-no-subscript w-1/3 mr-4">
                                             <mat-label>Dollar Value</mat-label>
@@ -1604,7 +1610,7 @@
                                     </div>
                                 </ng-container>
 
-                                <ng-container *ngIf="awardTypeValue === 1">
+                                <ng-container *ngIf="awardTypeValue === '1'">
                                     <div class="mt-8">
                                         <mat-form-field class="fuse-mat-no-subscript w-full">
                                             <mat-label>Point Amount</mat-label>
@@ -1632,14 +1638,14 @@
                                 </div>
 
                                 <mat-form-field class="fuse-mat-no-subscript w-full hidden ">
-                                    <input matInput [formControlName]="'product_type_selection'" />
+                                    <input matInput [formControlName]="'product_type_selection_name'" />
                                 </mat-form-field>
 
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full" (click)="setProductTypeSelectionDrawer()">
                                         <mat-label>Product Type Selection</mat-label>
                                         <input matInput style="cursor:pointer" readonly
-                                            [formControlName]="'product_type_selection_name'"
+                                            [formControlName]="'product_type_selection'"
                                             [(ngModel)]="productTypeSelection"
                                             placeholder="Select Product Type Selection">
                                         <mat-icon matSuffix svgIcon="heroicons_outline:external-link" style="cursor:pointer"></mat-icon>
