@@ -1,0 +1,57 @@
+
+<div class="flex flex-col w-full" style="background:#FFF;padding: 1.5em;">
+
+    <div class="flex w-full mt-3 w-full justify-center">
+        <div class="text-3xl font-bold">Upload Proudct Exclusion</div>
+        <div class="ml-3 flex items-center" *ngIf="canEdit" (mouseenter)="isHovered = true" (mouseleave)="isHovered = false" [class.hover-download_template_product]="isHovered"><a href="assets/downloads/ProductExclusion.csv" download style="color:blue;">Download Template</a></div>
+    </div>
+
+    <div class="w-full mt-5">
+        <mat-card class="flex" style="column-gap:40px;box-shadow: 1px 1px 15px 1px #ccc; border-radius: 10px;">
+            <div class="w-full" style="border: 1px dashed black; border-radius: 10px">
+                <div class="mb-5"> <span class="text-2xl font-bold justify-center" style="position: relative; top: 1rem; left: 1rem; border-bottom: 1px solid black;"> Select File And Upload </span></div>
+                <form [formGroup]="uploadProductExclusionForm">
+                    <div style="display: flex; justify-content: center; position: relative; top: 3rem;">
+                        <mat-form-field class="fuse-mat-no-subscript upload_product_dropdown">
+                            <mat-select [formControlName]="'processType'" [(ngModel)]="getProcessType" (selectionChange)="getProcessTypeProductValue($event.value)">
+                                <mat-option [value]="0">Update</mat-option>
+                                <mat-option [value]="1">FullRestore</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                <div class="w-full h-50 flex items-center justify-center" style="cursor:pointer; border-radius: 3px;">                    
+                    <div style="border-bottom: 1px solid black;">
+                        <input class="ng-hide mr-9" #fileInput type="file" accept=".csv" (change)="onFileProductSelect($event)" style="margin-bottom: 9px;" />
+                        <button mat-icon-button [matTooltip]="'Clear'" *ngIf="fileToUpload" (click)="clearFileToProductUpload()" style="width: 35px; height: 35px; border-radius: 9999px !important; border: 1px solid #4f46e5; top: 1px;">
+                            <span>x</span>
+                        </button>
+                    </div>
+
+                    <button *ngIf="canEdit" for="input-file-id" 
+                        class="h-10 md-button md-raised md-primary"
+                        (click)="uploadProductFile()"
+                        style="width: 6rem !important;"
+                        [disabled]="isUploadProductDisabled || !fileToUpload || getProcessType === null"
+                        [matTooltip]="'Upload'"
+                        mat-flat-button
+                        [color] = "'primary'">
+                        Upload
+                    </button>
+                </div>
+                <div *ngIf="uploadProductSuccess" style="position: relative; bottom: 4rem; text-align: center; color: green;">
+                    {{ uploadProductSuccess }}
+                </div>
+                <div *ngIf="fileNotAcceptedErrorMessage" style="position: relative; bottom: 4rem; text-align: center; color: red;">
+                    {{ fileNotAcceptedErrorMessage }}
+                </div>
+                <div *ngIf="errorMessage" style="position: relative; bottom: 4rem; text-align: center; color: red;">
+                    {{ errorMessage }}
+                </div>
+                <div style="position: relative; bottom: 3.4rem; text-align: justify; display: grid; line-height: 1; justify-content: center;">
+                    <span>* Product Number is required.</span>
+                </div>
+                </form>
+            </div>
+        </mat-card>
+    </div>
+</div>
