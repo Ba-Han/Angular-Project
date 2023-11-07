@@ -936,25 +936,11 @@
                                 <ng-container *ngIf="pointRule.product_type === 2">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Product Type: </div>
-                                        <div class="ml-6 leading-6">Category 1 Wise</div>
+                                        <div class="ml-6 leading-6">Category Wise</div>
                                     </div>
                                 </ng-container>
 
                                 <ng-container *ngIf="pointRule.product_type === 3">
-                                    <div class="flex sm:items-center">
-                                        <div class="w-1/4">Product Type: </div>
-                                        <div class="ml-6 leading-6">Category 2 Wise</div>
-                                    </div>
-                                </ng-container>
-
-                                <ng-container *ngIf="pointRule.product_type === 4">
-                                    <div class="flex sm:items-center">
-                                        <div class="w-1/4">Product Type: </div>
-                                        <div class="ml-6 leading-6">Category 3 Wise</div>
-                                    </div>
-                                </ng-container>
-
-                                <ng-container *ngIf="pointRule.product_type === 5">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Product Type: </div>
                                         <div class="ml-6 leading-6">Product Wise</div>
@@ -972,6 +958,13 @@
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Product Type Min Expense: </div>
                                         <div class="ml-6 leading-6">{{pointRule.product_type_min_expense}}</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.min_expense">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Minimum Order Expense: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.min_expense}}</div>
                                     </div>
                                 </ng-container>
                             </ng-container>
@@ -1661,6 +1654,18 @@
                                         <input matInput type="number"
                                             [formControlName]="'product_type_min_expense'"
                                             [placeholder]="'Product Type Min Expense'">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Minimum Order Expense</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'min_expense'"
+                                            [placeholder]="'Minimum Order Expense'">
                                     </mat-form-field>
                                 </div>
                             </ng-container>

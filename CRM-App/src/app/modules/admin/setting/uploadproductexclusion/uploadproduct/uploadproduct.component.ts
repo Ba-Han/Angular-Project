@@ -135,7 +135,11 @@ export class ProductUploadComponent implements OnInit, AfterViewInit, OnDestroy 
 
         this._httpClient.post(apiUrl, formData).subscribe(
             (response: any) => {
-                this.uploadProductSuccess = 'Upload Succcessfully.';
+                this.uploadProductSuccess = 'Upload Successfully.';
+                this.getProcessType = null;
+
+                const fileInput = this.fileInput.nativeElement;
+                fileInput.value = '';
                 this._changeDetectorRef.markForCheck();
             },
             (error) => {
