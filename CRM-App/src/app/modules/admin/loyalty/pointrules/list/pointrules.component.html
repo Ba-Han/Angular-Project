@@ -1146,6 +1146,18 @@
                                             [placeholder]="'Product Type Min Expense'">
                                     </mat-form-field>
                                 </div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Minimum Order Expense</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'min_expense'"
+                                            [placeholder]="'Minimum Order Expense'">
+                                    </mat-form-field>
+                                </div>
                             </ng-container>
 
                             <ng-container *ngIf="typeRuleValue === 0 || typeRuleValue === 1 || typeRuleValue === 3">

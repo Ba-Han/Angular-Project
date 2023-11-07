@@ -136,6 +136,10 @@ export class RedemptionUploadComponent implements OnInit, AfterViewInit, OnDestr
         this._httpClient.post(apiUrl, formData).subscribe(
             (response: any) => {
                 this.uploadRedeemSuccess = 'Upload Succcessfully.';
+                this.getProcessType = null;
+
+                const fileInput = this.fileInput.nativeElement;
+                fileInput.value = '';
                 this._changeDetectorRef.markForCheck();
             },
             (error) => {
