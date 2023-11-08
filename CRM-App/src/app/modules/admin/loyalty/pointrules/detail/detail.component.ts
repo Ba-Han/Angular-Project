@@ -312,7 +312,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             product_type: [''],
             product_type_selection: [''],
             product_type_min_expense: [''],
-            product_type_selection_name: [''],
+            product_type_selection_text: [''],
             award_type: ['']
         });
 
@@ -358,7 +358,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
 
             this.pointRule.point_basketName = pointrule.point_basket?.name;
             this.productTypeValue = pointrule.product_type.toString();
-            this.productTypeSelection = pointrule.product_type_selection.toString();
+            this.productTypeSelection = pointrule.product_type_selection_text;
             this.selectedPointRuleProduct = pointrule.point_rule_products;
             this.awardTypeValue = pointrule.award_type.toString();
             for( let i=0; i < this.selectedPointRuleProduct.length; i++)
@@ -818,8 +818,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     updateForm(): void {
         const productType = this.PointRuleEditForm.getRawValue();
-        productType.product_type_selection_name = this.selectedProductTypes.map(item => item.value).join(', ');
-        productType.product_type_selection = this.selectedProductTypes.map(item => item.name).join(', ');
+        productType.product_type_selection_text = this.selectedProductTypes.map(item => item.name).join(', ');
+        productType.product_type_selection = this.selectedProductTypes.map(item => item.value).join(', ');
         this.PointRuleEditForm.patchValue(productType);
     }
 
