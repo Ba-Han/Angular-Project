@@ -1122,14 +1122,14 @@
                                 </div>
 
                                 <mat-form-field class="fuse-mat-no-subscript w-full hidden ">
-                                    <input matInput [formControlName]="'product_type_selection_name'" />
+                                    <input matInput [formControlName]="'product_type_selection'" />
                                 </mat-form-field>
 
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full" (click)="setProductTypeSelectionDrawer()">
                                         <mat-label>Product Type Selection</mat-label>
                                         <input matInput style="cursor:pointer" readonly
-                                            [formControlName]="'product_type_selection'"
+                                            [formControlName]="'product_type_selection_text'"
                                             placeholder="Select Product Type Selection">
                                         <mat-icon matSuffix svgIcon="heroicons_outline:external-link" style="cursor:pointer"></mat-icon>
                                     </mat-form-field>

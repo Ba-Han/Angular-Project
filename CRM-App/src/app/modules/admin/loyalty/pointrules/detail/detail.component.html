@@ -947,10 +947,10 @@
                                     </div>
                                 </ng-container>
 
-                                <ng-container *ngIf="pointRule.product_type_selection">
+                                <ng-container *ngIf="pointRule.product_type_selection_text">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Product Type Selection: </div>
-                                        <div class="ml-6 leading-6">{{pointRule.product_type_selection}}</div>
+                                        <div class="ml-6 leading-6" style="width: 35rem;">{{pointRule.product_type_selection_text}}</div>
                                     </div>
                                 </ng-container>
 
@@ -1631,14 +1631,14 @@
                                 </div>
 
                                 <mat-form-field class="fuse-mat-no-subscript w-full hidden ">
-                                    <input matInput [formControlName]="'product_type_selection_name'" />
+                                    <input matInput [formControlName]="'product_type_selection'" />
                                 </mat-form-field>
 
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full" (click)="setProductTypeSelectionDrawer()">
                                         <mat-label>Product Type Selection</mat-label>
                                         <input matInput style="cursor:pointer" readonly
-                                            [formControlName]="'product_type_selection'"
+                                            [formControlName]="'product_type_selection_text'"
                                             [(ngModel)]="productTypeSelection"
                                             placeholder="Select Product Type Selection">
                                         <mat-icon matSuffix svgIcon="heroicons_outline:external-link" style="cursor:pointer"></mat-icon>
