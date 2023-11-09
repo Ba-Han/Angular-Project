@@ -596,6 +596,27 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     getProductTypeValue(selectedProductType: string) {
         this.getSelectedProductType = selectedProductType;
 
+        if ( this.getSelectedProductType !== selectedProductType ) {
+            this.selectedProductTypes = [];
+            this.updateForm();
+        }
+
+        this._pointRuleService.getProductTypeSelection(this.getSelectedProductType)
+          .subscribe(
+            () => {
+              this.closeProductTypeSelection();;
+            },
+            (error) => {
+              console.error(error);
+            }
+          );
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    onProductTypeChange(selectedProductTypeChange: string) {
+        this.getSelectedProductType = selectedProductTypeChange;
+
         this.selectedProductTypes = [];
         this.updateForm();
 

@@ -1620,7 +1620,7 @@
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Product Type</mat-label>
-                                        <mat-select [formControlName]="'product_type'" [(ngModel)]="productTypeValue" (selectionChange)="getProductTypeValue($event.value)">
+                                        <mat-select [formControlName]="'product_type'" [(ngModel)]="productTypeValue" (selectionChange)="onProductTypeChange($event.value)">
                                             <ng-container *ngFor="let type of productType">
                                                 <mat-option [value]="type.value">
                                                     {{type.name}}
