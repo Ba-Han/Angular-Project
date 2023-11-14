@@ -638,6 +638,41 @@
                                         <div class="ml-6 leading-6">High</div>
                                     </div>
                                 </ng-container>
+
+                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rule Cap Type: </div>
+                                        <div class="ml-6 leading-6">Order Base</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 2">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rule Cap Type: </div>
+                                        <div class="ml-6 leading-6">Per Day Base (Total points per day)</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 3">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rule Cap Type: </div>
+                                        <div class="ml-6 leading-6">Order Base for This Rule</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 4">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rule Cap Type: </div>
+                                        <div class="ml-6 leading-6">Per Day Base for This Rule (Total Points per day for this rule)</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.Point_Rule_Max_Cap">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rule Max Cap: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.Point_Rule_Max_Cap}}</div>
+                                    </div>
+                                </ng-container>
                             </ng-container>
                             
                             <ng-container *ngIf="pointRule.type === 2">
@@ -859,6 +894,43 @@
                                         </div>
                                     </ng-container>
                                 </ng-container>
+
+                                
+
+                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rule Cap Type: </div>
+                                        <div class="ml-6 leading-6">Order Base</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 2">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rule Cap Type: </div>
+                                        <div class="ml-6 leading-6">Per Day Base (Total points per day)</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 3">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rule Cap Type: </div>
+                                        <div class="ml-6 leading-6">Order Base for This Rule</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 4">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rule Cap Type: </div>
+                                        <div class="ml-6 leading-6">Per Day Base for This Rule (Total Points per day for this rule)</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.Point_Rule_Max_Cap">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rule Max Cap: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.Point_Rule_Max_Cap}}</div>
+                                    </div>
+                                </ng-container>
                             </ng-container>
 
                             <ng-container *ngIf="pointRule.type === 0 || pointRule.type === 1 || pointRule.type === 3 || pointRule.offer_type === 2">
@@ -965,6 +1037,43 @@
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Minimum Order Expense: </div>
                                         <div class="ml-6 leading-6">{{pointRule.min_expense}}</div>
+                                    </div>
+                                </ng-container>
+
+                                
+
+                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rule Cap Type: </div>
+                                        <div class="ml-6 leading-6">Order Base</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 2">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rule Cap Type: </div>
+                                        <div class="ml-6 leading-6">Per Day Base (Total points per day)</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 3">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rule Cap Type: </div>
+                                        <div class="ml-6 leading-6">Order Base for This Rule</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 4">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rule Cap Type: </div>
+                                        <div class="ml-6 leading-6">Per Day Base for This Rule (Total Points per day for this rule)</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.Point_Rule_Max_Cap">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Rule Max Cap: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.Point_Rule_Max_Cap}}</div>
                                     </div>
                                 </ng-container>
                             </ng-container>
@@ -1203,6 +1312,31 @@
                                         <input class="new_checkbox_01" type="checkbox" [formControlName]="'stop_further'" [(ngModel)]="stopFurtherValue">
                                         Stop Further
                                     </label>
+                                </div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Point Rule Cap Type</mat-label>
+                                        <mat-select [formControlName]="'Point_Rule_CapType'" [(ngModel)]="pointRuleCapTypeValue">
+                                            <mat-option [value]="0">None</mat-option>
+                                            <mat-option [value]="1">Order Base</mat-option>
+                                            <mat-option [value]="2">Per Day Base (Total points per day)</mat-option>
+                                            <mat-option [value]="3">Order Base for This Rule</mat-option>
+                                            <mat-option [value]="4">Per Day Base for This Rule (Total Points per day for this rule)</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Point Rule Max Cap</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'Point_Rule_Max_Cap'"
+                                            [placeholder]="'Point Rule Max Cap'">
+                                    </mat-form-field>
                                 </div>
                             </ng-container>
 
@@ -1560,6 +1694,31 @@
                                         </div>
                                     </ng-container>
                                 </ng-container>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Point Rule Cap Type</mat-label>
+                                        <mat-select [formControlName]="'Point_Rule_CapType'" [(ngModel)]="pointRuleCapTypeValue">
+                                            <mat-option [value]="0">None</mat-option>
+                                            <mat-option [value]="1">Order Base</mat-option>
+                                            <mat-option [value]="2">Per Day Base (Total points per day)</mat-option>
+                                            <mat-option [value]="3">Order Base for This Rule</mat-option>
+                                            <mat-option [value]="4">Per Day Base for This Rule (Total Points per day for this rule)</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Point Rule Max Cap</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'Point_Rule_Max_Cap'"
+                                            [placeholder]="'Point Rule Max Cap'">
+                                    </mat-form-field>
+                                </div>
                             </ng-container>
 
                             <ng-container *ngIf="typeRuleValue === 5">
@@ -1620,7 +1779,7 @@
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Product Type</mat-label>
-                                        <mat-select [formControlName]="'product_type'" [(ngModel)]="productTypeValue" (selectionChange)="getProductTypeValue($event.value)">
+                                        <mat-select [formControlName]="'product_type'" [(ngModel)]="productTypeValue" (selectionChange)="onProductTypeChange($event.value)">
                                             <ng-container *ngFor="let type of productType">
                                                 <mat-option [value]="type.value">
                                                     {{type.name}}
@@ -1639,7 +1798,7 @@
                                         <mat-label>Product Type Selection</mat-label>
                                         <input matInput style="cursor:pointer" readonly
                                             [formControlName]="'product_type_selection_text'"
-                                            [(ngModel)]="productTypeSelection"
+                                            [(ngModel)]="getProductTypeSelection"
                                             placeholder="Select Product Type Selection">
                                         <mat-icon matSuffix svgIcon="heroicons_outline:external-link" style="cursor:pointer"></mat-icon>
                                     </mat-form-field>
@@ -1666,6 +1825,31 @@
                                         <input matInput type="number"
                                             [formControlName]="'min_expense'"
                                             [placeholder]="'Minimum Order Expense'">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Point Rule Cap Type</mat-label>
+                                        <mat-select [formControlName]="'Point_Rule_CapType'" [(ngModel)]="pointRuleCapTypeValue">
+                                            <mat-option [value]="0">None</mat-option>
+                                            <mat-option [value]="1">Order Base</mat-option>
+                                            <mat-option [value]="2">Per Day Base (Total points per day)</mat-option>
+                                            <mat-option [value]="3">Order Base for This Rule</mat-option>
+                                            <mat-option [value]="4">Per Day Base for This Rule (Total Points per day for this rule)</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Point Rule Max Cap</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'Point_Rule_Max_Cap'"
+                                            [placeholder]="'Point Rule Max Cap'">
                                     </mat-form-field>
                                 </div>
                             </ng-container>

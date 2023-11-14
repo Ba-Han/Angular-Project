@@ -41,6 +41,8 @@ export interface PointRule {
     "product_type_selection_text": string;
     "product_type_min_expense": number;
     "award_type": number;
+    "Point_Rule_CapType": number;
+    "Point_Rule_Max_Cap": number;
 }
 
 export interface AwardType {
