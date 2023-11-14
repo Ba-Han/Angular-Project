@@ -308,6 +308,8 @@ export class PointRuleService {
         const productTypeSelectionText = !pointrule.product_type_selection_text ? '' : pointrule.product_type_selection_text;
         const productTypeMinExpense = !pointrule.product_type_min_expense ? 0 : pointrule.product_type_min_expense;
         const awardType = !pointrule.award_type ? 0 : Number(pointrule.award_type);
+        const pointRuleCapType = !pointrule.Point_Rule_CapType ? 0 : pointrule.Point_Rule_CapType;
+        const pointRuleMaxCap = !pointrule.Point_Rule_Max_Cap ? 0 : pointrule.Point_Rule_Max_Cap;
 
         return this.pointRules$.pipe(
             take(1),
@@ -345,7 +347,9 @@ export class PointRuleService {
                 "product_type_selection": productTypeSelection,
                 "product_type_selection_text": productTypeSelectionText,
                 "product_type_min_expense": productTypeMinExpense,
-                "award_type": awardType
+                "award_type": awardType,
+                "Point_Rule_CapType": pointRuleCapType,
+                "Point_Rule_Max_Cap": pointRuleMaxCap
             }).pipe(
                 map((newPointRule) => {
                     this._pointRules.next([newPointRule.data, ...pointrules]);
@@ -382,6 +386,8 @@ export class PointRuleService {
         const productTypeSelectionText = !pointrule.product_type_selection_text ? '' : pointrule.product_type_selection_text;
         const productTypeMinExpense = !pointrule.product_type_min_expense ? 0 : pointrule.product_type_min_expense;
         const awardType = !pointrule.award_type ? 0 : Number(pointrule.award_type);
+        const pointRuleCapType = !pointrule.Point_Rule_CapType ? 0 : pointrule.Point_Rule_CapType;
+        const pointRuleMaxCap = !pointrule.Point_Rule_Max_Cap ? 0 : pointrule.Point_Rule_Max_Cap;
 
         return this._httpClient.patch<PointRule>(`${this._apiurl}/items/point_rule/${id}`,
             {
@@ -419,7 +425,9 @@ export class PointRuleService {
                 "product_type_selection": productTypeSelection,
                 "product_type_selection_text": productTypeSelectionText,
                 "product_type_min_expense": productTypeMinExpense,
-                "award_type": awardType
+                "award_type": awardType,
+                "Point_Rule_CapType": pointRuleCapType,
+                "Point_Rule_Max_Cap": pointRuleMaxCap
             }
         ).pipe(
             map(createPointRule => createPointRule)
