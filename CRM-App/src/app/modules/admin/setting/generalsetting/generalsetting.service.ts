@@ -193,6 +193,7 @@ export class GeneralSettingService {
                 'member_groups': strMemberGroup,
                 'user_groups': strUserGroup,
                 'default_member_tier': defaultMemberTier,
+                'Voucher_Onetime_use': setting.Voucher_Onetime_use
             }).pipe(
                 map(updateSetting => updateSetting)
             );

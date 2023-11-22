@@ -82,6 +82,12 @@
                             </mat-form-field>
                         </div>
                         
+                        <div class="mt-8">
+                            <mat-checkbox class="primary" [formControlName]="'Voucher_Onetime_use'" [(ngModel)]="voucherOneTimeUseValue">
+                                Voucher one time use
+                            </mat-checkbox>
+                        </div>
+                        
                         <div class="flex items-center justify-end mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                             
                             <div *ngIf="successMessage" style="color: green;">
