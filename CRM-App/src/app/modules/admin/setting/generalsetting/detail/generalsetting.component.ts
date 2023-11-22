@@ -130,6 +130,7 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
     setting$: Observable<GeneralSetting>;
     successMessage: string;
     errorMessage: string;
+    voucherOneTimeUseValue: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -152,6 +153,7 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
             member_groups: [''],
             user_groups: [''],
             default_member_tier: [''],
+            Voucher_Onetime_use: ['']
         });
 
         //Member Groups
@@ -179,6 +181,7 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((formSetting: GeneralSettingExtended) => {
                 this.setting = formSetting;
+                this.voucherOneTimeUseValue = formSetting.Voucher_Onetime_use;
                 this.selectedMemberGroupOptions = [];
                 this.selectedUserGroupOptions = [];
                 const selectedUserGroup = formSetting.user_groups;

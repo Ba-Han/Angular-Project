@@ -14,6 +14,7 @@ export interface GeneralSetting
     memberGroupArray: MemberGroup[];
     userGroupArray: UserGroup[];
     memberTierDefaultArray: MemberTier[];
+    Voucher_Onetime_use: boolean;
 }
 
 export interface GeneralSettingExtended extends GeneralSetting {
