@@ -649,21 +649,7 @@
                                 <ng-container *ngIf="pointRule.Point_Rule_CapType === 2">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Point Rule Cap Type: </div>
-                                        <div class="ml-6 leading-6">Per Day Base (Total points per day)</div>
-                                    </div>
-                                </ng-container>
-
-                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 3">
-                                    <div class="flex sm:items-center">
-                                        <div class="w-1/4">Point Rule Cap Type: </div>
-                                        <div class="ml-6 leading-6">Order Base for This Rule</div>
-                                    </div>
-                                </ng-container>
-
-                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 4">
-                                    <div class="flex sm:items-center">
-                                        <div class="w-1/4">Point Rule Cap Type: </div>
-                                        <div class="ml-6 leading-6">Per Day Base for This Rule (Total Points per day for this rule)</div>
+                                        <div class="ml-6 leading-6">Per Day Base</div>
                                     </div>
                                 </ng-container>
 
@@ -907,24 +893,10 @@
                                 <ng-container *ngIf="pointRule.Point_Rule_CapType === 2">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Point Rule Cap Type: </div>
-                                        <div class="ml-6 leading-6">Per Day Base (Total points per day)</div>
+                                        <div class="ml-6 leading-6">Per Day Base</div>
                                     </div>
                                 </ng-container>
-
-                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 3">
-                                    <div class="flex sm:items-center">
-                                        <div class="w-1/4">Point Rule Cap Type: </div>
-                                        <div class="ml-6 leading-6">Order Base for This Rule</div>
-                                    </div>
-                                </ng-container>
-
-                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 4">
-                                    <div class="flex sm:items-center">
-                                        <div class="w-1/4">Point Rule Cap Type: </div>
-                                        <div class="ml-6 leading-6">Per Day Base for This Rule (Total Points per day for this rule)</div>
-                                    </div>
-                                </ng-container>
-
+                                
                                 <ng-container *ngIf="pointRule.Point_Rule_Max_Cap">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Point Rule Max Cap: </div>
@@ -1052,21 +1024,7 @@
                                 <ng-container *ngIf="pointRule.Point_Rule_CapType === 2">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Point Rule Cap Type: </div>
-                                        <div class="ml-6 leading-6">Per Day Base (Total points per day)</div>
-                                    </div>
-                                </ng-container>
-
-                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 3">
-                                    <div class="flex sm:items-center">
-                                        <div class="w-1/4">Point Rule Cap Type: </div>
-                                        <div class="ml-6 leading-6">Order Base for This Rule</div>
-                                    </div>
-                                </ng-container>
-
-                                <ng-container *ngIf="pointRule.Point_Rule_CapType === 4">
-                                    <div class="flex sm:items-center">
-                                        <div class="w-1/4">Point Rule Cap Type: </div>
-                                        <div class="ml-6 leading-6">Per Day Base for This Rule (Total Points per day for this rule)</div>
+                                        <div class="ml-6 leading-6">Per Day Base</div>
                                     </div>
                                 </ng-container>
 
@@ -1320,9 +1278,7 @@
                                         <mat-select [formControlName]="'Point_Rule_CapType'" [(ngModel)]="pointRuleCapTypeValue">
                                             <mat-option [value]="0">None</mat-option>
                                             <mat-option [value]="1">Order Base</mat-option>
-                                            <mat-option [value]="2">Per Day Base (Total points per day)</mat-option>
-                                            <mat-option [value]="3">Order Base for This Rule</mat-option>
-                                            <mat-option [value]="4">Per Day Base for This Rule (Total Points per day for this rule)</mat-option>
+                                            <mat-option [value]="2">Per Day Base</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -1701,9 +1657,7 @@
                                         <mat-select [formControlName]="'Point_Rule_CapType'" [(ngModel)]="pointRuleCapTypeValue">
                                             <mat-option [value]="0">None</mat-option>
                                             <mat-option [value]="1">Order Base</mat-option>
-                                            <mat-option [value]="2">Per Day Base (Total points per day)</mat-option>
-                                            <mat-option [value]="3">Order Base for This Rule</mat-option>
-                                            <mat-option [value]="4">Per Day Base for This Rule (Total Points per day for this rule)</mat-option>
+                                            <mat-option [value]="2">Per Day Base</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -1834,9 +1788,7 @@
                                         <mat-select [formControlName]="'Point_Rule_CapType'" [(ngModel)]="pointRuleCapTypeValue">
                                             <mat-option [value]="0">None</mat-option>
                                             <mat-option [value]="1">Order Base</mat-option>
-                                            <mat-option [value]="2">Per Day Base (Total points per day)</mat-option>
-                                            <mat-option [value]="3">Order Base for This Rule</mat-option>
-                                            <mat-option [value]="4">Per Day Base for This Rule (Total Points per day for this rule)</mat-option>
+                                            <mat-option [value]="2">Per Day Base</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
