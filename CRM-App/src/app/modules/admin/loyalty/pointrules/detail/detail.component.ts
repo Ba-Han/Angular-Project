@@ -461,6 +461,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         this.canDelete = this._userService.getDeleteUserPermissionByNavId('point-rules');
 
         this.getProductTypeValue(this.productTypeValue);
+        this.onCapTypeChange();
     }
 
     ngAfterViewInit(): void {
@@ -706,7 +707,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         } else {
             this.isMaxCapFieldHidden = false;
             this.isMaxCapFieldDisabled = false;
-            this.PointRuleEditForm.get('Point_Rule_Max_Cap')?.setValue(null);
+            //this.PointRuleEditForm.get('Point_Rule_Max_Cap')?.setValue(null);
         }
     }
 
