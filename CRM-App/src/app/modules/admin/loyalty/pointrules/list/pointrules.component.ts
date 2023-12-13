@@ -261,6 +261,8 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     selectedProductTypes: any[] = [];
     awardTypeValue: any;
     awardType: any;
+    isMaxCapFieldHidden: boolean;
+    isMaxCapFieldDisabled: boolean;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -1046,6 +1048,21 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         this.PointRuleProductForm.reset();
         this.tooglePointRuleProductFormMode(true);
         this.drawerTwo.open();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    onCapTypeChange() {
+        const selectedCapTypeValue = this.PointRuleAddForm.get('Point_Rule_CapType')?.value;
+
+        if (selectedCapTypeValue === 0) {
+            this.isMaxCapFieldHidden = true;
+            this.isMaxCapFieldDisabled = true;
+            this.PointRuleAddForm.get('Point_Rule_Max_Cap')?.setValue(0);
+        } else {
+            this.isMaxCapFieldHidden = false;
+            this.isMaxCapFieldDisabled = false;
+            this.PointRuleAddForm.get('Point_Rule_Max_Cap')?.setValue(null);
+        }
     }
 
     createPointRuleProduct(): void {
