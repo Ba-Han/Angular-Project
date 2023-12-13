@@ -245,6 +245,8 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     awardType: any;
     awardTypeValue: any;
     pointRuleCapTypeValue: number;
+    isMaxCapFieldHidden: boolean;
+    isMaxCapFieldDisabled: boolean;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -459,6 +461,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         this.canDelete = this._userService.getDeleteUserPermissionByNavId('point-rules');
 
         this.getProductTypeValue(this.productTypeValue);
+        this.onCapTypeChange();
     }
 
     ngAfterViewInit(): void {
@@ -690,6 +693,21 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             this.PointRuleEditForm.get('start_date').setValue(null);
             this.PointRuleEditForm.get('end_date').setValue(null);
             this._changeDetectorRef.markForCheck();
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    onCapTypeChange() {
+        const selectedCapTypeValue = this.PointRuleEditForm.get('Point_Rule_CapType')?.value;
+
+        if (selectedCapTypeValue === 0) {
+            this.isMaxCapFieldHidden = true;
+            this.isMaxCapFieldDisabled = true;
+            this.PointRuleEditForm.get('Point_Rule_Max_Cap')?.setValue(0);
+        } else {
+            this.isMaxCapFieldHidden = false;
+            this.isMaxCapFieldDisabled = false;
+            //this.PointRuleEditForm.get('Point_Rule_Max_Cap')?.setValue(null);
         }
     }
 

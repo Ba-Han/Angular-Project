@@ -1036,6 +1036,43 @@
                                 </ng-container>
                             </ng-container>
 
+                            <ng-container *ngIf="pointRule.type === 6">
+                                <ng-container *ngIf="pointRule.point_amount">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Point Amount: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.point_amount}}</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.min_expense">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Minimum Order Expense: </div>
+                                        <div class="ml-6 leading-6">{{pointRule.min_expense}}</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.priority === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Priority: </div>
+                                        <div class="ml-6 leading-6">Low</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.priority === 2">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Priority: </div>
+                                        <div class="ml-6 leading-6">Medium</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.priority === 3">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Priority: </div>
+                                        <div class="ml-6 leading-6">High</div>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+
                             <ng-container *ngIf="pointRule.status === 'active'">
                                 <div class="flex sm:items-center">
                                     <div class="w-1/4">Status: </div>
@@ -1170,6 +1207,7 @@
                                         <mat-option [value]="3">Referral Rule</mat-option>
                                         <mat-option [value]="4">Monthly Event</mat-option>
                                         <mat-option [value]="5">Product Base Rule</mat-option>
+                                        <mat-option [value]="6">First Order</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
@@ -1275,7 +1313,7 @@
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Point Rule Cap Type</mat-label>
-                                        <mat-select [formControlName]="'Point_Rule_CapType'" [(ngModel)]="pointRuleCapTypeValue">
+                                        <mat-select [formControlName]="'Point_Rule_CapType'" [(ngModel)]="pointRuleCapTypeValue" (selectionChange)="onCapTypeChange()">
                                             <mat-option [value]="0">None</mat-option>
                                             <mat-option [value]="1">Order Base</mat-option>
                                             <mat-option [value]="2">Per Day Base</mat-option>
@@ -1283,7 +1321,7 @@
                                     </mat-form-field>
                                 </div>
 
-                                <div class="mt-8">
+                                <div class="mt-8" [hidden]="isMaxCapFieldHidden">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Point Rule Max Cap</mat-label>
                                         <mat-icon matPrefix
@@ -1291,7 +1329,8 @@
                                                 [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
                                         <input matInput type="number"
                                             [formControlName]="'Point_Rule_Max_Cap'"
-                                            [placeholder]="'Point Rule Max Cap'">
+                                            [placeholder]="'Point Rule Max Cap'"
+                                            [disabled]="isMaxCapFieldDisabled">
                                     </mat-form-field>
                                 </div>
                             </ng-container>
@@ -1654,7 +1693,7 @@
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Point Rule Cap Type</mat-label>
-                                        <mat-select [formControlName]="'Point_Rule_CapType'" [(ngModel)]="pointRuleCapTypeValue">
+                                        <mat-select [formControlName]="'Point_Rule_CapType'" [(ngModel)]="pointRuleCapTypeValue" (selectionChange)="onCapTypeChange()">
                                             <mat-option [value]="0">None</mat-option>
                                             <mat-option [value]="1">Order Base</mat-option>
                                             <mat-option [value]="2">Per Day Base</mat-option>
@@ -1662,7 +1701,7 @@
                                     </mat-form-field>
                                 </div>
 
-                                <div class="mt-8">
+                                <div class="mt-8" [hidden]="isMaxCapFieldHidden">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Point Rule Max Cap</mat-label>
                                         <mat-icon matPrefix
@@ -1670,7 +1709,8 @@
                                                 [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
                                         <input matInput type="number"
                                             [formControlName]="'Point_Rule_Max_Cap'"
-                                            [placeholder]="'Point Rule Max Cap'">
+                                            [placeholder]="'Point Rule Max Cap'"
+                                            [disabled]="isMaxCapFieldDisabled">
                                     </mat-form-field>
                                 </div>
                             </ng-container>
@@ -1785,7 +1825,7 @@
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Point Rule Cap Type</mat-label>
-                                        <mat-select [formControlName]="'Point_Rule_CapType'" [(ngModel)]="pointRuleCapTypeValue">
+                                        <mat-select [formControlName]="'Point_Rule_CapType'" [(ngModel)]="pointRuleCapTypeValue" (selectionChange)="onCapTypeChange()">
                                             <mat-option [value]="0">None</mat-option>
                                             <mat-option [value]="1">Order Base</mat-option>
                                             <mat-option [value]="2">Per Day Base</mat-option>
@@ -1793,7 +1833,7 @@
                                     </mat-form-field>
                                 </div>
 
-                                <div class="mt-8">
+                                <div class="mt-8" [hidden]="isMaxCapFieldHidden">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Point Rule Max Cap</mat-label>
                                         <mat-icon matPrefix
@@ -1801,7 +1841,45 @@
                                                 [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
                                         <input matInput type="number"
                                             [formControlName]="'Point_Rule_Max_Cap'"
-                                            [placeholder]="'Point Rule Max Cap'">
+                                            [placeholder]="'Point Rule Max Cap'"
+                                            [disabled]="isMaxCapFieldDisabled">
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="typeRuleValue === 6">
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Point Amount</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'point_amount'"
+                                            [placeholder]="'Point Amount'">
+                                    </mat-form-field>
+                                </div>
+                                
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Minimum Order Expense</mat-label>
+                                        <mat-icon matPrefix
+                                                class="hidden sm:flex icon-size-5"
+                                                [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                                        <input matInput type="number"
+                                            [formControlName]="'min_expense'"
+                                            [placeholder]="'Minimum Order Expense'">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="mt-8">
+                                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                                        <mat-label>Priority</mat-label>
+                                        <mat-select [formControlName]="'priority'" [(ngModel)]="priorityValue">
+                                            <mat-option [value]="1">Low</mat-option>
+                                            <mat-option [value]="2">Medium</mat-option>
+                                            <mat-option [value]="3">High</mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </div>
                             </ng-container>
