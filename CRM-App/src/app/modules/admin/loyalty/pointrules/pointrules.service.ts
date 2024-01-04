@@ -23,7 +23,6 @@ export class PointRuleService {
     private _pointBasket: BehaviorSubject<PointBasket | null> = new BehaviorSubject(null);
     private _memberTierpagination: BehaviorSubject<MemberTierPagination | null> = new BehaviorSubject(null);
     private _pointBasketPagination: BehaviorSubject<PointBasketPagination | null> = new BehaviorSubject(null);
-    private _storePagination: BehaviorSubject<StorePagination | null> = new BehaviorSubject(null);
     private _stores: BehaviorSubject<Store[] | null> = new BehaviorSubject(null);
 
     constructor(private _httpClient: HttpClient) {
@@ -76,10 +75,6 @@ export class PointRuleService {
 
     get memberTierpagination$(): Observable<PointRulePaginagion> {
         return this._memberTierpagination.asObservable();
-    }
-
-    get storePagination$(): Observable<StorePagination> {
-        return this._storePagination.asObservable();
     }
 
     get stores$(): Observable<Store[]> {
@@ -154,37 +149,13 @@ export class PointRuleService {
         );
     }
 
-    getStores(page: number = 0, limit: number = 10, sort: string = 'date_created', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
-        Observable<{ storePagination: StorePagination; stores: Store[] }> {
-        return this._httpClient.get(`${this._apiurl}/items/store`, {
-                params: {
-                    meta: 'filter_count',
-                    page: page + 1,
-                    limit: limit,
-                    sort: sort,
-                    order,
-                    search
-                }
-            }).pipe(
-                tap((response: any) => {
-                    const totalLength = response.meta.filter_count;
-                    const begin = page * limit;
-                    const end = Math.min((limit * (page + 1)), totalLength);
-                    const lastPage = Math.max(Math.ceil(totalLength / limit), 1);
-
-                    // Prepare the pagination object
-                    const pagination = {
-                        length: totalLength,
-                        limit: limit,
-                        page: page,
-                        lastPage: lastPage,
-                        startIndex: begin,
-                        endIndex: end - 1
-                    };
-                    this._storePagination.next(pagination);
-                    this._stores.next(response.data);
-                })
-            );
+    getStores(): Observable<Store[]>
+    {
+        return this._httpClient.get<any>(`${this._apiurl}/items/store`).pipe(
+            tap((response: any) => {
+                this._stores.next(response.data);
+            })
+        );
     }
 
     getPointBaskets(page: number = 0, limit: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
