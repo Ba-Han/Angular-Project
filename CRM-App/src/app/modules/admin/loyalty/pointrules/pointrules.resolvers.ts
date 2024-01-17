@@ -92,7 +92,7 @@ export class StoresResolver implements Resolve<any>
 {
     constructor(private _pointRuleService: PointRuleService) {
     }
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ storePagination: StorePagination; stores: Store[] }> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Store[]> {
         return this._pointRuleService.getStores();
     }
 }

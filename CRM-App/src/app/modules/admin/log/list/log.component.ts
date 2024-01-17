@@ -147,7 +147,9 @@ export class LogListComponent implements OnInit, AfterViewInit, OnDestroy
             skip(1),
             switchMap((query) => {
                 this.isLoading = true;
-                return this._logService.postWithTodayDate(this.responseStatusCode, this.getLogInputData, this.todayDate, this.requestedMethod, 0, 10, 'request_on', 'asc', query);
+                const sortDirection = this._sort?.direction || 'asc';
+                // eslint-disable-next-line max-len
+                return this._logService.postWithTodayDate(this.responseStatusCode, this.getLogInputData, this.todayDate, this.requestedMethod, 0, 10, 'request_on', sortDirection, query);
             }),
             map(() => {
                 this.isLoading = false;

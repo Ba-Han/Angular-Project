@@ -131,9 +131,9 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
                 debounceTime(300),
                 switchMap((query) => {
                     this.isLoading = true;
-
+                    const sortDirection = this._sort?.direction || 'asc';
                     this.searchValue = query;
-                    return this._memberService.getMembers(0, 10, 'member_code', 'asc', query, this.searchFilter);
+                    return this._memberService.getMembers(0, 10, 'member_code', sortDirection, query, this.searchFilter);
                 }),
                 map(() => {
                     this.isLoading = false;
