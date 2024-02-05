@@ -90,6 +90,9 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
     TransactionDetail: boolean = false;
     isAscending: boolean = false;
     selectedCoulumn: string = 'date';
+    searchValue: string;
+    getSortTitleValue: string;
+    sortDirection: 'asc' | 'desc' | '' = 'asc';
     searchInputControl: FormControl = new FormControl();
     //selectedMemberPoint: Transaction | null = null;;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -142,7 +145,8 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
                 debounceTime(300),
                 switchMap((query) => {
                     this.isLoading = true;
-                    return this._transactionService.getData(Number(this.memberId), 0, 10, 'transaction_date', 'desc', query);
+                    this.searchValue = query;
+                    return this._transactionService.getData(Number(this.memberId), 0, 10, this.getSortTitleValue, this.sortDirection, query);
                 }),
                 map(() => {
                     this.isLoading = false;
@@ -210,7 +214,7 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
                 switchMap(() => {
                     if(this.isLoading === true) {
                         // eslint-disable-next-line max-len
-                        return this._transactionService.getData(Number(this.memberId), this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                        return this._transactionService.getData(Number(this.memberId), this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue);
                     } else {
                         return of(null);
                     }
@@ -267,11 +271,13 @@ export class TransactionListComponent implements OnInit, AfterViewInit, OnDestro
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onPageChange() {
         // eslint-disable-next-line max-len
-        this._transactionService.getData(Number(this.memberId), this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+        this._transactionService.getData(Number(this.memberId), this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue).pipe(
             switchMap(() => {
+                this.sortDirection = this._sort?.direction || 'desc';
+                this.getSortTitleValue = this._sort?.active || 'transaction_date';
                 if ( this.isLoading === true ) {
                     // eslint-disable-next-line max-len
-                    return this._transactionService.getData(Number(this.memberId), this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    return this._transactionService.getData(Number(this.memberId), this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue);
                 } else {
                     return of(null);
                 }

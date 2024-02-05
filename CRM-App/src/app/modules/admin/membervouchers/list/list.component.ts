@@ -95,6 +95,9 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
     searchInputControl: FormControl = new FormControl();
     isAscending: boolean = true;
     selectedCoulumn = 'vouchercode';
+    searchValue: string;
+    getSortTitleValue: string;
+    sortDirection: 'asc' | 'desc' | '' = 'asc';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor( private _activatedRoute: ActivatedRoute,
@@ -155,7 +158,8 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
              debounceTime(300),
              switchMap((query) => {
                  this.isLoading = true;
-                 return this._memberVoucherService.getMemberVoucher(Number(this.memberId),0, 10, 'voucher_code', 'asc', query);
+                 this.searchValue = query;
+                 return this._memberVoucherService.getMemberVoucher(Number(this.memberId),0, 10, this.getSortTitleValue, this.sortDirection, query);
              }),
              map(() => {
                  this.isLoading = false;
@@ -248,7 +252,7 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
                 switchMap(() => {
                     if(this.isLoading === true) {
                         // eslint-disable-next-line max-len
-                        return this._memberVoucherService.getMemberVoucher(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                        return this._memberVoucherService.getMemberVoucher(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue);
                     } else {
                         return of(null);
                     }
@@ -278,11 +282,13 @@ export class MemberVoucherListComponent implements OnInit, AfterViewInit, OnDest
      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onPageChange() {
         // eslint-disable-next-line max-len
-        this._memberVoucherService.getMemberVoucher(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+        this._memberVoucherService.getMemberVoucher(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue).pipe(
             switchMap(() => {
+                this.sortDirection = this._sort?.direction || 'asc';
+                this.getSortTitleValue = this._sort?.active || 'name';
                 if ( this.isLoading === true ) {
                     // eslint-disable-next-line max-len
-                    return this._memberVoucherService.getMemberVoucher(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    return this._memberVoucherService.getMemberVoucher(Number(this.memberId),this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue);
                 } else {
                     return of(null);
                 }

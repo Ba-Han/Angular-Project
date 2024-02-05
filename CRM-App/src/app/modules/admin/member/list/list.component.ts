@@ -74,6 +74,8 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
     selectedCoulumn = 'membercode';
     searchFilter: string;
     searchValue: string;
+    getSortTitleValue: string;
+    sortDirection: 'asc' | 'desc' | '' = 'asc';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -131,9 +133,8 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
                 debounceTime(300),
                 switchMap((query) => {
                     this.isLoading = true;
-                    const sortDirection = this._sort?.direction || 'asc';
                     this.searchValue = query;
-                    return this._memberService.getMembers(0, 10, 'member_code', sortDirection, query, this.searchFilter);
+                    return this._memberService.getMembers(0, 10, this.getSortTitleValue, this.sortDirection, query, this.searchFilter);
                 }),
                 map(() => {
                     this.isLoading = false;
@@ -286,6 +287,8 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
         // eslint-disable-next-line max-len
         this._memberService.getMembers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue, this.searchFilter).pipe(
             switchMap(() => {
+                this.sortDirection = this._sort?.direction || 'asc';
+                this.getSortTitleValue = this._sort?.active || 'name';
                 if ( this.isLoading === true ) {
                     // eslint-disable-next-line max-len
                     return this._memberService.getMembers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction,this.searchValue, this.searchFilter);

@@ -263,6 +263,9 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     awardType: any;
     isMaxCapFieldHidden: boolean;
     isMaxCapFieldDisabled: boolean;
+    searchValue: string;
+    getSortTitleValue: string;
+    sortDirection: 'asc' | 'desc' | '' = 'asc';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -376,7 +379,8 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             debounceTime(300),
             switchMap((query) => {
                 this.isLoading = true;
-                return this._pointRuleService.getPointRules(0, 10, 'name', 'asc', query);
+                this.searchValue = query;
+                return this._pointRuleService.getPointRules(0, 10, this.getSortTitleValue, this.sortDirection, query);
             }),
             map(() => {
                 this.isLoading = false;
@@ -544,7 +548,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
                     if(this.isLoading === true) {
-                        return this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                        return this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue);
                     } else {
                         return of(null);
                     }
@@ -693,11 +697,13 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onPageChange() {
         // eslint-disable-next-line max-len
-        this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+        this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue).pipe(
             switchMap(() => {
+                this.sortDirection = this._sort?.direction || 'asc';
+                this.getSortTitleValue = this._sort?.active || 'name';
                 if ( this.isLoading === true ) {
                     // eslint-disable-next-line max-len
-                    return this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    return this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue);
                 } else {
                     return of(null);
                 }

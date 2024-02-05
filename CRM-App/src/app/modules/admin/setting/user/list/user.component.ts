@@ -108,6 +108,9 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
     selectedChannel: User | null = null;
     isAscending: boolean = true;
     selectedCoulumn = 'username';
+    searchValue: string;
+    getSortTitleValue: string;
+    sortDirection: 'asc' | 'desc' | '' = 'asc';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     private passwordStrength: 0;
 
@@ -152,11 +155,12 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
                 debounceTime(300),
                 switchMap((query) => {
                     this.isLoading = true;
+                    this.searchValue = query;
                     return this._crmUserService.getAppUsers(
                         0,
                         10,
-                        'username',
-                        'asc',
+                        this.getSortTitleValue,
+                        this.sortDirection,
                         query
                     );
                 }),
@@ -242,7 +246,8 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
                                 this._paginator.pageIndex,
                                 this._paginator.pageSize,
                                 this._sort.active,
-                                this._sort.direction
+                                this._sort.direction,
+                                this.searchValue
                             );
                         } else {
                             return of(null);
@@ -283,11 +288,13 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onPageChange() {
         // eslint-disable-next-line max-len
-        this._crmUserService.getAppUsers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+        this._crmUserService.getAppUsers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue).pipe(
             switchMap(() => {
+                this.sortDirection = this._sort?.direction || 'asc';
+                this.getSortTitleValue = this._sort?.active || 'username';
                 if ( this.isLoading === true ) {
                     // eslint-disable-next-line max-len
-                    return this._crmUserService.getAppUsers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    return this._crmUserService.getAppUsers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue);
                 } else {
                     return of(null);
                 }

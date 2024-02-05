@@ -88,6 +88,9 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
     getChannelData: any;
     selectedCoulumn = 'storename';
     errorMessage: string | '' = '';
+    searchValue: string;
+    getSortTitleValue: string;
+    sortDirection: 'asc' | 'desc' | '' = 'asc';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -144,7 +147,8 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
                 debounceTime(300),
                 switchMap((query) => {
                     this.isLoading = true;
-                    return this._storeService.getStores(0, 10, 'name', 'asc', query);
+                    this.searchValue = query;
+                    return this._storeService.getStores(0, 10, this.getSortTitleValue, this.sortDirection, query);
                 }),
                 map(() => {
                     this.isLoading = false;
@@ -224,7 +228,7 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
                     if(this.isLoading === true) {
-                        return this._storeService.getStores(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                        return this._storeService.getStores(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue);
                     } else {
                         return of(null);
                     }
@@ -264,11 +268,13 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onPageChange() {
         // eslint-disable-next-line max-len
-        this._storeService.getStores(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+        this._storeService.getStores(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue).pipe(
             switchMap(() => {
+                this.sortDirection = this._sort?.direction || 'asc';
+                this.getSortTitleValue = this._sort?.active || 'name';
                 if ( this.isLoading === true ) {
                     // eslint-disable-next-line max-len
-                    return this._storeService.getStores(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    return this._storeService.getStores(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue);
                 } else {
                     return of(null);
                 }

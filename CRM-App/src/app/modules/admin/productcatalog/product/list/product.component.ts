@@ -88,6 +88,9 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     isAscending: boolean = true;
     selectedCoulumn = 'sku';
     errorMessage: string | '' = '';
+    searchValue: string;
+    getSortTitleValue: string;
+    sortDirection: 'asc' | 'desc' | '' = 'asc';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
@@ -130,7 +133,8 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
                 debounceTime(300),
                 switchMap((query) => {
                     this.isLoading = true;
-                    return this._productService.getProducts(0, 10, 'item_number', 'asc', query);
+                    this.searchValue = query;
+                    return this._productService.getProducts(0, 10, this.getSortTitleValue, this.sortDirection, query);
                 }),
                 map(() => {
                     this.isLoading = false;
@@ -198,7 +202,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
                     if(this.isLoading === true) {
-                        return this._productService.getProducts(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                        return this._productService.getProducts(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue);
                     } else {
                         return of(null);
                     }
@@ -238,11 +242,13 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onPageChange() {
         // eslint-disable-next-line max-len
-        this._productService.getProducts(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction).pipe(
+        this._productService.getProducts(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue).pipe(
             switchMap(() => {
+                this.sortDirection = this._sort?.direction || 'asc';
+                this.getSortTitleValue = this._sort?.active || 'item_number';
                 if ( this.isLoading === true ) {
                     // eslint-disable-next-line max-len
-                    return this._productService.getProducts(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
+                    return this._productService.getProducts(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue);
                 } else {
                     return of(null);
                 }
