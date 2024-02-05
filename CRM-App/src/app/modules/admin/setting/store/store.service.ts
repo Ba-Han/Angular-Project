@@ -54,7 +54,7 @@ export class StoreService {
      * @param order
      * @param search
      */
-    getStores(page: number = 0, limit: number = 10, sort: string = 'date_created', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+    getStores(page: number = 0, limit: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: StorePagination; stores: Store[] }> {
         return this._httpClient.get(`${this._apiurl}/items/store`, {
                 params: {
