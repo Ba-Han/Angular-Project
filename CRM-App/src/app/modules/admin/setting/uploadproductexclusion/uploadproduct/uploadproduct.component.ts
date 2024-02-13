@@ -119,6 +119,7 @@ export class ProductUploadComponent implements OnInit, AfterViewInit, OnDestroy 
         this.uploadProductSuccess = '';
         this.isUploadProductDisabled = true;
         this.fileToUpload = null;
+        this.uploadProductExclusionForm.get('processType').setValue(null);
         this._changeDetectorRef.markForCheck();
     }
 
