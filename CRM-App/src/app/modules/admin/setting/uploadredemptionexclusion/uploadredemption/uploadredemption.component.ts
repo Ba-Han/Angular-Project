@@ -119,6 +119,7 @@ export class RedemptionUploadComponent implements OnInit, AfterViewInit, OnDestr
         this.uploadRedeemSuccess = '';
         this.isRedeemUploadDisabled = true;
         this.fileToUpload = null;
+        this.uploadRedeemExclusionForm.get('processType').setValue(null);
         this._changeDetectorRef.markForCheck();
     }
 
