@@ -19,7 +19,7 @@ import { TransactionService } from 'app/modules/admin/transaction/transaction.se
     styles: [
         `
             .detail_table{
-                grid-template-columns: 150px 150px 150px 150px 150px;
+                grid-template-columns: 150px 150px 150px 120px 120px;
             }
             .detaildiscount_table{
                 grid-template-columns: 150px 480px 120px;

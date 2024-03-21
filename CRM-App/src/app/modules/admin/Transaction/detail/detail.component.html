@@ -64,7 +64,7 @@
                     Item Name
                 </div>
 
-                <div class="hidden md:block truncate">
+                <div class="hidden md:block text-center truncate">
                     Quantity
                 </div>
 
@@ -86,11 +86,11 @@
                             {{item.item_number}}
                         </div>
 
-                        <div class="hidden lg:block" [matTooltip]="item.item_name">
+                        <div class="hidden lg:block break-words" [matTooltip]="item.item_name">
                             {{item.item_name}}
                         </div>
 
-                        <div class="hidden md:block">
+                        <div class="hidden md:block text-center">
                             {{item.quantity}}
                         </div>
 
