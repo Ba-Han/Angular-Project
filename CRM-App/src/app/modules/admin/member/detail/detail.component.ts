@@ -19,6 +19,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { Member, MemberPoint, Transaction, MemberTier, MemberInfo, MemberDocument, MemberDocumentPagination, MemberVoucher } from 'app/modules/admin/member/member.types';
 import { MemberService } from 'app/modules/admin/member/member.service';
 import { UserService } from 'app/core/user/user.service';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Component({
     selector       : 'member-details',
@@ -264,6 +265,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
     fileAcceptedSuccessMessage: string | '' = '';
     canEdit: boolean = false;
     showClearButton: boolean = false;
+    showMinAgeErrorMessage: string | '' = '';
     // private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -741,37 +743,58 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
         this._changeDetectorRef.markForCheck();
     }
 
+    getCurrentDate(): string {
+        const allowSelectOnlytodayDate = new Date();
+        return allowSelectOnlytodayDate.toISOString().split('T')[0];
+    }
+
+    // Function to handle date selection
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    handleDateSelection(event: MatDatepickerInputEvent<Date>) {
+        const selectedDateValue = event.value;
+        //console.log(selectedDateValue);
+    }
+
     updateMember(): void {
         this.showAlert = false;
         const member = this.memberForm.getRawValue();
         member.date_of_birth = this.datePipe.transform(member.date_of_birth, 'yyyy-MM-dd');
+        const dateOfBirth = member.date_of_birth;
+        const minAgeDate = new Date();
+        minAgeDate.setFullYear(minAgeDate.getFullYear() - 18);
+        const userDateOfBirth = new Date(dateOfBirth);
         const sameUserPhone = member.mobile_phone === this.member.member[0].mobile_phone ? true : false;
         //let showHideError = this.phoneValidateError ? false : true;
-        this._memberService.checkMemberPhone(member.mobile_phone, this.memberId)
-        .pipe(
-            takeUntil(this._unsubscribeAll),
-            finalize(() => {
-                if(sameUserPhone){
-                    this.updateMemberInfo(member.id, member);
-                    this.phoneValidateError = true;
-                    this._changeDetectorRef.markForCheck();
-                }
-                else{
-                    if(this.phoneValidateError){
+
+        if (userDateOfBirth >= minAgeDate) {
+            this.showMinAgeErrorMessage = 'The minimum age is 18.';
+        } else {
+            this._memberService.checkMemberPhone(member.mobile_phone, this.memberId)
+            .pipe(
+                takeUntil(this._unsubscribeAll),
+                finalize(() => {
+                    if(sameUserPhone){
                         this.updateMemberInfo(member.id, member);
+                        this.phoneValidateError = true;
                         this._changeDetectorRef.markForCheck();
                     }
                     else{
-                        this.phoneValidateError = false;
+                        if(this.phoneValidateError){
+                            this.updateMemberInfo(member.id, member);
+                            this._changeDetectorRef.markForCheck();
+                        }
+                        else{
+                            this.phoneValidateError = false;
+                        }
                     }
+                    this._changeDetectorRef.markForCheck();
+                })
+            )
+            .subscribe((response) => {
+                this.phoneValidateError = response ? response.success : false;
                 }
-                this._changeDetectorRef.markForCheck();
-             })
-        )
-        .subscribe((response) => {
-            this.phoneValidateError = response ? response.success : false;
-            }
-        );
+            );
+        }
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
