@@ -794,6 +794,7 @@ export class MemberDetailComponent implements OnInit, AfterViewInit, OnDestroy
                 this.phoneValidateError = response ? response.success : false;
                 }
             );
+            this.showMinAgeErrorMessage = '';
         }
     }
 
