@@ -1196,12 +1196,19 @@
                                     <input matInput
                                            [matDatepicker]="birthdayDatepicker"
                                            [formControlName]="'date_of_birth'"
-                                           [placeholder]="'Birthday'">
+                                           [placeholder]="'Birthday'"
+                                           [max]="getCurrentDate()"
+                                           (dateInput)="handleDateSelection($event)">
                                     <mat-datepicker-toggle matSuffix
                                                            [for]="birthdayDatepicker">
                                     </mat-datepicker-toggle>
                                     <mat-datepicker #birthdayDatepicker></mat-datepicker>
                                 </mat-form-field>
+                                <ng-container *ngIf="showMinAgeErrorMessage">
+                                    <mat-error>
+                                        {{showMinAgeErrorMessage}}
+                                    </mat-error>
+                                </ng-container>
                             </div>
                             
                             <!-- Gender -->
