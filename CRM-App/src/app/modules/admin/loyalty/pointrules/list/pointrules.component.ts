@@ -975,8 +975,8 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     updateForm(): void {
         const productType = this.PointRuleAddForm.getRawValue();
-        productType.product_type_selection_text = this.selectedProductTypes.map(item => item.name).join(', ');
-        productType.product_type_selection = this.selectedProductTypes.map(item => item.value).join(', ');
+        productType.product_type_selection_text = this.selectedProductTypes.map(item => item.name).join(',');
+        productType.product_type_selection = this.selectedProductTypes.map(item => item.value).join(',');
         this.PointRuleAddForm.patchValue(productType);
     }
 
