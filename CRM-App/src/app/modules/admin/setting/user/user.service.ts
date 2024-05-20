@@ -113,8 +113,8 @@ export class CRMUserService {
         );
     }
 
-    updateQRCode(): Observable<any> {
-        return this._httpClient.patch(`${this._apiurl}/users/resetqrcode`, {
+    updateQRCode(id: string): Observable<any> {
+        return this._httpClient.patch(`${this._apiurl}/users/resetqrcode/${id}`, {
         }, {observe: 'response'});
     }
 

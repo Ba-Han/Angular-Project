@@ -127,6 +127,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     successMessage: string | '' = '';
     userErrorMessage: string | '' = '';
     userSuccessMessage: string | null = null;
+    selctedId: string | '' = '';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     private passwordStrength: 0;
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -232,7 +233,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         this._changeDetectorRef.markForCheck();
     }
 
-    resetQRCodeDrawer(): void {
+    resetQRCodeDrawer(id: string): void {
+        this.selctedId = id;
         this.toogleResetQRCodeMode(true);
         this.matDrawer.open();
         this._changeDetectorRef.markForCheck();
@@ -252,7 +254,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     }
 
     proceedPopup(): void {
-        this._crmUserService.updateQRCode().subscribe(() => {
+        this._crmUserService.updateQRCode(this.selctedId).subscribe(() => {
         },
             (response) => {
                 if (response.status === 200) {
