@@ -87,6 +87,8 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
     channels$: Observable<Channel[]>;
     getChannelData: any;
     selectedCoulumn = 'storename';
+    selectedChannelFilter: string = 'channel';
+    searchFilter: string;
     errorMessage: string | '' = '';
     searchValue: string;
     getSortTitleValue: string;
@@ -148,7 +150,7 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
                 switchMap((query) => {
                     this.isLoading = true;
                     this.searchValue = query;
-                    return this._storeService.getStores(0, 10, this.getSortTitleValue, this.sortDirection, query);
+                    return this._storeService.getStores(0, 10, this.getSortTitleValue, this.sortDirection, query ,this.searchFilter);
                 }),
                 map(() => {
                     this.isLoading = false;
@@ -228,7 +230,8 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
                     if(this.isLoading === true) {
-                        return this._storeService.getStores(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue);
+                        // eslint-disable-next-line max-len
+                        return this._storeService.getStores(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue, this.searchFilter);
                     } else {
                         return of(null);
                     }
@@ -265,16 +268,38 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
         this._changeDetectorRef.markForCheck();
     }
 
+    channelFilterChange(e: any): void {
+        const getChannelCode = e.value;
+        this.searchFilter = getChannelCode ? '{"channel_code":{"_eq":"' + getChannelCode + '"}}' : '';
+        const pageIndex = this._paginator?.pageIndex || 0;
+        const pageSize = this._paginator?.pageSize || 10;
+        const sortActive = this._sort?.active || 'name';
+        const sortDirection = this._sort?.direction || 'asc';
+
+        if(this.searchFilter === '{"channel_code":{"_eq":"all"}}') {
+            this.searchFilter = '';
+        }
+
+        this._storeService.getStores(pageIndex, pageSize, sortActive, sortDirection,this.searchValue, this.searchFilter)
+       .pipe(
+        takeUntil(this._unsubscribeAll)
+            )
+            .subscribe((response: any) => {
+                this._changeDetectorRef.markForCheck();
+        });
+        this._changeDetectorRef.markForCheck();
+    }
+
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onPageChange() {
         // eslint-disable-next-line max-len
-        this._storeService.getStores(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue).pipe(
+        this._storeService.getStores(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue, this.searchFilter).pipe(
             switchMap(() => {
                 this.sortDirection = this._sort?.direction || 'asc';
                 this.getSortTitleValue = this._sort?.active || 'name';
                 if ( this.isLoading === true ) {
                     // eslint-disable-next-line max-len
-                    return this._storeService.getStores(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue);
+                    return this._storeService.getStores(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue, this.searchFilter);
                 } else {
                     return of(null);
                 }

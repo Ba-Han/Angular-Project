@@ -73,7 +73,7 @@ export class PointRuleService {
         return this._pointBasketPagination.asObservable();
     }
 
-    get memberTierpagination$(): Observable<PointRulePaginagion> {
+    get memberTierpagination$(): Observable<MemberTierPagination> {
         return this._memberTierpagination.asObservable();
     }
 
@@ -83,11 +83,13 @@ export class PointRuleService {
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
-    getPointRules(page: number = 0, limit: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    getPointRules(page: number = 0, limit: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = '', filter: string = '', fields: string = ''):
         Observable<{ pagination: PointRulePaginagion; pointrules: PointRule[] }> {
         return this._httpClient.get(`${this._apiurl}/items/point_rule`, {
             params: {
                 meta: 'filter_count',
+                filter: filter,
                 page: page + 1,
                 limit: limit,
                 sort: sort,

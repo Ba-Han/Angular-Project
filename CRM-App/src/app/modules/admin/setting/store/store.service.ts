@@ -54,11 +54,13 @@ export class StoreService {
      * @param order
      * @param search
      */
-    getStores(page: number = 0, limit: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    getStores(page: number = 0, limit: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = '', filter: string = '', fields: string = ''):
         Observable<{ pagination: StorePagination; stores: Store[] }> {
         return this._httpClient.get(`${this._apiurl}/items/store`, {
                 params: {
                     meta: 'filter_count',
+                    filter: filter,
                     page: page + 1,
                     limit: limit,
                     sort: sort,

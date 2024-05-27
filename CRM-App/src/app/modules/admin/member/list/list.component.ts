@@ -41,7 +41,7 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import {
     Member,
     Country,
-    MemberPagination,
+    MemberPagination
 } from 'app/modules/admin/member/member.types';
 import { MemberService } from 'app/modules/admin/member/member.service';
 import { MemberTierService } from 'app/modules/admin/loyalty/membertier/membertier.service';
@@ -76,6 +76,9 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
     searchValue: string;
     getSortTitleValue: string;
     sortDirection: 'asc' | 'desc' | '' = 'asc';
+    selectedMemberTierFilter: string | number = 'memberTier';
+    getMemberTierResponse: any;
+    membersData: any;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -101,7 +104,7 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngOnInit(): void {
         const searchFilterTierId = this._activatedRoute.snapshot.paramMap.get('membertierid');
-        this.searchFilter = searchFilterTierId ? '{"member_tier":{"_eq":"' + searchFilterTierId + '"}}' : '';
+        this.selectedMemberTierFilter = searchFilterTierId ? parseInt(searchFilterTierId, 10) : 'memberTier';
         this.members$ = this._memberService.members$;
         this._memberService.members$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -117,6 +120,12 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.pagination = pagination;
                 this._changeDetectorRef.markForCheck();
             });
+
+        this._memberService.memberTiers
+        .subscribe((response: any) => {
+            this.getMemberTierResponse = response;
+            this._changeDetectorRef.markForCheck();
+        });
 
         // Get the member
         this._memberService.member$
@@ -282,13 +291,47 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
         return item.id || index;
     }
 
+    memberTierFilterChange(e: any): void {
+        const getMemberTierId = e.value;
+        this.selectedMemberTierFilter = getMemberTierId ? getMemberTierId : 'all';
+        this.updateMemberList();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    updateMemberList(): void {
+        const selectedIndex = this.selectedMemberTierFilter;
+        const pageIndex = this._paginator?.pageIndex || 0;
+        const pageSize = this._paginator?.pageSize || 10;
+        const sortActive = this._sort?.active || 'member_code';
+        const sortDirection = this._sort?.direction || 'asc';
+
+        this.searchFilter = selectedIndex === 'all' ? '' : '{"member_tier":{"_eq":"' + selectedIndex + '"}}';
+
+        this._memberService.getMembers(pageIndex, pageSize, sortActive, sortDirection, this.searchValue, this.searchFilter)
+        .pipe(
+            switchMap(() => {
+                if ( this.isLoading === true ) {
+                    // eslint-disable-next-line max-len
+                    return this._memberService.getMembers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction,this.searchValue, this.searchFilter);
+                } else {
+                    return of(null);
+                }
+            }),
+            map(() => {
+                this.isLoading = false;
+            })
+        ).subscribe(() => {
+            this._changeDetectorRef.markForCheck();
+        });
+    }
+
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onPageChange() {
         // eslint-disable-next-line max-len
         this._memberService.getMembers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue, this.searchFilter).pipe(
             switchMap(() => {
                 this.sortDirection = this._sort?.direction || 'asc';
-                this.getSortTitleValue = this._sort?.active || 'name';
+                this.getSortTitleValue = this._sort?.active || 'member_code';
                 if ( this.isLoading === true ) {
                     // eslint-disable-next-line max-len
                     return this._memberService.getMembers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction,this.searchValue, this.searchFilter);
