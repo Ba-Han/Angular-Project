@@ -237,6 +237,8 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     timeOutUpId: any;
     getStoreData: any;
     isAscending: boolean = true;
+    selectedMemberTierFilter: string = 'memberTier';
+    searchFilter: string;
     selectedCoulumn: string = 'name';
     errorMessage: string | '' = '';
     typeRuleValue: number = 0;
@@ -261,6 +263,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     selectedProductTypes: any[] = [];
     awardTypeValue: any;
     awardType: any;
+    getMemberTierResponse: any;
     isMaxCapFieldHidden: boolean;
     isMaxCapFieldDisabled: boolean;
     searchValue: string;
@@ -359,6 +362,12 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         this.pointRules$ = this._pointRuleService.pointRules$;
         this.productType$ = this._pointRuleService.productType$;
 
+        this._pointRuleService.memberTiers$
+        .subscribe((response: any) => {
+            this.getMemberTierResponse = response;
+            this._changeDetectorRef.markForCheck();
+        });
+
         this._pointRuleService.awardType$
         .subscribe((response: any) => {
             this.awardType = response;
@@ -380,7 +389,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             switchMap((query) => {
                 this.isLoading = true;
                 this.searchValue = query;
-                return this._pointRuleService.getPointRules(0, 10, this.getSortTitleValue, this.sortDirection, query);
+                return this._pointRuleService.getPointRules(0, 10, this.getSortTitleValue, this.sortDirection, query, this.searchFilter);
             }),
             map(() => {
                 this.isLoading = false;
@@ -548,7 +557,8 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             merge(this._sort.sortChange, this._paginator.page).pipe(
                 switchMap(() => {
                     if(this.isLoading === true) {
-                        return this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue);
+                        // eslint-disable-next-line max-len
+                        return this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue, this.searchFilter);
                     } else {
                         return of(null);
                     }
@@ -659,6 +669,28 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
         this._changeDetectorRef.markForCheck();
     }
 
+    memberTierFilterChange(e: any): void {
+        const getMemberTierId = e.value;
+        this.searchFilter = getMemberTierId ? '{"member_tier":{"_eq":"' + getMemberTierId + '"}}' : '';
+        const pageIndex = this._paginator?.pageIndex || 0;
+        const pageSize = this._paginator?.pageSize || 10;
+        const sortActive = this._sort?.active || 'name';
+        const sortDirection = this._sort?.direction || 'asc';
+
+        if(this.searchFilter === '{"member_tier":{"_eq":"all"}}') {
+            this.searchFilter = '';
+        }
+
+        this._pointRuleService.getPointRules(pageIndex, pageSize, sortActive, sortDirection,this.searchValue, this.searchFilter)
+       .pipe(
+        takeUntil(this._unsubscribeAll)
+            )
+            .subscribe((response: any) => {
+                this._changeDetectorRef.markForCheck();
+        });
+        this._changeDetectorRef.markForCheck();
+    }
+
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getAwardTypeValue(selectedValue: string) {
         this.awardTypeValue = selectedValue;
@@ -697,13 +729,13 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onPageChange() {
         // eslint-disable-next-line max-len
-        this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue).pipe(
+        this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue, this.searchFilter).pipe(
             switchMap(() => {
                 this.sortDirection = this._sort?.direction || 'asc';
                 this.getSortTitleValue = this._sort?.active || 'name';
                 if ( this.isLoading === true ) {
                     // eslint-disable-next-line max-len
-                    return this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue);
+                    return this._pointRuleService.getPointRules(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue, this.searchFilter);
                 } else {
                     return of(null);
                 }
@@ -747,9 +779,6 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             this.ngAfterViewInit();
             this.onPageChange();
         } else if ( this.selectedCoulumn === 'pointvalue' ) {
-            this.ngAfterViewInit();
-            this.onPageChange();
-        } else if ( this.selectedCoulumn === 'membertier' ) {
             this.ngAfterViewInit();
             this.onPageChange();
         } else if ( this.selectedCoulumn === 'startdate' ) {

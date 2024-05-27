@@ -412,7 +412,7 @@
                         </div>
                         <div class="text-4xl font-extrabold tracking-tight">Point Rules</div>
                         <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
-                            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
+                            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-60">
                                 <mat-icon class="icon-size-5"
                                         matPrefix
                                         [svgIcon]="'heroicons_solid:search'"></mat-icon>
@@ -422,6 +422,20 @@
                                     [placeholder]="'Search Point Rules'">
                             </mat-form-field>
 
+                            <!--Filter By Member Tier-->
+                            <mat-form-field class="ml-4 fuse-mat-no-subscript pointrule-2-sort">
+                                <span class="pointrule_sort_by">Sort By:</span>
+                                <mat-select [(ngModel)]="selectedMemberTierFilter" (selectionChange)="memberTierFilterChange($event)">
+                                    <mat-option disabled value="memberTier">Member Tier</mat-option>
+                                    <mat-option value="all">All</mat-option>
+                                    <ng-container *ngFor="let tier of getMemberTierResponse">
+                                        <mat-option [value]="tier.id">
+                                            {{tier.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                            </mat-form-field>
+
                             <!--sorting dropdown-->
                             <mat-form-field class="ml-4 fuse-mat-no-subscript pointrule-2-sort">
                                 <span class="pointrule_sort_by">Sort By:</span>
@@ -429,7 +443,6 @@
                                     <mat-option value="name">Name</mat-option>
                                     <mat-option value="rewardcode">Reward Code</mat-option>
                                     <mat-option value="pointvalue">Point Value</mat-option>
-                                    <mat-option value="membertier">Member Tier</mat-option>
                                     <mat-option value="startdate">Start Date</mat-option>
                                     <mat-option value="enddate">End Date</mat-option>
                                 </mat-select>
