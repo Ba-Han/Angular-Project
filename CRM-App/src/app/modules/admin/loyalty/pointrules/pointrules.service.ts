@@ -267,7 +267,7 @@ export class PointRuleService {
         const newMemberToEarnPoints = !pointrule.new_member_to_earn_points ? '' : pointrule.new_member_to_earn_points;
         const newMemberToEarnPointsValue = Boolean(newMemberToEarnPoints);
         const newMemberPointAamount = !pointrule.new_member_point_amount ? 0 : pointrule.new_member_point_amount;
-        const priority = !pointrule.priority ? 0 : pointrule.priority;
+        const priority = !pointrule.priority ? 1 : pointrule.priority;
         const stopFurther = !pointrule.stop_further ? '' : pointrule.stop_further;
         const stopFurtherValue = Boolean(stopFurther);
         const offerApply = !pointrule.offer_apply ? 0 : pointrule.offer_apply;
@@ -345,7 +345,7 @@ export class PointRuleService {
         const newMemberToEarnPoints = !pointrule.new_member_to_earn_points ? '' : pointrule.new_member_to_earn_points;
         const newMemberToEarnPointsValue = Boolean(newMemberToEarnPoints);
         const newMemberPointAamount = !pointrule.new_member_point_amount ? 0 : pointrule.new_member_point_amount;
-        const priority = !pointrule.priority ? 0 : pointrule.priority;
+        const priority = !pointrule.priority ? 1 : pointrule.priority;
         const stopFurther = !pointrule.stop_further ? '' : pointrule.stop_further;
         const stopFurtherValue = Boolean(stopFurther);
         const offerApply = !pointrule.offer_apply ? 0 : pointrule.offer_apply;
