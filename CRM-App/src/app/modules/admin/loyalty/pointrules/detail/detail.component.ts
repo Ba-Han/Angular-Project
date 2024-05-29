@@ -597,6 +597,12 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     getAwardTypeValue(selectedValue: string) {
         this.awardTypeValue = selectedValue;
+        if(this.awardTypeValue === '0' || this.awardTypeValue === '1' ) {
+            this.PointRuleEditForm.get('dollar_value').setValue(0);
+            this.PointRuleEditForm.get('point_value').setValue(0);
+            this.PointRuleEditForm.get('point_amount').setValue(0);
+        }
+        this._changeDetectorRef.markForCheck();
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -685,6 +691,80 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
         this.toogleDeleteMode(true);
         this.drawerOne.open();
         this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    setStoreSelectionTypeValue(selectedStoreValue: number) {
+        this.storeSelectionTypeValue = selectedStoreValue;
+        if(this.storeSelectionTypeValue === 0 || this.storeSelectionTypeValue === 1) {
+            this.PointRuleEditForm.get('store_codes').setValue(null);
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    setOfferTypeValue() {
+        if(this.offerTypeValue === 1 || this.offerTypeValue === 2) {
+            this.PointRuleEditForm.get('point_amount').setValue(0);
+            this.PointRuleEditForm.get('dollar_value').setValue(0);
+            this.PointRuleEditForm.get('point_value').setValue(0);
+            this.PointRuleEditForm.get('min_expense').setValue(0);
+            this.PointRuleEditForm.get('no_of_orders').setValue(0);
+            this.PointRuleEditForm.get('priority').setValue(1);
+            this.PointRuleEditForm.get('stop_further').setValue(false);
+            this.PointRuleEditForm.get('store_selection_type').setValue(0);
+            this.PointRuleEditForm.get('store_codes').setValue(null);
+            this.PointRuleEditForm.get('Point_Rule_CapType').setValue(0);
+            this.PointRuleEditForm.get('Point_Rule_Max_Cap').setValue(0);
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    setPointRewardedAtValueValue() {
+        if(this.pointRewardedAtValue === 1 || this.pointRewardedAtValue === 2) {
+            this.PointRuleEditForm.get('min_expense').setValue(0);
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    setOfferApplyValue() {
+        if(this.offerApplyValue === 1 || this.offerApplyValue === 3) {
+            this.PointRuleEditForm.get('offer_apply_month').setValue(0);
+            this.PointRuleEditForm.get('offer_apply_date').setValue(null);
+        }
+        this._changeDetectorRef.markForCheck();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    setPriorityDefaultValue(): void {
+        // eslint-disable-next-line max-len
+        if(this.typeRuleValue === 0 || this.typeRuleValue === 1 || this.typeRuleValue === 2 || this.typeRuleValue === 3 || this.typeRuleValue === 4 || this.typeRuleValue === 5 || this.typeRuleValue === 6) {
+            this.PointRuleEditForm.get('award_type').setValue(null);
+            this.PointRuleEditForm.get('dollar_value').setValue(0);
+            this.PointRuleEditForm.get('point_value').setValue(0);
+            this.PointRuleEditForm.get('min_expense').setValue(0);
+            this.PointRuleEditForm.get('no_of_orders').setValue(0);
+            this.PointRuleEditForm.get('priority').setValue(1);
+            this.PointRuleEditForm.get('stop_further').setValue(false);
+            this.PointRuleEditForm.get('Point_Rule_CapType').setValue(0);
+            this.PointRuleEditForm.get('Point_Rule_Max_Cap').setValue(0);
+            this.PointRuleEditForm.get('store_selection_type').setValue(0);
+            this.PointRuleEditForm.get('offer_apply').setValue(0);
+            this.PointRuleEditForm.get('offer_type').setValue(0);
+            this.PointRuleEditForm.get('point_amount').setValue(0);
+            this.PointRuleEditForm.get('new_member_to_earn_points').setValue(false);
+            this.PointRuleEditForm.get('new_member_point_amount').setValue(0);
+            this.PointRuleEditForm.get('point_rewarded_at').setValue(0);
+            this.PointRuleEditForm.get('product_type').setValue('0');
+            this.PointRuleEditForm.get('product_type_selection').setValue('');
+            this.PointRuleEditForm.get('product_type_selection_text').setValue('');
+            this.PointRuleEditForm.get('product_type_min_expense').setValue(0);
+            this.getProductTypeValue('0');
+            //this.selectedProductTypes = [];
+            this._changeDetectorRef.markForCheck();
+        }
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

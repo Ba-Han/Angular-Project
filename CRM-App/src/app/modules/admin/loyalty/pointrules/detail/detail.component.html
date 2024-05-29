@@ -566,6 +566,27 @@
                                         </div>
                                     </ng-container>
                                 </ng-container>
+
+                                <ng-container *ngIf="pointRule.priority === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Priority: </div>
+                                        <div class="ml-6 leading-6">Low</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.priority === 2">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Priority: </div>
+                                        <div class="ml-6 leading-6">Medium</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.priority === 3">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Priority: </div>
+                                        <div class="ml-6 leading-6">High</div>
+                                    </div>
+                                </ng-container>
                             </ng-container>
 
                             <ng-container *ngIf="pointRule.type === 0 || pointRule.type === 1">
@@ -721,6 +742,27 @@
                                         <div class="flex sm:items-center">
                                             <div class="w-1/4">Number of Orders: </div>
                                             <div class="ml-6 leading-6">{{pointRule.no_of_orders}}</div>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="pointRule.priority === 1">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Priority: </div>
+                                            <div class="ml-6 leading-6">Low</div>
+                                        </div>
+                                    </ng-container>
+    
+                                    <ng-container *ngIf="pointRule.priority === 2">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Priority: </div>
+                                            <div class="ml-6 leading-6">Medium</div>
+                                        </div>
+                                    </ng-container>
+    
+                                    <ng-container *ngIf="pointRule.priority === 3">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Priority: </div>
+                                            <div class="ml-6 leading-6">High</div>
                                         </div>
                                     </ng-container>
                                 </ng-container>
@@ -879,9 +921,28 @@
                                             <div class="ml-6 leading-6">{{pointRule.no_of_orders}}</div>
                                         </div>
                                     </ng-container>
-                                </ng-container>
 
-                                
+                                    <ng-container *ngIf="pointRule.priority === 1">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Priority: </div>
+                                            <div class="ml-6 leading-6">Low</div>
+                                        </div>
+                                    </ng-container>
+    
+                                    <ng-container *ngIf="pointRule.priority === 2">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Priority: </div>
+                                            <div class="ml-6 leading-6">Medium</div>
+                                        </div>
+                                    </ng-container>
+    
+                                    <ng-container *ngIf="pointRule.priority === 3">
+                                        <div class="flex sm:items-center">
+                                            <div class="w-1/4">Priority: </div>
+                                            <div class="ml-6 leading-6">High</div>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
 
                                 <ng-container *ngIf="pointRule.Point_Rule_CapType === 1">
                                     <div class="flex sm:items-center">
@@ -1012,8 +1073,6 @@
                                     </div>
                                 </ng-container>
 
-                                
-
                                 <ng-container *ngIf="pointRule.Point_Rule_CapType === 1">
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Point Rule Cap Type: </div>
@@ -1032,6 +1091,27 @@
                                     <div class="flex sm:items-center">
                                         <div class="w-1/4">Point Rule Max Cap: </div>
                                         <div class="ml-6 leading-6">{{pointRule.Point_Rule_Max_Cap}}</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.priority === 1">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Priority: </div>
+                                        <div class="ml-6 leading-6">Low</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.priority === 2">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Priority: </div>
+                                        <div class="ml-6 leading-6">Medium</div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="pointRule.priority === 3">
+                                    <div class="flex sm:items-center">
+                                        <div class="w-1/4">Priority: </div>
+                                        <div class="ml-6 leading-6">High</div>
                                     </div>
                                 </ng-container>
                             </ng-container>
@@ -1200,7 +1280,7 @@
                             <div class="mt-8">
                                 <mat-form-field class="fuse-mat-no-subscript w-full">
                                     <mat-label>Type</mat-label>
-                                    <mat-select [formControlName]="'type'" [(ngModel)]="typeRuleValue">
+                                    <mat-select [formControlName]="'type'" [(ngModel)]="typeRuleValue" (selectionChange)="setPriorityDefaultValue()">
                                         <mat-option [value]="0">Basic Rule</mat-option>
                                         <mat-option [value]="1">Event Rule</mat-option>
                                         <mat-option [value]="2">Birthday</mat-option>
@@ -1349,7 +1429,7 @@
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Offer Type</mat-label>
-                                        <mat-select [formControlName]="'offer_type'" [(ngModel)]="offerTypeValue">
+                                        <mat-select [formControlName]="'offer_type'" [(ngModel)]="offerTypeValue" (selectionChange)="setOfferTypeValue()">
                                             <mat-option [value]="1">Once</mat-option>
                                             <mat-option [value]="2">Order Base</mat-option>
                                         </mat-select>
@@ -1468,7 +1548,7 @@
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Point Reward At</mat-label>
-                                        <mat-select [formControlName]="'point_rewarded_at'" [(ngModel)]="pointRewardedAtValue">
+                                        <mat-select [formControlName]="'point_rewarded_at'" [(ngModel)]="pointRewardedAtValue" (selectionChange)="setPointRewardedAtValueValue()">
                                             <mat-option [value]="1">After Register</mat-option>
                                             <mat-option [value]="2">After First Purchase</mat-option>
                                         </mat-select>
@@ -1527,7 +1607,7 @@
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Offer Apply</mat-label>
-                                        <mat-select [formControlName]="'offer_apply'" [(ngModel)]="offerApplyValue">
+                                        <mat-select [formControlName]="'offer_apply'" [(ngModel)]="offerApplyValue" (selectionChange)="setOfferApplyValue()">
                                             <mat-option [value]="1">Across Month</mat-option>
                                             <mat-option [value]="3">Special Date</mat-option>
                                         </mat-select>
@@ -1576,7 +1656,7 @@
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Offer Type</mat-label>
-                                        <mat-select [formControlName]="'offer_type'" [(ngModel)]="offerTypeValue">
+                                        <mat-select [formControlName]="'offer_type'" [(ngModel)]="offerTypeValue" (selectionChange)="setOfferTypeValue()">
                                             <mat-option [value]="1">Once</mat-option>
                                             <mat-option [value]="2">Order Base</mat-option>
                                         </mat-select>
@@ -1888,7 +1968,7 @@
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Store Selection Type</mat-label>
-                                        <mat-select [formControlName]="'store_selection_type'" [(ngModel)]="storeSelectionTypeValue">
+                                        <mat-select [formControlName]="'store_selection_type'" [(ngModel)]="storeSelectionTypeValue" (selectionChange)="setStoreSelectionTypeValue($event.value)">
                                             <mat-option [value]="0">All</mat-option>
                                             <mat-option [value]="1">Selected</mat-option>
                                         </mat-select>
