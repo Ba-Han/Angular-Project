@@ -105,6 +105,9 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnInit(): void {
         const searchFilterTierId = this._activatedRoute.snapshot.paramMap.get('membertierid');
         this.selectedMemberTierFilter = searchFilterTierId ? parseInt(searchFilterTierId, 10) : 'memberTier';
+        if(this.selectedMemberTierFilter !== 'memberTier') {
+            this.updateMemberList();
+        }
         this.members$ = this._memberService.members$;
         this._memberService.members$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -294,6 +297,9 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
     memberTierFilterChange(e: any): void {
         const getMemberTierId = e.value;
         this.selectedMemberTierFilter = getMemberTierId ? getMemberTierId : 'all';
+        if (this._paginator) {
+            this._paginator.pageIndex = 0;
+        }
         this.updateMemberList();
         this._changeDetectorRef.markForCheck();
     }
