@@ -681,6 +681,9 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     memberTierFilterChange(e: any): void {
         const getMemberTierId = e.value;
         this.searchFilter = getMemberTierId ? '{"member_tier":{"_eq":"' + getMemberTierId + '"}}' : '';
+        if (this._paginator) {
+            this._paginator.pageIndex = 0;
+        }
         const pageIndex = this._paginator?.pageIndex || 0;
         const pageSize = this._paginator?.pageSize || 10;
         const sortActive = this._sort?.active || 'name';

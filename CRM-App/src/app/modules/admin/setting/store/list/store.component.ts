@@ -276,6 +276,9 @@ export class StoreListComponent implements OnInit, AfterViewInit, OnDestroy {
     channelFilterChange(e: any): void {
         const getChannelCode = e.value;
         this.searchFilter = getChannelCode ? '{"channel_code":{"_eq":"' + getChannelCode + '"}}' : '';
+        if (this._paginator) {
+            this._paginator.pageIndex = 0;
+        }
         const pageIndex = this._paginator?.pageIndex || 0;
         const pageSize = this._paginator?.pageSize || 10;
         const sortActive = this._sort?.active || 'name';
