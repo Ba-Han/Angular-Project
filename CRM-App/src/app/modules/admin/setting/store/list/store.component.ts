@@ -47,6 +47,11 @@ import { UserService } from 'app/core/user/user.service';
                 width: 12rem !important;
             }
 
+            .store-filter {
+                position: static;
+                width: 13rem !important;
+            }
+
             .store_sort_by {
                 display: grid;
                 grid-template-columns: max-content;

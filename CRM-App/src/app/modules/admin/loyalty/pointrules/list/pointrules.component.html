@@ -412,7 +412,7 @@
                         </div>
                         <div class="text-4xl font-extrabold tracking-tight">Point Rules</div>
                         <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
-                            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-60">
+                            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-56">
                                 <mat-icon class="icon-size-5"
                                         matPrefix
                                         [svgIcon]="'heroicons_solid:search'"></mat-icon>
@@ -423,8 +423,8 @@
                             </mat-form-field>
 
                             <!--Filter By Member Tier-->
-                            <mat-form-field class="ml-4 fuse-mat-no-subscript pointrule-2-sort">
-                                <span class="pointrule_sort_by">Sort By:</span>
+                            <mat-form-field class="ml-4 fuse-mat-no-subscript pointrule-filter">
+                                <span class="pointrule_sort_by">Filter By:</span>
                                 <mat-select [(ngModel)]="selectedMemberTierFilter" (selectionChange)="memberTierFilterChange($event)">
                                     <mat-option disabled value="memberTier">Member Tier</mat-option>
                                     <mat-option value="all">All</mat-option>

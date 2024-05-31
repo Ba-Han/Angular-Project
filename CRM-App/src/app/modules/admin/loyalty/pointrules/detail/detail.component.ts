@@ -753,6 +753,7 @@ export class PointRuleDetailComponent implements OnInit, AfterViewInit, OnDestro
             this.PointRuleEditForm.get('store_selection_type').setValue(0);
             this.PointRuleEditForm.get('offer_apply').setValue(0);
             this.PointRuleEditForm.get('offer_type').setValue(0);
+            this.PointRuleEditForm.get('offer_apply_month').setValue(0);
             this.PointRuleEditForm.get('point_amount').setValue(0);
             this.PointRuleEditForm.get('new_member_to_earn_points').setValue(false);
             this.PointRuleEditForm.get('new_member_point_amount').setValue(0);
