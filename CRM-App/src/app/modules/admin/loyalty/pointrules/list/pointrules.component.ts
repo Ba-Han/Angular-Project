@@ -112,6 +112,11 @@ import { UserService } from 'app/core/user/user.service';
                 width: 12rem !important;
             }
 
+            .pointrule-filter {
+                position: static;
+                width: 13rem !important;
+            }
+
             .pointrule_sort_by {
                 display: grid;
                 grid-template-columns: max-content;
@@ -676,6 +681,9 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
     memberTierFilterChange(e: any): void {
         const getMemberTierId = e.value;
         this.searchFilter = getMemberTierId ? '{"member_tier":{"_eq":"' + getMemberTierId + '"}}' : '';
+        if (this._paginator) {
+            this._paginator.pageIndex = 0;
+        }
         const pageIndex = this._paginator?.pageIndex || 0;
         const pageSize = this._paginator?.pageSize || 10;
         const sortActive = this._sort?.active || 'name';
@@ -900,6 +908,7 @@ export class PointRuleListComponent implements OnInit, AfterViewInit, OnDestroy 
             this.PointRuleAddForm.get('store_selection_type').setValue(0);
             this.PointRuleAddForm.get('offer_apply').setValue(0);
             this.PointRuleAddForm.get('offer_type').setValue(0);
+            this.PointRuleAddForm.get('offer_apply_month').setValue(0);
             this.PointRuleAddForm.get('point_amount').setValue(0);
             this.PointRuleAddForm.get('new_member_to_earn_points').setValue(false);
             this.PointRuleAddForm.get('new_member_point_amount').setValue(0);

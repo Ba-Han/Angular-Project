@@ -35,8 +35,8 @@
                             </mat-form-field>
 
                             <!--Filter By Member Tier-->
-                            <mat-form-field class="ml-4 fuse-mat-no-subscript store-2-sort">
-                                <span class="store_sort_by">Sort By:</span>
+                            <mat-form-field class="ml-4 fuse-mat-no-subscript store-filter">
+                                <span class="store_sort_by">Filter By:</span>
                                 <mat-select [(ngModel)]="selectedChannelFilter" (selectionChange)="channelFilterChange($event)">
                                     <mat-option disabled value="channel">Channel</mat-option>
                                     <mat-option value="all">All</mat-option>
