@@ -1374,24 +1374,6 @@
 
                                 <div class="mt-8">
                                     <mat-form-field class="fuse-mat-no-subscript w-full">
-                                        <mat-label>Priority</mat-label>
-                                        <mat-select [formControlName]="'priority'" [(ngModel)]="priorityValue">
-                                            <mat-option [value]="1">Low</mat-option>
-                                            <mat-option [value]="2">Medium</mat-option>
-                                            <mat-option [value]="3">High</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="mt-8">
-                                    <label class="new_checkbox_00">
-                                        <input class="new_checkbox_01" type="checkbox" [formControlName]="'stop_further'" [(ngModel)]="stopFurtherValue">
-                                        Stop Further
-                                    </label>
-                                </div>
-
-                                <div class="mt-8">
-                                    <mat-form-field class="fuse-mat-no-subscript w-full">
                                         <mat-label>Point Rule Cap Type</mat-label>
                                         <mat-select [formControlName]="'Point_Rule_CapType'" [(ngModel)]="pointRuleCapTypeValue" (selectionChange)="onCapTypeChange()">
                                             <mat-option [value]="0">None</mat-option>
@@ -1497,24 +1479,6 @@
                                                 [formControlName]="'no_of_orders'"
                                                 [placeholder]="'Number of Orders'">
                                         </mat-form-field>
-                                    </div>
-
-                                    <div class="mt-8">
-                                        <mat-form-field class="fuse-mat-no-subscript w-full">
-                                            <mat-label>Priority</mat-label>
-                                            <mat-select [formControlName]="'priority'" [(ngModel)]="priorityValue">
-                                                <mat-option [value]="1">Low</mat-option>
-                                                <mat-option [value]="2">Medium</mat-option>
-                                                <mat-option [value]="3">High</mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </div>
-    
-                                    <div class="mt-8">
-                                        <label class="new_checkbox_00">
-                                            <input class="new_checkbox_01" type="checkbox" [formControlName]="'stop_further'" [(ngModel)]="stopFurtherValue">
-                                            Stop Further
-                                        </label>
                                     </div>
 
                                     <div class="mt-8">
@@ -1728,24 +1692,6 @@
 
                                     <div class="mt-8">
                                         <mat-form-field class="fuse-mat-no-subscript w-full">
-                                            <mat-label>Priority</mat-label>
-                                            <mat-select [formControlName]="'priority'" [(ngModel)]="priorityValue">
-                                                <mat-option [value]="1">Low</mat-option>
-                                                <mat-option [value]="2">Medium</mat-option>
-                                                <mat-option [value]="3">High</mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </div>
-    
-                                    <div class="mt-8">
-                                        <label class="new_checkbox_00">
-                                            <input class="new_checkbox_01" type="checkbox" [formControlName]="'stop_further'" [(ngModel)]="stopFurtherValue">
-                                            Stop Further
-                                        </label>
-                                    </div>
-
-                                    <div class="mt-8">
-                                        <mat-form-field class="fuse-mat-no-subscript w-full">
                                             <mat-label>Store Selection Type</mat-label>
                                             <mat-select [formControlName]="'store_selection_type'" [(ngModel)]="storeSelectionTypeValue">
                                                 <mat-option [value]="0">All</mat-option>
@@ -1951,18 +1897,25 @@
                                             [placeholder]="'Minimum Order Expense'">
                                     </mat-form-field>
                                 </div>
-
-                                <div class="mt-8">
-                                    <mat-form-field class="fuse-mat-no-subscript w-full">
-                                        <mat-label>Priority</mat-label>
-                                        <mat-select [formControlName]="'priority'" [(ngModel)]="priorityValue">
-                                            <mat-option [value]="1">Low</mat-option>
-                                            <mat-option [value]="2">Medium</mat-option>
-                                            <mat-option [value]="3">High</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
                             </ng-container>
+
+                            <div class="mt-8">
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Priority</mat-label>
+                                    <mat-select [formControlName]="'priority'" [(ngModel)]="priorityValue">
+                                        <mat-option [value]="1">Low</mat-option>
+                                        <mat-option [value]="2">Medium</mat-option>
+                                        <mat-option [value]="3">High</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mt-8">
+                                <label class="new_checkbox_00">
+                                    <input class="new_checkbox_01" type="checkbox" [formControlName]="'stop_further'" [(ngModel)]="stopFurtherValue">
+                                    Stop Further
+                                </label>
+                            </div>
 
                             <ng-container *ngIf="typeRuleValue === 0 || typeRuleValue === 1 || typeRuleValue === 3">
                                 <div class="mt-8">
