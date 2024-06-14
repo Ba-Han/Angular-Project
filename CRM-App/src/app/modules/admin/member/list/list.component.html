@@ -23,7 +23,6 @@
                     <span class="member_sort_by">Filter By:</span>
                     <mat-select [(ngModel)]="selectedMemberTierFilter" (selectionChange)="memberTierFilterChange($event)">
                         <mat-option disabled value="memberTier">Member Tier</mat-option>
-                        <mat-option value="all">All</mat-option>
                         <ng-container *ngFor="let tier of getMemberTierResponse">
                             <mat-option [value]="tier.id">
                                 {{tier.name}}
