@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { MemberService } from 'app/modules/admin/member/member.service';
 import { Member, MemberPagination, MemberPoint, Transaction, MemberTier, MemberDocument, MemberDocumentPagination } from 'app/modules/admin/member/member.types';
 
@@ -31,9 +31,18 @@ export class MemberResolverByTier implements Resolve<any>
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ pagination: MemberPagination; members: Member[] }> {
         const searchFilterTierId = route.paramMap.get('membertierid');
-        const searchFilter = '{"member_tier":{"_eq":"' + searchFilterTierId + '"}}';
-
-        return this._memberService.getMembers(0, 10, 'member_code', 'asc', '', searchFilter);
+        if (searchFilterTierId === null) {
+            return this._memberService.getMemberTiers().pipe(
+                switchMap((response: any) => {
+                    const firstTierLevel = response.data[0].level;
+                    const searchFilter = `{"member_tier":{"_eq":"${firstTierLevel}"}}`;
+                    return this._memberService.getMembers(0, 10, 'member_code', 'asc', '', searchFilter);
+                })
+            );
+        } else {
+            const searchFilter = `{"member_tier":{"_eq":"${searchFilterTierId}"}}`;
+            return this._memberService.getMembers(0, 10, 'member_code', 'asc', '', searchFilter);
+        }
     }
 }
 

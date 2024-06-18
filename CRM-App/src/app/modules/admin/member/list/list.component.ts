@@ -79,6 +79,8 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
     selectedMemberTierFilter: string | number = 'memberTier';
     getMemberTierResponse: any;
     membersData: any;
+    searchFilterTierId: number | string;
+    getMemberTierResponseFirstLevel: number | string;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -103,11 +105,6 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
     // -----------------------------------------------------------------------------------------------------
 
     ngOnInit(): void {
-        const searchFilterTierId = this._activatedRoute.snapshot.paramMap.get('membertierid');
-        this.selectedMemberTierFilter = searchFilterTierId ? parseInt(searchFilterTierId, 10) : 'memberTier';
-        if(this.selectedMemberTierFilter !== 'memberTier') {
-            this.updateMemberList();
-        }
         this.members$ = this._memberService.members$;
         this._memberService.members$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -127,6 +124,10 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
         this._memberService.memberTiers
         .subscribe((response: any) => {
             this.getMemberTierResponse = response;
+            this.getMemberTierResponseFirstLevel = response[0].level;
+
+            this.searchFilterTierId = this._activatedRoute.snapshot.paramMap.get('membertierid');
+            this.selectedMemberTierFilter = this.searchFilterTierId ? parseInt(this.searchFilterTierId, 10) : this.getMemberTierResponseFirstLevel;
             this._changeDetectorRef.markForCheck();
         });
 
@@ -296,7 +297,7 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     memberTierFilterChange(e: any): void {
         const getMemberTierId = e.value;
-        this.selectedMemberTierFilter = getMemberTierId ? getMemberTierId : 'all';
+        this.selectedMemberTierFilter = getMemberTierId ? getMemberTierId : '';
         if (this._paginator) {
             this._paginator.pageIndex = 0;
         }
@@ -311,7 +312,7 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
         const sortActive = this._sort?.active || 'member_code';
         const sortDirection = this._sort?.direction || 'asc';
 
-        this.searchFilter = selectedIndex === 'all' ? '' : '{"member_tier":{"_eq":"' + selectedIndex + '"}}';
+        this.searchFilter = selectedIndex ? '{"member_tier":{"_eq":"' + selectedIndex + '"}}' : '';
 
         this._memberService.getMembers(pageIndex, pageSize, sortActive, sortDirection, this.searchValue, this.searchFilter)
         .pipe(
@@ -333,6 +334,8 @@ export class MemberListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     onPageChange() {
+        const selectedIndex = this.selectedMemberTierFilter;
+        this.searchFilter = selectedIndex ? '{"member_tier":{"_eq":"' + selectedIndex + '"}}' : '';
         // eslint-disable-next-line max-len
         this._memberService.getMembers(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction, this.searchValue, this.searchFilter).pipe(
             switchMap(() => {

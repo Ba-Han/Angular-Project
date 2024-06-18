@@ -24,7 +24,7 @@ export const memberRoutes: Route[] = [
                 path: '',
                 component: MemberListComponent,
                 resolve: {
-                    tasks: MemberResolver,
+                    tasks: MemberResolverByTier,
                     tier: MemberTierResolver
                 }
             },
